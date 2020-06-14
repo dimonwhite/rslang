@@ -1,0 +1,22 @@
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+
+  font-size: 1.04vw;
+  @include media(1024px) {
+    font-size: 20px;
+  }
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #fff;
+}
