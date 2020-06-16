@@ -1,7 +1,7 @@
-import './assets/scss/main.scss';
-import Header from './assets/components/header/header';
-import User from './assets/components/user/user';
-import CardController from './assets/components/card/cardController';
+import './scss/main.scss';
+import Header from './components/header/header';
+import User from './components/user/user';
+import CardController from './components/card/cardController';
 
 window.addEventListener('load', () => {
   document.body.addEventListener('click', (e) => {
