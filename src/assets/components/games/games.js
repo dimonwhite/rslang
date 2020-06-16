@@ -7,19 +7,19 @@ import SprintController from './sprint/sprintController';
 export default class Games {
   create(name) {
     switch (name) {
-      case 'savannah':
+      case 'liSavannah':
         new SavannahController(this.user).createEvent(this.endGame);
         break;
-      case 'puzzle':
+      case 'liPuzzle':
         new PuzzleController(this.user).createEvent(this.endGame);
         break;
-      case 'audiocall':
+      case 'liAudiocall':
         new AudiocallController(this.user).createEvent(this.endGame);
         break;
-      case 'speakit':
+      case 'liSpeakit':
         new SpeakitController(this.user).createEvent(this.endGame);
         break;
-      case 'sprint':
+      case 'liSprint':
         new SprintController(this.user).createEvent(this.endGame);
         break;
       default:
