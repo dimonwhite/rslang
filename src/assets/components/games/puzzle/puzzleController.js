@@ -1,15 +1,15 @@
 import PuzzleView from './puzzleView';
 import PuzzleModel from './puzzleModel';
 
-export default class AudiocallController {
-  constructor(user) {
-    this.puzzleView = new PuzzleView();
-    this.puzzleModel = new PuzzleModel(user);
-    this.puzzleView.renderHTML();
-    this.result = this.puzzleView.result.bind(this);
+export default class PuzzleController {
+  constructor(user, callResult) {
+    this.callResult = callResult;
+    this.PuzzleView = new PuzzleView();
+    this.PuzzleModel = new PuzzleModel(user);
   }
 
-  createEvent(callResult) {
-    this.result.onclick = () => callResult(this.puzzleModel.words);
+  createEvent() {
+    this.PuzzleView.renderHTML();
+    this.PuzzleView.result.onclick = () => this.callResult(this.PuzzleModel.words);
   }
 }

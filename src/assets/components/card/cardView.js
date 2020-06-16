@@ -5,7 +5,7 @@ export default class CardView {
 
   renderHTML() {
     this.card.innerHTML = '';
-    const card = document.createElement('div');
+    const card = document.createElement('h2');
     card.innerHTML = 'card';
     this.card.append(card);
   }

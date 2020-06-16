@@ -1,6 +1,6 @@
 export default class StatisticsView {
   constructor() {
-    this.statistics = document.getElementById('statTbody');
+    this.statistics = document.getElementById('tbody');
   }
 
   renderHTML() {

@@ -1,15 +1,15 @@
 import SprintView from './sprintView';
 import SprintModel from './sprintModel';
 
-export default class SprintController {
-  constructor(user) {
+export default class SavannahController {
+  constructor(user, callResult) {
+    this.callResult = callResult;
     this.sprintView = new SprintView();
     this.sprintModel = new SprintModel(user);
-    this.sprintView.renderHTML();
-    this.result = this.sprintView.result.bind(this);
   }
 
-  createEvent(callResult) {
-    this.result.onclick = () => callResult(this.sprintModel.words);
+  createEvent() {
+    this.sprintView.renderHTML();
+    this.sprintView.result.onclick = () => this.callResult(this.sprintModel.words);
   }
 }

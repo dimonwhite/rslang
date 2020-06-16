@@ -116,7 +116,7 @@
 /*------------------TOGGLE CLASSES-------------------*/
 
 .show {
-    display: block;
+    display: block !important;
 }
 
 .show-flex {
@@ -124,7 +124,7 @@
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
 
 .decoration {

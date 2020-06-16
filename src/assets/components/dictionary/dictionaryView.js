@@ -4,7 +4,6 @@ export default class DictionaryView {
   }
 
   renderHTML() {
-    this.dictionary.innerHTML = '';
     const li = document.createElement('li');
     li.innerHTML = 'dictionary';
     this.dictionary.append(li);
