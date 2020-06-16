@@ -1,0 +1,134 @@
+.header {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    background-image: -webkit-linear-gradient(top, #ffd700 0%, #d9cf73 50%, #8f7800 100%);
+    box-shadow: 5px 5px 5px 0px #000000, inset 4px 4px 15px 0px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+
+    &__title {
+        font-size: 62px;
+        color: #bc2e1e;
+        background: none;
+        text-align: center;
+    }
+
+    &__btn {
+        display: block;
+        width: 70px;
+        height: 70px;
+        border: 0;
+        outline: 0;
+        transition: 0.5s linear;
+        background-repeat: no-repeat;
+        background-size: contain;
+        border-radius: 50%;
+        z-index: 9999;
+    }
+    &__click {
+        transform: rotate(360deg);
+    }
+
+    @media only screen and (max-width: 1200px) {
+        .header {
+            &__title {
+                margin-right: 40px;
+            }
+        }
+    }
+    @media only screen and (max-width: 900px) {
+        .header {
+            &__title {
+                font-size: 40px;
+            }
+        }
+    }
+    @media only screen and (max-width: 700px) {
+        .header {
+            &__title {
+                font-size: 30px;
+            }
+        }
+    }
+    @media only screen and (max-width: 600px) {
+        .header {
+            &__title {
+                font-size: 0;
+            }
+        }
+    }
+}
+
+.nav {
+    position: absolute;
+    width: 320px;
+    z-index: 999;
+    top: 0;
+    left: -330px;
+    transition: 0.5s;
+    background-image: -webkit-linear-gradient(top, #ffd700 0%, #d9cf73 50%, #8f7800 100%);
+    color: firebrick;
+    font-size: 24px;
+    box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+
+    &__list {
+        margin-top: 120px;
+        margin-bottom: 50px;
+        list-style: none;
+
+        &-savannah,
+        &-audiocall,
+        &-dictionary,
+        &-mosaic,
+        &-choice,
+        &-sprint,
+        &-home,
+        &-statistics,
+        &-main {
+            margin: 0;
+            padding: 8px 0 8px 50px;
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: 40px;
+            outline: 0;
+        }
+    }
+
+    &__list li:hover {
+        letter-spacing: 0.05em;
+        color: goldenrod;
+        text-shadow: 1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black;
+    }
+
+    &__show {
+        left: 0;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .nav {
+            width: 300px;
+        }
+    }
+}
+
+/*------------------TOGGLE CLASSES-------------------*/
+
+.show {
+    display: block;
+}
+
+.show-flex {
+    display: flex;
+}
+
+.hide {
+    display: none;
+}
+
+.decoration {
+    text-decoration: underline;
+}
+
+/*----------------END TOGGLE CLASSES-----------------*/
