@@ -3,9 +3,7 @@ import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
 import SpeakitController from './speakit/speakitController';
 import SprintController from './sprint/sprintController';
-import Utils from '../../utils';
-
-const { createElement } = Utils;
+import { createElement } from '../../utils';
 
 export default class Games {
   constructor() {
