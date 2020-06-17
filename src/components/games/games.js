@@ -8,7 +8,7 @@ import { createElement } from '../../utils';
 export default class Games {
   constructor() {
     this.count = 10;
-  }
+  }1
 
   create(name) {
     const main = document.getElementById('main');

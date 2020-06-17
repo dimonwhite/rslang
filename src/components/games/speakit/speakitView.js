@@ -1,3 +1,5 @@
+import Card from './Card';
+
 export default class SpeakitView {
   constructor() {
     this.speakit = document.getElementById('main');
