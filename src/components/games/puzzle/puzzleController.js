@@ -10,6 +10,7 @@ export default class PuzzleController {
 
   createEvent() {
     this.PuzzleView.renderHTML();
-    this.PuzzleView.result.onclick = () => this.callResult(this.PuzzleModel.words);
+    const listener = () => this.callResult(this.PuzzleModel.words);
+    this.PuzzleView.result.addEventListener('click', listener);
   }
 }

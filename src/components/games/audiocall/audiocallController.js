@@ -10,6 +10,7 @@ export default class AudiocallController {
 
   createEvent() {
     this.audiocallView.renderHTML();
-    this.audiocallView.result.onclick = () => this.callResult(this.audiocallModel.words);
+    const listener = () => this.callResult(this.audiocallModel.words);
+    this.audiocallView.result.addEventListener('click', listener);
   }
 }

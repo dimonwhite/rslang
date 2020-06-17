@@ -10,6 +10,7 @@ export default class SpeakitController {
 
   createEvent() {
     this.speakitView.renderHTML();
-    this.speakitView.result.onclick = () => this.callResult(this.speakitModel.words);
+    const listener = () => this.callResult(this.speakitModel.words);
+    this.speakitView.result.addEventListener('click', listener);
   }
 }

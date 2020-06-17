@@ -10,6 +10,7 @@ export default class SavannahController {
 
   createEvent() {
     this.sprintView.renderHTML();
-    this.sprintView.result.onclick = () => this.callResult(this.sprintModel.words);
+    const listener = () => this.callResult(this.sprintModel.words);
+    this.sprintView.result.addEventListener('click', listener);
   }
 }

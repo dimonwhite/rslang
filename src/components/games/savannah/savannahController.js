@@ -10,6 +10,7 @@ export default class SavannahController {
 
   createEvent() {
     this.savannahView.renderHTML();
-    this.savannahView.result.onclick = () => this.callResult(this.savannahModel.words);
+    const listener = () => this.callResult(this.savannahModel.words);
+    this.savannahView.result.addEventListener('click', listener);
   }
 }

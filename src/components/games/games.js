@@ -140,11 +140,11 @@ export default class Games {
     return wrap;
   }
 
-  createOptions(minWords = 10, step = 5) {
+  createOptions(minWords = 10, step = 5, options = 3) {
     const wrap = createElement('div', 'savannah__select');
     const selectText = createElement('span', 'savannah__select-text', 'savSelectText', 'Количество слов');
     const select = document.createElement('select', 'savannah__select-options', 'selectCount');
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < options; i += 1) {
       const content = `${minWords + i * step}`;
       const option = document.createElement('option', 'savannah__select-options-item', false, content);
       select.append(option);

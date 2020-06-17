@@ -22,12 +22,9 @@ export default class Header {
   }
 
   eventNav({ target }) {
-    if (target.tagName === 'LI') {
-      if (!target.classList.contains('decoration')) {
-        this.mainPage.innerHTML = '';
-        this.createClass(target.dataset.name);
-      }
-
+    if (target.tagName === 'LI' && !target.classList.contains('decoration')) {
+      this.mainPage.innerHTML = '';
+      this.createClass(target.dataset.name);
       const list = document.getElementById('list');
       Array.from(list.children).forEach((el) => el.classList.remove('decoration'));
       target.classList.add('decoration');
