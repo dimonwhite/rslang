@@ -231,6 +231,138 @@ export default class HttpClient {
       "wordId": "string"
     } */
   }
+  async createUserStatistics({
+    userId, token, learnedWords, optional,
+  }) {
+    const requestBody = {
+      learnedWords,
+      optional,
+    };
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
+      method: 'PUT',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (rawResponse.status === 401) {
+      throw new Error('Access token is missing or invalid');
+    }
+    if (!rawResponse.ok) {
+      throw new Error('Can`t create user statistics, network problems');
+    }
+    const content = await rawResponse.json();
+
+    return content;
+    // returns object like:{
+    //   "id": "string",
+    //   "learnedWords": "number",
+    //   "optional": {
+    //     ......
+    //   }
+    // }
+  }
+
+  async getUserStatistics(userId, token) {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
+      method: 'GET',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    if (rawResponse.status === 401) {
+      throw new Error('Access token is missing or invalid');
+    }
+    if (rawResponse.status === 404) {
+      throw new Error('Can`t find user statistics');
+    }
+    if (!rawResponse.ok) {
+      throw new Error('Can`t get statistics, network problems');
+    }
+    const content = await rawResponse.json();
+
+    return content;
+    /*    returns object like {
+      "id": "5eea3830e0f08ce84754a9f7",
+      "learnedWords": "number",
+      "optional": {
+        ...
+      }
+    } */
+  }
+
+  async createUserSettings({
+    userId, token, wordsPerDay, optional,
+  }) {
+    const requestBody = {
+      wordsPerDay,
+      optional,
+    };
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+      method: 'PUT',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (rawResponse.status === 401) {
+      throw new Error('Access token is missing or invalid');
+    }
+    if (!rawResponse.ok) {
+      throw new Error('Can`t create user settings, network problems');
+    }
+    const content = await rawResponse.json();
+
+    return content;
+    /*     returns object like {
+      "id": "string",
+      "optional": {
+        ...
+      },
+      "wordsPerDay": "number"
+    } */
+  }
+
+  async getUserSettings(userId, token) {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+      method: 'GET',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    if (rawResponse.status === 401) {
+      throw new Error('Access token is missing or invalid');
+    }
+    if (rawResponse.status === 404) {
+      throw new Error('Can`t find user settings');
+    }
+    if (!rawResponse.ok) {
+      throw new Error('Can`t get user settings, network problems');
+    }
+    const content = await rawResponse.json();
+
+    return content;
+
+    /*     returns object like {
+      "id": "string",
+      "optional": {
+        ...
+      },
+      "wordsPerDay": 10
+    } */
+  }
 }
 
 /* eslint-enable class-methods-use-this */
