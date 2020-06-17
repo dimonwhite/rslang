@@ -4,8 +4,8 @@ export default class DictionaryView {
   }
 
   renderHTML() {
-    const li = document.createElement('li');
-    li.innerHTML = 'dictionary';
-    this.dictionary.append(li);
+    const row = document.createElement('div');
+    row.innerHTML = 'dictionary';
+    this.dictionary.append(row);
   }
 }

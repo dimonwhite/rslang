@@ -115,6 +115,10 @@
 
 /*------------------TOGGLE CLASSES-------------------*/
 
+.decoration {
+    text-decoration: underline;
+}
+
 .show {
     display: block !important;
 }
@@ -127,8 +131,76 @@
     display: none !important;
 }
 
-.decoration {
-    text-decoration: underline;
+.show-promo {
+    .main {
+        display: none;
+    }
+    .header {
+        display: none;
+    }
+    .settings {
+        display: none;
+    }
+    .footer {
+        display: none;
+    }
+}
+
+.show-main {
+    .statistics {
+        display: none;
+    }
+    .dictionary {
+        display: none;
+    }
+    .main {
+        display: block;
+    }
+}
+
+.show-dictionary {
+    .statistics {
+        display: none;
+    }
+    .dictionary {
+        display: block;
+    }
+    .main {
+        display: none;
+    }
+}
+
+.show-statistics {
+    .statistics {
+        display: block;
+    }
+    .dictionary {
+        display: none;
+    }
+    .main {
+        display: none;
+    }
+}
+
+.show-game {
+    .statistics {
+        display: none;
+    }
+    .dictionary {
+        display: none;
+    }
+    .main {
+        display: block;
+    }
+    .header {
+        display: none;
+    }
+    .settings {
+        display: none;
+    }
+    .footer {
+        display: none;
+    }
 }
 
 /*----------------END TOGGLE CLASSES-----------------*/

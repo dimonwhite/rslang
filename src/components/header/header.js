@@ -6,62 +6,53 @@ import StatisticsController from '../statistics/statisticsController';
 export default class Header {
   constructor(user) {
     this.user = user;
+    this.mainPage = document.getElementById('main');
   }
 
   createEvent() {
     const btn = document.getElementById('headerBtn');
-    btn.addEventListener('click', (e) => {
-      btn.classList.toggle('header__click');
-      document.getElementById('nav').classList.toggle('nav__show');
-      e.stopPropagation();
-    });
-
     const nav = document.getElementById('nav');
     nav.addEventListener('click', this.eventNav.bind(this));
+
+    btn.addEventListener('click', (e) => {
+      btn.classList.toggle('header__click');
+      nav.classList.toggle('nav__show');
+      e.stopPropagation();
+    });
   }
 
-  eventNav(e) {
-    if (e.target.tagName === 'LI') {
-      const mainPage = document.getElementById('main');
-      mainPage.innerHTML = '';
-      if (!e.target.classList.contains('decoration')) {
-        switch (e.target.id) {
-          case 'liMain':
-            document.getElementById('statistics').classList.remove('show');
-            document.getElementById('dictionary').classList.remove('show');
-            mainPage.classList.remove('hide');
-            new CardController(this.user).create();
-            break;
-          case 'liStatistics':
-            mainPage.classList.add('hide');
-            document.getElementById('dictionary').classList.remove('show');
-            new StatisticsController(this.user).create();
-            document.getElementById('statistics').classList.add('show');
-            break;
-          case 'liDictionary':
-            mainPage.classList.add('hide');
-            document.getElementById('statistics').classList.remove('show');
-            document.getElementById('dictionary').classList.add('show');
-            new DictionaryController(this.user).create();
-            break;
-          case e.target.id:
-            document.getElementById('settings').classList.add('hide');
-            document.getElementById('footer').classList.add('hide');
-            document.getElementById('statistics').classList.remove('show');
-            document.getElementById('dictionary').classList.remove('show');
-            document.getElementById('header').classList.add('hide');
-            mainPage.classList.remove('hide');
-            new Games().create(e.target.id);
-            break;
-          default:
-            break;
-        }
+  eventNav({ target }) {
+    if (target.tagName === 'LI') {
+      if (!target.classList.contains('decoration')) {
+        this.mainPage.innerHTML = '';
+        this.createClass(target.dataset.name);
       }
 
       const list = document.getElementById('list');
       Array.from(list.children).forEach((el) => el.classList.remove('decoration'));
-      e.target.classList.add('decoration');
+      target.classList.add('decoration');
       document.getElementById('nav').classList.toggle('nav__show');
+    }
+  }
+
+  createClass(name) {
+    switch (name) {
+      case 'main':
+        document.body.className = 'body show-main';
+        new CardController(this.user).create();
+        break;
+      case 'statistics':
+        document.body.className = 'body show-statistics';
+        new StatisticsController(this.user).create();
+        break;
+      case 'dictionary':
+        document.body.className = 'body show-dictionary';
+        new DictionaryController(this.user).create();
+        break;
+      default:
+        document.body.className = 'body show-game';
+        new Games().create(name);
+        break;
     }
   }
 }

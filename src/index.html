@@ -11,20 +11,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="body">
-  <header class="header hide" id="header">
+<body class="body show-promo">
+  <header class="header" id="header">
     <button class="header__btn" id="headerBtn">Menu</button>
     <h1 class="header__title">RSLang</h1>
     <nav class="nav" id="nav">
       <ul class="nav__list" id="list">
-        <li class="nav__list-main" id="liMain">Main Page</li>
-        <li class="nav__list-savannah" id="liSavannah">Savannah</li>
-        <li class="nav__list-audiocall" id="liSpeakit">SpeakIt</li>
-        <li class="nav__list-audiocall" id="liAudiocall">Audiocall</li>
-        <li class="nav__list-audiocall" id="liPuzzle">Puzzle</li>
-        <li class="nav__list-sprint" id="liSprint">Sprint</li>
-        <li class="nav__list-dictionary" id="liDictionary">Dictionary</li>
-        <li class="nav__list-statistics" id="liStatistics">Statistics</li>
+        <li class="nav__list-main" data-name="main" id="navPage">Main Page</li>
+        <li class="nav__list-savannah" data-name="savannah">Savannah</li>
+        <li class="nav__list-audiocall" data-name="speakit">SpeakIt</li>
+        <li class="nav__list-audiocall" data-name="audiocall">Audiocall</li>
+        <li class="nav__list-audiocall" data-name="puzzle">Puzzle</li>
+        <li class="nav__list-sprint" data-name="sprint">Sprint</li>
+        <li class="nav__list-dictionary" data-name="dictionary">Dictionary</li>
+        <li class="nav__list-statistics" data-name="statistics">Statistics</li>
       </ul>
     </nav>
   </header>
@@ -32,7 +32,7 @@
     <h2 class="promo__title">Start Page</h2>
     <button class="promo__start" id="startBtn">Star</button>
   </section>
-  <main class="main hide" id="main"></main>
+  <main class="main" id="main"></main>
   <section class="statistics" id="statistics">
     <h2 class="statistics__title">Statistics</h2>
     <div class="buttons">
@@ -54,14 +54,14 @@
   <section class="dictionary" id="dictionary">
     <h2 class="dictionary__title">Dictionary</h2>
   </section>
-  <section class="settings hide" id="settings">
+  <section class="settings" id="settings">
     <h2 class="settings__title">Settings</h2>
     <label for="maxWords">Maximum words</label>
     <input type="number" id="maxWords" value="20" />
     <label for="newWords">New words</label>
     <input type="number" id="newWords" value="10" />
   </section>
-  <footer class="footer hide" id="footer">
+  <footer class="footer" id="footer">
     <h2>Footer</h2>
   </footer>
 </body>

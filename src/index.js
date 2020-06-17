@@ -4,6 +4,7 @@ import User from './components/user/user';
 import CardController from './components/card/cardController';
 
 window.addEventListener('load', () => {
+  const user = new User();
   document.body.addEventListener('click', (e) => {
     const nav = document.getElementById('nav');
     if (nav.classList.length > 1 && !(e.target.tagName === 'NAV' || !e.target.tagName === 'LI')) {
@@ -12,14 +13,11 @@ window.addEventListener('load', () => {
   });
 
   document.getElementById('startPage').addEventListener('click', () => {
+    document.body.className = 'body show-main';
     document.getElementById('startPage').classList.add('hide');
-    document.getElementById('header').classList.remove('hide');
-    document.getElementById('settings').classList.remove('hide');
-    document.getElementById('footer').classList.remove('hide');
-    document.getElementById('main').classList.remove('hide');
-    document.getElementById('liMain').classList.add('decoration');
-    new Header(new User()).createEvent();
-    new CardController().create();
+    document.getElementById('navPage').classList.add('decoration');
+    new Header(user).createEvent();
+    new CardController(user).create();
   });
 });
 
