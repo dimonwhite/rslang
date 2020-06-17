@@ -1,5 +1,10 @@
 /* eslint-disable class-methods-use-this */
 export default class HttpClient {
+  constructor() {
+    this.token = localStorage.token;
+    this.userId = localStorage.userId;
+  }
+
   async getWords(group, page, maxLength, wordsPerPage) {
     const url = `https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=${page}&wordsPerExampleSentenceLTE=${maxLength}&wordsPerPage=${wordsPerPage}`;
     const rawResponse = await fetch(url);
@@ -74,6 +79,10 @@ export default class HttpClient {
       throw new Error('Can`t login user, network problems');
     }
     const content = await rawResponse.json();
+    this.userId = content.userId;
+    this.token = content.token;
+    localStorage.setItem('token', content.token);
+    localStorage.setItem('userId', content.userId);
 
     return content;
 
@@ -84,17 +93,17 @@ export default class HttpClient {
     } */
   }
 
-  async getUser(userId, token) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}`, {
+  async getUser() {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (rawResponse.status === 404) {
       throw new Error('Can`t get user with this ID');
@@ -112,18 +121,18 @@ export default class HttpClient {
     } */
   }
 
-  async updateUser(userId, newUserData, token) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}`, {
+  async updateUser(newUserData) {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}`, {
       method: 'PUT',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
       body: JSON.stringify(newUserData),
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t update user, network problems');
@@ -138,17 +147,17 @@ export default class HttpClient {
     } */
   }
 
-  async deleteUser(userId, token) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}`, {
+  async deleteUser() {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}`, {
       method: 'DELETE',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t delete user, network problems');
@@ -158,20 +167,20 @@ export default class HttpClient {
     return content;
   }
 
-  async getAllUserWords(userId, token) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words`, {
+  async getAllUserWords() {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/words`, {
       method: 'GET',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
-      throw new Error('Can`t get user, network problems');
+      throw new Error('Can`t get user words, network problems');
     }
     const content = await rawResponse.json();
 
@@ -180,17 +189,17 @@ export default class HttpClient {
     /* returns array of words */
   }
 
-  async getUserWordById(userId, token, wordId) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+  async getUserWordById(wordId) {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/words/${wordId}`, {
       method: 'GET',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -201,23 +210,23 @@ export default class HttpClient {
   }
 
   async createUserWord({
-    userId, token, wordData, difficulty, wordId,
+    wordData, difficulty, wordId,
   }) {
     const requestBody = {
       difficulty,
       optional: wordData,
     };
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/words/${wordId}`, {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/words/${wordId}`, {
       method: 'POST',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
       },
       body: JSON.stringify(requestBody),
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t create user word, network problems');
@@ -231,25 +240,26 @@ export default class HttpClient {
       "wordId": "string"
     } */
   }
+
   async createUserStatistics({
-    userId, token, learnedWords, optional,
+    learnedWords, optional,
   }) {
     const requestBody = {
       learnedWords,
       optional,
     };
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/statistics`, {
       method: 'PUT',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t create user statistics, network problems');
@@ -266,18 +276,18 @@ export default class HttpClient {
     // }
   }
 
-  async getUserStatistics(userId, token) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/statistics`, {
+  async getUserStatistics() {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/statistics`, {
       method: 'GET',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (rawResponse.status === 404) {
       throw new Error('Can`t find user statistics');
@@ -298,24 +308,24 @@ export default class HttpClient {
   }
 
   async createUserSettings({
-    userId, token, wordsPerDay, optional,
+    wordsPerDay, optional,
   }) {
     const requestBody = {
       wordsPerDay,
       optional,
     };
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/settings`, {
       method: 'PUT',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t create user settings, network problems');
@@ -332,18 +342,18 @@ export default class HttpClient {
     } */
   }
 
-  async getUserSettings(userId, token) {
-    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${userId}/settings`, {
+  async getUserSettings() {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/settings`, {
       method: 'GET',
       withCredentials: true,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     });
     if (rawResponse.status === 401) {
-      throw new Error('Access token is missing or invalid');
+      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (rawResponse.status === 404) {
       throw new Error('Can`t find user settings');
