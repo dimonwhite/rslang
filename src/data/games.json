@@ -1,0 +1,27 @@
+{
+  "savannah": {
+    "title": "savannah",
+    "desc": "savannah game",
+    "bgImage": "testbg.jpg"
+  },
+  "puzzle": {
+    "title": "puzzle",
+    "desc": "puzzle game",
+    "bgImage": "testbg.jpg"
+  },
+  "audiocall": {
+    "title": "audiocall",
+    "desc": "audiocall game",
+    "bgImage": "testbg.jpg"
+  },
+  "speakit": {
+    "title": "SPEAKIT",
+    "desc": "Click on the words to hear them sound.<br>Click on the button and speak the words into the microphone.",
+    "bgImage": "testbg.jpg"
+  },
+  "sprint": {
+    "title": "sprint",
+    "desc": "sprint game",
+    "bgImage": "testbg.jpg"
+  }
+}

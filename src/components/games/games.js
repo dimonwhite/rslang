@@ -1,3 +1,4 @@
+import gamesInfo from '@/data/games.json';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
@@ -8,50 +9,53 @@ import { createElement } from '../../utils';
 export default class Games {
   constructor() {
     this.count = 10;
-  }1
+    this.games = {
+      savannah: SavannahController,
+      puzzle: PuzzleController,
+      audiocall: AudiocallController,
+      speakit: SpeakitController,
+      sprint: SprintController,
+    };
+    this.gamesInfo = gamesInfo;
+  }
 
   create(name) {
-    const main = document.getElementById('main');
-    main.append(this.createBegin());
-    main.append(this.createEndGame());
-    switch (name) {
-      case 'savannah':
-        new SavannahController(this.user, this.endGame).createEvent();
-        break;
-      case 'puzzle':
-        new PuzzleController(this.user, this.endGame).createEvent();
-        break;
-      case 'audiocall':
-        new AudiocallController(this.user, this.endGame).createEvent();
-        break;
-      case 'speakit':
-        new SpeakitController(this.user, this.endGame).createEvent();
-        break;
-      case 'sprint':
-        new SprintController(this.user, this.endGame).createEvent();
-        break;
-      default:
-        break;
+    if (this.games[name]) {
+      const main = document.getElementById('main');
+      main.append(this.createStartScreen(name));
+      main.append(this.createSettings());
+      main.append(this.createEndGame());
+      this.game = new this.games[name](this.user, this.endGame);
+      this.game.init();
     }
   }
 
-  createBegin(nameGame = 'Game', options = true) {
-    this.begin = createElement('section', 'savannah__begin', 'begin');
-    const wrap = createElement('div', 'savannah__options');
-    if (options) {
-      wrap.append(this.createLevels());
-      wrap.append(this.createOptions());
-      this.begin.append(wrap);
-    }
-    const title = createElement('h2', 'savannah__begin-title', false, nameGame);
-    const start = createElement('button', 'savannah__begin-start', false, 'НАЧАТЬ');
-    const exit = createElement('button', 'savannah__begin-start', false, 'Вернуться');
-    this.begin.append(title);
-    this.begin.append(start);
-    this.begin.append(exit);
-    exit.addEventListener('click', this.exitGame.bind(this));
-    start.addEventListener('click', this.getStart.bind(this));
-    return this.begin;
+  createStartScreen(game) {
+    const gameInfo = this.gamesInfo[game];
+    const startScreen = createElement('div', 'game__startScreen');
+    const title = createElement('div', 'game__startScreen-title', false, gameInfo.title);
+    const desc = createElement('div', 'game__startScreen-desc', false, gameInfo.desc);
+    const btnStart = createElement('button', 'btn', false, 'Start');
+    const btnExit = createElement('button', 'btn', false, 'Go back');
+    const image = require(`@/assets/img/${gameInfo.bgImage}`);
+    startScreen.style.backgroundImage = `url("${image.default}")`;
+
+    startScreen.append(title);
+    startScreen.append(desc);
+    startScreen.append(btnStart);
+
+    btnStart.addEventListener('click', () => {
+      startScreen.classList.add('hide');
+    });
+    btnExit.addEventListener('click', Games.exitGame.bind(this));
+    return startScreen;
+  }
+
+  createSettings() {
+    const wrap = createElement('div', 'game__options');
+    wrap.append(this.createLevels());
+    wrap.append(this.createOptions());
+    return wrap;
   }
 
   createEndGame() {
@@ -79,7 +83,7 @@ export default class Games {
     const buttons = createElement('div', 'result__buttons');
     const returnBtn = createElement('button', 'result__buttons-item', false, 'Выход');
     const newGameBtn = createElement('button', 'result__buttons-item', 'newGame', 'Нова игра');
-    returnBtn.addEventListener('click', this.exitGame.bind(this));
+    returnBtn.addEventListener('click', Games.exitGame.bind(this));
     buttons.append(returnBtn);
     buttons.append(newGameBtn);
     result.append(wrapCorr);
@@ -123,19 +127,18 @@ export default class Games {
     for (let i = 0; i <= 6; i += 1) {
       const radio = createElement('label', 'radio', `radio${i}`);
       const span = createElement('span', 'radio__span', false, `lvl-${i}`);
-      const input = createElement('input', 'radio__input', false, false);
+      const input = createElement('input', 'radio__input');
+      input.value = i;
       input.type = 'radio';
       input.name = 'group';
-      input.setAttribute('data-value', i);
       if (i === 0) input.checked = 'checked';
       radio.append(input);
       radio.append(span);
       wrap.append(radio);
     }
     wrap.addEventListener('change', (e) => {
-      if (e.target.value === 'on' && e.target.dataset) {
-        this.level = +e.target.dataset.value;
-      }
+      this.game.level = +e.target.value;
+      this.game.change();
     });
     return wrap;
   }
@@ -157,15 +160,7 @@ export default class Games {
     return wrap;
   }
 
-  getStart() {
-    this.begin.classList.add('hide');
-  }
-
-  exitGame() {
-    this.begin = null;
-    document.getElementById('header').classList.remove('hide');
-    document.getElementById('footer').classList.remove('hide');
-    document.getElementById('settings').classList.remove('hide');
+  static exitGame() {
     document.getElementById('navPage').click();
   }
 }

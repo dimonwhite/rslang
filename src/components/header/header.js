@@ -7,16 +7,17 @@ export default class Header {
   constructor(user) {
     this.user = user;
     this.mainPage = document.getElementById('main');
+    this.nav = document.getElementById('nav');
+    this.body = document.body;
   }
 
   createEvent() {
     const btn = document.getElementById('headerBtn');
-    const nav = document.getElementById('nav');
-    nav.addEventListener('click', this.eventNav.bind(this));
+    this.nav.addEventListener('click', this.eventNav.bind(this));
 
     btn.addEventListener('click', (e) => {
       btn.classList.toggle('header__click');
-      nav.classList.toggle('nav__show');
+      this.nav.classList.toggle('nav__show');
       e.stopPropagation();
     });
   }
@@ -28,26 +29,26 @@ export default class Header {
       const list = document.getElementById('list');
       Array.from(list.children).forEach((el) => el.classList.remove('decoration'));
       target.classList.add('decoration');
-      document.getElementById('nav').classList.toggle('nav__show');
+      this.nav.classList.toggle('nav__show');
     }
   }
 
   createClass(name) {
     switch (name) {
       case 'main':
-        document.body.className = 'body show-main';
+        this.body.className = 'body show-main';
         new CardController(this.user).create();
         break;
       case 'statistics':
-        document.body.className = 'body show-statistics';
+        this.body.className = 'body show-statistics';
         new StatisticsController(this.user).create();
         break;
       case 'dictionary':
-        document.body.className = 'body show-dictionary';
+        this.body.className = 'body show-dictionary';
         new DictionaryController(this.user).create();
         break;
       default:
-        document.body.className = 'body show-game';
+        this.body.className = 'body show-game';
         new Games().create(name);
         break;
     }

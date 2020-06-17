@@ -4,3 +4,21 @@
     cursor: pointer;
     outline: 0;
 }
+
+.btn {
+  width: 300px;
+  height: 50px;
+  font-weight: 500;
+  font-size: 22px;
+  color: #fff;
+  border: 0;
+  background-color: $teal;
+  border-radius: 6px;
+  transition: background-color 0.5s;
+  &:hover, &.active {
+    background-color: darken($teal, 10);
+  }
+  &:focus {
+    outline: 0;
+  }
+}

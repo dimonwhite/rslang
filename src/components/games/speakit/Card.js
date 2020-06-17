@@ -9,15 +9,15 @@ export default class Card {
       word, transcription,
     } = this.card;
     const card = document.createElement('div');
-    card.classList.add('word_list_item');
+    card.classList.add('wordList__item');
     card.dataset.id = this.key;
     card.innerHTML = `
       <svg class="svg_icon">
         <use xlink:href="sprite.svg#volume"></use>
       </svg>
-      <div class="word_list_item_text">
-          <div class="word_list_item_title">${word}</div>
-          <div class="word_list_item_transcription">${transcription}</div>
+      <div class="wordList__item-text">
+          <div class="wordList__item-title">${word}</div>
+          <div class="wordList__item-transcription">${transcription}</div>
       </div>
     `;
     return card;
