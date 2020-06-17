@@ -210,7 +210,7 @@ export default class HttpClient {
   }
 
   async createUserWord({
-    wordData, difficulty, wordId,
+    wordData, wordId, difficulty,
   }) {
     const requestBody = {
       difficulty,
@@ -222,11 +222,15 @@ export default class HttpClient {
       headers: {
         Authorization: `Bearer ${this.token}`,
         Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
     });
     if (rawResponse.status === 401) {
       throw new Error('Access token is missing or invalid, try relogin');
+    }
+    if (rawResponse.status === 417) {
+      throw new Error('Such user word already exists');
     }
     if (!rawResponse.ok) {
       throw new Error('Can`t create user word, network problems');
@@ -239,6 +243,54 @@ export default class HttpClient {
       "id": "string",
       "wordId": "string"
     } */
+  }
+
+  async updateUserWord({
+    wordId, wordData, difficulty,
+  }) {
+    const requestBody = {
+      difficulty,
+      optional: wordData,
+    };
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/words/${wordId}`, {
+      method: 'PUT',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (rawResponse.status === 401) {
+      throw new Error('Access token is missing or invalid, try relogin');
+    }
+    if (!rawResponse.ok) {
+      throw new Error('Can`t create user word, network problems');
+    }
+    const content = await rawResponse.json();
+
+    return content;
+  }
+
+  async deleteUserWord(wordId) {
+    const rawResponse = await fetch(`https://afternoon-falls-25894.herokuapp.com/users/${this.userId}/words/${wordId}`, {
+      method: 'DELETE',
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        Accept: 'application/json',
+      },
+    });
+    if (rawResponse.status === 401) {
+      throw new Error('Access token is missing or invalid, try relogin');
+    }
+    if (!rawResponse.ok) {
+      throw new Error('Can`t get user words, network problems');
+    }
+    const content = await rawResponse.json();
+
+    return content;
   }
 
   async createUserStatistics({
