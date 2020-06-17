@@ -1,0 +1,19 @@
+.promo {
+    display: flex;
+    // display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: whitesmoke;
+
+    &__title {
+        font-size: 60px;
+    }
+    &__start {
+        font-size: 20px;
+        padding: 20px;
+        border: 2px solid burlywood;
+    }
+}

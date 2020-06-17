@@ -1,0 +1,256 @@
+.savannah {
+    min-height: 100vh;
+    background: gray;
+    &__begin {
+        background: gray;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 300px;
+        height: 100vh;
+        margin: 0;
+
+        &-title {
+            font-size: 42px;
+            color: white;
+        }
+        &-start {
+            font-size: 30px;
+            border: 1px solid green;
+        }
+        &-time {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: #dc143c;
+            text-shadow: 1px 1px 1px #000;
+            border: 1px solid gold;
+            text-align: center;
+            font-size: 42px;
+            display: none;
+        }
+        &-text {
+            margin: 0 auto;
+            font-size: 20px;
+            color: white;
+        }
+        &-key {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+    }
+    &__options {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        align-items: center;
+    }
+    &__select {
+        display: flex;
+        justify-content: space-around;
+
+        &-text {
+            color: white;
+            font-size: 26px;
+        }
+
+        &-options {
+            height: 30px;
+            &-item {
+                color: gold;
+            }
+        }
+    }
+
+    &__correct {
+        transform: 0.2s;
+        background-color: white;
+        color: green;
+    }
+    &__incorrect {
+        transform: 0.2s;
+        background-color: gray;
+        border: 1px solid gray;
+        color: crimson;
+    }
+}
+
+.result {
+    display: none;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    &__wrap {
+        width: 420px;
+        margin: 0 auto;
+    }
+
+    &__correct {
+        margin: 0;
+        padding-top: 30px;
+        padding-bottom: 20px;
+        color: darkgreen;
+        font-size: 26px;
+        text-align: center;
+    }
+    &__incorrect {
+        margin: 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        color: crimson;
+        font-size: 26px;
+        text-align: center;
+    }
+
+    &__list {
+        list-style: none;
+        margin: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-weight: bold;
+        font-family: "Times New Roman", Times, serif;
+
+        li {
+            margin: 0;
+            padding: 7px 0 7px 40px;
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: 40px;
+            outline: 0;
+            margin-bottom: 20px;
+            border: 1px solid goldenrod;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            span {
+                padding-right: 5px;
+            }
+        }
+    }
+    &__buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-bottom: 30px;
+
+        &-item {
+            min-width: 300px;
+            width: 300px;
+            height: 50px;
+            color: rgba(0, 0, 0, 0.795);
+            text-shadow: 1px 1px 1px white;
+            font-size: 34px;
+            font-family: "Times New Roman", Times, serif;
+            border: 2px solid #927e14;
+            border-radius: 5px;
+            outline: none;
+            user-select: none;
+            padding: 0px;
+            margin-right: 5px;
+            margin-left: 5px;
+            cursor: pointer;
+            background-image: -webkit-linear-gradient(top, rgb(250, 221, 55) 0%, #d9cf73 50%, #ebd983 100%);
+            transition: color 0.3s, background-color 0.3s, box-shadow 0.3s;
+            box-shadow: -2px 10px 13px -7px #000000, 4px 0px 23px -7px #000000, 20px 5px 25px 5px rgba(0, 0, 0, 0),
+                -8px -3px 16px -7px #000000;
+        }
+
+        &-item:hover {
+            background-image: none;
+            background: rgb(248, 212, 164);
+            color: blue;
+            outline: none;
+            text-decoration-line: none;
+            text-decoration: none;
+            box-shadow: -10px 0px 13px -7px #000000, 10px 0px 13px -7px #000000, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+        }
+    }
+}
+
+.levels {
+    display: flex;
+    margin-top: 20px;
+    width: 303px;
+    min-width: 303px;
+}
+
+.radio {
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    &__input {
+        display: none;
+        & + .radio__span {
+            line-height: 22px;
+            height: 22px;
+            width: 35px;
+            padding-left: 5px;
+            display: block;
+            position: relative;
+            &:not(:empty) {
+                color: darkgoldenrod;
+                font-weight: 700;
+                text-shadow: 1px 1px 1px black;
+            }
+            &:before,
+            &:after {
+                content: "";
+                width: 23px;
+                height: 22px;
+                display: block;
+                border-radius: 50%;
+                left: 10px;
+                top: -20px;
+                position: absolute;
+            }
+            &:before {
+                background: #8c94a4;
+                transition: background 0.2s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2);
+            }
+            &:after {
+                background: #fff;
+                transform: scale(0.78);
+                transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+            }
+        }
+        &:checked + .radio__span {
+            &:before {
+                transform: scale(1.04);
+                background: darkgoldenrod;
+            }
+            &:after {
+                transform: scale(0.4);
+                transition: transform 0.3s ease;
+            }
+        }
+    }
+    &:hover {
+        .radio__input {
+            & + .radio__span {
+                &:before {
+                    transform: scale(0.8);
+                }
+                &:after {
+                    transform: scale(0.6);
+                }
+            }
+            &:checked + .radio__span {
+                &:after {
+                    transform: scale(0.4);
+                }
+            }
+        }
+    }
+}
+
+.temp {
+    width: 200px;
+    font-size: 22px;
+    margin: 0 auto;
+    border: 2px solid goldenrod;
+    margin-left: 300px;
+    margin-top: 300px;
+}

@@ -1,15 +1,69 @@
 <!doctype html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>RS Lang</title>
   <link rel="icon" href="./favicon.ico" type="image/ico">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
 
+<body class="body show-promo">
+  <header class="header" id="header">
+    <button class="header__btn" id="headerBtn">Menu</button>
+    <h1 class="header__title">RSLang</h1>
+    <nav class="nav" id="nav">
+      <ul class="nav__list" id="list">
+        <li class="nav__list-main" data-name="main" id="navPage">Main Page</li>
+        <li class="nav__list-savannah" data-name="savannah">Savannah</li>
+        <li class="nav__list-audiocall" data-name="speakit">SpeakIt</li>
+        <li class="nav__list-audiocall" data-name="audiocall">Audiocall</li>
+        <li class="nav__list-audiocall" data-name="puzzle">Puzzle</li>
+        <li class="nav__list-sprint" data-name="sprint">Sprint</li>
+        <li class="nav__list-dictionary" data-name="dictionary">Dictionary</li>
+        <li class="nav__list-statistics" data-name="statistics">Statistics</li>
+      </ul>
+    </nav>
+  </header>
+  <section class="promo" id="startPage">
+    <h2 class="promo__title">Start Page</h2>
+    <button class="promo__start" id="startBtn">Star</button>
+  </section>
+  <main class="main" id="main"></main>
+  <section class="statistics" id="statistics">
+    <h2 class="statistics__title">Statistics</h2>
+    <div class="buttons">
+      <button class="buttons__btn" id="repeat">Repeat difficult words</button>
+      <button class="buttons__btn" id="reset">Reset</button>
+    </div>
+    <table class="statistics__table">
+      <thead>
+        <tr>
+          <th id="th1" class="statistics__table-th1">Category</td>
+          <th id="th2" class="statistics__table-th2">Word</th>
+          <th id="th3" class="statistics__table-th3">Translate</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </section>
+  <section class="dictionary" id="dictionary">
+    <h2 class="dictionary__title">Dictionary</h2>
+  </section>
+  <section class="settings" id="settings">
+    <h2 class="settings__title">Settings</h2>
+    <label for="maxWords">Maximum words</label>
+    <input type="number" id="maxWords" value="20" />
+    <label for="newWords">New words</label>
+    <input type="number" id="newWords" value="10" />
+  </section>
+  <footer class="footer" id="footer">
+    <h2>Footer</h2>
+  </footer>
 </body>
+
 </html>

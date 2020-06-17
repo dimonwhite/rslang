@@ -1,0 +1,14 @@
+.dictionary {
+    display: none;
+    justify-content: center;
+    height: 50vh;
+    background-color: whitesmoke;
+
+    &__title {
+        font-size: 50px;
+        text-align: center;
+        text-shadow: 1px 1px 1px gray, -1px 1px 1px gray;
+        margin: 0;
+        padding-top: 20px;
+    }
+}
