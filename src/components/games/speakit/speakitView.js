@@ -60,6 +60,9 @@ export default class SpeakitView {
   }
 
   dropScore() {
+    this.img.src = emptyImg;
+    this.translation.textContent = '';
+    this.gameWord.textContent = '';
     this.wordList.querySelectorAll('.wordList__item.active').forEach((item) => {
       item.classList.remove('active');
     });

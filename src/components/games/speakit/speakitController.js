@@ -2,8 +2,8 @@ import SpeakitView from './speakitView';
 import SpeakitModel from './speakitModel';
 
 export default class SpeakitController {
-  constructor(user, callResult) {
-    this.callResult = callResult;
+  constructor(user, gamesClass) {
+    this.gamesClass = gamesClass;
     this.view = new SpeakitView();
     this.model = new SpeakitModel(user);
     this.level = 0;
@@ -12,8 +12,9 @@ export default class SpeakitController {
   init() {
     this.view.renderHTML();
     this.createWords();
-    this.result = () => this.callResult(this.model.dataWords);
-    this.view.result.addEventListener('click', this.result);
+    this.view.result.addEventListener('click', () => {
+      this.gamesClass.openPopupResult(this.words);
+    });
 
     this.view.wordList.addEventListener('click', (e) => {
       this.clickWordList(e);
@@ -58,12 +59,12 @@ export default class SpeakitController {
     this.view.clearWordList();
     this.model.getWords()
       .then((data) => {
-        this.view.createWords(data);
+        this.words = data;
+        this.view.createWords(this.words);
       });
   }
 
   clickStart() {
-    this.dropScore();
     if (this.model.game) {
       this.stop();
     } else {
@@ -77,12 +78,14 @@ export default class SpeakitController {
   }
 
   stop() {
+    this.dropScore();
     this.view.stop();
     this.model.stop();
     this.recognition.stop();
   }
 
   start() {
+    this.dropScore();
     this.view.start();
     this.model.game = true;
     this.recognition.start();
@@ -121,7 +124,7 @@ export default class SpeakitController {
   win() {
     this.dropScore();
     this.stop();
-    this.result();
+    this.gamesClass.openPopupResult(this.words);
   }
 
   changeCountWords(count) {
@@ -131,5 +134,9 @@ export default class SpeakitController {
 
   getCountWords() {
     return this.model.countWords;
+  }
+
+  getScore() {
+    return this.model.score;
   }
 }

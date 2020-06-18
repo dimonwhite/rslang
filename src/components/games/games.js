@@ -22,12 +22,12 @@ export default class Games {
 
   create(name) {
     if (this.games[name]) {
-      this.game = new this.games[name](this.user, this.endGame);
+      this.game = new this.games[name](this.user, this);
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
       main.append(this.createStartScreen());
       main.append(this.createSettings());
-      main.append(this.createEndGame());
+      main.append(this.createResultPopup());
       main.classList.add(this.gameInfo.gameClass);
       this.game.init();
     }
@@ -68,68 +68,83 @@ export default class Games {
     return wrap;
   }
 
-  createEndGame() {
-    const result = createElement('section', 'result', 'gameResult');
-    const wrapIncorr = createElement('div', 'result__wrap');
-    const incorrect = createElement('p', 'result__incorrect');
-    const incorrectlyText = createElement('span', false, false, 'Incorrectly: ');
-    const incorrectly = createElement('span', false, 'incorrectly');
-    incorrect.append(incorrectlyText);
-    incorrect.append(incorrectly);
-    const invalidList = createElement('ul', 'result__list', 'invalidList');
-    wrapIncorr.append(incorrect);
-    wrapIncorr.append(invalidList);
+  createResultPopup() {
+    this.resultPopup = createElement('div', 'resultPopup');
+    const wrap = createElement('div', 'resultPopup__wrap');
 
-    const wrapCorr = createElement('div', 'result__wrap');
-    const correct = createElement('p', 'result__correct');
-    const correctlyText = createElement('span', false, false, 'Correctly: ');
-    const correctly = createElement('span', false, 'correctly');
-    correct.append(correctlyText);
-    correct.append(correctly);
-    const validList = createElement('ul', 'result__list', 'validList');
-    wrapCorr.append(correct);
-    wrapCorr.append(validList);
+    const titleError = createElement('div', 'resultPopup__title', false, 'Ошибок');
+    this.titleErrorCount = createElement('span', 'errors');
+    this.errorBlock = createElement('div', 'resultPopup__errors');
 
-    const buttons = createElement('div', 'result__buttons');
-    const returnBtn = createElement('button', 'result__buttons-item', false, 'Выход');
-    const newGameBtn = createElement('button', 'result__buttons-item', 'newGame', 'Нова игра');
-    returnBtn.addEventListener('click', Games.exitGame.bind(this));
-    buttons.append(returnBtn);
-    buttons.append(newGameBtn);
-    result.append(wrapCorr);
-    result.append(wrapIncorr);
-    result.append(buttons);
-    return result;
+    const titleSuccess = createElement('div', 'resultPopup__title', false, 'Знаю');
+    this.titleSuccessCount = createElement('span', 'success');
+    this.successBlock = createElement('div', 'resultPopup__success');
+
+    const btnBlock = createElement('div', 'resultPopup__btns');
+    this.btnClosePopup = createElement('button', 'btn', false, 'Close');
+    this.btnNewGame = createElement('button', 'btn', false, 'New game');
+
+    this.resultPopup.append(wrap);
+    titleError.append(this.titleErrorCount);
+    titleSuccess.append(this.titleSuccessCount);
+    wrap.append(
+      titleError,
+      this.errorBlock,
+      titleSuccess,
+      this.successBlock,
+      btnBlock,
+    );
+    btnBlock.append(this.btnClosePopup, this.btnNewGame);
+    this.addResultListeners();
+    return this.resultPopup;
   }
 
-  endGame(words) {
-    this.count = 10;
-    this.words = words;
-    document.getElementById('gameResult').classList.add('show');
+  addResultListeners() {
+    this.btnClosePopup.addEventListener('click', () => {
+      this.closeResultPopup();
+    });
+    this.btnNewGame.addEventListener('click', () => {
+      this.game.change();
+      this.closeResultPopup();
+    });
+  }
 
-    const corrFragment = new DocumentFragment();
-    const incorrFragment = new DocumentFragment();
-    let incorrect = 0;
-    for (let i = 0; i < this.count; i += 1) {
-      const { word, transcription, wordTranslate } = words[i];
-      const content = `${word} ${transcription} ${wordTranslate}`;
-      const li = createElement('li', false, `li${i}`, content);
-      if (words[i].correctly) {
-        corrFragment.append(li);
+  openPopupResult(words) {
+    const score = this.game.getScore();
+    const count = this.game.words.length;
+
+    this.successBlock.innerHTML = '';
+    this.errorBlock.innerHTML = '';
+
+    this.titleErrorCount.textContent = count - score;
+    this.titleSuccessCount.textContent = score;
+    words.forEach((item, key) => {
+      if (item.success) {
+        Games.createResultItem(item, key, this.successBlock);
       } else {
-        incorrFragment.append(li);
-        incorrect += 1;
+        Games.createResultItem(item, key, this.errorBlock);
       }
-    }
-    document.getElementById('correctly').innerHTML = this.count - incorrect;
-    document.getElementById('incorrectly').innerHTML = incorrect;
+    });
 
-    const invalidList = document.getElementById('invalidList');
-    invalidList.innerHTML = '';
-    invalidList.append(incorrFragment);
-    const validList = document.getElementById('validList');
-    validList.innerHTML = '';
-    validList.append(corrFragment);
+    this.resultPopup.classList.add('active');
+  }
+
+  static createResultItem(item, key, block) {
+    const listItem = createElement('div', 'resultPopup__word');
+    listItem.dataset.id = key;
+    listItem.innerHTML = `
+      <svg class="svg_icon">
+        <use xlink:href="sprite.svg#volume"></use>
+      </svg>
+      <div class="text word">${item.word}</div>
+      <div class="text">${item.transcription}</div>
+      <div class="text">${item.translation}</div>
+    `;
+    block.append(listItem);
+  }
+
+  closeResultPopup() {
+    this.resultPopup.classList.remove('active');
   }
 
   createLevels() {
