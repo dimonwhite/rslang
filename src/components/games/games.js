@@ -1,4 +1,5 @@
 import gamesInfo from '@/data/games.json';
+import { blackGradient } from '@/constants';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
@@ -21,28 +22,31 @@ export default class Games {
 
   create(name) {
     if (this.games[name]) {
+      this.game = new this.games[name](this.user, this.endGame);
+      this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
-      main.append(this.createStartScreen(name));
+      main.append(this.createStartScreen());
       main.append(this.createSettings());
       main.append(this.createEndGame());
-      this.game = new this.games[name](this.user, this.endGame);
+      main.classList.add(this.gameInfo.gameClass);
       this.game.init();
     }
   }
 
-  createStartScreen(game) {
-    const gameInfo = this.gamesInfo[game];
+  createStartScreen() {
     const startScreen = createElement('div', 'game__startScreen');
-    const title = createElement('div', 'game__startScreen-title', false, gameInfo.title);
-    const desc = createElement('div', 'game__startScreen-desc', false, gameInfo.desc);
+    const title = createElement('div', 'game__startScreen-title', false, this.gameInfo.title);
+    const desc = createElement('div', 'game__startScreen-desc', false, this.gameInfo.desc);
     const btnStart = createElement('button', 'btn', false, 'Start');
     const btnExit = createElement('button', 'btn', false, 'Go back');
-    const image = require(`@/assets/img/${gameInfo.bgImage}`);
+    const image = require(`@/assets/img/${this.gameInfo.bgImage}`);
     startScreen.style.backgroundImage = `url("${image.default}")`;
+    document.body.style.backgroundImage = `${blackGradient}, url("${image.default}")`;
 
     startScreen.append(title);
     startScreen.append(desc);
     startScreen.append(btnStart);
+    startScreen.append(btnExit);
 
     btnStart.addEventListener('click', () => {
       startScreen.classList.add('hide');
@@ -54,7 +58,13 @@ export default class Games {
   createSettings() {
     const wrap = createElement('div', 'game__options');
     wrap.append(this.createLevels());
-    wrap.append(this.createOptions());
+    if (this.gameInfo.settings.countWords) {
+      wrap.append(this.createOptions(
+        this.gameInfo.settings.countWordsMin,
+        this.gameInfo.settings.countWordsStep,
+        this.gameInfo.settings.optionsCount,
+      ));
+    }
     return wrap;
   }
 
@@ -124,17 +134,11 @@ export default class Games {
 
   createLevels() {
     const wrap = createElement('div', 'levels', 'levels');
-    for (let i = 0; i <= 6; i += 1) {
-      const radio = createElement('label', 'radio', `radio${i}`);
-      const span = createElement('span', 'radio__span', false, `lvl-${i}`);
-      const input = createElement('input', 'radio__input');
-      input.value = i;
-      input.type = 'radio';
-      input.name = 'group';
-      if (i === 0) input.checked = 'checked';
-      radio.append(input);
-      radio.append(span);
-      wrap.append(radio);
+    const levelsParent = createElement('div', 'levels__wrap');
+    wrap.append(createElement('div', 'levels__title', false, 'Levels'));
+    wrap.append(levelsParent);
+    for (let i = 0; i < 6; i += 1) {
+      levelsParent.append(Games.createRadioLevel(i));
     }
     wrap.addEventListener('change', (e) => {
       this.game.level = +e.target.value;
@@ -143,18 +147,32 @@ export default class Games {
     return wrap;
   }
 
-  createOptions(minWords = 10, step = 5, options = 3) {
-    const wrap = createElement('div', 'savannah__select');
-    const selectText = createElement('span', 'savannah__select-text', 'savSelectText', 'Количество слов');
-    const select = createElement('select', 'savannah__select-options', 'selectCount');
+  static createRadioLevel(i) {
+    const radio = createElement('label', 'radio', `radio${i}`);
+    const span = createElement('span', 'radio__decor');
+    const input = createElement('input', 'radio__input');
+    input.value = i;
+    input.type = 'radio';
+    input.name = 'group';
+    if (i === 0) input.checked = 'checked';
+    radio.append(input);
+    radio.append(span);
+    return radio;
+  }
+
+  createOptions(minWords = 5, step = 5, options = 3) {
+    const wrap = createElement('div', 'game__select');
+    const selectText = createElement('span', 'game__select-text', 'savSelectText', 'Количество слов');
+    const select = createElement('select', 'game__select-options', 'selectCount');
     for (let i = 0; i < options; i += 1) {
       const content = `${minWords + i * step}`;
-      const option = createElement('option', 'savannah__select-options-item', false, content);
+      const option = createElement('option', 'game__select-options-item', false, content);
       select.append(option);
     }
     select.addEventListener('change', (e) => {
-      this.count = e.target.value;
+      this.game.changeCountWords(e.target.value);
     });
+    select.value = this.game.getCountWords();
     wrap.append(selectText);
     wrap.append(select);
     return wrap;

@@ -23,9 +23,9 @@ export default class SpeakitView {
     this.gameWord = createElement('div', 'game__word');
     this.wordList = createElement('div', 'wordList');
     this.btnsBlock = createElement('div', 'game__btns');
-    this.newGame = createElement('button', 'btn', false, 'New game');
-    this.startBtn = createElement('button', 'btn start', false, 'Start');
-    this.result = createElement('button', 'btn', false, 'Result');
+    this.newGame = createElement('button', 'btn btn-circle', false, 'New game');
+    this.startBtn = createElement('button', 'btn  btn-circle start', false, 'Start');
+    this.result = createElement('button', 'btn  btn-circle', false, 'Result');
     this.scoreBlock = createElement('div', 'score');
   }
 

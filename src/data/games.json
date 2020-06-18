@@ -2,26 +2,37 @@
   "savannah": {
     "title": "savannah",
     "desc": "savannah game",
-    "bgImage": "testbg.jpg"
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
   },
   "puzzle": {
     "title": "puzzle",
     "desc": "puzzle game",
-    "bgImage": "testbg.jpg"
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
   },
   "audiocall": {
     "title": "audiocall",
     "desc": "audiocall game",
-    "bgImage": "testbg.jpg"
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
   },
   "speakit": {
     "title": "SPEAKIT",
     "desc": "Click on the words to hear them sound.<br>Click on the button and speak the words into the microphone.",
-    "bgImage": "testbg.jpg"
+    "bgImage": "speakitbg.jpg",
+    "gameClass": "speakIt",
+    "settings": {
+      "countWords": true,
+      "countWordsMin": 5,
+      "countWordsStep": 5,
+      "optionsCount": 3
+    }
   },
   "sprint": {
     "title": "sprint",
     "desc": "sprint game",
-    "bgImage": "testbg.jpg"
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
   }
 }

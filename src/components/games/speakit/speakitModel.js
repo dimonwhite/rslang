@@ -1,4 +1,5 @@
 import dataWords from '@/data/mock_StudyWords';
+import { randomArray } from '@/utils';
 
 export default class SpeakitModel {
   constructor(user) {
@@ -7,12 +8,14 @@ export default class SpeakitModel {
     this.score = 0;
     this.page = 0;
     this.dataWords = dataWords;
+    this.countWords = 10;
   }
 
   getWords() {
-    console.log(this.dataWords);
-    this.dataWords = this.dataWords.slice(0, 10);
-    return new Promise((resolve) => resolve(this.dataWords));
+    randomArray(this.dataWords);
+    let arrWords = [...this.dataWords];
+    arrWords = arrWords.slice(0, this.countWords);
+    return new Promise((resolve) => resolve(arrWords));
   }
 
   getWord(id) {
@@ -43,7 +46,6 @@ export default class SpeakitModel {
       });
       return !success;
     });
-    console.log(this.dataWords);
     return success;
   }
 }

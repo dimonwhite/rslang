@@ -90,3 +90,34 @@ $teal: #009688;
     }
   }
 }
+
+.speakIt {
+  position: relative;
+  padding: 0 180px;
+  .levels {
+    position: absolute;
+    left: 64px;
+    bottom: 50px;
+  }
+}
+
+$radioBg: #FF0048;
+
+.levels {
+  &__title {
+    color: #BF123D;
+  }
+  .radio {
+    &__decor {
+      background-color: $radioBg;
+    }
+    @for $i from 2 through 6 {
+      $radioBg: lighten($radioBg, 5);
+      &:nth-last-child(#{$i}) {
+        .radio__decor {
+          background-color: $radioBg;
+        }
+      }
+    }
+  }
+}

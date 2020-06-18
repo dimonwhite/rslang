@@ -6,11 +6,12 @@ export default class SpeakitController {
     this.callResult = callResult;
     this.view = new SpeakitView();
     this.model = new SpeakitModel(user);
+    this.level = 0;
   }
 
   init() {
     this.view.renderHTML();
-    this.change();
+    this.createWords();
     this.result = () => this.callResult(this.model.dataWords);
     this.view.result.addEventListener('click', this.result);
 
@@ -38,18 +39,26 @@ export default class SpeakitController {
       }
       card.classList.add('active');
       const word = this.model.getWord(card.dataset.id);
-      console.log(word);
       this.view.editInfo(word);
       this.view.playAudio(word);
     }
   }
 
+  changeNumberPage() {
+    this.model.page = this.model.page === 29 ? 0 : this.model.page + 1;
+  }
+
   change() {
+    this.stop();
+    this.changeNumberPage();
+    this.createWords();
+  }
+
+  createWords() {
     this.view.clearWordList();
     this.model.getWords()
       .then((data) => {
         this.view.createWords(data);
-        this.model.page = this.model.page === 29 ? 0 : this.model.page + 1;
       });
   }
 
@@ -104,7 +113,7 @@ export default class SpeakitController {
     this.model.successWord.success = true;
     this.view.successCard(this.model.successWord, this.model.successId);
     this.model.score += 1;
-    if (this.model.score >= 10) {
+    if (this.model.score >= this.model.countWords) {
       this.win();
     }
   }
@@ -113,5 +122,14 @@ export default class SpeakitController {
     this.dropScore();
     this.stop();
     this.result();
+  }
+
+  changeCountWords(count) {
+    this.model.countWords = count;
+    this.change();
+  }
+
+  getCountWords() {
+    return this.model.countWords;
   }
 }

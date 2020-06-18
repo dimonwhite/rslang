@@ -6,19 +6,98 @@
 }
 
 .btn {
-  width: 300px;
-  height: 50px;
+  min-width: 180px;
+  height: 60px;
+
+  padding: 0 15px;
+
   font-weight: 500;
-  font-size: 22px;
-  color: #fff;
-  border: 0;
-  background-color: $teal;
-  border-radius: 6px;
+  font-size: 34px;
+  color: #FFCB29;
+
+  background-color: #6C55AD;
+  border-radius: 12px;
+  border: 2px solid #A586FF;
+
   transition: background-color 0.5s;
   &:hover, &.active {
-    background-color: darken($teal, 10);
+    background-color: darken(#6C55AD, 10);
   }
   &:focus {
     outline: 0;
+  }
+  &-circle {
+    border-radius: 60px;
+  }
+}
+
+$widthLevel: 20;
+
+.levels {
+  &__wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  &__title {
+    width: 100%;
+    margin-bottom: 15px;
+
+    font-size: 40px;
+    font-weight: 700;
+  }
+  .radio {
+    position: relative;
+
+    margin-right: 15px;
+
+    cursor: pointer;
+    &__input {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+
+      width: 1px;
+      height: 1px;
+
+      opacity: 0;
+      &:checked ~ .radio__decor {
+        box-shadow: 0 0 6px 3px #FFF2C3;
+        &:after {
+          content: '';
+          position: absolute;
+          top: 6px;
+          left: 6px;
+
+          width: calc(100% - 12px);
+          height: calc(100% - 12px);
+
+          background-color: #F1BC19;
+          border-radius: 50%;
+        }
+      }
+    }
+    &__decor {
+      position: relative;
+
+      display: block;
+      width: $widthLevel+px;
+      height: $widthLevel+px;
+
+      background-color: #FF0048;
+      border-radius: 50%;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+    @for $i from 2 through 6 {
+      $widthLevel: $widthLevel + 6;
+      &:nth-child(#{$i}) {
+        .radio__decor {
+          width: $widthLevel+px;
+          height: $widthLevel+px;
+        }
+      }
+    }
   }
 }

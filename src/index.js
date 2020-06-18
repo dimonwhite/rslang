@@ -12,13 +12,9 @@ window.addEventListener('load', () => {
     }
   });
 
-  document.getElementById('startPage').addEventListener('click', () => {
-    document.body.className = 'body show-main';
-    document.getElementById('startPage').classList.add('hide');
-    document.getElementById('navPage').classList.add('decoration');
-    new Header(user).createEvent();
-    new CardController(user).create();
-  });
+  document.body.className = 'body show-main';
+  new Header(user).createEvent();
+  new CardController(user).create();
 });
 
 function importAll(r) {

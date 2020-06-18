@@ -36,7 +36,12 @@ const cssLoaders = (extra) => {
         reloadAll: true,
       },
     },
-    'css-loader',
+    {
+      loader: 'css-loader',
+      options: {
+        sourceMap: isDev,
+      },
+    },
   ];
 
   if (extra) {
