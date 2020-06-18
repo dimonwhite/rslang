@@ -26,11 +26,15 @@ export default class SpeakitView {
     this.newGame = createElement('button', 'btn', false, 'New game');
     this.startBtn = createElement('button', 'btn start', false, 'Start');
     this.result = createElement('button', 'btn', false, 'Result');
+    this.scoreBlock = createElement('div', 'score');
   }
 
   appendElements() {
     this.btnsBlock.append(this.newGame, this.startBtn, this.result);
-    this.game.append(this.img, this.translation, this.gameWord, this.wordList, this.btnsBlock);
+    this.game.append(
+      this.scoreBlock, this.img, this.translation,
+      this.gameWord, this.wordList, this.btnsBlock,
+    );
   }
 
   clearWordList() {
@@ -53,5 +57,48 @@ export default class SpeakitView {
   playAudio(word) {
     this.audio.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
     this.audio.play();
+  }
+
+  dropScore() {
+    this.wordList.querySelectorAll('.wordList__item.active').forEach((item) => {
+      item.classList.remove('active');
+    });
+    this.scoreBlock.innerHTML = '';
+  }
+
+  stop() {
+    this.startBtn.classList.remove('active');
+    this.startBtn.innerText = 'Start';
+    this.game.classList.remove('active');
+  }
+
+  start() {
+    this.startBtn.classList.add('active');
+    this.startBtn.innerText = 'Stop';
+    this.game.classList.add('active');
+  }
+
+  displayWord(e) {
+    const i = e.resultIndex;
+    this.gameWord.textContent = e.results[i][0].transcript;
+  }
+
+  successCard(word, id) {
+    const card = this.wordList.querySelector(`.wordList__item[data-id="${id}"]`);
+    card.classList.add('active');
+    this.scoreBlock.append(SpeakitView.createStar());
+    this.editInfo(word);
+    this.gameWord.textContent = word.word;
+  }
+
+  static createStar() {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.innerHTML = `
+      <svg class="svg_icon">
+        <use xlink:href="sprite.svg#star"></use>
+      </svg>
+    `;
+    return star;
   }
 }

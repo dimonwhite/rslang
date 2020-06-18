@@ -11,8 +11,8 @@ export default class SpeakitController {
   init() {
     this.view.renderHTML();
     this.change();
-    const listener = () => this.callResult(this.model.words);
-    this.view.result.addEventListener('click', listener);
+    this.result = () => this.callResult(this.model.dataWords);
+    this.view.result.addEventListener('click', this.result);
 
     this.view.wordList.addEventListener('click', (e) => {
       this.clickWordList(e);
@@ -21,6 +21,12 @@ export default class SpeakitController {
     this.view.startBtn.addEventListener('click', () => {
       this.clickStart();
     });
+    this.view.newGame.addEventListener('click', () => {
+      this.stop();
+      this.change();
+    });
+
+    this.createRecognition();
   }
 
   clickWordList(e) {
@@ -45,5 +51,67 @@ export default class SpeakitController {
         this.view.createWords(data);
         this.model.page = this.model.page === 29 ? 0 : this.model.page + 1;
       });
+  }
+
+  clickStart() {
+    this.dropScore();
+    if (this.model.game) {
+      this.stop();
+    } else {
+      this.start();
+    }
+  }
+
+  dropScore() {
+    this.model.score = 0;
+    this.view.dropScore();
+  }
+
+  stop() {
+    this.view.stop();
+    this.model.stop();
+    this.recognition.stop();
+  }
+
+  start() {
+    this.view.start();
+    this.model.game = true;
+    this.recognition.start();
+  }
+
+  createRecognition() {
+    const MySpeechRecognition = window.SpeechRecognition
+      || window.webkitSpeechRecognition || window.mozSpeechRecognition;
+    this.recognition = new MySpeechRecognition();
+    this.recognition.continuous = true;
+    this.recognition.interimResults = false;
+    this.recognition.lang = 'en-US';
+    this.recognition.maxAlternatives = 30;
+    this.recognition.addEventListener('result', (e) => {
+      this.resultRecognition(e);
+    });
+  }
+
+  resultRecognition(e) {
+    if (this.model.isSameWord(e)) {
+      this.successCard();
+    } else {
+      this.view.displayWord(e);
+    }
+  }
+
+  successCard() {
+    this.model.successWord.success = true;
+    this.view.successCard(this.model.successWord, this.model.successId);
+    this.model.score += 1;
+    if (this.model.score >= 10) {
+      this.win();
+    }
+  }
+
+  win() {
+    this.dropScore();
+    this.stop();
+    this.result();
   }
 }

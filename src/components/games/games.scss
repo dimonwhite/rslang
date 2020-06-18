@@ -288,3 +288,24 @@
     margin-left: 300px;
     margin-top: 300px;
 }
+
+.score {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 30px;
+  .star {
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+    &:last-child {
+      margin-right: 0;
+    }
+    .svg_icon {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: $teal;
+    }
+  }
+}
