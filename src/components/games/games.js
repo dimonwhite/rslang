@@ -16,6 +16,7 @@ export default class Games {
       speakit: SpeakitController,
       sprint: SprintController,
     };
+    this.countLevels = 6;
     this.gamesInfo = gamesInfo;
   }
 
@@ -60,11 +61,7 @@ export default class Games {
       wrap.append(this.createLevels());
     }
     if (this.gameInfo.settings.countWords) {
-      wrap.append(this.createOptions(
-        this.gameInfo.settings.countWordsMin,
-        this.gameInfo.settings.countWordsStep,
-        this.gameInfo.settings.optionsCount,
-      ));
+      wrap.append(this.createOptions(this.gameInfo.settings.countWordsParams));
     }
     return wrap;
   }
@@ -84,23 +81,25 @@ export default class Games {
     const btnBlock = createElement({ tag: 'div', class: 'resultPopup__btns' });
     this.btnClosePopup = createElement({ tag: 'button', class: 'btn', content: 'Close' });
     this.btnNewGame = createElement({ tag: 'button', class: 'btn', content: 'New game' });
-    this.appendResultPopupElements(wrap, titleError, titleSuccess, btnBlock);
+    this.appendResultPopupElements({
+      wrap, titleError, titleSuccess, btnBlock,
+    });
     this.addResultListeners();
     return this.resultPopup;
   }
 
-  appendResultPopupElements(wrap, titleError, titleSuccess, btnBlock) {
-    this.resultPopup.append(wrap);
-    titleError.append(this.titleErrorCount);
-    titleSuccess.append(this.titleSuccessCount);
-    wrap.append(
-      titleError,
+  appendResultPopupElements(elements) {
+    this.resultPopup.append(elements.wrap);
+    elements.titleError.append(this.titleErrorCount);
+    elements.titleSuccess.append(this.titleSuccessCount);
+    elements.wrap.append(
+      elements.titleError,
       this.errorBlock,
-      titleSuccess,
+      elements.titleSuccess,
       this.successBlock,
-      btnBlock,
+      elements.btnBlock,
     );
-    btnBlock.append(this.btnClosePopup, this.btnNewGame);
+    elements.btnBlock.append(this.btnClosePopup, this.btnNewGame);
   }
 
   addResultListeners() {
@@ -122,27 +121,28 @@ export default class Games {
 
     this.titleErrorCount.textContent = count - score;
     this.titleSuccessCount.textContent = score;
-    words.forEach((item, key) => {
-      if (item.success) {
-        Games.createResultItem(item, key, this.successBlock);
+    words.forEach((word, key) => {
+      const objWord = { word, key };
+      if (word.success) {
+        Games.createResultItem(objWord, this.successBlock);
       } else {
-        Games.createResultItem(item, key, this.errorBlock);
+        Games.createResultItem(objWord, this.errorBlock);
       }
     });
 
     this.resultPopup.classList.add('active');
   }
 
-  static createResultItem(item, key, block) {
+  static createResultItem(objWord, block) {
     const listItem = createElement({ tag: 'div', class: 'resultPopup__word' });
-    listItem.dataset.id = key;
+    listItem.dataset.id = objWord.key;
     listItem.innerHTML = `
       <svg class="svg_icon">
         <use xlink:href="sprite.svg#volume"></use>
       </svg>
-      <div class="text word">${item.word}</div>
-      <div class="text">${item.transcription}</div>
-      <div class="text">${item.translation}</div>
+      <div class="text word">${objWord.word.word}</div>
+      <div class="text">${objWord.word.transcription}</div>
+      <div class="text">${objWord.word.translation}</div>
     `;
     block.append(listItem);
   }
@@ -156,7 +156,7 @@ export default class Games {
     const levelsParent = createElement({ tag: 'div', class: 'levels__wrap' });
     wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Levels' }));
     wrap.append(levelsParent);
-    for (let i = 0; i < 6; i += 1) {
+    for (let i = 0; i < this.countLevels; i += 1) {
       levelsParent.append(Games.createRadioLevel(i));
     }
     wrap.addEventListener('change', (e) => {
@@ -179,14 +179,14 @@ export default class Games {
     return radio;
   }
 
-  createOptions(minWords = 5, step = 5, options = 3) {
+  createOptions(settings = { min: 5, step: 5, options: 3 }) {
     const wrap = createElement({ tag: 'div', class: 'game__select' });
     const selectText = createElement({
       tag: 'span', class: 'game__select-text', id: 'savSelectText', content: 'Количество слов',
     });
     const select = createElement({ tag: 'select', class: 'game__select-options', id: 'selectCount' });
-    for (let i = 0; i < options; i += 1) {
-      const content = `${minWords + i * step}`;
+    for (let i = 0; i < settings.options; i += 1) {
+      const content = `${settings.min + i * settings.step}`;
       const option = createElement({ tag: 'option', class: 'game__select-options-item', content });
       select.append(option);
     }

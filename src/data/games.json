@@ -24,9 +24,11 @@
     "gameClass": "speakIt",
     "settings": {
       "countWords": true,
-      "countWordsMin": 5,
-      "countWordsStep": 5,
-      "optionsCount": 3,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
       "levels": true
     }
   },
