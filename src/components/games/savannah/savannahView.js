@@ -29,24 +29,23 @@ export default class SavannahView {
     main.append(savannah);
     this.savannah = savannah;
     this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
-    // this.createEvent();
   }
 
   createGame() {
     const game = document.createElement('section');
     game.className = 'savannah__game';
     game.id = 'savGame';
-    const heart = document.createElement('div');
-    heart.className = 'savannah__game-heart';
-    for (let i = 1; i <= this.heart; i += 1) {
+    this.hearts = document.createElement('div');
+    this.hearts.className = 'savannah__game-heart';
+    for (let i = 0; i < this.heart; i += 1) {
       const img = document.createElement('img');
       img.className = 'savannah__game-heart-img';
       img.src = './img/heart.png';
-      img.id = `savHeart${i}`;
+      // img.id = `savHeart${i}`;
       img.setAttribute('alt', '');
-      heart.append(img);
+      this.hearts.append(img);
     }
-    game.append(heart);
+    game.append(this.hearts);
 
     const fild = document.createElement('div');
     fild.className = 'savannah__game-fild';
@@ -175,6 +174,24 @@ export default class SavannahView {
     this.fild.append(this.bottom);
     this.bottom.innerHTML = word;
     this.bottom.classList.add('move-from-bottom');
+  }
+
+  nextWord(countHeart) {
+    this.hearts.children[countHeart].src = './img/heart-empty.png';
+    // document.getElementById(`savHeart${countHeart}`).src = './img/heart-empty.png';
+    if (this.top.classList.length > 1) {
+      this.top.innerHTML = '';
+      const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
+      this.top.classList.remove('move-from-top');
+      this.top.style.transform = matrix;
+      this.top.classList.add('move-out-top');
+    } else {
+      this.bottom.innerHTML = '';
+      const matrix = window.getComputedStyle(this.bottom).getPropertyValue('transform');
+      this.bottom.classList.remove('move-from-bottom');
+      this.bottom.style.transform = matrix;
+      this.bottom.classList.add('move-out-bottom');
+    }
   }
 
   getRandomIndexes(count) {
