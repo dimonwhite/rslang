@@ -1,5 +1,5 @@
 import gamesInfo from '@/data/games.json';
-import { blackGradient } from '@/constants';
+import { blackGradient, urlGitHub } from '@/constants';
 import { createElement } from '@/utils';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
@@ -18,6 +18,7 @@ export default class Games {
     };
     this.countLevels = 6;
     this.gamesInfo = gamesInfo;
+    this.audio = new Audio();
   }
 
   create(name) {
@@ -110,18 +111,34 @@ export default class Games {
       this.game.change();
       this.closeResultPopup();
     });
+    this.resultPopup.addEventListener('click', (e) => {
+      this.clickResultWords(e.target);
+    });
+  }
+
+  clickResultWords(element) {
+    const word = element.closest('.resultPopup__word');
+    if (word) {
+      this.playAudio(this.words[word.dataset.id]);
+    }
+  }
+
+  playAudio(word) {
+    this.audio.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
+    this.audio.play();
   }
 
   openPopupResult(words) {
+    this.words = words;
     const score = this.game.getScore();
-    const count = this.game.words.length;
+    const count = this.words.length;
 
     this.successBlock.innerHTML = '';
     this.errorBlock.innerHTML = '';
 
     this.titleErrorCount.textContent = count - score;
     this.titleSuccessCount.textContent = score;
-    words.forEach((word, key) => {
+    this.words.forEach((word, key) => {
       const objWord = { word, key };
       if (word.success) {
         Games.createResultItem(objWord, this.successBlock);
