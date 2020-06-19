@@ -1,15 +1,14 @@
 import gamesInfo from '@/data/games.json';
 import { blackGradient } from '@/constants';
+import { createElement } from '@/utils';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
 import SpeakitController from './speakit/speakitController';
 import SprintController from './sprint/sprintController';
-import { createElement } from '../../utils';
 
 export default class Games {
   constructor() {
-    this.count = 10;
     this.games = {
       savannah: SavannahController,
       puzzle: PuzzleController,
@@ -83,7 +82,12 @@ export default class Games {
     const btnBlock = createElement('div', 'resultPopup__btns');
     this.btnClosePopup = createElement('button', 'btn', false, 'Close');
     this.btnNewGame = createElement('button', 'btn', false, 'New game');
+    this.appendResultPopupElements(wrap, titleError, titleSuccess, btnBlock);
+    this.addResultListeners();
+    return this.resultPopup;
+  }
 
+  appendResultPopupElements(wrap, titleError, titleSuccess, btnBlock) {
     this.resultPopup.append(wrap);
     titleError.append(this.titleErrorCount);
     titleSuccess.append(this.titleSuccessCount);
@@ -95,8 +99,6 @@ export default class Games {
       btnBlock,
     );
     btnBlock.append(this.btnClosePopup, this.btnNewGame);
-    this.addResultListeners();
-    return this.resultPopup;
   }
 
   addResultListeners() {
