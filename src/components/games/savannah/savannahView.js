@@ -149,7 +149,7 @@ export default class SavannahView {
     if (rand) {
       this.moveWordFromTop(gameWords[attempt][4]);
     } else {
-      this.moveWordFromBottom(gameWords[this.attempt][4]);
+      this.moveWordFromBottom(gameWords[attempt][4]);
     }
   }
 
@@ -178,7 +178,6 @@ export default class SavannahView {
 
   nextWord(countHeart) {
     this.hearts.children[countHeart].src = './img/heart-empty.png';
-    // document.getElementById(`savHeart${countHeart}`).src = './img/heart-empty.png';
     if (this.top.classList.length > 1) {
       this.top.innerHTML = '';
       const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
@@ -192,6 +191,51 @@ export default class SavannahView {
       this.bottom.style.transform = matrix;
       this.bottom.classList.add('move-out-bottom');
     }
+  }
+
+  getCorrectlyAnswer(target, delta) {
+    target.classList.add('savannah__correct');
+    if (this.top.classList.length > 1) {
+      this.top.innerHTML = '';
+      const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
+      this.top.classList.remove('move-from-top');
+      this.top.style.transform = matrix;
+      this.top.classList.add('move-to-ship-top');
+    } else {
+      this.bottom.innerHTML = '';
+      const matrix = window.getComputedStyle(this.bottom).getPropertyValue('transform');
+      this.bottom.classList.remove('move-from-bottom');
+      this.bottom.style.transform = matrix;
+      this.bottom.classList.add('move-to-ship-bottom');
+    }
+    this.moveBackground(delta);
+  }
+
+  moveBackground(delta) {
+    const bg = +this.startBg.replace('px', '');
+    this.game.style.backgroundPositionY = `${bg + Math.floor(this.BG_HIGHT * delta)}px`;
+    setTimeout(() => {
+      this.ship.style.height = `${Math.floor(this.SHIP_HIGHT * (delta + 1))}px`;
+      this.ship.style.width = `${Math.floor(this.SHIP_HIGHT * (delta + 1))}px`;
+    }, 2000);
+  }
+
+  getIncorrectlyAnswer(target, countHeart) {
+    target.classList.add('savannah__incorrect');
+    if (this.top.classList.length > 1) {
+      this.top.innerHTML = '';
+      const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
+      this.top.classList.remove('move-from-top');
+      this.top.style.transform = matrix;
+      this.top.classList.add('move-out-top');
+    } else {
+      this.bottom.innerHTML = '';
+      const matrix = window.getComputedStyle(this.bottom).getPropertyValue('transform');
+      this.bottom.classList.remove('move-from-bottom');
+      this.bottom.style.transform = matrix;
+      this.bottom.classList.add('move-out-bottom');
+    }
+    this.hearts.children[countHeart].src = './img/heart-empty.png';
   }
 
   endGame(words, attempt) {
@@ -213,9 +257,6 @@ export default class SavannahView {
     Array.from(this.hearts.children).forEach((item) => {
       item.src = './img/heart.png';
     });
-    // for (let i = 1; i <= this.maxHeart; i += 1) {
-    //   document.getElementById(`savHeart${i}`).src = './img/heart.png';
-    // }
   }
 
   getRandomIndexes(count) {
