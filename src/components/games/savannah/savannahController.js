@@ -37,7 +37,7 @@ export default class SavannahController {
       if (this.lockChoice) this.getAnswer(e);
     });
     document.getElementById('startGame').addEventListener('click', this.getStart.bind(this));
-    // document.getElementById('newGame').addEventListener('click', this.newGame.bind(this));
+    document.getElementById('newGame').addEventListener('click', this.newGame.bind(this));
     document.body.addEventListener('keydown', (e) => {
       switch (e.code) {
         case 'Digit1':
@@ -106,10 +106,15 @@ export default class SavannahController {
       } else {
         this.getAudio('win');
       }
-      setTimeout(this.endGame.bind(this), 4000);
+      setTimeout(this.view.endGame.bind(this.view, this.model.words, this.attempt), 4000);
     } else {
       setTimeout(this.startNextRound.bind(this), 2500);
     }
+  }
+
+  newGame() {
+    this.model.newGame();
+    this.view.newGame();
   }
 
   getAudio(stateGame) {

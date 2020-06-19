@@ -194,6 +194,30 @@ export default class SavannahView {
     }
   }
 
+  endGame(words, attempt) {
+    this.top.remove();
+    this.bottom.remove();
+    this.fild.classList.remove('show-flex');
+    this.countdown.classList.remove('hide');
+    this.savannah.classList.remove('show');
+    this.callResult(words, attempt);
+  }
+
+  newGame() {
+    document.getElementById('begin').classList.remove('hide');
+    document.getElementById('gameResult').classList.remove('show');
+    document.getElementById('savTime').innerHTML = '3';
+    this.ship.style.height = `${this.SHIP_HIGHT}px`;
+    this.ship.style.width = `${this.SHIP_HIGHT}px`;
+    this.game.style.backgroundPositionY = this.startBg;
+    Array.from(this.hearts.children).forEach((item) => {
+      item.src = './img/heart.png';
+    });
+    // for (let i = 1; i <= this.maxHeart; i += 1) {
+    //   document.getElementById(`savHeart${i}`).src = './img/heart.png';
+    // }
+  }
+
   getRandomIndexes(count) {
     this.randIndexes = [];
     while (this.randIndexes.length < count) {
