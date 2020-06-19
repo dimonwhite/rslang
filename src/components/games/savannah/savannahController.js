@@ -30,8 +30,6 @@ export default class SavannahController {
   create() {
     this.view.renderHTML();
     this.createEvent();
-    // const listener = () => this.callResult(this.savannahModel.words);
-    // this.savannahView.result.addEventListener('click', listener);
   }
 
   createEvent() {
@@ -39,7 +37,7 @@ export default class SavannahController {
       if (this.lockChoice) this.getAnswer(e);
     });
     document.getElementById('startGame').addEventListener('click', this.getStart.bind(this));
-    document.getElementById('newGame').addEventListener('click', this.newGame.bind(this));
+    // document.getElementById('newGame').addEventListener('click', this.newGame.bind(this));
     document.body.addEventListener('keydown', (e) => {
       switch (e.code) {
         case 'Digit1':
@@ -79,30 +77,12 @@ export default class SavannahController {
     this.startNextRound();
   }
 
-  // getAnswer({ target }) {
-  //   if (target.tagName === 'BUTTON' && target.classList.length < 2 && this.lockChoice) {
-  //     this.lockChoice = false;
-  //     this.stopRounds[this.attempt] = false;
-  //     if (target.dataset.answer === 'true') {
-  //       this.getCorrectlyAnswer(target);
-  //     } else {
-  //       this.getIncorrectlyAnswer(target);
-  //     }
-  //     this.attempt += 1;
-  //     // this.changeStatistics();
-  //   }
-  //   if (this.correctly === this.count || this.heart === 0) {
-  //     this.lockChoice = false;
-  //     if (this.heart === 0) {
-  //       this.getAudio('game-over');
-  //     } else {
-  //       this.getAudio('win');
-  //     }
-  //     setTimeout(this.endGame.bind(this), 4000);
-  //   } else {
-  //     setTimeout(this.startNextRound.bind(this), 2300);
-  //   }
-  // }
+  startNextRound() {
+    // if (this.stopRounds[this.attempt]) { ... }
+    this.view.startNextRound(this.model.gameWords, this.attempt);
+    setTimeout(() => { this.lockChoice = true; }, 500);
+    setTimeout(this.nextWord.bind(this, this.attempt), 10000);
+  }
 
   getAudio(stateGame) {
     try {

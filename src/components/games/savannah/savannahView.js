@@ -127,4 +127,63 @@ export default class SavannahView {
     this.bottom = document.getElementById('savBottom');
     this.ship = document.getElementById('savShip');
   }
+
+  startNextRound(gameWords, attempt) {
+    if (this.top) this.top.remove();
+    if (this.bottom) this.bottom.remove();
+
+    const WORDS = 4;
+    this.getRandomIndexes(WORDS);
+    Array.from(this.options.children).forEach((item, index) => {
+      const word = gameWords[attempt][this.randIndexes[index]];
+      item.innerHTML = word;
+      item.classList.remove('savannah__correct');
+      item.classList.remove('savannah__incorrect');
+      if (this.randIndexes[index] === 0) {
+        item.setAttribute('data-answer', 'true');
+      } else {
+        item.setAttribute('data-answer', 'false');
+      }
+    });
+
+    const rand = Math.floor(Math.random() * 2);
+    if (rand) {
+      this.moveWordFromTop(gameWords[attempt][4]);
+    } else {
+      this.moveWordFromBottom(gameWords[this.attempt][4]);
+    }
+  }
+
+  moveWordFromTop(word) {
+    const top = document.createElement('div');
+    top.className = 'savannah__game-question';
+    this.top = top;
+    this.top.innerHTML = word;
+    this.bottom = document.createElement('div');
+    this.fild.prepend(this.top);
+    this.fild.append(this.bottom);
+    this.top.classList.add('move-from-top');
+  }
+
+  moveWordFromBottom(word) {
+    const bottom = document.createElement('div');
+    bottom.className = 'savannah__game-question';
+    this.bottom = bottom;
+    this.bottom.innerHTML = word;
+    this.top = document.createElement('div');
+    this.fild.prepend(this.top);
+    this.fild.append(this.bottom);
+    this.bottom.innerHTML = word;
+    this.bottom.classList.add('move-from-bottom');
+  }
+
+  getRandomIndexes(count) {
+    this.randIndexes = [];
+    while (this.randIndexes.length < count) {
+      const rand = Math.floor(Math.random() * count);
+      if (!this.randIndexes.includes(rand)) {
+        this.randIndexes.push(rand);
+      }
+    }
+  }
 }

@@ -81,20 +81,6 @@ export default class SavannahModel {
     }
   }
 
-  getRandomIndexes(count) {
-    try {
-      const indexes = [];
-      while (indexes.length < count) {
-        const rand = Math.floor(Math.random() * count);
-        if (!indexes.includes(rand)) indexes.push(rand);
-      }
-      return indexes;
-    } catch (error) {
-      this.error = error.message;
-    }
-    return new Array(count).fill(1).map((item, index) => index);
-  }
-
   getWords() {
     try {
       for (let i = 0; i < this.words.length; i += 1) {
