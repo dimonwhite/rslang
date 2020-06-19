@@ -3,11 +3,13 @@ import DictionaryModel from './dictionaryModel';
 
 export default class DictionaryController {
   constructor(user) {
-    this.dictionaryModel = new DictionaryModel(user);
-    this.dictionaryView = new DictionaryView();
+    this.model = new DictionaryModel(user);
+    this.view = new DictionaryView();
+    this.list = this.model.getList();
   }
 
   create() {
-    this.dictionaryView.renderHTML();
+    this.view.renderHTML();
+    this.view.createList(this.list);
   }
 }
