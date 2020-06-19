@@ -4,19 +4,38 @@ import AudiocallController from './audiocall/audiocallController';
 import SpeakitController from './speakit/speakitController';
 import SprintController from './sprint/sprintController';
 import { createElement } from '../../utils';
+// import Savannah from './savannah/savannah';
 
 export default class Games {
-  constructor() {
+  constructor(user) {
     this.count = 10;
+    this.user = user;
   }
 
+  /*
+  * Для следующих Id привяжите необходимые события:
+  * Id кнопки на стартовой странице для начала игры: startGame [НАЧАТЬ]
+  * Id кнопки на странице краткосрочной статистики: newGame [Новая игра]
+  *
+  * В класс передаётся два параметра:
+  * user с нужными данными (token) и методами запросов.
+  * endGame (расширяющий метод), который показывает краткосрочную статистику после игры.
+  *
+  * В endGame надо передать два параметра:
+  * words - массив слов, которые учавствовали в игре со всеми стандртынми свойствами:
+  * word, transcription, wordTranslate, audio, correctly [false - отвечено не верно, true - верно]
+  *
+  * Id стартовой страницы: begin
+  * Id страницы краткосрочной статистики: gameResult
+  */
   create(name) {
     const main = document.getElementById('main');
     main.append(this.createBegin());
     main.append(this.createEndGame());
     switch (name) {
       case 'savannah':
-        new SavannahController(this.user, this.endGame).createEvent();
+        new SavannahController(this.user, this.endGame).create();
+        // new Savannah(this.user, this.endGame).create();
         break;
       case 'puzzle':
         new PuzzleController(this.user, this.endGame).createEvent();
@@ -44,13 +63,12 @@ export default class Games {
       this.begin.append(wrap);
     }
     const title = createElement('h2', 'savannah__begin-title', false, nameGame);
-    const start = createElement('button', 'savannah__begin-start', false, 'НАЧАТЬ');
+    const start = createElement('button', 'savannah__begin-start', 'startGame', 'НАЧАТЬ');
     const exit = createElement('button', 'savannah__begin-start', false, 'Вернуться');
     this.begin.append(title);
     this.begin.append(start);
     this.begin.append(exit);
     exit.addEventListener('click', this.exitGame.bind(this));
-    start.addEventListener('click', this.getStart.bind(this));
     return this.begin;
   }
 
@@ -88,10 +106,11 @@ export default class Games {
     return result;
   }
 
-  endGame(words) {
-    this.count = 10;
+  endGame(words, count) {
+    this.count = count;
     this.words = words;
-    document.getElementById('gameResult').classList.add('show');
+    const gameResult = document.getElementById('gameResult');
+    gameResult.classList.add('show');
 
     const corrFragment = new DocumentFragment();
     const incorrFragment = new DocumentFragment();
@@ -116,6 +135,15 @@ export default class Games {
     const validList = document.getElementById('validList');
     validList.innerHTML = '';
     validList.append(corrFragment);
+    gameResult.addEventListener('click', this.speakWord.bind(this));
+  }
+
+  speakWord(e) {
+    if (e.target.tagName === 'LI') {
+      const audio = new Audio();
+      audio.src = this.words[+e.target.id.replace('li', '')].audio;
+      audio.autoplay = true;
+    }
   }
 
   createLevels() {
@@ -157,15 +185,8 @@ export default class Games {
     return wrap;
   }
 
-  getStart() {
-    this.begin.classList.add('hide');
-  }
-
   exitGame() {
     this.begin = null;
-    document.getElementById('header').classList.remove('hide');
-    document.getElementById('footer').classList.remove('hide');
-    document.getElementById('settings').classList.remove('hide');
     document.getElementById('navPage').click();
   }
 }

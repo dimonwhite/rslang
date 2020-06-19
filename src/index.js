@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
     }
   });
 
-  document.getElementById('startPage').addEventListener('click', () => {
+  document.getElementById('startBtn').addEventListener('click', () => {
     document.body.className = 'body show-main';
     document.getElementById('startPage').classList.add('hide');
     document.getElementById('navPage').classList.add('decoration');
@@ -21,7 +21,7 @@ window.addEventListener('load', () => {
   });
 });
 
-function importAll(r) {
-  return r.keys().map(r);
-}
-importAll(require.context('./assets/img/', false, /\.svg$/));
+// function importAll(r) {
+//   return r.keys().map(r);
+// }
+// importAll(require.context('./assets/img/', false, /\.svg$/));

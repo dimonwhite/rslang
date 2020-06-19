@@ -1,0 +1,218 @@
+.savannah {
+    display: none;
+    background-image: url("/img/bg-savana.svg");
+    background-position-y: 5000px;
+    height: 100vh;
+    transition: background-position-y 1s;
+    overflow: hidden;
+    user-select: none;
+
+    &__game {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 100vh;
+        position: relative;
+
+        background-image: url("/img/bg-savana.svg");
+        background-position-y: 5000px;
+        height: 100vh;
+        transition: background-position-y 1s;
+        overflow: hidden;
+
+        &-heart {
+            display: flex;
+            justify-content: space-around;
+            width: 200px;
+            align-self: flex-end;
+            padding: 10px;
+
+            &-img {
+                width: 30px;
+                height: 30px;
+                object-fit: cover;
+            }
+        }
+        &-fild {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 96%;
+            height: 100%;
+            position: relative;
+            padding-bottom: 70px;
+        }
+        &-question {
+            text-align: center;
+            border: 1px solid red;
+            width: 300px;
+            color: white;
+            font-size: 35px;
+            transform: translateY(0);
+        }
+        &-answer {
+            text-align: center;
+            min-width: 300px;
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: 1px solid white;
+        }
+        &-ship {
+            width: 35px;
+            height: 35px;
+            bottom: 10px;
+            object-fit: cover;
+            transform: rotate(180deg);
+            position: absolute;
+            transition: 0.3s;
+        }
+        &-wrap {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+    }
+    &__timer {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 50vh;
+
+        &-key {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+        &-time {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: #dc143c;
+            text-shadow: 1px 1px 1px #000;
+            border: 1px solid gold;
+            text-align: center;
+            font-size: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        &-text {
+            margin: 0 auto;
+            font-size: 20px;
+            color: white;
+        }
+    }
+}
+
+@keyframes top {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(50vh);
+    }
+}
+
+@keyframes bottom {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50vh);
+    }
+}
+
+@keyframes ship-top {
+    0% {
+    }
+    100% {
+        transform: translateY(85vh);
+        border: 3px solid white;
+    }
+}
+@keyframes ship-bottom {
+    0% {
+    }
+    100% {
+        transform: translateY(5vh);
+        border: 3px solid white;
+    }
+}
+
+@keyframes out-top {
+    0% {
+    }
+    99% {
+        transform: translateY(-20vh);
+        border: 3px solid crimson;
+    }
+    100% {
+        border: 0;
+    }
+}
+
+@keyframes out-bottom {
+    0% {
+    }
+    99% {
+        transform: translateY(-120vh);
+        border: 3px solid crimson;
+    }
+    100% {
+        border: 0;
+    }
+}
+
+.move-from-top {
+    animation-name: top;
+    animation-duration: 7s;
+    animation-delay: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+.move-from-bottom {
+    animation-name: bottom;
+    animation-duration: 7s;
+    animation-delay: 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.move-to-ship-top,
+.move-to-ship-bottom {
+    height: 25px;
+    width: 0px;
+    border: 3px solid white;
+    border-radius: 15px;
+    animation: ship-top 2s 1 forwards;
+}
+.move-to-ship-bottom {
+    animation: ship-bottom 2s 1 forwards;
+}
+
+.move-out-top,
+.move-out-bottom {
+    height: 25px;
+    width: 0px;
+    border: 3px solid crimson;
+    border-radius: 15px;
+    animation: out-bottom 2s 1 forwards;
+}
+.move-out-top {
+    animation: out-top 2s 1 forwards;
+}
+.gray-word {
+    background-color: gray;
+}

@@ -48,7 +48,7 @@ export default class Header {
         break;
       default:
         document.body.className = 'body show-game';
-        new Games().create(name);
+        new Games(this.user).create(name);
         break;
     }
   }
