@@ -16,17 +16,17 @@ export default class SpeakitView {
   }
 
   createElements() {
-    this.game = createElement('section', 'game');
-    this.img = createElement('img', 'game__img');
+    this.game = createElement({ tag: 'section', class: 'game' });
+    this.img = createElement({ tag: 'img', class: 'game__img' });
     this.img.src = emptyImg;
-    this.translation = createElement('div', 'game__translation');
-    this.gameWord = createElement('div', 'game__word');
-    this.wordList = createElement('div', 'wordList');
-    this.btnsBlock = createElement('div', 'game__btns');
-    this.newGame = createElement('button', 'btn btn-circle', false, 'New game');
-    this.startBtn = createElement('button', 'btn  btn-circle start', false, 'Start');
-    this.result = createElement('button', 'btn  btn-circle', false, 'Result');
-    this.scoreBlock = createElement('div', 'score');
+    this.translation = createElement({ tag: 'div', class: 'game__translation' });
+    this.gameWord = createElement({ tag: 'div', class: 'game__word' });
+    this.wordList = createElement({ tag: 'div', class: 'wordList' });
+    this.btnsBlock = createElement({ tag: 'div', class: 'game__btns' });
+    this.newGame = createElement({ tag: 'button', class: 'btn btn-circle', content: 'New game' });
+    this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Start' });
+    this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Result' });
+    this.scoreBlock = createElement({ tag: 'div', class: 'score' });
   }
 
   appendElements() {
@@ -95,13 +95,11 @@ export default class SpeakitView {
   }
 
   static createStar() {
-    const star = document.createElement('div');
-    star.classList.add('star');
-    star.innerHTML = `
+    const svg = `
       <svg class="svg_icon">
         <use xlink:href="sprite.svg#star"></use>
       </svg>
     `;
-    return star;
+    return createElement({ tag: 'div', class: 'star', content: svg });
   }
 }

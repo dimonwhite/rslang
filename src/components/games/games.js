@@ -33,11 +33,11 @@ export default class Games {
   }
 
   createStartScreen() {
-    const startScreen = createElement('div', 'game__startScreen');
-    const title = createElement('div', 'game__startScreen-title', false, this.gameInfo.title);
-    const desc = createElement('div', 'game__startScreen-desc', false, this.gameInfo.desc);
-    const btnStart = createElement('button', 'btn', false, 'Start');
-    const btnExit = createElement('button', 'btn', false, 'Go back');
+    const startScreen = createElement({ tag: 'div', class: 'game__startScreen' });
+    const title = createElement({ tag: 'div', class: 'game__startScreen-title', content: this.gameInfo.title });
+    const desc = createElement({ tag: 'div', class: 'game__startScreen-desc', content: this.gameInfo.desc });
+    const btnStart = createElement({ tag: 'button', class: 'btn', content: 'Start' });
+    const btnExit = createElement({ tag: 'button', class: 'btn', content: 'Go back' });
     const image = require(`@/assets/img/${this.gameInfo.bgImage}`);
     startScreen.style.backgroundImage = `url("${image.default}")`;
     document.body.style.backgroundImage = `${blackGradient}, url("${image.default}")`;
@@ -55,7 +55,7 @@ export default class Games {
   }
 
   createSettings() {
-    const wrap = createElement('div', 'game__options');
+    const wrap = createElement({ tag: 'div', class: 'game__options' });
     wrap.append(this.createLevels());
     if (this.gameInfo.settings.countWords) {
       wrap.append(this.createOptions(
@@ -68,20 +68,20 @@ export default class Games {
   }
 
   createResultPopup() {
-    this.resultPopup = createElement('div', 'resultPopup');
-    const wrap = createElement('div', 'resultPopup__wrap');
+    this.resultPopup = createElement({ tag: 'div', class: 'resultPopup' });
+    const wrap = createElement({ tag: 'div', class: 'resultPopup__wrap' });
 
-    const titleError = createElement('div', 'resultPopup__title', false, 'Ошибок');
-    this.titleErrorCount = createElement('span', 'errors');
-    this.errorBlock = createElement('div', 'resultPopup__errors');
+    const titleError = createElement({ tag: 'div', class: 'resultPopup__title', content: 'Ошибок' });
+    this.titleErrorCount = createElement({ tag: 'span', class: 'errors' });
+    this.errorBlock = createElement({ tag: 'div', class: 'resultPopup__errors' });
 
-    const titleSuccess = createElement('div', 'resultPopup__title', false, 'Знаю');
-    this.titleSuccessCount = createElement('span', 'success');
-    this.successBlock = createElement('div', 'resultPopup__success');
+    const titleSuccess = createElement({ tag: 'div', class: 'resultPopup__title', content: 'Знаю' });
+    this.titleSuccessCount = createElement({ tag: 'span', class: 'success' });
+    this.successBlock = createElement({ tag: 'div', class: 'resultPopup__success' });
 
-    const btnBlock = createElement('div', 'resultPopup__btns');
-    this.btnClosePopup = createElement('button', 'btn', false, 'Close');
-    this.btnNewGame = createElement('button', 'btn', false, 'New game');
+    const btnBlock = createElement({ tag: 'div', class: 'resultPopup__btns' });
+    this.btnClosePopup = createElement({ tag: 'button', class: 'btn', content: 'Close' });
+    this.btnNewGame = createElement({ tag: 'button', class: 'btn', content: 'New game' });
     this.appendResultPopupElements(wrap, titleError, titleSuccess, btnBlock);
     this.addResultListeners();
     return this.resultPopup;
@@ -132,7 +132,7 @@ export default class Games {
   }
 
   static createResultItem(item, key, block) {
-    const listItem = createElement('div', 'resultPopup__word');
+    const listItem = createElement({ tag: 'div', class: 'resultPopup__word' });
     listItem.dataset.id = key;
     listItem.innerHTML = `
       <svg class="svg_icon">
@@ -150,9 +150,9 @@ export default class Games {
   }
 
   createLevels() {
-    const wrap = createElement('div', 'levels', 'levels');
-    const levelsParent = createElement('div', 'levels__wrap');
-    wrap.append(createElement('div', 'levels__title', false, 'Levels'));
+    const wrap = createElement({ tag: 'div', class: 'levels', id: 'levels' });
+    const levelsParent = createElement({ tag: 'div', class: 'levels__wrap' });
+    wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Levels' }));
     wrap.append(levelsParent);
     for (let i = 0; i < 6; i += 1) {
       levelsParent.append(Games.createRadioLevel(i));
@@ -165,9 +165,9 @@ export default class Games {
   }
 
   static createRadioLevel(i) {
-    const radio = createElement('label', 'radio', `radio${i}`);
-    const span = createElement('span', 'radio__decor');
-    const input = createElement('input', 'radio__input');
+    const radio = createElement({ tag: 'label', class: 'radio', id: `radio${i}` });
+    const span = createElement({ tag: 'span', class: 'radio__decor' });
+    const input = createElement({ tag: 'input', class: 'radio__input' });
     input.value = i;
     input.type = 'radio';
     input.name = 'group';
@@ -178,12 +178,14 @@ export default class Games {
   }
 
   createOptions(minWords = 5, step = 5, options = 3) {
-    const wrap = createElement('div', 'game__select');
-    const selectText = createElement('span', 'game__select-text', 'savSelectText', 'Количество слов');
-    const select = createElement('select', 'game__select-options', 'selectCount');
+    const wrap = createElement({ tag: 'div', class: 'game__select' });
+    const selectText = createElement({
+      tag: 'span', class: 'game__select-text', id: 'savSelectText', content: 'Количество слов',
+    });
+    const select = createElement({ tag: 'select', class: 'game__select-options', id: 'selectCount' });
     for (let i = 0; i < options; i += 1) {
       const content = `${minWords + i * step}`;
-      const option = createElement('option', 'game__select-options-item', false, content);
+      const option = createElement({ tag: 'option', class: 'game__select-options-item', content });
       select.append(option);
     }
     select.addEventListener('change', (e) => {
