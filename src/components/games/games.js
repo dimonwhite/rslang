@@ -21,7 +21,7 @@ export default class Games {
 
   create(name) {
     if (this.games[name]) {
-      this.game = new this.games[name](this.user, this);
+      this.game = new this.games[name](this.user, this.openPopupResult.bind(this));
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
       main.append(this.createStartScreen());

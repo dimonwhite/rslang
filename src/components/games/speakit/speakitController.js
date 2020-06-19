@@ -2,8 +2,8 @@ import SpeakitView from './speakitView';
 import SpeakitModel from './speakitModel';
 
 export default class SpeakitController {
-  constructor(user, gamesClass) {
-    this.gamesClass = gamesClass;
+  constructor(user, openPopupResult) {
+    this.openPopupResult = openPopupResult;
     this.view = new SpeakitView();
     this.model = new SpeakitModel(user);
     this.level = 0;
@@ -13,7 +13,7 @@ export default class SpeakitController {
     this.view.renderHTML();
     this.createWords();
     this.view.result.addEventListener('click', () => {
-      this.gamesClass.openPopupResult(this.words);
+      this.openPopupResult(this.words);
     });
 
     this.view.wordList.addEventListener('click', (e) => {
@@ -124,7 +124,7 @@ export default class SpeakitController {
   win() {
     this.dropScore();
     this.stop();
-    this.gamesClass.openPopupResult(this.words);
+    this.openPopupResult(this.words);
   }
 
   changeCountWords(count) {
