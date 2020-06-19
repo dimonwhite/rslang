@@ -10,24 +10,11 @@ import rus from '../../../data/rus';
 export default class SavannahModel {
   constructor(user) {
     this.user = user;
-    // this.words = words;
     this.words = [];
     this.gameWords = [];
-
-    this.lockChoice = true; //
-    this.words = []; //
-    this.gameWords = []; //
-    this.stopRounds = [];
-    this.level = 0;
     this.maxHeart = 5;
-    this.heart = 5;
     this.count = 10;
-    this.attempt = 0;
-    this.correctly = 0;
-    this.timeInterval = 7000;
-    this.SHIP_HIGHT = 35;
-    this.BG_HIGHT = 3500;
-    this.studyWords = false;
+    this.level = 0;
     this.allStudyWords = []; // JSON.parse(localStorage.getItem('userAllStudyWords'));
   }
 

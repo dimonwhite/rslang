@@ -3,16 +3,9 @@ import SavannahModel from './savannahModel';
 
 export default class SavannahController {
   constructor(user, callResult) {
-    this.callResult = callResult;
     this.view = new SavannahView(callResult);
     this.model = new SavannahModel(user);
-
     this.lockChoice = true;
-    this.user = user;
-    this.callResult = callResult;
-    this.lockChoice = true; //
-    this.words = []; //
-    this.gameWords = []; //
     this.stopRounds = [];
     this.level = 0;
     this.maxHeart = 5;
@@ -20,11 +13,6 @@ export default class SavannahController {
     this.count = 10;
     this.attempt = 0;
     this.correctly = 0;
-    this.timeInterval = 7000;
-    this.SHIP_HIGHT = 35;
-    this.BG_HIGHT = 3500;
-    this.studyWords = false;
-    this.allStudyWords = []; // JSON.parse(localStorage.getItem('userAllStudyWords'));
   }
 
   create() {
@@ -33,7 +21,7 @@ export default class SavannahController {
   }
 
   createEvent() {
-    document.getElementById('savOptions').addEventListener('click', (e) => {
+    this.view.options.addEventListener('click', (e) => {
       if (this.lockChoice) this.getAnswer(e);
     });
     document.getElementById('startGame').addEventListener('click', this.getStart.bind(this));
@@ -61,6 +49,7 @@ export default class SavannahController {
   getStart() {
     this.getAudio('start');
     this.count = this.view.getStart();
+    this.model.count = this.count;
     this.model.createWords();
     this.model.getWords();
     this.stopRounds = new Array(this.model.words.length).fill(true);
