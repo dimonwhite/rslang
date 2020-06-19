@@ -56,7 +56,9 @@ export default class Games {
 
   createSettings() {
     const wrap = createElement({ tag: 'div', class: 'game__options' });
-    wrap.append(this.createLevels());
+    if (this.gameInfo.settings.levels) {
+      wrap.append(this.createLevels());
+    }
     if (this.gameInfo.settings.countWords) {
       wrap.append(this.createOptions(
         this.gameInfo.settings.countWordsMin,

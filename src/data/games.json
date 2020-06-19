@@ -26,7 +26,8 @@
       "countWords": true,
       "countWordsMin": 5,
       "countWordsStep": 5,
-      "optionsCount": 3
+      "optionsCount": 3,
+      "levels": true
     }
   },
   "sprint": {
