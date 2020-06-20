@@ -22,7 +22,6 @@
         font-size: 29px;
         line-height: 34px;
         color: #FFC100;
-        cursor: pointer;
 
         &:focus {
             outline: none;
@@ -52,7 +51,9 @@
         color: #FFC100;
         overflow: hidden;
         cursor: pointer;
+        transition: .3s;
     }
+    &__item:hover,
     &__item_active {
         background: #6C55AD;
     }

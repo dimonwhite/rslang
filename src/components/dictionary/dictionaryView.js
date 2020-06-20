@@ -6,11 +6,6 @@ export default class DictionaryView {
   constructor() {
     this.main = document.getElementById('main');
     this.audio = new Audio();
-    this.state = {
-      study: 'difficult',
-      difficult: 'difficult',
-      remove: 'remove',
-    };
   }
 
   renderHTML() {
@@ -31,13 +26,13 @@ export default class DictionaryView {
     this.filtersWrap = createElement({ tag: 'div', class: 'filters' });
 
     this.filterAll = createElementAttr({ tag: 'div', class: 'filters__item filters__all filters__item_active', content: 'Все' });
-    this.filterAll.setAttribute('filter_data', 'all');
+    this.filterAll.dataset.filter = 'all';
     this.filterStudy = createElementAttr({ tag: 'div', class: 'filters__item filters__study', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-study.svg" title="Изучемые слова">' });
-    this.filterStudy.setAttribute('filter_data', 'study');
+    this.filterStudy.dataset.filter = 'study';
     this.filterDifficult = createElementAttr({ tag: 'div', class: 'filters__item filters__difficult', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-difficult.svg" title="Сложные слова">' });
-    this.filterDifficult.setAttribute('filter_data', 'difficult');
-    this.filterRemote = createElementAttr({ tag: 'div', class: 'filters__item filters__remote', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-remove.svg" title="Удаленные слова">' });
-    this.filterRemote.setAttribute('filter_data', 'remote');
+    this.filterDifficult.dataset.filter = 'difficult';
+    this.filterRemote = createElementAttr({ tag: 'div', class: 'filters__item filters__remove', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-remove.svg" title="Удаленные слова">' });
+    this.filterRemote.dataset.filter = 'remove';
 
     this.filtersWrap.append(this.filterAll);
     this.filtersWrap.append(this.filterStudy);
@@ -60,6 +55,10 @@ export default class DictionaryView {
       const card = new Card(item, item.id);
       this.list.append(card.create());
     });
+  }
+
+  clearList() {
+    this.list.innerHTML = '';
   }
 
   playAudio(word) {

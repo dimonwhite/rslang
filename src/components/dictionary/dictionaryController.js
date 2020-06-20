@@ -19,6 +19,10 @@ export default class DictionaryController {
   }
 
   init() {
+    this.view.filtersWrap.addEventListener('click', (e) => {
+      this.clickFilter(e);
+    });
+
     this.view.list.addEventListener('click', (e) => {
       this.clickList(e);
     });
@@ -76,8 +80,8 @@ export default class DictionaryController {
     return false;
   }
 
-  createList() {
-    const list = this.model.getList(this.page);
+  createList(filter) {
+    const list = this.model.getList(this.page, filter);
     if (list) {
       list.then((data) => {
         if (data) {
@@ -96,6 +100,24 @@ export default class DictionaryController {
       this.load = true;
       this.createList();
       this.load = false;
+    }
+  }
+
+  clickFilter(e) {
+    console.log('clickFilter');
+    this.page = 0;
+    const filter = e.target.closest('.filters__item');
+    console.log(filter);
+    const filterData = filter.dataset.filter;
+    console.log(filterData);
+    if (filterData) {
+      const filterActive = this.view.filtersWrap.querySelector('.filters__item_active');
+      if (filterActive) {
+        filterActive.classList.remove('filters__item_active');
+        filter.classList.add('filters__item_active');
+      }
+      this.view.clearList();
+      this.createList(filterData);
     }
   }
 }

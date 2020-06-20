@@ -5,9 +5,24 @@ export default class DictionaryModel {
     this.user = user;
     this.dataWords = dataWords;
     this.countWords = 10;
+    this.state = {
+      all: 'all',
+      study: 'study',
+      difficult: 'difficult',
+      remove: 'remove',
+    };
   }
 
-  getList(page) {
+  getList(page, filter) {
+    console.log(filter);
+    if (filter && filter === this.state.all) {
+      this.dataWords = dataWords;
+    }
+    if (filter && filter !== this.state.all) {
+      this.dataWords = dataWords.filter((item) => item.state === filter);
+      console.log(this.dataWords);
+    }
+
     const first = page * this.countWords;
     const last = first + 10;
     let arrWords = [...this.dataWords];
