@@ -1,171 +1,222 @@
+import gamesInfo from '@/data/games.json';
+import { blackGradient, urlGitHub } from '@/constants';
+import { createElement } from '@/utils';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
 import SpeakitController from './speakit/speakitController';
 import SprintController from './sprint/sprintController';
-import { createElement } from '../../utils';
 
 export default class Games {
   constructor() {
-    this.count = 10;
+    this.games = {
+      savannah: SavannahController,
+      puzzle: PuzzleController,
+      audiocall: AudiocallController,
+      speakit: SpeakitController,
+      sprint: SprintController,
+    };
+    this.countLevels = 6;
+    this.gamesInfo = gamesInfo;
+    this.audio = new Audio();
   }
 
   create(name) {
-    const main = document.getElementById('main');
-    main.append(this.createBegin());
-    main.append(this.createEndGame());
-    switch (name) {
-      case 'savannah':
-        new SavannahController(this.user, this.endGame).createEvent();
-        break;
-      case 'puzzle':
-        new PuzzleController(this.user, this.endGame).createEvent();
-        break;
-      case 'audiocall':
-        new AudiocallController(this.user, this.endGame).createEvent();
-        break;
-      case 'speakit':
-        new SpeakitController(this.user, this.endGame).createEvent();
-        break;
-      case 'sprint':
-        new SprintController(this.user, this.endGame).createEvent();
-        break;
-      default:
-        break;
+    if (this.games[name]) {
+      this.game = new this.games[name](this.user, this.openPopupResult.bind(this));
+      this.gameInfo = this.gamesInfo[name];
+      const main = document.getElementById('main');
+      main.append(this.createStartScreen());
+      main.append(this.createSettings());
+      main.append(this.createResultPopup());
+      main.classList.add(this.gameInfo.gameClass);
+      this.game.init();
     }
   }
 
-  createBegin(nameGame = 'Game', options = true) {
-    this.begin = createElement('section', 'savannah__begin', 'begin');
-    const wrap = createElement('div', 'savannah__options');
-    if (options) {
+  createStartScreen() {
+    const startScreen = createElement({ tag: 'div', class: 'game__startScreen' });
+    const title = createElement({ tag: 'div', class: 'game__startScreen-title', content: this.gameInfo.title });
+    const desc = createElement({ tag: 'div', class: 'game__startScreen-desc', content: this.gameInfo.desc });
+    const btnStart = createElement({ tag: 'button', class: 'btn', content: 'Start' });
+    const btnExit = createElement({ tag: 'button', class: 'btn', content: 'Go back' });
+    const image = require(`@/assets/img/${this.gameInfo.bgImage}`);
+    startScreen.style.backgroundImage = `url("${image.default}")`;
+    document.body.style.backgroundImage = `${blackGradient}, url("${image.default}")`;
+
+    startScreen.append(title);
+    startScreen.append(desc);
+    startScreen.append(btnStart);
+    startScreen.append(btnExit);
+
+    btnStart.addEventListener('click', () => {
+      startScreen.classList.add('hide');
+    });
+    btnExit.addEventListener('click', Games.exitGame.bind(this));
+    return startScreen;
+  }
+
+  createSettings() {
+    const wrap = createElement({ tag: 'div', class: 'game__options' });
+    if (this.gameInfo.settings.levels) {
       wrap.append(this.createLevels());
-      wrap.append(this.createOptions());
-      this.begin.append(wrap);
     }
-    const title = createElement('h2', 'savannah__begin-title', false, nameGame);
-    const start = createElement('button', 'savannah__begin-start', false, 'НАЧАТЬ');
-    const exit = createElement('button', 'savannah__begin-start', false, 'Вернуться');
-    this.begin.append(title);
-    this.begin.append(start);
-    this.begin.append(exit);
-    exit.addEventListener('click', this.exitGame.bind(this));
-    start.addEventListener('click', this.getStart.bind(this));
-    return this.begin;
+    if (this.gameInfo.settings.countWords) {
+      wrap.append(this.createOptions(this.gameInfo.settings.countWordsParams));
+    }
+    return wrap;
   }
 
-  createEndGame() {
-    const result = createElement('section', 'result', 'gameResult');
-    const wrapIncorr = createElement('div', 'result__wrap');
-    const incorrect = createElement('p', 'result__incorrect');
-    const incorrectlyText = createElement('span', false, false, 'Incorrectly: ');
-    const incorrectly = createElement('span', false, 'incorrectly');
-    incorrect.append(incorrectlyText);
-    incorrect.append(incorrectly);
-    const invalidList = createElement('ul', 'result__list', 'invalidList');
-    wrapIncorr.append(incorrect);
-    wrapIncorr.append(invalidList);
+  createResultPopup() {
+    this.resultPopup = createElement({ tag: 'div', class: 'resultPopup' });
+    const wrap = createElement({ tag: 'div', class: 'resultPopup__wrap' });
 
-    const wrapCorr = createElement('div', 'result__wrap');
-    const correct = createElement('p', 'result__correct');
-    const correctlyText = createElement('span', false, false, 'Correctly: ');
-    const correctly = createElement('span', false, 'correctly');
-    correct.append(correctlyText);
-    correct.append(correctly);
-    const validList = createElement('ul', 'result__list', 'validList');
-    wrapCorr.append(correct);
-    wrapCorr.append(validList);
+    const titleError = createElement({ tag: 'div', class: 'resultPopup__title', content: 'Ошибок' });
+    this.titleErrorCount = createElement({ tag: 'span', class: 'errors' });
+    this.errorBlock = createElement({ tag: 'div', class: 'resultPopup__errors' });
 
-    const buttons = createElement('div', 'result__buttons');
-    const returnBtn = createElement('button', 'result__buttons-item', false, 'Выход');
-    const newGameBtn = createElement('button', 'result__buttons-item', 'newGame', 'Нова игра');
-    returnBtn.addEventListener('click', this.exitGame.bind(this));
-    buttons.append(returnBtn);
-    buttons.append(newGameBtn);
-    result.append(wrapCorr);
-    result.append(wrapIncorr);
-    result.append(buttons);
-    return result;
+    const titleSuccess = createElement({ tag: 'div', class: 'resultPopup__title', content: 'Знаю' });
+    this.titleSuccessCount = createElement({ tag: 'span', class: 'success' });
+    this.successBlock = createElement({ tag: 'div', class: 'resultPopup__success' });
+
+    const btnBlock = createElement({ tag: 'div', class: 'resultPopup__btns' });
+    this.btnClosePopup = createElement({ tag: 'button', class: 'btn', content: 'Close' });
+    this.btnNewGame = createElement({ tag: 'button', class: 'btn', content: 'New game' });
+    this.appendResultPopupElements({
+      wrap, titleError, titleSuccess, btnBlock,
+    });
+    this.addResultListeners();
+    return this.resultPopup;
   }
 
-  endGame(words) {
-    this.count = 10;
+  appendResultPopupElements(elements) {
+    this.resultPopup.append(elements.wrap);
+    elements.titleError.append(this.titleErrorCount);
+    elements.titleSuccess.append(this.titleSuccessCount);
+    elements.wrap.append(
+      elements.titleError,
+      this.errorBlock,
+      elements.titleSuccess,
+      this.successBlock,
+      elements.btnBlock,
+    );
+    elements.btnBlock.append(this.btnClosePopup, this.btnNewGame);
+  }
+
+  addResultListeners() {
+    this.btnClosePopup.addEventListener('click', () => {
+      this.closeResultPopup();
+    });
+    this.btnNewGame.addEventListener('click', () => {
+      this.game.change();
+      this.closeResultPopup();
+    });
+    this.resultPopup.addEventListener('click', (e) => {
+      this.clickResultWords(e.target);
+    });
+  }
+
+  clickResultWords(element) {
+    const word = element.closest('.resultPopup__word');
+    if (word) {
+      this.playAudio(this.words[word.dataset.id]);
+    }
+  }
+
+  playAudio(word) {
+    this.audio.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
+    this.audio.play();
+  }
+
+  openPopupResult(words) {
     this.words = words;
-    document.getElementById('gameResult').classList.add('show');
+    const score = this.game.getScore();
+    const count = this.words.length;
 
-    const corrFragment = new DocumentFragment();
-    const incorrFragment = new DocumentFragment();
-    let incorrect = 0;
-    for (let i = 0; i < this.count; i += 1) {
-      const { word, transcription, wordTranslate } = words[i];
-      const content = `${word} ${transcription} ${wordTranslate}`;
-      const li = createElement('li', false, `li${i}`, content);
-      if (words[i].correctly) {
-        corrFragment.append(li);
+    this.successBlock.innerHTML = '';
+    this.errorBlock.innerHTML = '';
+
+    this.titleErrorCount.textContent = count - score;
+    this.titleSuccessCount.textContent = score;
+    this.words.forEach((word, key) => {
+      const objWord = { word, key };
+      if (word.success) {
+        Games.createResultItem(objWord, this.successBlock);
       } else {
-        incorrFragment.append(li);
-        incorrect += 1;
+        Games.createResultItem(objWord, this.errorBlock);
       }
-    }
-    document.getElementById('correctly').innerHTML = this.count - incorrect;
-    document.getElementById('incorrectly').innerHTML = incorrect;
+    });
 
-    const invalidList = document.getElementById('invalidList');
-    invalidList.innerHTML = '';
-    invalidList.append(incorrFragment);
-    const validList = document.getElementById('validList');
-    validList.innerHTML = '';
-    validList.append(corrFragment);
+    this.resultPopup.classList.add('active');
+  }
+
+  static createResultItem(objWord, block) {
+    const listItem = createElement({ tag: 'div', class: 'resultPopup__word' });
+    listItem.dataset.id = objWord.key;
+    listItem.innerHTML = `
+      <svg class="svg_icon">
+        <use xlink:href="sprite.svg#volume"></use>
+      </svg>
+      <div class="text word">${objWord.word.word}</div>
+      <div class="text">${objWord.word.transcription}</div>
+      <div class="text">${objWord.word.translation}</div>
+    `;
+    block.append(listItem);
+  }
+
+  closeResultPopup() {
+    this.resultPopup.classList.remove('active');
   }
 
   createLevels() {
-    const wrap = createElement('div', 'levels', 'levels');
-    for (let i = 0; i <= 6; i += 1) {
-      const radio = createElement('label', 'radio', `radio${i}`);
-      const span = createElement('span', 'radio__span', false, `lvl-${i}`);
-      const input = createElement('input', 'radio__input', false, false);
-      input.type = 'radio';
-      input.name = 'group';
-      input.setAttribute('data-value', i);
-      if (i === 0) input.checked = 'checked';
-      radio.append(input);
-      radio.append(span);
-      wrap.append(radio);
+    const wrap = createElement({ tag: 'div', class: 'levels', id: 'levels' });
+    const levelsParent = createElement({ tag: 'div', class: 'levels__wrap' });
+    wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Levels' }));
+    wrap.append(levelsParent);
+    for (let i = 0; i < this.countLevels; i += 1) {
+      levelsParent.append(Games.createRadioLevel(i));
     }
     wrap.addEventListener('change', (e) => {
-      if (e.target.value === 'on' && e.target.dataset) {
-        this.level = +e.target.dataset.value;
-      }
+      this.game.level = +e.target.value;
+      this.game.change();
     });
     return wrap;
   }
 
-  createOptions(minWords = 10, step = 5, options = 3) {
-    const wrap = createElement('div', 'savannah__select');
-    const selectText = createElement('span', 'savannah__select-text', 'savSelectText', 'Количество слов');
-    const select = createElement('select', 'savannah__select-options', 'selectCount');
-    for (let i = 0; i < options; i += 1) {
-      const content = `${minWords + i * step}`;
-      const option = createElement('option', 'savannah__select-options-item', false, content);
+  static createRadioLevel(i) {
+    const radio = createElement({ tag: 'label', class: 'radio', id: `radio${i}` });
+    const span = createElement({ tag: 'span', class: 'radio__decor' });
+    const input = createElement({ tag: 'input', class: 'radio__input' });
+    input.value = i;
+    input.type = 'radio';
+    input.name = 'group';
+    if (i === 0) input.checked = 'checked';
+    radio.append(input);
+    radio.append(span);
+    return radio;
+  }
+
+  createOptions(settings = { min: 5, step: 5, options: 3 }) {
+    const wrap = createElement({ tag: 'div', class: 'game__select' });
+    const selectText = createElement({
+      tag: 'span', class: 'game__select-text', id: 'savSelectText', content: 'Количество слов',
+    });
+    const select = createElement({ tag: 'select', class: 'game__select-options', id: 'selectCount' });
+    for (let i = 0; i < settings.options; i += 1) {
+      const content = `${settings.min + i * settings.step}`;
+      const option = createElement({ tag: 'option', class: 'game__select-options-item', content });
       select.append(option);
     }
     select.addEventListener('change', (e) => {
-      this.count = e.target.value;
+      this.game.changeCountWords(e.target.value);
     });
+    select.value = this.game.getCountWords();
     wrap.append(selectText);
     wrap.append(select);
     return wrap;
   }
 
-  getStart() {
-    this.begin.classList.add('hide');
-  }
-
-  exitGame() {
-    this.begin = null;
-    document.getElementById('header').classList.remove('hide');
-    document.getElementById('footer').classList.remove('hide');
-    document.getElementById('settings').classList.remove('hide');
+  static exitGame() {
     document.getElementById('navPage').click();
   }
 }
