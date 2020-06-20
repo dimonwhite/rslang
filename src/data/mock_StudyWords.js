@@ -1,5 +1,6 @@
 const studyWords = [
   {
+    id: '0',
     audio: 'files/01_0001.mp3',
     audioExample: 'files/01_0001_example.mp3',
     audioMeaning: 'files/01_0001_meaning.mp3',
@@ -19,6 +20,7 @@ const studyWords = [
     word: 'agree',
   },
   {
+    id: '1',
     audio: 'files/01_0002.mp3',
     audioExample: 'files/01_0002_example.mp3',
     audioMeaning: 'files/01_0002_meaning.mp3',
@@ -29,7 +31,7 @@ const studyWords = [
     mistakes: 0,
     nextTime: 1593687771977,
     rating: 5,
-    state: 'learned',
+    state: 'difficult',
     textExample: 'A person should not drive a car after he or she has been drinking <b>alcohol</b>.',
     textMeaning: '<i>Alcohol</i> is a type of drink that can make people drunk.',
     transcription: '[ǽlkəhɔ̀ːl]',
@@ -37,6 +39,7 @@ const studyWords = [
     word: 'alcohol',
   },
   {
+    id: '2',
     audio: 'files/01_0003.mp3',
     audioExample: 'files/01_0003_example.mp3',
     audioMeaning: 'files/01_0003_meaning.mp3',
@@ -48,7 +51,7 @@ const studyWords = [
     mistakes: 0,
     nextTime: 1591732036350,
     rating: 5,
-    state: 'difficult',
+    state: 'study',
     textExample: 'They <b>arrived</b> at school at 7 a.m.',
     textMeaning: 'To <i>arrive</i> is to get somewhere.',
     transcription: '[əráiv]',
@@ -56,6 +59,7 @@ const studyWords = [
     word: 'arrive',
   },
   {
+    id: '3',
     audio: 'files/01_0004.mp3',
     audioExample: 'files/01_0004_example.mp3',
     audioMeaning: 'files/01_0004_meaning.mp3',
@@ -66,7 +70,7 @@ const studyWords = [
     mistakes: 0,
     nextTime: 1593687778665,
     rating: 5,
-    state: 'study',
+    state: 'remove',
     textExample: 'Is your birthday in <b>August</b>?',
     textMeaning: '<i>August</i> is the eighth month of the year.',
     transcription: '[ɔ́ːgəst]',
@@ -74,6 +78,7 @@ const studyWords = [
     word: 'august',
   },
   {
+    id: '4',
     audio: 'files/01_0005.mp3',
     audioExample: 'files/01_0005_example.mp3',
     audioMeaning: 'files/01_0005_meaning.mp3',
@@ -92,6 +97,7 @@ const studyWords = [
     word: 'boat',
   },
   {
+    id: '5',
     audio: 'files/01_0006.mp3',
     audioExample: 'files/01_0006_example.mp3',
     audioMeaning: 'files/01_0006_meaning.mp3',
@@ -111,6 +117,7 @@ const studyWords = [
     word: 'breakfast',
   },
   {
+    id: '6',
     audio: 'files/01_0007.mp3',
     audioExample: 'files/01_0007_example.mp3',
     audioMeaning: 'files/01_0007_meaning.mp3',
@@ -130,6 +137,7 @@ const studyWords = [
     word: 'camera',
   },
   {
+    id: '7',
     audio: 'files/01_0008.mp3',
     audioExample: 'files/01_0008_example.mp3',
     audioMeaning: 'files/01_0008_meaning.mp3',
@@ -148,6 +156,7 @@ const studyWords = [
     word: 'capital',
   },
   {
+    id: '8',
     audio: 'files/01_0009.mp3',
     audioExample: 'files/01_0009_example.mp3',
     audioMeaning: 'files/01_0009_meaning.mp3',
@@ -167,6 +176,7 @@ const studyWords = [
     word: 'catch',
   },
   {
+    id: '9',
     audio: 'files/01_0010.mp3',
     audioExample: 'files/01_0010_example.mp3',
     audioMeaning: 'files/01_0010_meaning.mp3',
@@ -186,6 +196,7 @@ const studyWords = [
     word: 'duck',
   },
   {
+    id: '10',
     audio: 'files/01_0011.mp3',
     audioExample: 'files/01_0011_example.mp3',
     audioMeaning: 'files/01_0011_meaning.mp3',
@@ -204,6 +215,7 @@ const studyWords = [
     word: 'enjoy',
   },
   {
+    id: '11',
     audio: 'files/01_0012.mp3',
     audioExample: 'files/01_0012_example.mp3',
     audioMeaning: 'files/01_0012_meaning.mp3',
@@ -223,6 +235,7 @@ const studyWords = [
     word: 'invite',
   },
   {
+    id: '12',
     audio: 'files/01_0013.mp3',
     audioExample: 'files/01_0013_example.mp3',
     audioMeaning: 'files/01_0013_meaning.mp3',
@@ -241,6 +254,7 @@ const studyWords = [
     word: 'love',
   },
   {
+    id: '13',
     audio: 'files/01_0014.mp3',
     audioExample: 'files/01_0014_example.mp3',
     audioMeaning: 'files/01_0014_meaning.mp3',
@@ -260,6 +274,7 @@ const studyWords = [
     word: 'month',
   },
   {
+    id: '14',
     audio: 'files/01_0015.mp3',
     audioExample: 'files/01_0015_example.mp3',
     audioMeaning: 'files/01_0015_meaning.mp3',
@@ -278,6 +293,7 @@ const studyWords = [
     word: 'travel',
   },
   {
+    id: '15',
     audio: 'files/01_0016.mp3',
     audioExample: 'files/01_0016_example.mp3',
     audioMeaning: 'files/01_0016_meaning.mp3',
@@ -296,6 +312,7 @@ const studyWords = [
     word: 'typical',
   },
   {
+    id: '16',
     audio: 'files/01_0017.mp3',
     audioExample: 'files/01_0017_example.mp3',
     audioMeaning: 'files/01_0017_meaning.mp3',
@@ -315,6 +332,7 @@ const studyWords = [
     word: 'visit',
   },
   {
+    id: '17',
     audio: 'files/01_0018.mp3',
     audioExample: 'files/01_0018_example.mp3',
     audioMeaning: 'files/01_0018_meaning.mp3',
@@ -334,6 +352,7 @@ const studyWords = [
     word: 'weather',
   },
   {
+    id: '18',
     audio: 'files/01_0019.mp3',
     audioExample: 'files/01_0019_example.mp3',
     audioMeaning: 'files/01_0019_meaning.mp3',
@@ -353,6 +372,7 @@ const studyWords = [
     word: 'week',
   },
   {
+    id: '19',
     audio: 'files/01_0020.mp3',
     audioExample: 'files/01_0020_example.mp3',
     audioMeaning: 'files/01_0020_meaning.mp3',
@@ -372,6 +392,7 @@ const studyWords = [
     word: 'wine',
   },
   {
+    id: '20',
     audio: 'files/02_0021.mp3',
     audioExample: 'files/02_0021_example.mp3',
     audioMeaning: 'files/02_0021_meaning.mp3',
@@ -390,6 +411,7 @@ const studyWords = [
     word: 'adventure',
   },
   {
+    id: '21',
     audio: 'files/02_0022.mp3',
     audioExample: 'files/02_0022_example.mp3',
     audioMeaning: 'files/02_0022_meaning.mp3',
@@ -409,6 +431,7 @@ const studyWords = [
     word: 'approach',
   },
   {
+    id: '22',
     audio: 'files/02_0023.mp3',
     audioExample: 'files/02_0023_example.mp3',
     audioMeaning: 'files/02_0023_meaning.mp3',
@@ -427,6 +450,7 @@ const studyWords = [
     word: 'carefully',
   },
   {
+    id: '23',
     audio: 'files/02_0024.mp3',
     audioExample: 'files/02_0024_example.mp3',
     audioMeaning: 'files/02_0024_meaning.mp3',

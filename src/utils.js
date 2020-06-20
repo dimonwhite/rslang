@@ -1,10 +1,10 @@
-function createElement(elementName, className, id, content) {
-  const element = document.createElement(elementName);
-  if (className) element.className = className;
-  if (id) element.id = id;
-  if (content) element.innerHTML = content;
+const createElement = (el) => {
+  const element = document.createElement(el.tag);
+  if (el.class) element.className = el.class;
+  if (el.id) element.id = el.id;
+  if (el.content) element.innerHTML = el.content;
   return element;
-}
+};
 
 function createElementAttr(elementName, className, id, content, attr, valueAttr) {
   const element = createElement(elementName, className, id, content);

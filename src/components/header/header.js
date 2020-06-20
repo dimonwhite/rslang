@@ -43,7 +43,8 @@ export default class Header {
         new StatisticsController(this.user).create();
         break;
       case 'dictionary':
-        document.body.className = 'body show-dictionary';
+        // document.body.className = 'body show-dictionary';
+        document.body.className = 'body show-main';
         new DictionaryController(this.user).create();
         break;
       default:
