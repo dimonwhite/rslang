@@ -77,7 +77,25 @@ export default class DictionaryController {
       return true;
     }
 
+    if (e.target.closest('.card__state')) {
+      this.stateCard(e);
+      return true;
+    }
+
     return false;
+  }
+
+  stateCard(e) {
+    const state = e.target.closest('.card__state-item');
+    const stateActive = this.view.card.querySelector('.card__state-item_active');
+    if (stateActive) {
+      stateActive.classList.remove('card__state-item_active');
+    }
+    state.classList.add('card__state-item_active');
+
+    this.page = 0;
+    this.view.clearList();
+    this.createList();
   }
 
   createList(filter) {
@@ -104,18 +122,15 @@ export default class DictionaryController {
   }
 
   clickFilter(e) {
-    console.log('clickFilter');
     this.page = 0;
     const filter = e.target.closest('.filters__item');
-    console.log(filter);
     const filterData = filter.dataset.filter;
-    console.log(filterData);
     if (filterData) {
       const filterActive = this.view.filtersWrap.querySelector('.filters__item_active');
       if (filterActive) {
         filterActive.classList.remove('filters__item_active');
-        filter.classList.add('filters__item_active');
       }
+      filter.classList.add('filters__item_active');
       this.view.clearList();
       this.createList(filterData);
     }

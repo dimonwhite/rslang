@@ -14,13 +14,11 @@ export default class DictionaryModel {
   }
 
   getList(page, filter) {
-    console.log(filter);
     if (filter && filter === this.state.all) {
       this.dataWords = dataWords;
     }
     if (filter && filter !== this.state.all) {
       this.dataWords = dataWords.filter((item) => item.state === filter);
-      console.log(this.dataWords);
     }
 
     const first = page * this.countWords;
