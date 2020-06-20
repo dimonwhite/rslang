@@ -2,11 +2,15 @@ import './scss/main.scss';
 import Header from './components/header/header';
 import User from './components/user/user';
 import CardController from './components/card/cardController';
-import HttpClient from './components/httpclient/http-client';
+// eslint-disable-next-line no-unused-vars
+import HttpClient from './components/httpclient/HttpClient';
+
+require('./prototype.settings');
 
 function importAll(r) {
   return r.keys().map(r);
 }
+
 importAll(require.context('./assets/img/', false, /\.svg$/));
 
 window.addEventListener('load', () => {
