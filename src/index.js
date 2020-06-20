@@ -1,7 +1,8 @@
 import './scss/main.scss';
+import Router from '@/components/router/Router';
 import Header from './components/header/header';
 import User from './components/user/user';
-import CardController from './components/card/cardController';
+// import CardController from './components/card/cardController';
 // eslint-disable-next-line no-unused-vars
 import HttpClient from './components/httpclient/HttpClient';
 
@@ -14,6 +15,9 @@ function importAll(r) {
 importAll(require.context('./assets/img/', false, /\.svg$/));
 
 window.addEventListener('load', () => {
+  const router = new Router();
+  router.init();
+
   const user = new User();
   document.body.addEventListener('click', (e) => {
     const nav = document.getElementById('nav');
@@ -24,5 +28,5 @@ window.addEventListener('load', () => {
 
   document.body.className = 'body show-main';
   new Header(user).createEvent();
-  new CardController(user).create();
+  // new CardController(user).create();
 });

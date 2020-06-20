@@ -13,7 +13,7 @@ export default class Header {
 
   createEvent() {
     const btn = document.getElementById('headerBtn');
-    this.nav.addEventListener('click', this.eventNav.bind(this));
+    // this.nav.addEventListener('click', this.eventNav.bind(this));
 
     btn.addEventListener('click', (e) => {
       btn.classList.toggle('header__click');
