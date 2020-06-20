@@ -16,6 +16,8 @@ export default class DictionaryView {
 
   createElements() {
     this.form = createElement({ tag: 'form', class: 'form-search' });
+    this.form.setAttribute('enctype', 'text/plain');
+    this.form.setAttribute('method', 'POST');
     this.formInput = createElement({ tag: 'input', class: 'form-search__input' });
     this.formInput.setAttribute('type', 'text');
     this.formInput.setAttribute('name', 'search');

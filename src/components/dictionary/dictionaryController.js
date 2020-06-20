@@ -6,6 +6,7 @@ export default class DictionaryController {
     this.model = new DictionaryModel(user);
     this.view = new DictionaryView();
     this.test = 'test';
+    this.filter = 'all';
     this.page = 0;
     this.load = false;
     this.loadFullData = false;
@@ -23,6 +24,15 @@ export default class DictionaryController {
       this.clickFilter(e);
     });
 
+    this.view.form.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+
+    this.view.formInput.oninput = () => {
+      console.log(this.view.formInput.value);
+      this.search(this.view.formInput.value);
+    };
+
     this.view.list.addEventListener('click', (e) => {
       this.clickList(e);
     });
@@ -33,6 +43,12 @@ export default class DictionaryController {
         this.paginationList();
       }
     });
+  }
+
+  search(str) {
+    this.page = 0;
+    this.view.clearList();
+    this.createList(this.filter, str);
   }
 
   clickList(e) {
@@ -93,13 +109,14 @@ export default class DictionaryController {
     }
     state.classList.add('card__state-item_active');
 
+    // не обновлять фулл лист а получить слова по ид и обновить его
     this.page = 0;
     this.view.clearList();
     this.createList();
   }
 
-  createList(filter) {
-    const list = this.model.getList(this.page, filter);
+  createList(filter, strSearch) {
+    const list = this.model.getList(this.page, filter, strSearch);
     if (list) {
       list.then((data) => {
         if (data) {
@@ -131,8 +148,10 @@ export default class DictionaryController {
         filterActive.classList.remove('filters__item_active');
       }
       filter.classList.add('filters__item_active');
+
+      this.filter = filterData;
       this.view.clearList();
-      this.createList(filterData);
+      this.createList(this.filter);
     }
   }
 }

@@ -13,12 +13,15 @@ export default class DictionaryModel {
     };
   }
 
-  getList(page, filter) {
-    if (filter && filter === this.state.all) {
-      this.dataWords = dataWords;
-    }
+  getList(page, filter, strSearch) {
+    this.dataWords = dataWords;
+
     if (filter && filter !== this.state.all) {
-      this.dataWords = dataWords.filter((item) => item.state === filter);
+      this.dataWords = this.dataWords.filter((item) => item.state === filter);
+    }
+
+    if (strSearch) {
+      this.dataWords = this.dataWords.filter((item) => item.word.indexOf(strSearch) !== -1);
     }
 
     const first = page * this.countWords;
