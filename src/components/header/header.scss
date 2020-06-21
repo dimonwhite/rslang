@@ -102,6 +102,11 @@
     list-style: none;
     &-item {
       margin-bottom: 1.5rem;
+      &.active {
+        .nav__list-link {
+          color: #EE3E54;
+        }
+      }
     }
     &-link {
       font-size: 1.8rem;
