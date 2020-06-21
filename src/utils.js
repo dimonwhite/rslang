@@ -26,8 +26,40 @@ const randomArray = (arr) => {
   return arr;
 };
 
+function getDiffTime(date1, date2) {
+  return date2.getTime() - date1.getTime();
+}
+
+function declOfNum(number, titles) {
+  const cases = [2, 0, 1, 1, 1, 2];
+  return titles[(number % 100 > 4 && number % 100 < 20)
+    ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+}
+
+function getDiffFormatDate(date) {
+  const time = Math.abs(date);
+  const obj = {};
+
+  obj.milliseconds = time;
+  obj.second = Math.round(obj.milliseconds / 1000);
+  obj.minutes = Math.round(obj.second / 60);
+  obj.hours = Math.round(obj.minutes / 60);
+  obj.days = Math.round(obj.hours / 24);
+
+  if (obj.hours < 1) {
+    return `${obj.minutes} ${declOfNum(obj.minutes, ['минута', 'минуты', 'минут'])}`;
+  }
+  if (obj.days < 1) {
+    return `${obj.hours} ${declOfNum(obj.hours, ['час', 'часа', 'часов'])}`;
+  }
+
+  return `${obj.days} ${declOfNum(obj.days, ['день', 'дня', 'дней'])}`;
+}
+
 export {
   createElement,
   createElementAttr,
   randomArray,
+  getDiffTime,
+  getDiffFormatDate,
 };

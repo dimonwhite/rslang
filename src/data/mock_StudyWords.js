@@ -10,14 +10,15 @@ const studyWords = [
     image: 'files/01_0001.jpg',
     lastTime: 1591527767059,
     mistakes: 0,
-    nextTime: 1591530870688,
-    rating: 5,
+    nextTime: 1592749360154,
+    rating: 1,
     state: 'study',
     textExample: 'The students <b>agree</b> they have too much homework.',
     textMeaning: 'To <i>agree</i> is to have the same opinion or belief as another person.',
     transcription: '[əgríː]',
     translation: 'соглашаться',
     word: 'agree',
+    repeat: 0,
   },
   {
     id: '1',
@@ -30,13 +31,14 @@ const studyWords = [
     lastTime: 1591527771977,
     mistakes: 0,
     nextTime: 1593687771977,
-    rating: 5,
+    rating: 2,
     state: 'difficult',
     textExample: 'A person should not drive a car after he or she has been drinking <b>alcohol</b>.',
     textMeaning: '<i>Alcohol</i> is a type of drink that can make people drunk.',
     transcription: '[ǽlkəhɔ̀ːl]',
     translation: 'алкоголь',
     word: 'alcohol',
+    repeat: 1,
   },
   {
     id: '2',
@@ -50,13 +52,14 @@ const studyWords = [
     lastTime: 1591527774969,
     mistakes: 0,
     nextTime: 1591732036350,
-    rating: 5,
+    rating: 3,
     state: 'study',
     textExample: 'They <b>arrived</b> at school at 7 a.m.',
     textMeaning: 'To <i>arrive</i> is to get somewhere.',
     transcription: '[əráiv]',
     translation: 'прибывать',
     word: 'arrive',
+    repeat: 2,
   },
   {
     id: '3',
@@ -69,13 +72,14 @@ const studyWords = [
     lastTime: 1591527778665,
     mistakes: 0,
     nextTime: 1593687778665,
-    rating: 5,
+    rating: 4,
     state: 'remove',
     textExample: 'Is your birthday in <b>August</b>?',
     textMeaning: '<i>August</i> is the eighth month of the year.',
     transcription: '[ɔ́ːgəst]',
     translation: 'Август',
     word: 'august',
+    repeat: 3,
   },
   {
     id: '4',
@@ -95,6 +99,7 @@ const studyWords = [
     transcription: '[bout]',
     translation: 'лодка',
     word: 'boat',
+    repeat: 4,
   },
   {
     id: '5',
@@ -115,6 +120,7 @@ const studyWords = [
     transcription: '[brekfəst]',
     translation: 'завтрак',
     word: 'breakfast',
+    repeat: 5,
   },
   {
     id: '6',
@@ -135,6 +141,7 @@ const studyWords = [
     transcription: '[kǽmərə]',
     translation: 'камера',
     word: 'camera',
+    repeat: 6,
   },
   {
     id: '7',
@@ -154,6 +161,7 @@ const studyWords = [
     transcription: '[kæpətl]',
     translation: 'столица',
     word: 'capital',
+    repeat: 7,
   },
   {
     id: '8',
@@ -174,6 +182,7 @@ const studyWords = [
     transcription: '[kætʃ]',
     translation: 'ловить',
     word: 'catch',
+    repeat: 8,
   },
   {
     id: '9',
@@ -194,6 +203,7 @@ const studyWords = [
     transcription: '[dʌk]',
     translation: 'утка',
     word: 'duck',
+    repeat: 9,
   },
   {
     id: '10',
@@ -213,6 +223,7 @@ const studyWords = [
     transcription: '[indʒɔ́i]',
     translation: 'наслаждаться',
     word: 'enjoy',
+    repeat: 10,
   },
   {
     id: '11',
@@ -233,6 +244,7 @@ const studyWords = [
     transcription: '[inváit]',
     translation: 'приглашать',
     word: 'invite',
+    repeat: 11,
   },
   {
     id: '12',
@@ -252,6 +264,7 @@ const studyWords = [
     transcription: '[lʌv]',
     translation: 'любовь',
     word: 'love',
+    repeat: 12,
   },
   {
     id: '13',
@@ -272,6 +285,7 @@ const studyWords = [
     transcription: '[mʌnθ]',
     translation: 'месяц',
     word: 'month',
+    repeat: 13,
   },
   {
     id: '14',
@@ -291,6 +305,7 @@ const studyWords = [
     transcription: '[trǽvəl]',
     translation: 'путешествовать',
     word: 'travel',
+    repeat: 14,
   },
   {
     id: '15',
@@ -310,6 +325,7 @@ const studyWords = [
     transcription: '[típikəl]',
     translation: 'типичный',
     word: 'typical',
+    repeat: 15,
   },
   {
     id: '16',
@@ -330,6 +346,7 @@ const studyWords = [
     transcription: '[vízit]',
     translation: 'посещать',
     word: 'visit',
+    repeat: 16,
   },
   {
     id: '17',
@@ -350,6 +367,7 @@ const studyWords = [
     transcription: '[weðər]',
     translation: 'погода',
     word: 'weather',
+    repeat: 17,
   },
   {
     id: '18',
@@ -370,6 +388,7 @@ const studyWords = [
     transcription: '[wiːk]',
     translation: 'неделя',
     word: 'week',
+    repeat: 18,
   },
   {
     id: '19',
@@ -390,6 +409,7 @@ const studyWords = [
     transcription: '[wain]',
     translation: 'вино',
     word: 'wine',
+    repeat: 19,
   },
   {
     id: '20',
@@ -409,6 +429,7 @@ const studyWords = [
     transcription: '[ədvéntʃər]',
     translation: 'приключение',
     word: 'adventure',
+    repeat: 20,
   },
   {
     id: '21',
@@ -429,6 +450,7 @@ const studyWords = [
     transcription: '[əpróutʃ]',
     translation: 'подход',
     word: 'approach',
+    repeat: 21,
   },
   {
     id: '22',
@@ -448,6 +470,7 @@ const studyWords = [
     transcription: '[kɛ́ərfəli]',
     translation: 'внимательно',
     word: 'carefully',
+    repeat: 22,
   },
   {
     id: '23',
@@ -468,6 +491,7 @@ const studyWords = [
     transcription: '[kémikəl]',
     translation: 'химический',
     word: 'chemical',
+    repeat: 23,
   },
 ];
 

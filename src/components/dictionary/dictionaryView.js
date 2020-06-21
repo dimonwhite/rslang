@@ -1,5 +1,5 @@
-import { urlGitHub } from '@/constants';
-import { createElement, createElementAttr } from '../../utils';
+import { urlGitHub, blackGradient } from '@/constants';
+import { createElement } from '@/utils';
 
 export default class DictionaryView {
   constructor() {
@@ -26,13 +26,13 @@ export default class DictionaryView {
 
     this.filtersWrap = createElement({ tag: 'div', class: 'filters' });
 
-    this.filterAll = createElementAttr({ tag: 'div', class: 'filters__item filters__all filters__item_active', content: 'Все' });
+    this.filterAll = createElement({ tag: 'div', class: 'filters__item filters__all filters__item_active', content: 'Все' });
     this.filterAll.dataset.filter = 'all';
-    this.filterStudy = createElementAttr({ tag: 'div', class: 'filters__item filters__study', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-study.svg" title="Изучемые слова">' });
+    this.filterStudy = createElement({ tag: 'div', class: 'filters__item filters__study', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-study.svg" title="Изучемые слова">' });
     this.filterStudy.dataset.filter = 'study';
-    this.filterDifficult = createElementAttr({ tag: 'div', class: 'filters__item filters__difficult', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-difficult.svg" title="Сложные слова">' });
+    this.filterDifficult = createElement({ tag: 'div', class: 'filters__item filters__difficult', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-difficult.svg" title="Сложные слова">' });
     this.filterDifficult.dataset.filter = 'difficult';
-    this.filterRemote = createElementAttr({ tag: 'div', class: 'filters__item filters__remove', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-remove.svg" title="Удаленные слова">' });
+    this.filterRemote = createElement({ tag: 'div', class: 'filters__item filters__remove', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-remove.svg" title="Удаленные слова">' });
     this.filterRemote.dataset.filter = 'remove';
 
     this.filtersWrap.append(this.filterAll);
@@ -127,12 +127,19 @@ export default class DictionaryView {
           <div class="card__text">
             <div class="card__word">${word.word}</div>
             <div class="card__translation">${word.translation}</div>
+            <div class="card__transcription">${word.transcription}</div>
           </div>
         </div>
       </div>
       <div class="card__body">
         <div class="card__example">${word.textExample}</div>
         <div class="card__meaning">${word.textMeaning}</div>
+        <div class="card__progress">
+          <div class="card__rating">Прогресс изучения: ${word.rating}</div>
+          <div class="card__repeat">Повторейний: ${word.repeat}</div>
+          <div class="card__last-time">Давность: ${word.lastTimeText} назад</div>
+          <div class="card__next-time">Повтор: через ${word.nextTimeText}</div>
+        </div>
       </div>
       <div class="card__bot">
         <div class="card__state">
@@ -150,5 +157,11 @@ export default class DictionaryView {
     this.card.querySelector(`.card__${word.state}-icon`).classList.add('card__state-item_active');
 
     this.main.append(this.card);
+  }
+
+  createCardBackground() {
+    this.cardBackground = createElement({ tag: 'div', class: 'card-background' });
+    this.cardBackground.style.background = blackGradient;
+    this.main.append(this.cardBackground);
   }
 }

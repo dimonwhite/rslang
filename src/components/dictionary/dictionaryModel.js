@@ -1,4 +1,5 @@
-import dataWords from '../../data/mock_StudyWords';
+import dataWords from '@/data/mock_StudyWords';
+import { getDiffTime, getDiffFormatDate } from '@/utils';
 
 export default class DictionaryModel {
   constructor(user) {
@@ -35,6 +36,18 @@ export default class DictionaryModel {
   }
 
   getWord(id) {
-    return this.dataWords.find((item) => item.id === id);
+    const word = this.dataWords.find((item) => item.id === id);
+
+    const lastTime = getDiffFormatDate(
+      getDiffTime(new Date(word.lastTime), new Date()),
+    );
+    word.lastTimeText = lastTime;
+
+    const nextTime = getDiffFormatDate(
+      getDiffTime(new Date(), new Date(word.nextTime)),
+    );
+    word.nextTimeText = nextTime;
+
+    return word;
   }
 }

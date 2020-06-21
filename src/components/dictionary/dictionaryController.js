@@ -5,11 +5,9 @@ export default class DictionaryController {
   constructor(user) {
     this.model = new DictionaryModel(user);
     this.view = new DictionaryView();
-    this.test = 'test';
-    this.filter = 'all';
+    this.filter = this.model.state.all;
     this.strSearch = '';
     this.page = 0;
-    this.load = false;
     this.loadFullData = false;
   }
 
@@ -71,6 +69,7 @@ export default class DictionaryController {
   }
 
   createCard(word, wordId) {
+    this.view.createCardBackground();
     this.view.createCard(word, wordId);
     this.initCard();
   }
@@ -90,6 +89,7 @@ export default class DictionaryController {
 
     if (e.target.closest('.close-icon')) {
       this.view.card.remove();
+      this.view.cardBackground.remove();
       return true;
     }
 
@@ -129,10 +129,8 @@ export default class DictionaryController {
   }
 
   paginationList() {
-    if (this.load === false && !this.loadFullData) {
-      this.load = true;
+    if (!this.loadFullData) {
       this.createList(this.filter, this.strSearch);
-      this.load = false;
     }
   }
 
@@ -140,8 +138,8 @@ export default class DictionaryController {
     this.page = 0;
     this.loadFullData = false;
     const filter = e.target.closest('.filters__item');
-    const filterData = filter.dataset.filter;
-    if (filterData) {
+    if (filter) {
+      const filterData = filter.dataset.filter;
       const filterActive = this.view.filtersWrap.querySelector('.filters__item_active');
       if (filterActive) {
         filterActive.classList.remove('filters__item_active');
@@ -150,7 +148,7 @@ export default class DictionaryController {
 
       this.filter = filterData;
       this.view.clearList();
-      this.createList(this.filter);
+      this.createList(this.filter, this.strSearch);
     }
   }
 }
