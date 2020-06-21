@@ -36,7 +36,12 @@ const cssLoaders = (extra) => {
         reloadAll: true,
       },
     },
-    'css-loader',
+    {
+      loader: 'css-loader',
+      options: {
+        sourceMap: isDev,
+      },
+    },
   ];
 
   if (extra) {
@@ -107,9 +112,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.json'],
     alias: {
-      '@modules': path.resolve(__dirname, 'src/modules'),
-      '@data': path.resolve(__dirname, 'src/data'),
-      '@': path.resolve(__dirname, 'src'),
+      '@modules': path.resolve(__dirname, './src/modules'),
+      '@data': path.resolve(__dirname, './src/data'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   optimization: optimization(),

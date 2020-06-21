@@ -2,6 +2,12 @@ import './scss/main.scss';
 import Header from './components/header/header';
 import User from './components/user/user';
 import CardController from './components/card/cardController';
+import HttpClient from './components/httpclient/http-client';
+
+function importAll(r) {
+  return r.keys().map(r);
+}
+importAll(require.context('./assets/img/', false, /\.svg$/));
 
 window.addEventListener('load', () => {
   const user = new User();
@@ -12,16 +18,7 @@ window.addEventListener('load', () => {
     }
   });
 
-  document.getElementById('startPage').addEventListener('click', () => {
-    document.body.className = 'body show-main';
-    document.getElementById('startPage').classList.add('hide');
-    document.getElementById('navPage').classList.add('decoration');
-    new Header(user).createEvent();
-    new CardController(user).create();
-  });
+  document.body.className = 'body show-main';
+  new Header(user).createEvent();
+  new CardController(user).create();
 });
-
-function importAll(r) {
-  return r.keys().map(r);
-}
-importAll(require.context('./assets/img/', false, /\.svg$/));
