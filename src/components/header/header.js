@@ -14,7 +14,7 @@ export default class Header {
     });
 
     this.nav.addEventListener('click', (e) => {
-      this.clickLink(e);
+      this.clickNav(e);
     });
 
     document.addEventListener('click', (e) => {
@@ -28,9 +28,15 @@ export default class Header {
     return this.openedNav && !this.nav.contains(e.target) && !this.btn.contains(e.target);
   }
 
-  clickLink(e) {
+  clickNav(e) {
     if (e.target.closest('.nav__list-link')) {
       this.closeNav();
+      return;
+    }
+    const el = e.target.closest('.nav__list-open');
+    if (el) {
+      el.classList.toggle('active');
+      el.nextElementSibling.toggle(600);
     }
   }
 

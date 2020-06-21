@@ -99,17 +99,38 @@
     transform: none;
   }
   &__list {
+    font-size: 1.8rem;
     list-style: none;
     &-item {
       margin-bottom: 1.5rem;
       &.active {
-        .nav__list-link {
+        & > .nav__list-link {
           color: #EE3E54;
         }
       }
     }
+    &-open {
+      content: '';
+      position: relative;
+      left: 0.5rem;
+      bottom: 0.45rem;
+
+      display: inline-block;
+      width: 0.8rem;
+      height: 0.8rem;
+
+      border-bottom: 0.2rem solid #F1BC19;
+      border-right: 0.2rem solid #F1BC19;
+      transform: rotate(45deg);
+      cursor: pointer;
+
+      transition: 0.5s;
+      &.active {
+        transform: rotate(-135deg);
+        bottom: 0;
+      }
+    }
     &-link {
-      font-size: 1.8rem;
       font-weight: 700;
       text-decoration: none;
       text-transform: uppercase;
@@ -117,6 +138,17 @@
     }
     &-children {
       display: none;
+      padding-left: 3rem;
+
+      font-size: 1.5rem;
+
+      list-style: none;
+      .nav__list-item {
+        margin-bottom: 0.8rem;
+        &:first-child {
+          margin-top: 0.5rem;
+        }
+      }
     }
   }
 }
