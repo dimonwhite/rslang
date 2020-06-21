@@ -57,7 +57,6 @@ export default class Games {
     btnStart.addEventListener('click', () => {
       startScreen.classList.add('hide');
     });
-    btnExit.addEventListener('click', Games.exitGame.bind(this));
     return startScreen;
   }
 
@@ -219,9 +218,5 @@ export default class Games {
     wrap.append(selectText);
     wrap.append(select);
     return wrap;
-  }
-
-  static exitGame() {
-    document.getElementById('navPage').click();
   }
 }
