@@ -26,14 +26,14 @@ const randomArray = (arr) => {
   return arr;
 };
 
-function getDiffTime(date1, date2) {
-  return date2.getTime() - date1.getTime();
-}
-
 function declOfNum(number, titles) {
   const cases = [2, 0, 1, 1, 1, 2];
   return titles[(number % 100 > 4 && number % 100 < 20)
     ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+}
+
+function getDiffTime(date1, date2) {
+  return date2.getTime() - date1.getTime();
 }
 
 function getDiffFormatDate(date) {
@@ -60,6 +60,7 @@ export {
   createElement,
   createElementAttr,
   randomArray,
+  declOfNum,
   getDiffTime,
   getDiffFormatDate,
 };
