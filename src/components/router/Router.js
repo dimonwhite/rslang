@@ -5,6 +5,7 @@ import StatisticsController from '../statistics/statisticsController';
 
 export default class Router {
   constructor() {
+    this.mainSection = document.querySelector('main');
     this.hash = window.location.hash;
     this.pages = {
       main: CardController,
@@ -25,6 +26,10 @@ export default class Router {
   }
 
   changePage() {
+    this.mainSection.innerHTML = '';
+    this.mainSection.className = 'main';
+    document.body.className = 'body';
+    document.body.removeAttribute('style');
     this.parseHash();
     this.currentPage = new this.pages[this.urlArray.shift()]();
     this.currentPage.create(...this.urlArray);
