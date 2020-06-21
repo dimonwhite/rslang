@@ -1,5 +1,4 @@
 import { urlGitHub } from '@/constants';
-import Card from './Card';
 import { createElement, createElementAttr } from '../../utils';
 
 export default class DictionaryView {
@@ -54,13 +53,57 @@ export default class DictionaryView {
 
   createList(data) {
     data.forEach((item) => {
-      const card = new Card(item, item.id);
-      this.list.append(card.create());
+      const content = `
+        <div class="card-list__left">
+          <div class="card-list__sound">
+            <img class="card-list__sound-icon" src="src/assets/img/dictionary-sound.svg">
+          </div>
+          <div class="card-list__text">
+            <div class="card-list__word">${item.word}</div>
+            <div class="card-list__translation">${item.translation}</div>
+          </div>
+        </div>
+        <div class="card-list__right">
+          <div class="card-list__img" style="background: url(${urlGitHub}${item.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>
+          <div class="card-list__state">
+            <img class="card-list__state-icon" src="src/assets/img/dictionary-filter-${item.state}.svg">
+          </div>
+        </div>
+      `;
+
+      const card = createElement({ tag: 'div', class: 'list-dictionary__item card-list', content });
+      card.dataset.id = item.id;
+
+      this.list.append(card);
     });
   }
 
   clearList() {
     this.list.innerHTML = '';
+  }
+
+  updateListItem(word) {
+    const item = this.list.querySelector(`.card-list[data-id="${word.id}"]`);
+
+    const content = `
+        <div class="card-list__left">
+          <div class="card-list__sound">
+            <img class="card-list__sound-icon" src="src/assets/img/dictionary-sound.svg">
+          </div>
+          <div class="card-list__text">
+            <div class="card-list__word">${word.word}</div>
+            <div class="card-list__translation">${word.translation}</div>
+          </div>
+        </div>
+        <div class="card-list__right">
+          <div class="card-list__img" style="background: url(${urlGitHub}${word.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>
+          <div class="card-list__state">
+            <img class="card-list__state-icon" src="src/assets/img/dictionary-filter-${word.state}.svg">
+          </div>
+        </div>
+      `;
+
+    item.innerHTML = content;
   }
 
   playAudio(word) {
@@ -101,7 +144,7 @@ export default class DictionaryView {
     `;
 
     this.cardId = wordId;
-    this.card = createElementAttr({ tag: 'div', class: 'card', content });
+    this.card = createElement({ tag: 'div', class: 'card', content });
     this.card.setAttribute('data-id', wordId);
 
     this.card.querySelector(`.card__${word.state}-icon`).classList.add('card__state-item_active');

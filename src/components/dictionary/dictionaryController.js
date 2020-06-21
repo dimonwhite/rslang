@@ -7,6 +7,7 @@ export default class DictionaryController {
     this.view = new DictionaryView();
     this.test = 'test';
     this.filter = 'all';
+    this.strSearch = '';
     this.page = 0;
     this.load = false;
     this.loadFullData = false;
@@ -29,7 +30,6 @@ export default class DictionaryController {
     });
 
     this.view.formInput.oninput = () => {
-      console.log(this.view.formInput.value);
       this.search(this.view.formInput.value);
     };
 
@@ -47,8 +47,10 @@ export default class DictionaryController {
 
   search(str) {
     this.page = 0;
+    this.loadFullData = false;
+    this.strSearch = str;
     this.view.clearList();
-    this.createList(this.filter, str);
+    this.createList(this.filter, this.strSearch);
   }
 
   clickList(e) {
@@ -80,10 +82,8 @@ export default class DictionaryController {
   }
 
   clickCard(e) {
-    const card = e.target.closest('.card');
-    const word = this.model.getWord(card.dataset.id);
-
     if (e.target.closest('.card__sound-icon')) {
+      const word = this.model.getWord(this.view.card.dataset.id);
       this.playAudio(word);
       return true;
     }
@@ -109,10 +109,8 @@ export default class DictionaryController {
     }
     state.classList.add('card__state-item_active');
 
-    // не обновлять фулл лист а получить слова по ид и обновить его
-    this.page = 0;
-    this.view.clearList();
-    this.createList();
+    const word = this.model.getWord(this.view.card.dataset.id);
+    this.view.updateListItem(word);
   }
 
   createList(filter, strSearch) {
@@ -133,13 +131,14 @@ export default class DictionaryController {
   paginationList() {
     if (this.load === false && !this.loadFullData) {
       this.load = true;
-      this.createList();
+      this.createList(this.filter, this.strSearch);
       this.load = false;
     }
   }
 
   clickFilter(e) {
     this.page = 0;
+    this.loadFullData = false;
     const filter = e.target.closest('.filters__item');
     const filterData = filter.dataset.filter;
     if (filterData) {
