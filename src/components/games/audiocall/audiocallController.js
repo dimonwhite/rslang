@@ -2,15 +2,21 @@ import AudiocallView from './audiocallView';
 import AudiocallModel from './audiocallModel';
 
 export default class AudiocallController {
-  constructor(user, callResult) {
-    this.callResult = callResult;
+  constructor(user, openPopupResult) {
+    this.openPopupResult = openPopupResult;
     this.audiocallView = new AudiocallView();
     this.audiocallModel = new AudiocallModel(user);
+    this.level = 0;
   }
 
-  createEvent() {
+  init() {
+    this.audiocallModel.formWordarray();
+    console.log(this.audiocallModel.wordArray);
     this.audiocallView.renderHTML();
-    const listener = () => this.callResult(this.audiocallModel.words);
-    this.audiocallView.result.addEventListener('click', listener);
+  }
+
+  change() {
+    this.audiocallModel.level = this.level;
+    console.log(this.audiocallModel.level);
   }
 }

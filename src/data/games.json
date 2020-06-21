@@ -15,7 +15,12 @@
     "title": "audiocall",
     "desc": "audiocall game",
     "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "gameClass": "audiocall",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {},
+      "levels": true
+    }
   },
   "speakit": {
     "title": "SPEAKIT",

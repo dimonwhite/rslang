@@ -26,8 +26,11 @@ const randomArray = (arr) => {
   return arr;
 };
 
+const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
+
 export {
   createElement,
   createElementAttr,
   randomArray,
+  shuffleArray,
 };
