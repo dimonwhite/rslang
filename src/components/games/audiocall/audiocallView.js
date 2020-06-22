@@ -1,4 +1,6 @@
 import { createElement } from '../../../utils';
+import sound from '../../../assets/img/volume.svg';
+import { urlGitHub } from '../../../constants';
 
 export default class AudiocallView {
   constructor() {
@@ -8,7 +10,6 @@ export default class AudiocallView {
 
   renderHTML() {
     this.createElements();
-    this.main.append(this.game);
   }
 
   createElements() {
@@ -22,21 +23,65 @@ export default class AudiocallView {
     <div class="word-wrapper"></div>
     <div class="btn-wrapper">
       <div class="btn btn__idk">I don't know</div>
-      <div class="btn btn__next">Next</div>
+      <div class="btn btn__next hidden">Next</div>
     </div>
     `;
-    this.iconContainer = document.querySelector('.icon-container');
-    this.wordDescription = document.querySelector('.word-description');
-    this.wordWrapper = document.querySelector('.word-wrapper');
-    this.btnIdk = document.querySelector('.btn__idk');
-    this.btnNext = document.querySelector('.btn__next');
+    this.main.append(this.game);
+
+    this.iconContainer = this.game.querySelector('.icon-container');
+    this.wordDescription = this.game.querySelector('.word-description');
+    this.wordWrapper = this.game.querySelector('.word-wrapper');
+    this.btnIdk = this.game.querySelector('.btn__idk');
+    this.btnNext = this.game.querySelector('.btn__next');
   }
 
-  renderWords(arr) {
-    arr.forEach((el) => {
-      const word = createElement({ tag: 'div', class: 'word' });
-      word.innerText = el;
-      this.wordWrapper.append(word);
+  renderStepWords(word) {
+    word.optionWords.forEach((el, i) => {
+      const wordBlock = createElement({ tag: 'div', class: 'word', content: `${i + 1} ${el}` });
+      if (el === word.wordTranslate) {
+        this.rightWord = wordBlock;
+        this.rightWord.index = i + 1;
+      }
+      this.wordWrapper.append(wordBlock);
     });
+  }
+
+  renderSoundIcon() {
+    this.iconContainer.innerHTML = '';
+    this.iconContainer.style.background = 'none';
+    const soundIcon = new Image();
+    soundIcon.src = `${sound}`;
+    soundIcon.style.filter = 'invert(90%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%)';
+    soundIcon.classList.add('sound-icon');
+    this.iconContainer.append(soundIcon);
+    soundIcon.onclick = () => {
+      this.playAudio();
+    };
+  }
+
+  renderWordIcon(word) {
+    this.iconContainer.innerHTML = '';
+    this.iconContainer.style.background = `white url(${urlGitHub}${word.image.replace('files/', '')}) no-repeat`;
+    this.iconContainer.style.backgroundSize = 'cover';
+  }
+
+  playAudio(word) {
+    if (word) {
+      this.audioUrl = `${urlGitHub}${word.audio.replace('files/', '')}`;
+    }
+    if (this.audio) {
+      this.audio.pause();
+    }
+    this.audio = new Audio(this.audioUrl);
+    this.iconContainer.style.animation = 'pulse 10s infinite';
+    this.audio.play();
+    this.audio.onended = () => {
+      this.iconContainer.style.animation = '';
+    };
+  }
+
+  displayElement(element, display) {
+    element.style.display = display;
+    return this;
   }
 }

@@ -26,7 +26,12 @@ const randomArray = (arr) => {
   return arr;
 };
 
-const shuffleArray = (arr) => arr.sort(() => Math.random() - 0.5);
+const shuffleArray = (arr) => {
+  for (let i = 0; i < 3; i += 1) {
+    arr.sort(() => Math.random() - 0.5);
+  }
+  return arr;
+};
 
 export {
   createElement,
