@@ -49,7 +49,7 @@ export default class Router {
     this.nav.querySelectorAll('.nav__list-item.active').forEach((listItem) => {
       listItem.classList.remove('active');
     });
-    const activeLink = this.nav.querySelector(`[href="/${this.hash}"]`);
+    const activeLink = this.nav.querySelector(`[href="/${this.hash || '#/'}"]`);
     activeLink.parentNode.classList.add('active');
   }
 }
