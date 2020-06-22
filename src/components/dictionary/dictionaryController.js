@@ -27,9 +27,9 @@ export default class DictionaryController {
       e.preventDefault();
     });
 
-    this.view.formInput.oninput = () => {
+    this.view.formInput.addEventListener('input', () => {
       this.search(this.view.formInput.value);
-    };
+    });
 
     this.view.list.addEventListener('click', (e) => {
       this.clickList(e);
@@ -57,11 +57,10 @@ export default class DictionaryController {
 
     if (e.target.closest('.card-list__sound')) {
       this.playAudio(word);
-      return true;
+      return;
     }
 
     this.createCard(word, card.dataset.id);
-    return false;
   }
 
   playAudio(word) {
@@ -84,21 +83,18 @@ export default class DictionaryController {
     if (e.target.closest('.card__sound-icon')) {
       const word = this.model.getWord(this.view.card.dataset.id);
       this.playAudio(word);
-      return true;
+      return;
     }
 
     if (e.target.closest('.close-icon')) {
       this.view.card.remove();
       this.view.cardBackground.remove();
-      return true;
+      return;
     }
 
     if (e.target.closest('.card__state')) {
       this.stateCard(e);
-      return true;
     }
-
-    return false;
   }
 
   stateCard(e) {

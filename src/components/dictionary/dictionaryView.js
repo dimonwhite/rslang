@@ -14,31 +14,8 @@ export default class DictionaryView {
   }
 
   createElements() {
-    this.form = createElement({ tag: 'form', class: 'form-search' });
-    this.form.setAttribute('enctype', 'text/plain');
-    this.form.setAttribute('method', 'POST');
-    this.formInput = createElement({ tag: 'input', class: 'form-search__input' });
-    this.formInput.setAttribute('type', 'text');
-    this.formInput.setAttribute('name', 'search');
-    this.formInput.setAttribute('placeholder', 'Найти');
-
-    this.form.append(this.formInput);
-
-    this.filtersWrap = createElement({ tag: 'div', class: 'filters' });
-
-    this.filterAll = createElement({ tag: 'div', class: 'filters__item filters__all filters__item_active', content: 'Все' });
-    this.filterAll.dataset.filter = 'all';
-    this.filterStudy = createElement({ tag: 'div', class: 'filters__item filters__study', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-study.svg" title="Изучемые слова">' });
-    this.filterStudy.dataset.filter = 'study';
-    this.filterDifficult = createElement({ tag: 'div', class: 'filters__item filters__difficult', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-difficult.svg" title="Сложные слова">' });
-    this.filterDifficult.dataset.filter = 'difficult';
-    this.filterRemote = createElement({ tag: 'div', class: 'filters__item filters__remove', content: '<img class="filters__item-icon" src="src/assets/img/dictionary-filter-remove.svg" title="Удаленные слова">' });
-    this.filterRemote.dataset.filter = 'remove';
-
-    this.filtersWrap.append(this.filterAll);
-    this.filtersWrap.append(this.filterStudy);
-    this.filtersWrap.append(this.filterDifficult);
-    this.filtersWrap.append(this.filterRemote);
+    this.createForm();
+    this.createFilters();
 
     this.head = createElement({ tag: 'div', class: 'head-dictionary' });
     this.head.append(this.form);
@@ -51,12 +28,59 @@ export default class DictionaryView {
     this.body.append(this.list);
   }
 
+  createForm() {
+    this.form = createElement({ tag: 'form', class: 'form-search' });
+    this.form.setAttribute('enctype', 'text/plain');
+    this.form.setAttribute('method', 'POST');
+    this.formInput = createElement({ tag: 'input', class: 'form-search__input' });
+    this.formInput.setAttribute('type', 'text');
+    this.formInput.setAttribute('name', 'search');
+    this.formInput.setAttribute('placeholder', 'Найти');
+
+    this.form.append(this.formInput);
+  }
+
+  createFilters() {
+    this.filtersWrap = createElement({ tag: 'div', class: 'filters' });
+
+    this.filterAll = createElement({ tag: 'div', class: 'filters__item filters__all filters__item_active', content: 'Все' });
+    this.filterAll.dataset.filter = 'all';
+
+    this.filterStudy = createElement({
+      tag: 'div',
+      class: 'filters__item filters__study',
+      content: '<svg class="filters__item-icon" title="Изучемое слово"><use xlink:href="sprite.svg#dictionary-filter-study"></use></svg>',
+    });
+    this.filterStudy.dataset.filter = 'study';
+
+    this.filterDifficult = createElement({
+      tag: 'div',
+      class: 'filters__item filters__difficult',
+      content: '<svg class="filters__item-icon" title="Сложные слова"><use xlink:href="sprite.svg#dictionary-filter-difficult"></use></svg>',
+    });
+    this.filterDifficult.dataset.filter = 'difficult';
+
+    this.filterRemote = createElement({
+      tag: 'div',
+      class: 'filters__item filters__remove',
+      content: '<svg class="filters__item-icon" title="Удаленные слова"><use xlink:href="sprite.svg#dictionary-filter-remove"></use></svg>',
+    });
+    this.filterRemote.dataset.filter = 'remove';
+
+    this.filtersWrap.append(this.filterAll);
+    this.filtersWrap.append(this.filterStudy);
+    this.filtersWrap.append(this.filterDifficult);
+    this.filtersWrap.append(this.filterRemote);
+  }
+
   createList(data) {
     data.forEach((item) => {
       const content = `
         <div class="card-list__left">
           <div class="card-list__sound">
-            <img class="card-list__sound-icon" src="src/assets/img/dictionary-sound.svg">
+            <svg class="card-list__sound-icon" title="Прослушать">
+              <use xlink:href="sprite.svg#dictionary-sound"></use>
+            </svg>
           </div>
           <div class="card-list__text">
             <div class="card-list__word">${item.word}</div>
@@ -66,7 +90,9 @@ export default class DictionaryView {
         <div class="card-list__right">
           <div class="card-list__img" style="background: url(${urlGitHub}${item.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>
           <div class="card-list__state">
-            <img class="card-list__state-icon" src="src/assets/img/dictionary-filter-${item.state}.svg">
+            <svg class="card-list__state-icon">
+              <use xlink:href="sprite.svg#dictionary-filter-${item.state}"></use>
+            </svg>
           </div>
         </div>
       `;
@@ -88,7 +114,9 @@ export default class DictionaryView {
     const content = `
         <div class="card-list__left">
           <div class="card-list__sound">
-            <img class="card-list__sound-icon" src="src/assets/img/dictionary-sound.svg">
+            <svg class="card-list__sound-icon" title="Прослушать">
+              <use xlink:href="sprite.svg#dictionary-sound"></use>
+            </svg>
           </div>
           <div class="card-list__text">
             <div class="card-list__word">${word.word}</div>
@@ -98,7 +126,9 @@ export default class DictionaryView {
         <div class="card-list__right">
           <div class="card-list__img" style="background: url(${urlGitHub}${word.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>
           <div class="card-list__state">
-            <img class="card-list__state-icon" src="src/assets/img/dictionary-filter-${word.state}.svg">
+            <svg class="card-list__state-icon">
+              <use xlink:href="sprite.svg#dictionary-filter-${word.state}"></use>
+            </svg>
           </div>
         </div>
       `;
@@ -122,7 +152,9 @@ export default class DictionaryView {
         </div>
         <div class="card__head-right">
           <div class="card__sound">
-            <img class="card__sound-icon" src="src/assets/img/dictionary-sound.svg">
+            <svg class="card__sound-icon" title="Прослушать">
+              <use xlink:href="sprite.svg#dictionary-sound"></use>
+            </svg>
           </div>
           <div class="card__text">
             <div class="card__word">${word.word}</div>
@@ -143,9 +175,15 @@ export default class DictionaryView {
       </div>
       <div class="card__bot">
         <div class="card__state">
-          <img class="card__state-item card__study-icon" src="src/assets/img/dictionary-filter-study.svg" title="Изучемое слово">
-          <img class="card__state-item card__difficult-icon" src="src/assets/img/dictionary-filter-difficult.svg" title="Сложное слово">
-          <img class="card__state-item card__remove-icon" src="src/assets/img/dictionary-filter-remove.svg" title="Удаленное слово">
+          <svg class="card__state-item card__study-icon" title="Изучемое слово">
+            <use xlink:href="sprite.svg#dictionary-filter-study"></use>
+          </svg>
+          <svg class="card__state-item card__difficult-icon" title="Сложное слово">
+            <use xlink:href="sprite.svg#dictionary-filter-difficult"></use>
+          </svg>
+          <svg class="card__state-item card__remove-icon" title="Удаленное слово">
+            <use xlink:href="sprite.svg#dictionary-filter-remove"></use>
+          </svg>
         </div>
       </div>
     `;
