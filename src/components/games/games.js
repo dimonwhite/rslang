@@ -219,4 +219,10 @@ export default class Games {
     wrap.append(select);
     return wrap;
   }
+
+  removeListeners() {
+    if (this.game && this.game.removeListeners) {
+      this.game.removeListeners();
+    }
+  }
 }

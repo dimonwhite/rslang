@@ -30,6 +30,7 @@ export default class Router {
     this.parseHash();
     const PageClass = this.pages[this.urlArray.shift()];
     if (PageClass) {
+      this.removeListeners();
       this.mainSection.innerHTML = '';
       this.mainSection.className = 'main';
       document.body.className = 'body';
@@ -51,5 +52,11 @@ export default class Router {
     });
     const activeLink = this.nav.querySelector(`[href="/${this.hash || '#/'}"]`);
     activeLink.parentNode.classList.add('active');
+  }
+
+  removeListeners() {
+    if (this.currentPage && this.currentPage.removeListeners) {
+      this.currentPage.removeListeners();
+    }
   }
 }
