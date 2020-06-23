@@ -1,19 +1,18 @@
+import HeaderView from '@/components/header/HeaderView';
+
 export default class Header {
   constructor() {
-    this.nav = document.getElementById('nav');
-    this.body = document.body;
-    this.btn = document.getElementById('headerBtn');
     this.openedNav = false;
+    this.view = new HeaderView();
   }
 
   createEvent() {
-    this.btn.addEventListener('click', () => {
-      this.btn.classList.toggle('header__btn-active');
-      this.nav.classList.toggle('nav-show');
+    this.view.btn.addEventListener('click', () => {
+      this.view.toggleShowNav();
       this.openedNav = !this.openedNav;
     });
 
-    this.nav.addEventListener('click', (e) => {
+    this.view.nav.addEventListener('click', (e) => {
       this.clickNav(e);
     });
 
@@ -25,7 +24,7 @@ export default class Header {
   }
 
   isClickOutside(e) {
-    return this.openedNav && !this.nav.contains(e.target) && !this.btn.contains(e.target);
+    return this.openedNav && !this.view.nav.contains(e.target) && !this.view.btn.contains(e.target);
   }
 
   clickNav(e) {
@@ -33,16 +32,14 @@ export default class Header {
       this.closeNav();
       return;
     }
-    const el = e.target.closest('.nav__list-open');
-    if (el) {
-      el.classList.toggle('active');
-      el.nextElementSibling.toggle(600);
+    const showBtn = e.target.closest('.nav__list-open');
+    if (showBtn) {
+      this.view.toggleShowSubmenu(showBtn);
     }
   }
 
   closeNav() {
-    this.btn.classList.remove('header__btn-active');
-    this.nav.classList.remove('nav-show');
+    this.view.closeNav();
     this.openedNav = false;
   }
 }
