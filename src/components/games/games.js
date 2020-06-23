@@ -50,6 +50,9 @@ export default class Games {
     startScreen.append(btnExit);
 
     btnStart.addEventListener('click', () => {
+      if (this.game.startDelay) {
+        this.game.startRound();
+      }
       startScreen.classList.add('hide');
     });
     btnExit.addEventListener('click', Games.exitGame.bind(this));
@@ -159,7 +162,7 @@ export default class Games {
       </svg>
       <div class="text word">${objWord.word.word}</div>
       <div class="text">${objWord.word.transcription}</div>
-      <div class="text">${objWord.word.translation}</div>
+      <div class="text">${objWord.word.translation || objWord.word.wordTranslate}</div>
     `;
     block.append(listItem);
   }

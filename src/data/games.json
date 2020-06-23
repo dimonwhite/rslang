@@ -12,9 +12,9 @@
     "gameClass": "speakIt"
   },
   "audiocall": {
-    "title": "audiocall",
-    "desc": "audiocall game",
-    "bgImage": "testbg.jpg",
+    "title": "Audiocall",
+    "desc": "Listen to the audio and choose right variant with mouse or keyboard",
+    "bgImage": "audiocallbg.png",
     "gameClass": "audiocall",
     "settings": {
       "countWords": false,

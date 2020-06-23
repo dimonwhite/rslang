@@ -7,6 +7,9 @@ export default class AudiocallModel {
     this.wordArray = null;
     this.level = 0;
     this.optionWordsNumber = 4;
+    this.step = 0;
+    this.isStepGoing = false;
+    this.score = 0;
   }
 
   formWordarray() {

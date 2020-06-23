@@ -1,5 +1,6 @@
 import { createElement } from '../../../utils';
-import sound from '../../../assets/img/volume.svg';
+import sound from '../../../assets/img/sound-audiocall.svg';
+import arrow from '../../../assets/img/arrow-audiocall.svg';
 import { urlGitHub } from '../../../constants';
 
 export default class AudiocallView {
@@ -23,7 +24,7 @@ export default class AudiocallView {
     <div class="word-wrapper"></div>
     <div class="btn-wrapper">
       <div class="btn btn__idk">I don't know</div>
-      <div class="btn btn__next hidden">Next</div>
+      <div class="btn__next"><img class ="btn__next__img" src=${arrow}></div>
     </div>
     `;
     this.main.append(this.game);
@@ -31,8 +32,10 @@ export default class AudiocallView {
     this.iconContainer = this.game.querySelector('.icon-container');
     this.wordDescription = this.game.querySelector('.word-description');
     this.wordWrapper = this.game.querySelector('.word-wrapper');
+    this.infoWrapper = this.game.querySelector('.info-wrapper');
     this.btnIdk = this.game.querySelector('.btn__idk');
     this.btnNext = this.game.querySelector('.btn__next');
+    this.displayElement(this.btnNext, 'none');
   }
 
   renderStepWords(word) {
@@ -54,9 +57,6 @@ export default class AudiocallView {
     soundIcon.style.filter = 'invert(90%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%)';
     soundIcon.classList.add('sound-icon');
     this.iconContainer.append(soundIcon);
-    soundIcon.onclick = () => {
-      this.playAudio();
-    };
   }
 
   renderWordIcon(word) {
