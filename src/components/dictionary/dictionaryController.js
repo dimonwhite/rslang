@@ -35,12 +35,19 @@ export default class DictionaryController {
       this.clickList(e);
     });
 
-    window.addEventListener('scroll', () => {
-      const windowBottom = window.pageYOffset + document.documentElement.clientHeight;
-      if (windowBottom >= this.listBottomLimit) {
-        this.paginationList();
-      }
-    });
+    this.scroll = this.listenerScroll.bind(this);
+    window.addEventListener('scroll', this.scroll);
+  }
+
+  listenerScroll() {
+    const windowBottom = window.pageYOffset + document.documentElement.clientHeight;
+    if (windowBottom >= this.listBottomLimit) {
+      this.paginationList();
+    }
+  }
+
+  removeListeners() {
+    window.removeEventListener('scroll', this.scroll);
   }
 
   search(str) {
