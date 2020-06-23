@@ -14,6 +14,7 @@ export default class SavannahView {
     this.savannah.append(this.createGame());
     main.append(this.savannah);
     this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
+    document.getElementById('gameResult').addEventListener('click', this.speakWord.bind(this));
   }
 
   createGame() {
@@ -208,6 +209,14 @@ export default class SavannahView {
     Array.from(this.hearts.children).forEach((item) => {
       item.src = './img/heart.png';
     });
+  }
+
+  speakWord(e) {
+    if (e.target.tagName === 'LI') {
+      const audio = new Audio();
+      audio.src = this.words[+e.target.id.replace('li', '')].audio;
+      audio.autoplay = true;
+    }
   }
 
   getRandomIndexes(count) {

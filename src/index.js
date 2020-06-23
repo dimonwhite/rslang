@@ -21,7 +21,7 @@ window.addEventListener('load', () => {
   });
 });
 
-// function importAll(r) {
-//   return r.keys().map(r);
-// }
-// importAll(require.context('./assets/img/', false, /\.svg$/));
+function importAll(r) {
+  return r.keys().map(r);
+}
+importAll(require.context('./assets/img/', false, /\.svg$/));

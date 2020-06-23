@@ -135,15 +135,6 @@ export default class Games {
     const validList = document.getElementById('validList');
     validList.innerHTML = '';
     validList.append(corrFragment);
-    gameResult.addEventListener('click', this.speakWord.bind(this));
-  }
-
-  speakWord(e) {
-    if (e.target.tagName === 'LI') {
-      const audio = new Audio();
-      audio.src = this.words[+e.target.id.replace('li', '')].audio;
-      audio.autoplay = true;
-    }
   }
 
   createLevels() {
