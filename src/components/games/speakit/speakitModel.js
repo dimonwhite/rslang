@@ -22,11 +22,15 @@ export default class SpeakitModel {
     return this.dataWords[id];
   }
 
-  stop() {
-    this.game = false;
+  start() {
+    this.score = 0;
     this.dataWords.forEach((item) => {
       item.success = false;
     });
+  }
+
+  stop() {
+    this.game = false;
   }
 
   isSameWord(e) {

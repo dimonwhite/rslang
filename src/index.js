@@ -2,7 +2,7 @@ import './scss/main.scss';
 import Header from './components/header/header';
 import User from './components/user/user';
 import CardController from './components/card/cardController';
-import HttpClient from './components/httpclient/http-client';
+// import HttpClient from './components/httpclient/http-client';
 
 function importAll(r) {
   return r.keys().map(r);
