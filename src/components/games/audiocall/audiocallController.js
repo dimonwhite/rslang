@@ -1,5 +1,8 @@
 import AudiocallView from './audiocallView';
 import AudiocallModel from './audiocallModel';
+import right from '../../../assets/img/audiocall/right.svg';
+import wrong from '../../../assets/img/audiocall/wrong.svg';
+import idk from '../../../assets/img/audiocall/idk.svg';
 
 export default class AudiocallController {
   constructor(user, openPopupResult) {
@@ -24,6 +27,7 @@ export default class AudiocallController {
     } else if (e.target.closest('.word') && this.model.isStepGoing) {
       this.endStep(false);
       e.target.classList.add('wrong');
+      this.view.appendanswerIcon(wrong, e.target);
     }
 
     if (e.target.closest('.btn__next')) {
@@ -38,6 +42,10 @@ export default class AudiocallController {
     if (e.target.closest('.icon-container') && this.model.isStepGoing) {
       this.view.playAudio();
     }
+
+    if (e.target.closest('.restart')) {
+      this.startRound();
+    }
   }
 
   keypressHandler(e) {
@@ -50,6 +58,7 @@ export default class AudiocallController {
       this.view.wordWrapper.querySelectorAll('.word').forEach((el) => {
         if (el.innerText.slice(0, 1) === e.key) {
           el.classList.add('wrong');
+          this.view.appendanswerIcon(wrong, el);
         }
       });
     }
@@ -58,6 +67,11 @@ export default class AudiocallController {
   addListeners() {
     this.view.game.addEventListener('click', this.clickHandler);
     window.document.addEventListener('keypress', this.keypressHandler);
+  }
+
+  removeListeners() {
+    this.view.game.removeEventListener('click', this.clickHandler);
+    window.document.removeEventListener('keypress', this.keypressHandler);
   }
 
   startStep() {
@@ -77,6 +91,7 @@ export default class AudiocallController {
   endStep(isRight) {
     this.model.isStepGoing = false;
     this.view.rightWord.classList.add('right');
+    this.view.appendanswerIcon(right, this.view.rightWord);
     this.model.wordArray[this.model.step].success = isRight;
     this.view.displayElement(this.view.btnNext, 'block');
     this.view.displayElement(this.view.btnIdk, 'none');
@@ -87,30 +102,35 @@ export default class AudiocallController {
   idkTip() {
     this.endStep(false);
     this.view.rightWord.classList.add('idk');
+    this.view.appendanswerIcon(idk, this.view.rightWord);
   }
 
   proceedStep() {
     this.model.step += 1;
     this.view.wordWrapper.innerHTML = '';
+    this.view.changeBackground();
     this.startStep();
   }
 
   resetGame() {
     this.model.score = 0;
     this.model.step = 0;
+    this.view.displayElement(this.view.btnNext, 'none');
     this.view.wordWrapper.innerHTML = '';
     this.view.wordDescription.innerHTML = '';
   }
 
   startRound() {
     this.resetGame();
+    this.view.getBackColor();
+    this.view.setBackground();
     this.model.formWordarray();
     this.view.wordWrapper.innerHTML = '';
     this.startStep();
   }
 
   endRound() {
-    window.document.removeEventListener('keypress', this.eventHandler);
+    this.view.renderEndgamePost();
     this.openPopupResult(this.model.wordArray);
     this.resetGame();
     console.log(this.model.wordArray);

@@ -2,6 +2,7 @@ import { createElement } from '../../../utils';
 import sound from '../../../assets/img/sound-audiocall.svg';
 import arrow from '../../../assets/img/arrow-audiocall.svg';
 import { urlGitHub } from '../../../constants';
+import gameOver from '../../../assets/img/audiocall/gameover.svg';
 
 export default class AudiocallView {
   constructor() {
@@ -17,6 +18,7 @@ export default class AudiocallView {
     this.game = createElement({ tag: 'section', class: 'game' });
 
     this.game.innerHTML = `
+    <div class="restart-wrapper"><div class="restart">Restart</div></div>
     <div class="info-wrapper">
       <div class="icon-container"></div>
       <div class="word-description"></div>
@@ -52,17 +54,27 @@ export default class AudiocallView {
   renderSoundIcon() {
     this.iconContainer.innerHTML = '';
     this.iconContainer.style.background = 'none';
-    const soundIcon = new Image();
+    const soundIcon = createElement({ tag: 'img', class: 'sound-icon' });
     soundIcon.src = `${sound}`;
-    soundIcon.style.filter = 'invert(90%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%)';
-    soundIcon.classList.add('sound-icon');
     this.iconContainer.append(soundIcon);
+  }
+
+  renderEndgamePost() {
+    this.iconContainer.innerHTML = '';
+    this.iconContainer.style.background = `url(${gameOver})`;
   }
 
   renderWordIcon(word) {
     this.iconContainer.innerHTML = '';
     this.iconContainer.style.background = `white url(${urlGitHub}${word.image.replace('files/', '')}) no-repeat`;
     this.iconContainer.style.backgroundSize = 'cover';
+  }
+
+  appendanswerIcon(answer, nodeElement) {
+    const answerIcon = createElement({ tag: 'img', class: 'answer-icon' });
+    answerIcon.src = answer;
+    nodeElement.append(answerIcon);
+    return this;
   }
 
   playAudio(word) {
@@ -83,5 +95,25 @@ export default class AudiocallView {
   displayElement(element, display) {
     element.style.display = display;
     return this;
+  }
+
+  getBackColor() {
+    const randomColor = () => Math.floor(Math.random() * 255);
+    this.backColor = {
+      r: randomColor(),
+      g: randomColor(),
+      b: randomColor(),
+    };
+  }
+
+  setBackground() {
+    this.main.style.background = `rgba(${this.backColor.r}, ${this.backColor.g}, ${this.backColor.b}, 0.3)`;
+  }
+
+  changeBackground() {
+    this.backColor.r -= 10;
+    this.backColor.g -= 20;
+    this.backColor.b -= 30;
+    this.setBackground();
   }
 }
