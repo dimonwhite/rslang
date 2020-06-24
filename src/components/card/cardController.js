@@ -8,6 +8,7 @@ export default class CardController {
   }
 
   create() {
+    document.body.className = 'body show-main';
     this.cardView.renderHTML();
   }
 }
