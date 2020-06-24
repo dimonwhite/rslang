@@ -6,6 +6,7 @@ import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
 import SpeakitController from './speakit/speakitController';
 import SprintController from './sprint/sprintController';
+import GamesPageController from './gamesPage/GamesPageController';
 
 export default class Games {
   constructor() {
@@ -23,6 +24,7 @@ export default class Games {
 
   create(name) {
     if (this.games[name]) {
+      document.body.className = 'body show-game';
       this.game = new this.games[name](this.user, this.openPopupResult.bind(this));
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
@@ -31,6 +33,8 @@ export default class Games {
       main.append(this.createResultPopup());
       main.classList.add(this.gameInfo.gameClass);
       this.game.init();
+    } else {
+      new GamesPageController().create();
     }
   }
 
@@ -39,7 +43,8 @@ export default class Games {
     const title = createElement({ tag: 'div', class: 'game__startScreen-title', content: this.gameInfo.title });
     const desc = createElement({ tag: 'div', class: 'game__startScreen-desc', content: this.gameInfo.desc });
     const btnStart = createElement({ tag: 'button', class: 'btn', content: 'Start' });
-    const btnExit = createElement({ tag: 'button', class: 'btn', content: 'Go back' });
+    const btnExit = createElement({ tag: 'a', class: 'btn', content: 'Go back' });
+    btnExit.href = '#/';
     const image = require(`@/assets/img/${this.gameInfo.bgImage}`);
     startScreen.style.backgroundImage = `url("${image.default}")`;
     document.body.style.backgroundImage = `${blackGradient}, url("${image.default}")`;
@@ -52,7 +57,6 @@ export default class Games {
     btnStart.addEventListener('click', () => {
       startScreen.classList.add('hide');
     });
-    btnExit.addEventListener('click', Games.exitGame.bind(this));
     return startScreen;
   }
 
@@ -216,7 +220,9 @@ export default class Games {
     return wrap;
   }
 
-  static exitGame() {
-    document.getElementById('navPage').click();
+  removeListeners() {
+    if (this.game && this.game.removeListeners) {
+      this.game.removeListeners();
+    }
   }
 }
