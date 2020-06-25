@@ -44,7 +44,6 @@
         }
         &-question {
             text-align: center;
-            border: 1px solid red;
             width: 300px;
             color: white;
             font-size: 35px;
@@ -52,11 +51,11 @@
         }
         &-answer {
             text-align: center;
-            min-width: 300px;
             font-size: 30px;
             color: white;
             background: none;
-            border: 1px solid white;
+            border: 0;
+            padding: 20px;
         }
         &-answer:hover {
             background-color: rgba(0, 0, 0, 0.1);
@@ -266,14 +265,27 @@
     color: #e43355b5;
     background: #d839393d;
 }
+.answer-incorrect:hover {
+    color: #e43355b5;
+    background: #d839393d;
+}
 .answer-correct {
+    background: #59c7794d;
+}
+.answer-correct:hover {
     background: #59c7794d;
 }
 .answer-auto {
     color: whitesmoke;
     background: #cebebe3b;
 }
+.answer-auto:hover {
+    background: #cebebe3b;
+}
 .answer-dark {
     background: rgba(0, 0, 0, 0.450);
     color: gray;
+}
+.answer-dark:hover {
+    background: rgba(0, 0, 0, 0.450);
 }

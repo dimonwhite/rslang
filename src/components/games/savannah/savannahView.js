@@ -51,9 +51,12 @@ export default class SavannahView {
 
   createGameOptions() {
     this.start = document.getElementById('startScreen');
-    this.createOptions('Выбор языка', ['EN', 'RU'], 'selectLang');
-    this.createOptions('Скорость', ['easy', 'normal', 'hard'], 'selectSpeed');
-    this.createOptions('Жизни', ['easy', 'normal', 'hard'], 'selectHearts');
+    this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang');
+    this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed');
+    this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts');
+    const ALL_PAGES = 30;
+    const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
+    this.createOptions('Страница:', pages, 'selectPage');
   }
 
   createOptions(content, options, id) {

@@ -1,9 +1,3 @@
-import book1 from '../../../data/book1';
-import book2 from '../../../data/book2';
-import book3 from '../../../data/book3';
-import book4 from '../../../data/book4';
-import book5 from '../../../data/book5';
-import book6 from '../../../data/book6';
 import choice from '../../../data/choice';
 
 export default class SavannahModel {
@@ -14,53 +8,36 @@ export default class SavannahModel {
     this.maxHeart = 5;
     this.countWords = 10;
     this.level = 0;
+    this.page = 1;
     this.lang = 'EN';
-    this.allStudyWords = []; // JSON.parse(localStorage.getItem('userAllStudyWords'));
+    this.allStudyWords = [];
   }
 
-  createWords() {
-    switch (this.level) {
-      case 0:
-        if (this.allStudyWords.length < 100) {
-          this.random(book1.slice(0, 100));
-        } else {
-          this.studyWords = true;
-          this.random(this.allStudyWords);
-        }
-        break;
-      case 1:
-        this.random(book1);
-        break;
-      case 2:
-        this.random(book2);
-        break;
-      case 3:
-        this.random(book3);
-        break;
-      case 4:
-        this.random(book4);
-        break;
-      case 5:
-        this.random(book5);
-        break;
-      case 6:
-        this.random(book6);
-        break;
-      default:
-        break;
+  async createWords() {
+    const SENTENCE = 99;
+    // this.allStudyWords = await this.user.getAllUserWords();
+    if (this.allStudyWords && this.allStudyWords.length > 100 && this.level === -1) {
+      this.random(this.allStudyWords);
+    } else {
+      const HANDICAP = 10;
+      const countWords = this.countWords + HANDICAP;
+      const words = await this.user.getWords({
+        group: this.level, page: this.page - 1, maxLength: SENTENCE, wordsPerPage: countWords,
+      });
+      this.random(words);
     }
   }
 
-  random(book) {
+  random(words) {
     const unique = [];
     for (let i = 0; i < this.countWords + this.maxHeart; i += 1) {
-      const rand = Math.floor(Math.random() * (book.length + 1));
-      if (book[rand] && book[rand].wordTranslate) {
+      const rand = Math.floor(Math.random() * (words.length + 1));
+      if (words[rand] && words[rand].wordTranslate) {
         if (unique.includes(rand)) {
           i -= 1;
         } else {
           unique.push(rand);
-          this.words.push(book[rand]);
+          this.words.push(words[rand]);
         }
       } else {
         i -= 1;
