@@ -87,6 +87,7 @@
             border: 0;
             width: 30px;
             height: 30px;
+            cursor: pointer;
         }
         &-control {
             display: flex;
@@ -103,6 +104,7 @@
             border: 0;
             width: 30px;
             height: 30px;
+            cursor: pointer;
         }
         &-wrapper {
             width: 100px;
@@ -183,24 +185,18 @@
 @keyframes out-top {
     0% {
     }
-    99% {
+    100% {
         transform: translateY(-20vh);
         border: 3px solid crimson;
-    }
-    100% {
-        border: 0;
     }
 }
 
 @keyframes out-bottom {
     0% {
     }
-    99% {
+    100% {
         transform: translateY(-120vh);
         border: 3px solid crimson;
-    }
-    100% {
-        border: 0;
     }
 }
 

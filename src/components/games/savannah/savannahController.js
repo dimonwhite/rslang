@@ -73,7 +73,6 @@ export default class SavannahController {
 
   getStartRound() {
     this.view.getStartRound();
-    this.sound = true;
     this.attempt = 0;
     this.correctly = 0;
     this.heart = 5;
@@ -83,10 +82,22 @@ export default class SavannahController {
   }
 
   startNextRound() {
-    // if (this.stopRounds[this.attempt]) { ... }
     this.view.startNextRound(this.model.gameWords, this.attempt, this.model.words);
-    setTimeout(() => { this.lockChoice = true; }, 1300);
-    setTimeout(this.nextWord.bind(this, this.attempt), 10000);
+    const countHeart = this.maxHeart - this.heart;
+    if (this.view.top.classList.length > 0) {
+      this.view.top.addEventListener('animationend', () => {
+        this.view.top.addEventListener('animationstart', () => this.getAudio('mistake'));
+        this.view.nextWord(countHeart);
+        this.view.top.addEventListener('animationend', this.nextWord.bind(this, this.attempt));
+      });
+    } else {
+      this.view.bottom.addEventListener('animationend', () => {
+        this.view.bottom.addEventListener('animationstart', () => this.getAudio('mistake'));
+        this.view.nextWord(countHeart);
+        this.view.bottom.addEventListener('animationend', this.nextWord.bind(this, this.attempt));
+      });
+    }
+    this.lockChoice = true;
   }
 
   getAnswer({ target }) {
@@ -109,23 +120,17 @@ export default class SavannahController {
       }
       this.attempt += 1;
       // this.changeStatistics();
+      this.view.top.addEventListener('animationend', this.checkEndGame.bind(this));
+      this.view.bottom.addEventListener('animationend', this.checkEndGame.bind(this));
     }
-    this.checkEndGame();
   }
 
-  nextWord(indexRound) {
-    if (this.stopRounds[indexRound]) {
-      this.getAudio('mistake');
-      this.model.words[this.attempt].correctly = false;
-      const countHeart = this.maxHeart - this.heart;
-      this.view.nextWord(countHeart);
-      this.heart -= 1;
-      // this.changeWordStatistics();
-      this.attempt += 1;
-      // this.changeStatistics();
-
-      this.checkEndGame();
-    }
+  nextWord() {
+    this.lockChoice = false;
+    this.model.words[this.attempt].correctly = false;
+    this.heart -= 1;
+    this.attempt += 1;
+    this.checkEndGame();
   }
 
   checkEndGame() {
@@ -136,12 +141,16 @@ export default class SavannahController {
       } else {
         this.getAudio('win');
       }
+      if (this.view.top) this.view.top.remove();
+      if (this.view.bottom) this.view.bottom.remove();
       setTimeout(() => {
         this.view.endGame();
         this.callResult(this.model.words.slice(0, this.attempt));
       }, 4000);
     } else {
-      setTimeout(this.startNextRound.bind(this), 2500);
+      this.view.bottom.remove();
+      this.view.top.remove();
+      this.startNextRound();
     }
   }
 
