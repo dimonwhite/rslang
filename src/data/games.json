@@ -3,7 +3,7 @@
     "title": "SAVANNAH",
     "desc": "savannah game",
     "bgImage": "testbg.jpg",
-    "gameClass": "savannah__start-page",
+    "gameClass": "clear-main",
     "settings": {
       "countWords": true,
       "countWordsParams": {

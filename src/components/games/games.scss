@@ -1,9 +1,16 @@
+.show-game {
+  padding-top: 30px;
+  .header {
+    transform: translateY(-100%);
+  }
+}
+
 .game {
   &__startScreen {
-    // position: fixed;
-    // top: 0;
-    // left: 0;
-    // z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
 
     display: flex;
     justify-content: center;

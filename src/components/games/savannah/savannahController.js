@@ -5,7 +5,7 @@ import soundGO from '@/assets/sounds/game-over.mp3';
 import soundMist from '@/assets/sounds/mistake.mp3';
 import SavannahView from './savannahView';
 import SavannahModel from './savannahModel';
-import HttpClient from '../../httpclient/http-client';
+import HttpClient from '../../httpclient/HttpClient';
 
 export default class SavannahController {
   constructor(user, callResult) {

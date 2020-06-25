@@ -5,10 +5,17 @@
 }
 
 button,
-li,
 a {
   cursor: pointer;
   outline: 0;
+}
+
+button {
+  background: 0 0;
+  border: 0;
+  &:focus {
+    outline: 0;
+  }
 }
 
 html {
@@ -21,7 +28,7 @@ html {
 }
 
 body {
-  // padding-top: 120px;
+  // padding-top: 5.6rem;
   min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -35,4 +42,5 @@ body {
   background-position: center;
   background-attachment: fixed;
   background-color: #191919;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url("../assets/img/main-page-background.jpg");
 }
