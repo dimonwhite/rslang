@@ -103,6 +103,11 @@ export default class SpeakitController {
     this.recognition.addEventListener('result', (e) => {
       this.resultRecognition(e);
     });
+    this.recognition.addEventListener('end', () => {
+      if (this.model.game) {
+        this.recognition.start();
+      }
+    });
   }
 
   resultRecognition(e) {
