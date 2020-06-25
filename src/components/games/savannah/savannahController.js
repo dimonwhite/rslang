@@ -11,8 +11,6 @@ export default class SavannahController {
     this.view = new SavannahView();
     this.callResult = callResult;
     this.model = new SavannahModel(user);
-    this.lockChoice = true;
-    this.stopRounds = [];
     this.level = 0;
     this.maxHeart = 5;
     this.heart = 5;
@@ -20,6 +18,7 @@ export default class SavannahController {
     this.attempt = 0;
     this.correctly = 0;
     this.sound = true;
+    this.answer = false;
   }
 
   init() {
@@ -28,12 +27,23 @@ export default class SavannahController {
   }
 
   createEvent() {
-    this.view.options.addEventListener('click', (e) => {
-      if (this.lockChoice) this.getAnswer(e);
-    });
+    this.view.options.addEventListener('click', this.getAnswer.bind(this));
     document.getElementById('selectLang').addEventListener('change', (e) => {
       this.model.lang = e.target.value;
       this.view.lang = e.target.value;
+    });
+    document.getElementById('selectHearts').addEventListener('change', (e) => {
+      const MIN_HEARTS = 3;
+      const options = ['hard', 'normal', 'easy'];
+      this.maxHeart = MIN_HEARTS + options.findIndex((item) => item === e.target.value);
+      this.model.maxHeart = this.maxHeart;
+      this.view.countHearts = this.maxHeart;
+      this.view.createHearts();
+    });
+    document.getElementById('selectSpeed').addEventListener('change', (e) => {
+      const MAX_SPEED = 7;
+      const options = ['easy', 'normal', 'hard'];
+      this.view.speed = MAX_SPEED - 2 * options.findIndex((item) => item === e.target.value);
     });
     document.getElementById('cancel').addEventListener('click', () => {
       this.sound = false;
@@ -68,15 +78,13 @@ export default class SavannahController {
     this.model.createWords();
     setTimeout(this.getStartRound.bind(this), 3000);
     await this.model.getWords();
-    this.stopRounds = new Array(this.model.words.length).fill(true);
   }
 
   getStartRound() {
     this.view.getStartRound();
     this.attempt = 0;
     this.correctly = 0;
-    this.heart = 5;
-    this.lockChoice = true;
+    this.heart = this.maxHeart;
     // this.addStatistics();
     this.startNextRound();
   }
@@ -86,31 +94,36 @@ export default class SavannahController {
     const countHeart = this.maxHeart - this.heart;
     if (this.view.top.classList.length > 0) {
       this.view.top.addEventListener('animationend', () => {
+        this.lockChoise = false;
+        this.view.setAnswer();
         this.view.top.addEventListener('animationstart', () => this.getAudio('mistake'));
-        this.view.nextWord(countHeart);
+        this.view.nextWord(countHeart, this.answer);
         this.view.top.addEventListener('animationend', this.nextWord.bind(this, this.attempt));
       });
     } else {
       this.view.bottom.addEventListener('animationend', () => {
+        this.lockChoise = false;
+        this.view.setAnswer();
         this.view.bottom.addEventListener('animationstart', () => this.getAudio('mistake'));
-        this.view.nextWord(countHeart);
+        this.view.nextWord(countHeart, this.answer);
         this.view.bottom.addEventListener('animationend', this.nextWord.bind(this, this.attempt));
       });
     }
-    this.lockChoice = true;
+    this.answer = false;
   }
 
   getAnswer({ target }) {
-    if (target.tagName === 'BUTTON' && target.classList.length < 2 && this.lockChoice) {
-      this.lockChoice = false;
-      this.stopRounds[this.attempt] = false;
+    if (target.tagName === 'BUTTON' && target.classList.length < 2) {
+      this.answer = true;
       if (target.dataset.answer === 'true') {
+        this.view.setAnswer('correct', target);
         this.getAudio('correctly');
         this.correctly += 1;
         const delta = (this.correctly / this.count);
         this.view.getCorrectlyAnswer(target, delta);
         this.model.words[this.attempt].success = true;
       } else {
+        this.view.setAnswer('mistake', target);
         this.getAudio('mistake');
         const countHeart = this.maxHeart - this.heart;
         this.view.getIncorrectlyAnswer(target, countHeart);
@@ -126,7 +139,6 @@ export default class SavannahController {
   }
 
   nextWord() {
-    this.lockChoice = false;
     this.model.words[this.attempt].correctly = false;
     this.heart -= 1;
     this.attempt += 1;
@@ -135,7 +147,6 @@ export default class SavannahController {
 
   checkEndGame() {
     if (this.correctly === this.count || this.heart === 0) {
-      this.lockChoice = false;
       if (this.heart === 0) {
         this.getAudio('game-over');
       } else {

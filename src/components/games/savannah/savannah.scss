@@ -58,6 +58,9 @@
             background: none;
             border: 1px solid white;
         }
+        &-answer:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
         &-ship {
             width: 35px;
             height: 35px;
@@ -124,7 +127,10 @@
         &-key {
             width: 50px;
             height: 50px;
-            object-fit: cover;
+            background: none;
+            background-image: url('/src/assets/img/keyboard.png');
+            background-repeat: no-repeat;
+            background-size: 48px;
         }
         &-time {
             width: 50px;
@@ -223,10 +229,10 @@
     width: 0px;
     border: 3px solid white;
     border-radius: 15px;
-    animation: ship-top 2s 1 forwards;
+    animation: ship-top 2s linear 1 forwards;
 }
 .move-to-ship-bottom {
-    animation: ship-bottom 2s 1 forwards;
+    animation: ship-bottom 2s linear 1 forwards;
 }
 
 .move-out-top,
@@ -235,10 +241,10 @@
     width: 0px;
     border: 3px solid crimson;
     border-radius: 15px;
-    animation: out-bottom 2s 1 forwards;
+    animation: out-bottom 2s linear 1 forwards;
 }
 .move-out-top {
-    animation: out-top 2s 1 forwards;
+    animation: out-top 2s 1 linear forwards;
 }
 .gray-word {
     background-color: gray;
@@ -254,4 +260,20 @@
 
 .sound-mute {
     background-image: url('/src/assets/img/sound-mute.png');
+}
+
+.answer-incorrect {
+    color: #e43355b5;
+    background: #d839393d;
+}
+.answer-correct {
+    background: #59c7794d;
+}
+.answer-auto {
+    color: whitesmoke;
+    background: #cebebe3b;
+}
+.answer-dark {
+    background: rgba(0, 0, 0, 0.450);
+    color: gray;
 }

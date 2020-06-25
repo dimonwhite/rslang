@@ -5,6 +5,7 @@ export default class SavannahView {
     this.countHearts = 5;
     this.SHIP_HIGHT = 35;
     this.BG_HIGHT = 3500;
+    this.speed = 7;
     this.lang = 'EN';
   }
 
@@ -12,7 +13,7 @@ export default class SavannahView {
     const main = document.getElementById('main');
     document.getElementById('gameOptions').classList.add('show');
     document.getElementById('closePopup').innerHTML = 'Close Game';
-    this.createLanguageSelect();
+    this.createGameOptions();
     this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });
     this.savannah.append(this.createGame());
     main.append(this.savannah);
@@ -21,20 +22,15 @@ export default class SavannahView {
 
   createGame() {
     this.game = createElement({ tag: 'section', class: 'savannah__game' });
-    this.hearts = createElement({ tag: 'div', class: 'savannah__game-heart' });
-    for (let i = 0; i < this.countHearts; i += 1) {
-      const img = createElement({ tag: 'div', class: 'savannah__game-heart-img' });
-      this.hearts.append(img);
-    }
     const cancel = createElement({ tag: 'div', class: 'savannah__game-cancel', id: 'cancel' });
     const sound = createElement({ tag: 'div', class: 'savannah__game-sound', id: 'sound' });
     const wrap = createElement({ tag: 'div', class: 'savannah__game-wrapper' });
     wrap.append(cancel);
     wrap.append(sound);
-    const control = createElement({ tag: 'div', class: 'savannah__game-control' });
-    control.append(wrap);
-    control.append(this.hearts);
-    this.game.append(control);
+    this.control = createElement({ tag: 'div', class: 'savannah__game-control' });
+    this.control.append(wrap);
+    this.createHearts();
+    this.game.append(this.control);
     this.game.append(this.createField());
     this.game.append(this.createCountdown());
 
@@ -43,14 +39,36 @@ export default class SavannahView {
     return this.game;
   }
 
-  createLanguageSelect() {
+  createHearts() {
+    if (this.hearts) this.hearts.innerHTML = '';
+    this.hearts = createElement({ tag: 'div', class: 'savannah__game-heart' });
+    for (let i = 0; i < this.countHearts; i += 1) {
+      const img = createElement({ tag: 'div', class: 'savannah__game-heart-img' });
+      this.hearts.append(img);
+    }
+    this.control.append(this.hearts);
+  }
+
+  createGameOptions() {
     this.start = document.getElementById('startScreen');
-    const select = createElement({ tag: 'select', class: 'game__select-options', id: 'selectLang' });
-    const en = createElement({ tag: 'option', class: 'game__select-options-item', content: 'EN' });
-    const ru = createElement({ tag: 'option', class: 'game__select-options-item', content: 'RU' });
-    select.append(en);
-    select.append(ru);
-    this.start.append(select);
+    this.createOptions('Выбор языка', ['EN', 'RU'], 'selectLang');
+    this.createOptions('Скорость', ['easy', 'normal', 'hard'], 'selectSpeed');
+    this.createOptions('Жизни', ['easy', 'normal', 'hard'], 'selectHearts');
+  }
+
+  createOptions(content, options, id) {
+    const wrap = createElement({ tag: 'div', class: 'game__select' });
+    const selectText = createElement({
+      tag: 'span', class: 'game__select-text', id: `text${id}`, content,
+    });
+    const select = createElement({ tag: 'select', class: 'game__select-options', id });
+    for (let i = 0; i < options.length; i += 1) {
+      const option = createElement({ tag: 'option', class: 'game__select-options-item', content: options[i] });
+      select.append(option);
+    }
+    wrap.append(selectText);
+    wrap.append(select);
+    this.start.append(wrap);
   }
 
   createField() {
@@ -81,9 +99,7 @@ export default class SavannahView {
     });
     this.countdown.append(text);
 
-    const key = createElement({ tag: 'img', class: 'savannah__timer-key' });
-    key.setAttribute('alt', '');
-    key.src = './img/keyboard.png';
+    const key = createElement({ tag: 'div', class: 'savannah__timer-key' });
     this.countdown.append(key);
     return this.countdown;
   }
@@ -109,9 +125,8 @@ export default class SavannahView {
     this.getRandomIndexes(WORDS);
     Array.from(this.options.children).forEach((item, index) => {
       const word = gameWords[attempt][this.randIndexes[index]];
-      item.innerHTML = word;
-      item.classList.remove('savannah__correct');
-      item.classList.remove('savannah__incorrect');
+      item.innerHTML = `${index + 1}. ${word}`;
+      item.className = 'savannah__game-answer';
       if (this.randIndexes[index] === 0) {
         item.setAttribute('data-answer', 'true');
       } else {
@@ -143,6 +158,7 @@ export default class SavannahView {
     this.field.prepend(this.top);
     this.field.append(this.bottom);
     this.top.classList.add('move-from-top');
+    this.top.style.animationDuration = `${this.speed}s`;
   }
 
   moveWordFromBottom(word) {
@@ -152,11 +168,11 @@ export default class SavannahView {
     this.field.append(this.bottom);
     this.bottom.innerHTML = word;
     this.bottom.classList.add('move-from-bottom');
+    this.bottom.style.animationDuration = `${this.speed}s`;
   }
 
-  nextWord(countHeart) {
-    const MAX_HEART = 5;
-    if (countHeart < MAX_HEART) {
+  nextWord(countHeart, answer) {
+    if (countHeart < this.countHearts && !answer) {
       this.hearts.children[countHeart].classList.add('heart-empty');
     }
     if (this.top.classList.length > 1) {
@@ -165,29 +181,33 @@ export default class SavannahView {
       this.top.classList.remove('move-from-top');
       this.top.style.transform = matrix;
       this.top.classList.add('move-out-top');
+      this.top.style.animationDuration = '1.5s';
     } else {
       this.bottom.innerHTML = '';
       const matrix = window.getComputedStyle(this.bottom).getPropertyValue('transform');
       this.bottom.classList.remove('move-from-bottom');
       this.bottom.style.transform = matrix;
       this.bottom.classList.add('move-out-bottom');
+      this.bottom.style.animationDuration = '1.5s';
     }
   }
 
   getCorrectlyAnswer(target, delta) {
-    target.classList.add('savannah__correct');
+    // target.classList.add('savannah__correct');
     if (this.top.classList.length > 1) {
       this.top.innerHTML = '';
       const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
       this.top.classList.remove('move-from-top');
       this.top.style.transform = matrix;
       this.top.classList.add('move-to-ship-top');
+      this.top.style.animationDuration = '1.5s';
     } else {
       this.bottom.innerHTML = '';
       const matrix = window.getComputedStyle(this.bottom).getPropertyValue('transform');
       this.bottom.classList.remove('move-from-bottom');
       this.bottom.style.transform = matrix;
       this.bottom.classList.add('move-to-ship-bottom');
+      this.bottom.style.animationDuration = '1.5s';
     }
     this.moveBackground(delta);
   }
@@ -202,22 +222,23 @@ export default class SavannahView {
   }
 
   getIncorrectlyAnswer(target, countHeart) {
-    target.classList.add('savannah__incorrect');
+    // target.classList.add('savannah__incorrect');
     if (this.top.classList.length > 1) {
       this.top.innerHTML = '';
       const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
       this.top.classList.remove('move-from-top');
       this.top.style.transform = matrix;
       this.top.classList.add('move-out-top');
+      this.top.style.animationDuration = '1.5s';
     } else {
       this.bottom.innerHTML = '';
       const matrix = window.getComputedStyle(this.bottom).getPropertyValue('transform');
       this.bottom.classList.remove('move-from-bottom');
       this.bottom.style.transform = matrix;
       this.bottom.classList.add('move-out-bottom');
+      this.bottom.style.animationDuration = '1.5s';
     }
-    const MAX_HEART = 5;
-    if (countHeart < MAX_HEART) {
+    if (countHeart < this.countHearts) {
       this.hearts.children[countHeart].classList.add('heart-empty');
     }
   }
@@ -230,6 +251,33 @@ export default class SavannahView {
     this.savannah.classList.remove('show');
   }
 
+  setAnswer(result, target) {
+    if (result === 'correct') {
+      Array.from(this.options.children).forEach((item) => {
+        if (target !== item) item.classList.add('answer-dark');
+      });
+      target.classList.add('answer-correct');
+    } else if (result === 'mistake') {
+      Array.from(this.options.children).forEach((item) => {
+        if (target !== item && item.dataset.answer !== 'true') {
+          item.classList.add('answer-dark');
+        }
+        if (item.dataset.answer === 'true') {
+          item.classList.add('answer-auto');
+        }
+      });
+      target.classList.add('answer-incorrect');
+    } else {
+      Array.from(this.options.children).forEach((item) => {
+        if (item.dataset.answer === 'true') {
+          item.classList.add('answer-auto');
+        } else {
+          item.classList.add('answer-dark');
+        }
+      });
+    }
+  }
+
   newGame() {
     document.getElementById('startScreen').classList.remove('hide');
     document.getElementById('gameOptions').classList.remove('hide');
@@ -240,14 +288,6 @@ export default class SavannahView {
     Array.from(this.hearts.children).forEach((item) => {
       item.classList.remove('heart-empty');
     });
-  }
-
-  speakWord(e) {
-    if (e.target.tagName === 'LI') {
-      const audio = new Audio();
-      audio.src = this.words[+e.target.id.replace('li', '')].audio;
-      audio.autoplay = true;
-    }
   }
 
   getRandomIndexes(count) {
