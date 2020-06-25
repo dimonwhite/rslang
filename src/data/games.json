@@ -1,0 +1,50 @@
+{
+  "savannah": {
+    "title": "SAVANNAH",
+    "desc": "savannah game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "savannah__start-page",
+    "settings": {
+      "countWords": true,
+      "countWordsParams": {
+        "min": 10,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
+  },
+  "puzzle": {
+    "title": "puzzle",
+    "desc": "puzzle game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
+  },
+  "audiocall": {
+    "title": "audiocall",
+    "desc": "audiocall game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
+  },
+  "speakit": {
+    "title": "SPEAKIT",
+    "desc": "Click on the words to hear them sound.<br>Click on the button and speak the words into the microphone.",
+    "bgImage": "speakitbg.jpg",
+    "gameClass": "speakIt",
+    "settings": {
+      "countWords": true,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
+  },
+  "sprint": {
+    "title": "sprint",
+    "desc": "sprint game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "speakIt"
+  }
+}

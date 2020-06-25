@@ -1,69 +1,87 @@
 import { createElement } from '../../../utils';
 
 export default class SavannahView {
-  constructor(callResult) {
-    this.callResult = callResult;
+  constructor() {
     this.countHearts = 5;
     this.SHIP_HIGHT = 35;
     this.BG_HIGHT = 3500;
+    this.lang = 'EN';
   }
 
   renderHTML() {
     const main = document.getElementById('main');
-    this.savannah = createElement('section', 'savannah', 'savannah');
+    document.getElementById('gameOptions').classList.add('show');
+    document.getElementById('closePopup').innerHTML = 'Close Game';
+    this.createLanguageSelect();
+    this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });
     this.savannah.append(this.createGame());
     main.append(this.savannah);
     this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
-    document.getElementById('gameResult').addEventListener('click', this.speakWord.bind(this));
   }
 
   createGame() {
-    this.game = createElement('section', 'savannah__game');
-    this.hearts = createElement('div', 'savannah__game-heart');
+    this.game = createElement({ tag: 'section', class: 'savannah__game' });
+    this.hearts = createElement({ tag: 'div', class: 'savannah__game-heart' });
     for (let i = 0; i < this.countHearts; i += 1) {
-      const img = createElement('img', 'savannah__game-heart-img');
-      img.src = './img/heart.png';
-      img.setAttribute('alt', '');
+      const img = createElement({ tag: 'div', class: 'savannah__game-heart-img' });
       this.hearts.append(img);
     }
-    this.game.append(this.hearts);
+    const cancel = createElement({ tag: 'div', class: 'savannah__game-cancel', id: 'cancel' });
+    const sound = createElement({ tag: 'div', class: 'savannah__game-sound', id: 'sound' });
+    const wrap = createElement({ tag: 'div', class: 'savannah__game-wrapper' });
+    wrap.append(cancel);
+    wrap.append(sound);
+    const control = createElement({ tag: 'div', class: 'savannah__game-control' });
+    control.append(wrap);
+    control.append(this.hearts);
+    this.game.append(control);
     this.game.append(this.createField());
     this.game.append(this.createCountdown());
 
-    this.ship = createElement('img', 'savannah__game-ship');
-    this.ship.src = './img/ship.png';
-    this.ship.setAttribute('alt', '');
+    this.ship = createElement({ tag: 'div', class: 'savannah__game-ship' });
     this.game.append(this.ship);
     return this.game;
   }
 
+  createLanguageSelect() {
+    this.start = document.getElementById('startScreen');
+    const select = createElement({ tag: 'select', class: 'game__select-options', id: 'selectLang' });
+    const en = createElement({ tag: 'option', class: 'game__select-options-item', content: 'EN' });
+    const ru = createElement({ tag: 'option', class: 'game__select-options-item', content: 'RU' });
+    select.append(en);
+    select.append(ru);
+    this.start.append(select);
+  }
+
   createField() {
-    this.field = createElement('div', 'savannah__game-field');
-    this.top = createElement('div', 'savannah__game-question');
+    this.field = createElement({ tag: 'div', class: 'savannah__game-field' });
+    this.top = createElement({ tag: 'div', class: 'savannah__game-question' });
     this.field.append(this.top);
 
-    this.options = createElement('div', 'savannah__game-wrap', 'savOptions');
+    this.options = createElement({ tag: 'div', class: 'savannah__game-wrap', id: 'savOptions' });
     const OPTIONS = 4;
     for (let i = 1; i <= OPTIONS; i += 1) {
-      const answer = createElement('button', 'savannah__game-answer', `savAnswer${i}`);
+      const answer = createElement({ tag: 'button', class: 'savannah__game-answer', id: `savAnswer${i}` });
       this.options.append(answer);
     }
     this.field.append(this.options);
-    this.bottom = createElement('div', 'savannah__game-question');
+    this.bottom = createElement({ tag: 'div', class: 'savannah__game-question' });
     this.field.append(this.bottom);
     return this.field;
   }
 
   createCountdown() {
-    this.countdown = createElement('div', 'savannah__timer');
-    this.time = createElement('span', 'savannah__timer-time', false, '3');
+    this.countdown = createElement({ tag: 'div', class: 'savannah__timer' });
+    this.time = createElement({ tag: 'span', class: 'savannah__timer-time', content: '3' });
     this.countdown.append(this.time);
 
     const context = 'Для быстрого ответа можно использовать клавиши 1, 2, 3, 4';
-    const text = createElement('p', 'savannah__timer-text', 'savText', context);
+    const text = createElement({
+      tag: 'p', class: 'savannah__timer-text', id: 'savText', content: context,
+    });
     this.countdown.append(text);
 
-    const key = createElement('img', 'savannah__timer-key');
+    const key = createElement({ tag: 'img', class: 'savannah__timer-key' });
     key.setAttribute('alt', '');
     key.src = './img/keyboard.png';
     this.countdown.append(key);
@@ -72,12 +90,10 @@ export default class SavannahView {
 
   getStart() {
     this.savannah.classList.add('show');
-    document.getElementById('begin').classList.add('hide');
-    this.game.style.backgroundImage = 'url(./img/bg-savana.svg)';
+    document.getElementById('gameOptions').classList.add('hide');
     this.game.classList.add('show-flex');
     setTimeout(() => { this.time.innerHTML = 2; }, 1000);
     setTimeout(() => { this.time.innerHTML = 1; }, 2000);
-    return +document.getElementById('selectCount').value;
   }
 
   getStartRound() {
@@ -85,7 +101,7 @@ export default class SavannahView {
     this.field.classList.add('show-flex');
   }
 
-  startNextRound(gameWords, attempt) {
+  startNextRound(gameWords, attempt, words) {
     if (this.top) this.top.remove();
     if (this.bottom) this.bottom.remove();
 
@@ -103,25 +119,35 @@ export default class SavannahView {
       }
     });
 
+    this.checkSide(words, attempt);
+  }
+
+  checkSide(words, attempt) {
     const rand = Math.floor(Math.random() * 2);
     if (rand) {
-      this.moveWordFromTop(gameWords[attempt][4]);
+      if (this.lang === 'EN') {
+        this.moveWordFromTop(words[attempt].word);
+      } else {
+        this.moveWordFromTop(words[attempt].wordTranslate);
+      }
+    } else if (this.lang === 'EN') {
+      this.moveWordFromBottom(words[attempt].word);
     } else {
-      this.moveWordFromBottom(gameWords[attempt][4]);
+      this.moveWordFromBottom(words[attempt].wordTranslate);
     }
   }
 
   moveWordFromTop(word) {
-    this.top = createElement('div', 'savannah__game-question', false, word);
-    this.bottom = createElement('div');
+    this.top = createElement({ tag: 'div', class: 'savannah__game-question', content: word });
+    this.bottom = createElement({ tag: 'div' });
     this.field.prepend(this.top);
     this.field.append(this.bottom);
     this.top.classList.add('move-from-top');
   }
 
   moveWordFromBottom(word) {
-    this.bottom = createElement('div', 'savannah__game-question', false, word);
-    this.top = createElement('div');
+    this.bottom = createElement({ tag: 'div', class: 'savannah__game-question', content: word });
+    this.top = createElement({ tag: 'div' });
     this.field.prepend(this.top);
     this.field.append(this.bottom);
     this.bottom.innerHTML = word;
@@ -129,7 +155,10 @@ export default class SavannahView {
   }
 
   nextWord(countHeart) {
-    this.hearts.children[countHeart].src = './img/heart-empty.png';
+    const MAX_HEART = 5;
+    if (countHeart < MAX_HEART) {
+      this.hearts.children[countHeart].classList.add('heart-empty');
+    }
     if (this.top.classList.length > 1) {
       this.top.innerHTML = '';
       const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
@@ -187,27 +216,29 @@ export default class SavannahView {
       this.bottom.style.transform = matrix;
       this.bottom.classList.add('move-out-bottom');
     }
-    this.hearts.children[countHeart].src = './img/heart-empty.png';
+    const MAX_HEART = 5;
+    if (countHeart < MAX_HEART) {
+      this.hearts.children[countHeart].classList.add('heart-empty');
+    }
   }
 
-  endGame(words, attempt) {
+  endGame() {
     this.top.remove();
     this.bottom.remove();
     this.field.classList.remove('show-flex');
     this.countdown.classList.remove('hide');
     this.savannah.classList.remove('show');
-    this.callResult(words, attempt);
   }
 
   newGame() {
-    document.getElementById('begin').classList.remove('hide');
-    document.getElementById('gameResult').classList.remove('show');
+    document.getElementById('startScreen').classList.remove('hide');
+    document.getElementById('gameOptions').classList.remove('hide');
     this.time.innerHTML = '3';
     this.ship.style.height = `${this.SHIP_HIGHT}px`;
     this.ship.style.width = `${this.SHIP_HIGHT}px`;
     this.game.style.backgroundPositionY = this.startBg;
     Array.from(this.hearts.children).forEach((item) => {
-      item.src = './img/heart.png';
+      item.classList.remove('heart-empty');
     });
   }
 

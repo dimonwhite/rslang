@@ -1,11 +1,10 @@
-// import words from '../../../data/mock_endGame';
 import book1 from '../../../data/book1';
 import book2 from '../../../data/book2';
 import book3 from '../../../data/book3';
 import book4 from '../../../data/book4';
 import book5 from '../../../data/book5';
 import book6 from '../../../data/book6';
-import rus from '../../../data/rus';
+import choice from '../../../data/choice';
 
 export default class SavannahModel {
   constructor(user) {
@@ -13,8 +12,9 @@ export default class SavannahModel {
     this.words = [];
     this.gameWords = [];
     this.maxHeart = 5;
-    this.count = 10;
+    this.countWords = 10;
     this.level = 0;
+    this.lang = 'EN';
     this.allStudyWords = []; // JSON.parse(localStorage.getItem('userAllStudyWords'));
   }
 
@@ -53,7 +53,7 @@ export default class SavannahModel {
 
   random(book) {
     const unique = [];
-    for (let i = 0; i < this.count + this.maxHeart; i += 1) {
+    for (let i = 0; i < this.countWords + this.maxHeart; i += 1) {
       const rand = Math.floor(Math.random() * (book.length + 1));
       if (book[rand] && book[rand].wordTranslate) {
         if (unique.includes(rand)) {
@@ -68,33 +68,60 @@ export default class SavannahModel {
     }
   }
 
-  getWords() {
+  newGame() {
+    this.gameWords = [];
+    this.words = [];
+  }
+
+  async getWords() {
+    if (this.lang === 'EN') {
+      this.words.forEach((item) => this.gameWords.push([item.wordTranslate]));
+    } else {
+      this.words.forEach((item) => this.gameWords.push([item.word]));
+    }
+    await this.getPartsOfSpeech();
+  }
+
+  async getPartsOfSpeech() {
     try {
-      for (let i = 0; i < this.words.length; i += 1) {
-        this.gameWords.push([this.words[i].wordTranslate]);
-        const WRONG_WORDS = 3;
-        for (let j = 0; j < WRONG_WORDS; j += 1) {
-          for (let k = 0; k < rus.length; k += 1) {
-            if (rus[k][0][0] === this.words[i].wordTranslate[0]) {
-              if (!this.gameWords[i].includes(rus[k][0])) {
-                this.gameWords[i].push(rus[k][0]);
-                k = rus.length;
-              }
-            }
-          }
-        }
-        while (this.gameWords[i].length < 4) {
-          this.gameWords[i].push(rus[Math.floor(Math.random() * rus.length)][0]);
-        }
-        this.gameWords[i].push(this.words[i].word);
-      }
+      const urls = [];
+      this.words.forEach((word) => {
+        urls.push(`https://dictionary.skyeng.ru/api/public/v1/words/search?search=${word.word}`);
+      });
+
+      const request = urls.map((url) => fetch(url));
+      const promises = await Promise.all(request);
+      const contents = await Promise.all(promises.map((response) => response.json()));
+      const partsOfSpeech = ['j', 'r', 'v', 'n'];
+      contents.forEach((content, index) => {
+        const find = content.find((item) => item.text === this.words[index].word);
+        const part = find.meanings[0].partOfSpeechCode;
+        this.gameWords[index] = this.randWords(index, part, partsOfSpeech);
+      });
     } catch (error) {
       this.error = error.message;
     }
   }
 
-  newGame() {
-    this.gameWords = [];
-    this.words = [];
+  randWords(index, part, partsOfSpeech) {
+    let choiceWords;
+    if (this.lang === 'EN') {
+      if (partsOfSpeech.includes(part)) {
+        choiceWords = choice.ru[part].find((item) => item[0][0] === this.gameWords[index][0][0]);
+      } else {
+        choiceWords = choice.ru.other;
+      }
+    } else {
+      choiceWords = choice.en.find((item) => item[0][0] === this.gameWords[index][0][0]);
+    }
+    const randWords = [this.gameWords[index][0]];
+    while (randWords.length < 4) {
+      const rand = Math.floor(Math.random() * choiceWords.length);
+      if (!randWords.includes(choiceWords[rand])) {
+        randWords.push(choiceWords[rand]);
+      }
+    }
+    randWords.push(this.words[index].word);
+    return randWords;
   }
 }

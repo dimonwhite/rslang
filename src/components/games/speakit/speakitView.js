@@ -1,12 +1,105 @@
+import emptyImg from '@/assets/img/blank.jpg';
+import Card from '@/components/games/speakit/Card';
+import { urlGitHub } from '@/constants';
+import { createElement } from '../../../utils';
+
 export default class SpeakitView {
   constructor() {
-    this.speakit = document.getElementById('main');
+    this.main = document.getElementById('main');
+    this.audio = new Audio();
   }
 
   renderHTML() {
-    this.result = document.createElement('button');
-    this.result.innerHTML = 'RESULT';
-    this.result.className = 'temp';
-    this.speakit.append(this.result);
+    this.createElements();
+    this.appendElements();
+    this.main.append(this.game);
+  }
+
+  createElements() {
+    this.game = createElement({ tag: 'section', class: 'game' });
+    this.img = createElement({ tag: 'img', class: 'game__img' });
+    this.img.src = emptyImg;
+    this.translation = createElement({ tag: 'div', class: 'game__translation' });
+    this.gameWord = createElement({ tag: 'div', class: 'game__word' });
+    this.wordList = createElement({ tag: 'div', class: 'wordList' });
+    this.btnsBlock = createElement({ tag: 'div', class: 'game__btns' });
+    this.newGame = createElement({ tag: 'button', class: 'btn btn-circle', content: 'New game' });
+    this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Start' });
+    this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Result' });
+    this.scoreBlock = createElement({ tag: 'div', class: 'score' });
+  }
+
+  appendElements() {
+    this.btnsBlock.append(this.newGame, this.startBtn, this.result);
+    this.game.append(
+      this.scoreBlock, this.img, this.translation,
+      this.gameWord, this.wordList, this.btnsBlock,
+    );
+  }
+
+  clearWordList() {
+    this.wordList.innerHTML = '';
+  }
+
+  createWords(words) {
+    words.forEach((item, key) => {
+      const card = new Card(item, key);
+      this.wordList.append(card.create());
+    });
+  }
+
+  editInfo(word) {
+    const image = `${urlGitHub}${word.image.replace('files/', '')}`;
+    this.translation.textContent = word.translation;
+    this.img.src = image;
+  }
+
+  playAudio(word) {
+    this.audio.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
+    this.audio.play();
+  }
+
+  dropScore() {
+    this.img.src = emptyImg;
+    this.translation.textContent = '';
+    this.gameWord.textContent = '';
+    this.wordList.querySelectorAll('.wordList__item.active').forEach((item) => {
+      item.classList.remove('active');
+    });
+    this.scoreBlock.innerHTML = '';
+  }
+
+  stop() {
+    this.startBtn.classList.remove('active');
+    this.startBtn.innerText = 'Start';
+    this.game.classList.remove('active');
+  }
+
+  start() {
+    this.startBtn.classList.add('active');
+    this.startBtn.innerText = 'Stop';
+    this.game.classList.add('active');
+  }
+
+  displayWord(e) {
+    const i = e.resultIndex;
+    this.gameWord.textContent = e.results[i][0].transcript;
+  }
+
+  successCard(word, id) {
+    const card = this.wordList.querySelector(`.wordList__item[data-id="${id}"]`);
+    card.classList.add('active');
+    this.scoreBlock.append(SpeakitView.createStar());
+    this.editInfo(word);
+    this.gameWord.textContent = word.word;
+  }
+
+  static createStar() {
+    const svg = `
+      <svg class="svg_icon">
+        <use xlink:href="sprite.svg#star"></use>
+      </svg>
+    `;
+    return createElement({ tag: 'div', class: 'star', content: svg });
   }
 }

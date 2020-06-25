@@ -36,7 +36,12 @@ const cssLoaders = (extra) => {
         reloadAll: true,
       },
     },
-    'css-loader',
+    {
+      loader: 'css-loader',
+      options: {
+        sourceMap: isDev,
+      },
+    },
   ];
 
   if (extra) {
@@ -84,14 +89,6 @@ const plugins = () => {
         from: path.resolve(__dirname, 'src/favicon.ico'),
         to: path.resolve(__dirname, 'dist'),
       },
-      {
-        from: path.resolve(__dirname, 'src/assets/img'),
-        to: path.resolve(__dirname, 'dist/img'),
-      },
-      {
-        from: path.resolve(__dirname, 'src/assets/sounds'),
-        to: path.resolve(__dirname, 'dist/sounds'),
-      },
     ]),
     new MiniCssExtractPlugin({
       filename: filename('css'),
@@ -115,9 +112,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.json'],
     alias: {
-      '@modules': path.resolve(__dirname, 'src/modules'),
-      '@data': path.resolve(__dirname, 'src/data'),
-      '@': path.resolve(__dirname, 'src'),
+      '@modules': path.resolve(__dirname, './src/modules'),
+      '@data': path.resolve(__dirname, './src/data'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   optimization: optimization(),

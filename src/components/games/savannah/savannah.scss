@@ -1,9 +1,5 @@
 .savannah {
     display: none;
-    background-image: url("/img/bg-savana.svg");
-    background-position-y: 5000px;
-    height: 100vh;
-    transition: background-position-y 1s;
     overflow: hidden;
     user-select: none;
 
@@ -15,7 +11,7 @@
         height: 100vh;
         position: relative;
 
-        background-image: url("/img/bg-savana.svg");
+        background-image: url('/src/assets/img/bg-savana.svg');
         background-position-y: 5000px;
         height: 100vh;
         transition: background-position-y 1s;
@@ -31,7 +27,9 @@
             &-img {
                 width: 30px;
                 height: 30px;
-                object-fit: cover;
+                background-image: url('/src/assets/img/heart.png');
+                background-repeat: no-repeat;
+                background-size: 28px;
             }
         }
         &-field {
@@ -64,7 +62,9 @@
             width: 35px;
             height: 35px;
             bottom: 10px;
-            object-fit: cover;
+            background-image: url('/src/assets/img/ship.png');
+            background-repeat: no-repeat;
+            background-size: cover;
             transform: rotate(180deg);
             position: absolute;
             transition: 0.3s;
@@ -78,6 +78,37 @@
             width: 100%;
             display: flex;
             justify-content: space-around;
+        }
+        &-cancel {
+            background: none;
+            background-image: url('/src/assets/img/cancel.png');
+            background-repeat: no-repeat;
+            background-size: 28px;
+            border: 0;
+            width: 30px;
+            height: 30px;
+        }
+        &-control {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 96%;
+            margin: 0 auto;
+        }
+        &-sound {
+            background: none;
+            background-image: url('/src/assets/img/sound.png');
+            background-repeat: no-repeat;
+            background-size: 28px;
+            border: 0;
+            width: 30px;
+            height: 30px;
+        }
+        &-wrapper {
+            width: 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     }
     &__timer {
@@ -215,4 +246,16 @@
 }
 .gray-word {
     background-color: gray;
+}
+
+.savannah__start-page {
+    display: flex;
+}
+
+.heart-empty {
+    background-image: url('/src/assets/img/heart-empty.png');
+}
+
+.sound-mute {
+    background-image: url('/src/assets/img/sound-mute.png');
 }

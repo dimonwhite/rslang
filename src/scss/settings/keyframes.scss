@@ -1,0 +1,13 @@
+@keyframes preloadHide {
+  0% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0;
+    left: 0;
+  }
+  100% {
+    opacity: 0;
+    left: -9999px;
+  }
+}

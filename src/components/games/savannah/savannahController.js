@@ -1,9 +1,15 @@
+import soundStart from '@/assets/sounds/start.mp3';
+import soundWin from '@/assets/sounds/win.mp3';
+import soundCorr from '@/assets/sounds/correctly.mp3';
+import soundGO from '@/assets/sounds/game-over.mp3';
+import soundMist from '@/assets/sounds/mistake.mp3';
 import SavannahView from './savannahView';
 import SavannahModel from './savannahModel';
 
 export default class SavannahController {
   constructor(user, callResult) {
-    this.view = new SavannahView(callResult);
+    this.view = new SavannahView();
+    this.callResult = callResult;
     this.model = new SavannahModel(user);
     this.lockChoice = true;
     this.stopRounds = [];
@@ -13,9 +19,10 @@ export default class SavannahController {
     this.count = 10;
     this.attempt = 0;
     this.correctly = 0;
+    this.sound = true;
   }
 
-  create() {
+  init() {
     this.view.renderHTML();
     this.createEvent();
   }
@@ -24,40 +31,49 @@ export default class SavannahController {
     this.view.options.addEventListener('click', (e) => {
       if (this.lockChoice) this.getAnswer(e);
     });
+    document.getElementById('selectLang').addEventListener('change', (e) => {
+      this.model.lang = e.target.value;
+      this.view.lang = e.target.value;
+    });
+    document.getElementById('cancel').addEventListener('click', () => {
+      this.sound = false;
+      document.getElementById('main').className = 'main';
+      document.getElementById('navPage').click();
+    });
+    const sound = document.getElementById('sound');
+    sound.addEventListener('click', () => {
+      this.sound = !this.sound;
+      sound.classList.toggle('sound-mute');
+    });
+    document.getElementById('closePopup').addEventListener('click', () => {
+      document.getElementById('main').className = 'main';
+      document.getElementById('navPage').click();
+    });
     document.getElementById('startGame').addEventListener('click', this.getStart.bind(this));
-    document.getElementById('newGame').addEventListener('click', this.newGame.bind(this));
     document.body.addEventListener('keydown', (e) => {
-      switch (e.code) {
-        case 'Digit1':
-          document.getElementById('savAnswer1').click();
-          break;
-        case 'Digit2':
-          document.getElementById('savAnswer2').click();
-          break;
-        case 'Digit3':
-          document.getElementById('savAnswer3').click();
-          break;
-        case 'Digit4':
-          document.getElementById('savAnswer4').click();
-          break;
-        default:
-          break;
+      if (e.code.includes('Digit')) {
+        const id = +e.code.replace('Digit', '');
+        if (id > 0 && id < 5) {
+          document.getElementById(`savAnswer${id}`).click();
+        }
       }
     });
   }
 
-  getStart() {
+  async getStart() {
     this.getAudio('start');
-    this.count = this.view.getStart();
-    this.model.count = this.count;
+    this.view.getStart();
+    this.model.countWords = this.count;
+    this.model.level = this.level;
     this.model.createWords();
-    this.model.getWords();
-    this.stopRounds = new Array(this.model.words.length).fill(true);
     setTimeout(this.getStartRound.bind(this), 3000);
+    await this.model.getWords();
+    this.stopRounds = new Array(this.model.words.length).fill(true);
   }
 
   getStartRound() {
     this.view.getStartRound();
+    this.sound = true;
     this.attempt = 0;
     this.correctly = 0;
     this.heart = 5;
@@ -68,8 +84,8 @@ export default class SavannahController {
 
   startNextRound() {
     // if (this.stopRounds[this.attempt]) { ... }
-    this.view.startNextRound(this.model.gameWords, this.attempt);
-    setTimeout(() => { this.lockChoice = true; }, 500);
+    this.view.startNextRound(this.model.gameWords, this.attempt, this.model.words);
+    setTimeout(() => { this.lockChoice = true; }, 1300);
     setTimeout(this.nextWord.bind(this, this.attempt), 10000);
   }
 
@@ -82,12 +98,12 @@ export default class SavannahController {
         this.correctly += 1;
         const delta = (this.correctly / this.count);
         this.view.getCorrectlyAnswer(target, delta);
-        this.model.words[this.attempt].correctly = true;
+        this.model.words[this.attempt].success = true;
       } else {
         this.getAudio('mistake');
         const countHeart = this.maxHeart - this.heart;
         this.view.getIncorrectlyAnswer(target, countHeart);
-        this.model.words[this.attempt].correctly = false;
+        this.model.words[this.attempt].success = false;
         this.heart -= 1;
         // this.changeWordStatistics();
       }
@@ -120,42 +136,61 @@ export default class SavannahController {
       } else {
         this.getAudio('win');
       }
-      setTimeout(this.view.endGame.bind(this.view, this.model.words, this.attempt), 4000);
+      setTimeout(() => {
+        this.view.endGame();
+        this.callResult(this.model.words.slice(0, this.attempt));
+      }, 4000);
     } else {
       setTimeout(this.startNextRound.bind(this), 2500);
     }
   }
 
-  newGame() {
+  change() {
     this.model.newGame();
     this.view.newGame();
   }
 
+  getCountWords() {
+    return this.model.countWords;
+  }
+
+  changeCountWords(value) {
+    this.count = +value;
+  }
+
+  getScore() {
+    let count = 0;
+    for (let i = 0; i < this.attempt; i += 1) {
+      if (this.model.words[i].success) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
   getAudio(stateGame) {
-    try {
+    if (this.sound) {
       const audio = new Audio();
       switch (stateGame) {
         case 'start':
-          audio.src = './sounds/start.mp3';
+          audio.src = soundStart;
           break;
         case 'win':
-          audio.src = './sounds/win.mp3';
+          audio.src = soundWin;
           break;
         case 'correctly':
-          audio.src = './sounds/correctly.mp3';
+          audio.src = soundCorr;
           break;
         case 'mistake':
-          audio.src = './sounds/mistake.mp3';
+          audio.src = soundMist;
           break;
         case 'game-over':
-          audio.src = './sounds/game-over.mp3';
+          audio.src = soundGO;
           break;
         default:
           break;
       }
       audio.autoplay = true;
-    } catch (error) {
-      this.error = error.message;
     }
   }
 }
