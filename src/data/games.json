@@ -6,10 +6,19 @@
     "gameClass": "speakIt"
   },
   "puzzle": {
-    "title": "puzzle",
+    "title": "English puzzle",
     "desc": "puzzle game",
     "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "gameClass": "englishPuzzle",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
   },
   "audiocall": {
     "title": "audiocall",

@@ -5,10 +5,10 @@ import RenderView from './RenderView';
 import obtainWords from './RoundData/obtainWords';
 
 export default class PuzzleController {
-  constructor(root, imgWidth, imgHeight) {
-    this.root = root;
-    this.imgWidth = imgWidth;
-    this.imgHeight = imgHeight;
+  constructor() {
+    this.root = document.querySelector('.main');
+    this.imgWidth = 600;
+    this.imgHeight = 400;
     this.roundData = null;
     this.renderView = null;
     this.roundNumber = 1;
@@ -283,20 +283,10 @@ export default class PuzzleController {
     });
   }
 
-  makeStat() {
-    const date = new Date().toLocaleString();
-    const right = Object.values(this.roundData.sentences)
-      .filter((el) => !el.idk).length;
-    const wrong = Object.values(this.roundData.sentences)
-      .filter((el) => el.idk).length;
-    const text = `Level ${this.level} Round: ${this.roundNumber} Right sentences: ${right}, Wrong sentences: ${wrong}`;
-    return { date, text };
-  }
-
   async init() {
     this.roundData = await new RoundData(this.level, this.roundNumber, obtainWords);
     this.renderView = new RenderView(this.root, this.roundData, this.imgWidth, this.imgHeight);
-    this.renderView.renderstartScreen();
+    this.beginRound();
     this.clickListener();
   }
 }

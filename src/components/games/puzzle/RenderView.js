@@ -1,4 +1,5 @@
 import { modifySentence, shuffleSentence } from './RoundData/modifySentence';
+import volumeImg from '../../../assets/img/volume.svg';
 
 export default class RenderView {
   constructor(root, data, containerWidth, containerHeight) {
@@ -33,7 +34,6 @@ export default class RenderView {
     this.root.innerHTML = `
       <div class="container">
         <div class="control-block">
-        <div class="logout__wrapper"><button class="btn btn__logout"><i class="icon-logout"></i></button></div>
         <div class="btn__block">
           <button class="btn btn__backImg"><i class="icon-picture"></i><span class="tooltiptext">Click to toggle background images of puzzles</span></button>
           <button class="btn btn__audio__tip"><i class="icon-play"></i><span class="tooltiptext">Click to toggle audio tip </span></button>
@@ -48,7 +48,6 @@ export default class RenderView {
           </select>
           <select class="btn select-round"></select>
           <button class="btn btn__select">Select round</button>
-          <button class="btn btn__statistics__modal">Statistic</button>
         </div>
         <div class="btn__audio__wrapper"><button class="btn btn__audio"><i class="icon-sound"></i><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
         <div class="sentence-translation"></div>
@@ -112,10 +111,6 @@ export default class RenderView {
     return this.word;
   }
 
-  appendtranslation(translation) {
-    this.sentenceTranslation.innerHTML = translation;
-  }
-
   renderResult(sentenceData) {
     this.resultWindow = document.createElement('div');
     this.resultWindow.classList.add('result-window');
@@ -141,7 +136,7 @@ export default class RenderView {
       const resultSentence = document.createElement('div');
       resultSentence.classList.add('result-sentence');
       resultSentence.innerHTML = `
-      <img src="" alt="sound">
+      <img src=${volumeImg} alt="sound">
       <p>${el.textExample}</p>
       `;
       resultSentence.addEventListener('click', () => {
@@ -157,83 +152,8 @@ export default class RenderView {
     return this.resultWindow;
   }
 
-  renderstartScreen() {
-    this.root.innerHTML = '';
-    const startScreen = document.createElement('div');
-    startScreen.classList.add('start-screen');
-    startScreen.innerHTML = `
-    <div class="start-screen__message">
-      <h1>Howdy, partner!</h1>
-      <p>Let's play english puzzle!</p>
-      <p>You can drag puzzles or just click 'em, use tips and learn art history.</p>
-      <p>Finish the puzzle and see some great art!</p>
-      <button class ="btn btn__go">GO ON</button>
-    </div>
-    `;
-    this.root.append(startScreen);
-  }
-
-  renderAuthorization() {
-    const authorization = document.createElement('div');
-    authorization.classList.add('authorization');
-    authorization.innerHTML = `
-    <form autocomplete="off" class="form form__login">
-      <h2>Log in</h2>
-      <p class="login__info"></p>
-      <fieldset class="form__fieldset">
-        <div class="form__field">
-          <input name="login-email" type="email" placeholder="Email" required autofocus autocomplete="off" />
-        </div>
-        <div class="form__field">
-          <input name="login-password" type="password" placeholder="Password" required autocomplete="off" value="" />
-        </div>
-      </fieldset>
-      <div class="form__buttons">
-        <input type="submit" value="Log In" class="btn btn__login">
-      </div>
-    </form>
-    <form autocomplete="off" class="form form__signup">
-    <h2>Sign up</h2>
-    <p class="signup__info"></p>
-    <fieldset class="form__fieldset">
-      <div class="form__field">
-        <input name="signup-email" type="email" placeholder="Email" class="forms_field-input" required autofocus />
-      </div>
-      <div class="form__field">
-        <input name="signup-password" type="password" placeholder="Password" class="forms_field-input" required />
-      </div>
-    </fieldset>
-    <div class="form__buttons">
-      <input type="submit" value="Sign Up" class="btn btn__signup">
-    </div>
-  </form>
-    `;
-    this.root.append(authorization);
-  }
-
-  renderStatistic(data) {
-    this.statWindow = document.createElement('div');
-    this.statWindow.classList.add('stat-window');
-    this.statWindow.innerHTML = `
-      <div class="stat-modal">
-        <div class="stat-modal__info">
-          <h2>Statistics</h2>
-          <div class="stat-modal__data"></div>
-        </div>
-        <div class="stat-modal__btn">
-          <button class="btn btn__back">Back</button>
-        </div>
-      </div>
-    `;
-    this.root.append(this.statWindow);
-    Object.values(data).forEach((el) => {
-      const paragraph = document.createElement('p');
-      paragraph.innerHTML = `${el.date} ${el.text}`;
-      this.statWindow.querySelector('.stat-modal__data').append(paragraph);
-    });
-    this.statWindow.querySelector('.btn__back').onclick = () => {
-      this.statWindow.remove();
-    };
+  appendtranslation(translation) {
+    this.sentenceTranslation.innerHTML = translation;
   }
 
   init() {

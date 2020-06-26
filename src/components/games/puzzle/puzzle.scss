@@ -1,3 +1,5 @@
+@import './_resultModal.scss';
+
 @mixin textStroke {
   text-shadow: gray 1px 1px 0, gray -1px -1px 0,
   rgb(10, 10, 10) -1px 1px 0, rgb(20, 20, 20) 1px -1px 0;
