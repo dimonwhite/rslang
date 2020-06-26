@@ -1,7 +1,7 @@
 import emptyImg from '@/assets/img/blank.jpg';
 import Card from '@/components/games/speakit/Card';
 import { urlGitHub } from '@/constants';
-import { createElement } from '../../../utils';
+import { createElement, getSvg } from '../../../utils';
 
 export default class SpeakitView {
   constructor() {
@@ -23,16 +23,26 @@ export default class SpeakitView {
     this.gameWord = createElement({ tag: 'div', class: 'game__word' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.btnsBlock = createElement({ tag: 'div', class: 'game__btns' });
-    this.newGame = createElement({ tag: 'button', class: 'btn btn-circle', content: 'New game' });
+    this.newGame = createElement({
+      tag: 'button',
+      class: 'btn btn-circle',
+      content: `${getSvg('repeat')}Новая игра`,
+    });
     this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Start' });
     this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Result' });
     this.scoreBlock = createElement({ tag: 'div', class: 'score' });
+    this.topBlock = createElement({ tag: 'div', class: 'topBlock' });
+    this.close = createElement({ tag: 'a', class: 'close', content: getSvg('close') });
+    this.close.setAttribute('href', '#/');
   }
 
   appendElements() {
-    this.btnsBlock.append(this.newGame, this.startBtn, this.result);
+    this.optionsWrap = this.main.querySelector('.game__options');
+    this.optionsWrap.append(this.result);
+    this.btnsBlock.append(this.startBtn);
+    this.topBlock.append(this.scoreBlock, this.newGame, this.close);
     this.game.append(
-      this.scoreBlock, this.img, this.translation,
+      this.topBlock, this.img, this.translation,
       this.gameWord, this.wordList, this.btnsBlock,
     );
   }
@@ -97,7 +107,7 @@ export default class SpeakitView {
   static createStar() {
     const svg = `
       <svg class="svg_icon">
-        <use xlink:href="sprite.svg#star"></use>
+        <use xlink:href="sprite.svg#alien"></use>
       </svg>
     `;
     return createElement({ tag: 'div', class: 'star', content: svg });
