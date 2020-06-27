@@ -134,7 +134,7 @@ module.exports = {
         use: cssLoaders('sass-loader'),
       },
       {
-        test: /\.(png|jpg|gif|mp3)$/,
+        test: /\.(png|jpg|gif|mp3|webp)$/,
         use: ['file-loader'],
       },
       {
