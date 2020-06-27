@@ -33,9 +33,18 @@
     }
   },
   "sprint": {
-    "title": "sprint",
+    "title": "SPRINT",
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "gameClass": "speakIt",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
   }
 }

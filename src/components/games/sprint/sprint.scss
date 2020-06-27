@@ -1,0 +1,190 @@
+$teal: #009688;
+.couple__item{
+  margin: 0 auto;
+}
+.game__sprint {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: red;
+  width: 60%;
+    margin: 0 auto;
+    border-radius: 30px;
+  &__img {
+    width: 400px;
+    height: 270px;
+    margin-bottom: 20px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  &__word {
+
+    width: 100%;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+  }
+  &__score{
+
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    .btn {
+      width: 18%;
+      &.start {
+        width: 60%;
+      }
+    }
+  }
+  &__time{
+
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  &.active {
+    .game__word {
+      display: block;
+    }
+  }
+  &__translation {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    min-height: 40px;
+  }
+}
+.arrowChoice{
+  font-size: 50px;
+}
+.wordList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 10px;
+  &__item {
+    display: flex;
+    align-items: center;
+    width: 18%;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid lightgrey;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.5s;
+    &:hover {
+      box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 2px 4px 0 rgba(14,30,37,.12);
+    }
+    &.active {
+      background-color: rgba(0, 173, 159, .15);
+      border: 1px solid $teal;
+    }
+    .svg_icon {
+      width: 30px;
+      height: 30px;
+      margin-right: 20px;
+      fill: $teal;
+    }
+    &-text {
+      width: calc(100% - 50px);
+      text-align: center;
+    }
+    &-title {
+      font-size: 22px;
+      font-weight: 500;
+    }
+    &-transcription {
+      font-size: 20px;
+      font-weight: 400;
+      color: lightgrey;
+    }
+  }
+}
+
+.speakIt {
+  position: relative;
+  padding: 0 180px;
+  .levels {
+    position: absolute;
+    left: 64px;
+    bottom: 50px;
+  }
+}
+
+$radioBg: #FF0048;
+
+.levels {
+  &__title {
+    color: #BF123D;
+  }
+  .radio {
+    &__decor {
+      background-color: $radioBg;
+    }
+    @for $i from 2 through 6 {
+      $radioBg: lighten($radioBg, 5);
+      &:nth-last-child(#{$i}) {
+        .radio__decor {
+          background-color: $radioBg;
+        }
+      }
+    }
+  }
+}
+
+
+
+.game__sprint__preloader{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 3;
+transition: 1s all;
+opacity: 1;
+visibility: visible;
+
+.game__sprint__loader{
+  width: 75px;
+  height: 75px;
+  border: 15px solid white;
+  border-radius: 50% ;
+  border-top-color: blue;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  animation: 1s spin infinite linear;
+
+}
+
+.done{
+  opacity: 0;
+  visibility: hidden;
+}
+}
+
+@keyframes spin{
+  from{
+    transform: translate(-50%,-50%) rotate(0deg);
+  }
+  to{
+    transform: translate(-50%,-50%)rotate(360deg);
+  }
+  }
+
