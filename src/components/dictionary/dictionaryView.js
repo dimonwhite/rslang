@@ -168,7 +168,7 @@ export default class DictionaryView {
         <div class="card__meaning">${word.textMeaning}</div>
         <div class="card__progress">
           <div class="card__rating">Прогресс изучения: ${word.rating}</div>
-          <div class="card__repeat">Повторейний: ${word.repeat}</div>
+          <div class="card__repeat">Повторейний: ${word.count}</div>
           <div class="card__last-time">Давность: ${word.lastTimeText} назад</div>
           <div class="card__next-time">Повтор: через ${word.nextTimeText}</div>
         </div>

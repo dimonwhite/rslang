@@ -68,10 +68,14 @@
         cursor: pointer;
         transition: .3s;
     }
-    &__item:hover,
-    &__item_active {
-        background: #6C55AD;
+    
+    &__item {
+        &:hover,
+        &_active {
+            background: #6C55AD;
+        }
     }
+    
     &__all {
         border-left-width: 2px;
         border-radius: 10px 0 0 10px;
@@ -262,10 +266,11 @@
             opacity: .5;
             cursor: pointer;
             transition: .3s;
-        }
-        .card__state-item_active, 
-        .card__state-item:hover {
-            opacity: 1;
+
+            &_active, 
+            &:hover {
+                opacity: 1;
+            }
         }
     }
     

@@ -8,7 +8,7 @@ export default class DictionaryController {
     this.filter = this.model.state.all;
     this.strSearch = '';
     this.page = 0;
-    this.loadFullData = false;
+    this.isLoadFullData = false;
   }
 
   create() {
@@ -52,7 +52,7 @@ export default class DictionaryController {
 
   search(str) {
     this.page = 0;
-    this.loadFullData = false;
+    this.isLoadFullData = false;
     this.strSearch = str;
     this.view.clearList();
     this.createList(this.filter, this.strSearch);
@@ -117,7 +117,11 @@ export default class DictionaryController {
   }
 
   createList(filter, strSearch) {
-    const list = this.model.getList(this.page, filter, strSearch);
+    const list = this.model.getList({
+      page: this.page,
+      filter,
+      strSearch,
+    });
     if (list) {
       list.then((data) => {
         if (data) {
@@ -125,21 +129,21 @@ export default class DictionaryController {
           this.listBottomLimit = this.listTopLimit + this.view.list.getBoundingClientRect().height;
           this.page += 1;
         } else {
-          this.loadFullData = true;
+          this.isLoadFullData = true;
         }
       });
     }
   }
 
   paginationList() {
-    if (!this.loadFullData) {
+    if (!this.isLoadFullData) {
       this.createList(this.filter, this.strSearch);
     }
   }
 
   clickFilter(e) {
     this.page = 0;
-    this.loadFullData = false;
+    this.isLoadFullData = false;
     const filter = e.target.closest('.filters__item');
     if (filter) {
       const filterData = filter.dataset.filter;

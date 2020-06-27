@@ -14,8 +14,10 @@ export default class DictionaryModel {
     };
   }
 
-  getList(page, filter, strSearch) {
+  getList({ page, filter, strSearch }) {
     this.dataWords = dataWords;
+    const first = page * this.countWords;
+    const last = first + 10;
 
     if (filter && filter !== this.state.all) {
       this.dataWords = this.dataWords.filter((item) => item.state === filter);
@@ -25,14 +27,9 @@ export default class DictionaryModel {
       this.dataWords = this.dataWords.filter((item) => item.word.indexOf(strSearch) !== -1);
     }
 
-    const first = page * this.countWords;
-    const last = first + 10;
     let arrWords = [...this.dataWords];
-    if (first < arrWords.length) {
-      arrWords = arrWords.slice(first, last);
-      return new Promise((resolve) => resolve(arrWords));
-    }
-    return false;
+    arrWords = arrWords.slice(first, last);
+    return new Promise((resolve) => resolve(arrWords));
   }
 
   getWord(id) {
