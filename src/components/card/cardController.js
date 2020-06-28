@@ -279,8 +279,14 @@ export default class CardController {
 
     const answer = this.view.input.value.toLowerCase();
     const word = this.model.listToday[this.cardIndex];
-    word.word = word.word.toLowerCase();
-    const showAnswer = (answer === word.word);
+    let showAnswer;
+    if (this.view.settings.langEn) {
+      word.word = word.word.toLowerCase();
+      showAnswer = (answer === word.word);
+    } else {
+      word.wordTranslate = word.wordTranslate.toLowerCase();
+      showAnswer = (answer === word.wordTranslate);
+    }
 
     if (showAnswer || prev) {
       this.view.setAnswerInCard(word, this.currentMistake);
@@ -322,7 +328,11 @@ export default class CardController {
         this.newWordsToday += 1;
         this.model.updateAllStudyWords(word, true, false, true, true, false, 'study');
       }
-      this.view.incorrectWord(answer, word.word);
+      if (this.view.settings.langEn) {
+        this.view.incorrectWord(answer, word.word);
+      } else {
+        this.view.incorrectWord(answer, word.wordTranslate);
+      }
     }
     this.setTodayStatStorage();
   }

@@ -154,6 +154,7 @@ export default class CardView {
   getSettings() {
     this.settings = {};
     this.getCheckRadio('listType');
+    this.getCheckRadio('lang');
     const checkBoxes = document.querySelectorAll('[type=checkbox]');
     Array.from(checkBoxes).forEach((item) => {
       this.settings[item.id] = item.checked;
@@ -203,30 +204,52 @@ export default class CardView {
 
   setDataInCard(word, cardIndex, passedToday) {
     if (this.settings.numberLetters && cardIndex === passedToday) {
-      this.input.setAttribute('maxlength', word.word.length);
-      this.incorrectWord('', '*'.repeat(word.word.length));
+      if (this.settings.langEn) {
+        this.input.setAttribute('maxlength', word.word.length);
+        this.incorrectWord('', '*'.repeat(word.word.length));
+      } else {
+        this.input.setAttribute('maxlength', word.wordTranslate.length);
+        this.incorrectWord('', '*'.repeat(word.wordTranslate.length));
+      }
     } else {
       const correct = document.getElementById('cardCorrect');
       correct.innerHTML = '';
       correct.classList.remove('opacity-correct');
       this.input.setAttribute('maxlength', 80);
     }
+
     const image = `${urlGitHub}${word.image.replace('files/', '')}`;
     document.getElementById('cardImg').src = image;
-    document.getElementById('cardMeaning').innerHTML = this.replace(
-      word.word, word.textMeaning, cardIndex, passedToday,
-    );
-    document.getElementById('cardExample').innerHTML = this.replace(
-      word.word, word.textExample, cardIndex, passedToday,
-    );
-    document.getElementById('transcriptionWord').innerHTML = word.transcription;
-    document.getElementById('translationWord').innerHTML = word.wordTranslate;
+    if (this.settings.langEn) {
+      document.getElementById('cardMeaning').innerHTML = this.replace(
+        word.word, word.textMeaning, cardIndex, passedToday,
+      );
+      document.getElementById('cardExample').innerHTML = this.replace(
+        word.word, word.textExample, cardIndex, passedToday,
+      );
+      // document.getElementById('transcriptionWord').innerHTML = word.transcription;
+      document.getElementById('translationWord').innerHTML = word.wordTranslate;
+    } else {
+      document.getElementById('cardMeaning').innerHTML = this.replace(
+        word.wordTranslate, word.textMeaningTranslate, cardIndex, passedToday,
+      );
+      document.getElementById('cardExample').innerHTML = this.replace(
+        word.wordTranslate, word.textExampleTranslate, cardIndex, passedToday,
+      );
+      // document.getElementById('transcriptionWord').innerHTML = word.transcription;
+      document.getElementById('translationWord').innerHTML = word.word;
+    }
     this.setSettingsInCard();
   }
 
   replace(word, text, cardIndex, passedToday) {
     const words = text.split(' ');
-    const compare = word.slice(0, word.length - 2);
+    let compare;
+    if (word.length > 5) {
+      compare = word.slice(0, word.length - 4);
+    } else {
+      compare = word.slice(0, word.length - 2);
+    }
     for (let i = 0; i < words.length; i += 1) {
       if (words[i].toLowerCase().includes(compare)) {
         if (this.settings.numberLetters && cardIndex === passedToday) {
@@ -240,17 +263,27 @@ export default class CardView {
   }
 
   setAnswerInCard(word, currentMistake) {
-    this.input.value = word.word;
     document.getElementById('transcriptionWord').innerHTML = word.transcription;
     if (currentMistake) {
       document.getElementById('cardAgain').classList.add('lock-element');
     }
-    document.getElementById('cardMeaning').innerHTML = word.textMeaning;
-    document.getElementById('cardExample').innerHTML = word.textExample;
-    const meaning = word.textMeaningTranslate;
-    document.getElementById('cardMeaningTranslation').innerHTML = meaning;
-    const example = word.textExampleTranslate;
-    document.getElementById('cardExampleTranslation').innerHTML = example;
+    if (this.settings.langEn) {
+      this.input.value = word.word;
+      document.getElementById('cardMeaning').innerHTML = word.textMeaning;
+      document.getElementById('cardExample').innerHTML = word.textExample;
+      const meaning = word.textMeaningTranslate;
+      document.getElementById('cardMeaningTranslation').innerHTML = meaning;
+      const example = word.textExampleTranslate;
+      document.getElementById('cardExampleTranslation').innerHTML = example;
+    } else {
+      this.input.value = word.wordTranslate;
+      document.getElementById('cardMeaning').innerHTML = word.textMeaningTranslate;
+      document.getElementById('cardExample').innerHTML = word.textExampleTranslate;
+      const meaning = word.textMeaning;
+      document.getElementById('cardMeaningTranslation').innerHTML = meaning;
+      const example = word.textExample;
+      document.getElementById('cardExampleTranslation').innerHTML = example;
+    }
     this.setSettingsInCard();
     document.getElementById('cardPlay').classList.add('show');
     document.getElementById('cardRight').classList.add('go-next');
@@ -309,15 +342,31 @@ export default class CardView {
     }
 
     if (change) {
-      document.getElementById('cardMeaning').innerHTML = this.replace(
-        word.word, word.textMeaning, cardIndex, passedToday,
-      );
-      document.getElementById('cardExample').innerHTML = this.replace(
-        word.word, word.textExample, cardIndex, passedToday,
-      );
+      if (this.settings.langEn) {
+        document.getElementById('cardMeaning').innerHTML = this.replace(
+          word.word, word.textMeaning, cardIndex, passedToday,
+        );
+        document.getElementById('cardExample').innerHTML = this.replace(
+          word.word, word.textExample, cardIndex, passedToday,
+        );
+        document.getElementById('translationWord').innerHTML = word.wordTranslate;
+      } else {
+        document.getElementById('cardMeaning').innerHTML = this.replace(
+          word.wordTranslate, word.textMeaningTranslate, cardIndex, passedToday,
+        );
+        document.getElementById('cardExample').innerHTML = this.replace(
+          word.wordTranslate, word.textExampleTranslate, cardIndex, passedToday,
+        );
+        document.getElementById('translationWord').innerHTML = word.word;
+      }
       if (this.settings.numberLetters && cardIndex === passedToday) {
-        this.input.setAttribute('maxlength', word.word.length);
-        if (this.input.value === '') this.incorrectWord('', '*'.repeat(word.word.length));
+        if (this.settings.langEn) {
+          this.input.setAttribute('maxlength', word.word.length);
+          this.incorrectWord('', '*'.repeat(word.word.length));
+        } else {
+          this.input.setAttribute('maxlength', word.wordTranslate.length);
+          this.incorrectWord('', '*'.repeat(word.wordTranslate.length));
+        }
       } else {
         const correct = document.getElementById('cardCorrect');
         correct.innerHTML = '';
