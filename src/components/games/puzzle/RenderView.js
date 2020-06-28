@@ -1,5 +1,9 @@
 import { modifySentence, shuffleSentence } from './RoundData/modifySentence';
 import volumeImg from '../../../assets/img/volume.svg';
+import soundTip from '../../../assets/img/puzzle/speaker.svg';
+import backTip from '../../../assets/img/puzzle/photo.svg';
+import textTip from '../../../assets/img/puzzle/text.svg';
+import playTip from '../../../assets/img/puzzle/video-player.svg';
 
 export default class RenderView {
   constructor(root, data, containerWidth, containerHeight) {
@@ -34,10 +38,11 @@ export default class RenderView {
     this.root.innerHTML = `
       <div class="container">
         <div class="control-block">
+        <a class="btn btn__exit" href="#/">Exit</a>
         <div class="btn__block">
-          <button class="btn btn__backImg"><i class="icon-picture"></i><span class="tooltiptext">Click to toggle background images of puzzles</span></button>
-          <button class="btn btn__audio__tip"><i class="icon-play"></i><span class="tooltiptext">Click to toggle audio tip </span></button>
-          <button class="btn btn__translate"><i class="icon-book-open"></i><span class="tooltiptext">Click to toggle sentence translation</span></button>
+          <button class="btn btn__backImg"><img src=${backTip} class="tip"><span class="tooltiptext">Click to toggle background images of puzzles in next step</span></button>
+          <button class="btn btn__audio__tip"><img src=${soundTip} class="tip"><span class="tooltiptext">Click to toggle audio tip in next step</span></button>
+          <button class="btn btn__translate"><img src=${textTip} class="tip"><span class="tooltiptext">Click to toggle sentence translation in next step</span></button>
           <select class="btn select-level">
             <option value="0">1</option>
             <option value="1">2</option>
@@ -49,7 +54,7 @@ export default class RenderView {
           <select class="btn select-round"></select>
           <button class="btn btn__select">Select round</button>
         </div>
-        <div class="btn__audio__wrapper"><button class="btn btn__audio"><i class="icon-sound"></i><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
+        <div class="btn__audio__wrapper"><button class="btn btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
         <div class="sentence-translation"></div>
         </div>
         <div class="puzzle-container"></div>

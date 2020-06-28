@@ -25,6 +25,9 @@
     border-radius: 20px;
     border: 3px solid rgb(132, 226, 243);
   }
+  .btn{
+    min-width: 0;
+  }
 }
 
 .container{
@@ -32,6 +35,70 @@
   margin: 0 auto;
   padding-top: 50px;
   text-align: center;
+}
+
+.btn {
+  width: max-content;
+  vertical-align: top;
+  height: 45px;
+  border-radius: 12px;
+  background-color: rgb(21, 188, 230);
+  color: rgb(59, 57, 57);
+  font-size: 22px;
+  .tip{
+    width: 30px;
+    height: 30px;
+  }
+  .tooltiptext{
+    visibility: hidden;
+    width: 120px;
+    background-color: rgb(245, 139, 139);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+  }
+  &:hover{
+    background-color: rgb(177, 20, 177);
+    .tooltiptext{
+      visibility: visible;
+    }
+  }
+  &.inactive{
+    background-color: lightslategray;
+  }
+  i{
+    pointer-events: none;
+  }
+  &__exit{
+    margin-bottom: 10px;
+  }
+  &__check{
+    display: none;
+  }
+  &__continue{
+    display: none;
+  }
+  &__idk{
+    display: inline-block;
+  }
+  &__audio{
+    &.playing{
+      background-color: red;
+    }
+    &__wrapper{
+      height: 40px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+  &__block{
+    &_bottom{
+      margin-top: 30px;
+    }
+  }
 }
 
 .ghost {
@@ -83,60 +150,6 @@
   }
   span{
     pointer-events: none;
-  }
-}
-
-.btn {
-  width: auto;
-  height: 40px;
-  border-radius: 12px;
-  background-color: rgb(21, 188, 230);
-  color: rgb(59, 57, 57);
-  .tooltiptext{
-    visibility: hidden;
-    width: 120px;
-    background-color: rgb(245, 139, 139);
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-  }
-  &:hover{
-    .tooltiptext{
-      visibility: visible;
-    }
-  }
-  &.inactive{
-    background-color: lightslategray;
-  }
-  i{
-    pointer-events: none;
-  }
-  &__check{
-    display: none;
-  }
-  &__continue{
-    display: none;
-  }
-  &__idk{
-    display: inline-block;
-    width: 110px;
-  }
-  &__audio{
-    &.playing{
-      background-color: red;
-    }
-    &__wrapper{
-      height: 40px;
-      margin-top: 20px;
-    }
-  }
-  &__block{
-    &_bottom{
-      margin-top: 30px;
-    }
   }
 }
 

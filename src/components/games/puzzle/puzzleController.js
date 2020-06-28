@@ -102,8 +102,9 @@ export default class PuzzleController {
     this.audioTip = new Audio(audioSrc);
     this.audioTip.play();
     this.audioTip.onended = () => {
-      this.root.querySelector('.btn__audio').classList.remove('playing');
-      // this.audioTip = null;
+      if (this.root.querySelector('.btn__audio')) {
+        this.root.querySelector('.btn__audio').classList.remove('playing');
+      }
     };
   }
 
@@ -216,7 +217,12 @@ export default class PuzzleController {
     } else {
       this.finishRound();
       this.currentRow = 0;
-      this.roundNumber += 1;
+      if (this.roundNumber < 25) {
+        this.roundNumber += 1;
+      } else if (this.roundNumber === 25 && this.level < 5) {
+        this.roundNumber = 1;
+        this.level += 1;
+      }
       return;
     }
     this.displayElement('.btn__idk', 'inline-block');
@@ -246,7 +252,7 @@ export default class PuzzleController {
       }
 
       if (e.target.closest('.btn__backImg')) {
-        e.target.classList.toggle('inactive');
+        e.target.closest('.btn__backImg').classList.toggle('inactive');
         this.tips.backImg = !this.tips.backImg;
       }
 
@@ -255,19 +261,13 @@ export default class PuzzleController {
       }
 
       if (e.target.closest('.btn__translate')) {
-        e.target.classList.toggle('inactive');
+        e.target.closest('.btn__translate').classList.toggle('inactive');
         this.tips.translate = !this.tips.translate;
       }
 
       if (e.target.closest('.btn__audio__tip')) {
-        e.target.classList.toggle('inactive');
+        e.target.closest('.btn__audio__tip').classList.toggle('inactive');
         this.tips.autoPlay = !this.tips.autoPlay;
-      }
-
-      if (e.target.closest('.btn__logout')) {
-        localStorage.setItem('tokenData', '');
-        this.root.innerHTML = '';
-        this.initApp();
       }
 
       if (e.target.closest('.btn__select')) {
