@@ -9,6 +9,7 @@ export default class PuzzleController {
     this.root = document.querySelector('.main');
     this.imgWidth = 600;
     this.imgHeight = 400;
+    this.startDelay = true;
     this.roundData = null;
     this.renderView = null;
     this.roundNumber = 1;
@@ -51,6 +52,7 @@ export default class PuzzleController {
   makeRow() {
     this.renderView.modifyData();
     this.puzzleRow = this.renderView.renderRow();
+    this.puzzleRow.classList.add('row__current');
     this.ethaloneSentence = this.roundData.sentences[this.currentRow].splitted;
 
     this.renderView.puzzleContainer.append(this.puzzleRow);
@@ -131,7 +133,7 @@ export default class PuzzleController {
       }
     });
     if (right === Object.keys(this.ethaloneSentence).length) {
-      if (!this.roundData.sentences[this.currentRow].idk) {
+      if (!this.roundData.sentences[this.currentRow].success) {
         this.playAudioTip();
       }
       this.displayElement('.btn__check', 'none');
@@ -148,13 +150,14 @@ export default class PuzzleController {
   }
 
   finishRow() {
-    if (this.roundData.sentences[this.currentRow].idk) {
+    if (this.roundData.sentences[this.currentRow].success) {
       this.playAudioTip();
     }
     this.renderView
       .appendtranslation(this.roundData.sentences[this.currentRow].textExampleTranslate);
     this.renderView.wordContainer.innerHTML = '';
     this.puzzleRow.innerHTML = '';
+    this.puzzleRow.classList.remove('row__current');
     this.puzzleRow.style.outline = 'none';
     this.displayElement('.btn__check', 'none');
 
@@ -166,7 +169,7 @@ export default class PuzzleController {
     });
   }
 
-  async beginRound() {
+  async startRound() {
     this.tips = {
       backImg: true,
       translate: true,
@@ -203,7 +206,7 @@ export default class PuzzleController {
   }
 
   async continue() {
-    if (!this.roundData.sentences[this.currentRow].idk) {
+    if (!this.roundData.sentences[this.currentRow].success) {
       this.finishRow();
     }
     this.displayElement('.btn__continue', 'none');
@@ -222,7 +225,7 @@ export default class PuzzleController {
   clickListener() {
     this.root.addEventListener('click', (e) => {
       if (e.target.closest('.btn__go')) {
-        this.beginRound();
+        this.startRound();
       }
 
       if (e.target.closest('.btn__continue')) {
@@ -230,7 +233,7 @@ export default class PuzzleController {
       }
 
       if (e.target.closest('.btn__continue__modal')) {
-        this.beginRound();
+        this.startRound();
       }
 
       if (e.target.closest('.btn__check')) {
@@ -238,7 +241,7 @@ export default class PuzzleController {
       }
 
       if (e.target.closest('.btn__idk')) {
-        this.roundData.sentences[this.currentRow].idk = true;
+        this.roundData.sentences[this.currentRow].success = true;
         this.dontKnowHandler();
       }
 
@@ -267,18 +270,10 @@ export default class PuzzleController {
         this.initApp();
       }
 
-      if (e.target.closest('.btn__statistics__modal')) {
-        if (this.stat.optional) {
-          this.renderView.renderStatistic(JSON.parse(this.stat.optional.results).stats);
-        } else {
-          this.renderView.renderStatistic([{ date: '', text: 'No statistic yet' }]);
-        }
-      }
-
       if (e.target.closest('.btn__select')) {
         this.level = parseInt(this.root.querySelector('.select-level').value, 0);
         this.roundNumber = parseInt(this.root.querySelector('.select-round').value, 0);
-        this.beginRound();
+        this.startRound();
       }
     });
   }
@@ -286,7 +281,6 @@ export default class PuzzleController {
   async init() {
     this.roundData = await new RoundData(this.level, this.roundNumber, obtainWords);
     this.renderView = new RenderView(this.root, this.roundData, this.imgWidth, this.imgHeight);
-    this.beginRound();
     this.clickListener();
   }
 }

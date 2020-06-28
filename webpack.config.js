@@ -34,6 +34,7 @@ const cssLoaders = (extra) => {
       options: {
         hmr: isDev,
         reloadAll: true,
+        publicPath: '../',
       },
     },
     {

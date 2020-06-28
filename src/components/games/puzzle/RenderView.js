@@ -143,7 +143,7 @@ export default class RenderView {
         const audio = new Audio(`${el.audio}`);
         audio.play();
       });
-      if (el.idk === true) {
+      if (el.success === true) {
         this.resultWindow.querySelector('.dont-know').append(resultSentence);
       } else {
         this.resultWindow.querySelector('.know').append(resultSentence);
