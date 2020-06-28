@@ -63,6 +63,12 @@ $teal: #009688;
     margin-bottom: 30px;
     min-height: 40px;
   }
+  &__bonus__star{
+display: flex;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
 }
 .arrowChoice{
   font-size: 50px;
@@ -149,20 +155,23 @@ $radioBg: #FF0048;
 
 .game__sprint__preloader{
   position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  left: 50%;
+  top: 50%;
+  width: 60%;
+  /* height: 100%; */
+  height: 400px;
   background-color: black;
   z-index: 3;
-transition: 1s all;
-opacity: 1;
-visibility: visible;
+  transition: 1s all;
+  opacity: 1;
+  visibility: visible;
+  border-radius: 30px;
 
 .game__sprint__loader{
-  width: 75px;
-  height: 75px;
+  width: 110px;
+  height: 110px;
   border: 15px solid white;
+
   border-radius: 50% ;
   border-top-color: blue;
   position: absolute;
@@ -173,10 +182,24 @@ visibility: visible;
 
 }
 
-.done{
+
+}
+
+.hide__loader{
   opacity: 0;
   visibility: hidden;
 }
+
+.game__sprint__loader__count{
+  position: relative;
+  left: 49%;
+  top: 45%;
+  z-index: 4;
+  font-size: 70px;
+  font-weight: 400;
+  color: lightgrey;
+  margin-left: -11px;
+  margin-top: -27px;
 }
 
 @keyframes spin{

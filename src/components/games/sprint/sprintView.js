@@ -21,6 +21,7 @@ export default class SprintView {
   createElements() {
     this.preloader = createElement({ tag: 'div', class: 'game__sprint__preloader' });
     this.loader = createElement({ tag: 'div', class: 'game__sprint__loader' });
+    this.loadCounter = createElement({ tag: 'div', class: 'game__sprint__loader__count' });
     this.game = createElement({ tag: 'section', class: 'game__sprint' });
     this.img = createElement({ tag: 'img', class: 'game__sprint__img' });
     this.currentWord = createElement({ tag: 'div', class: 'game__sprint__word' });
@@ -32,11 +33,11 @@ export default class SprintView {
     this.arrowChoiceTrue = createElement({ tag: 'div', class: 'arrowChoice', content: '←' });
     this.arrowChoiceFalse = createElement({ tag: 'div', class: 'arrowChoice', content: '→' });
     this.scoreBlock = createElement({ tag: 'div', class: 'game__sprint__score', content: 'Score: 0' });
-    this.currentBonus = createElement({ tag: 'div', class: 'current_Bonus' });
+    this.currentBonus = createElement({ tag: 'div', class: 'game__sprint__bonus__star', id: 'current_Bonus' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.timer = createElement({ tag: 'div', class: 'timer' });
-    this.testButton = createElement({ tag: 'button', class: 'btn btn-circle', content: 'Test' });
     this.timer = createElement({ tag: 'p', class: 'game__sprint__time' });
+    this.bonus = createElement({ tag: 'div', class: 'current__Bonus__item', content: '*' });
   }
 
   appendElements() {
@@ -50,11 +51,14 @@ export default class SprintView {
   }
 
   getPreloader() {
+    this.preloader.append(this.loadCounter, this.loader);
+    this.game.append(this.preloader);
     setTimeout(() => {
-      if (this.preloader.classList.contains('done')) {
-        this.preloader.classList.add('done');
+      console.log(this.preloader.classList);
+      if (!this.preloader.classList.contains('hide__loader')) {
+        this.preloader.classList.add('hide__loader');
       }
-    }, 1000);
+    }, 100000);
   }
 
   createWords(words) {
@@ -82,10 +86,19 @@ export default class SprintView {
     this.timer.innerHTML = `${howMinutes} : ${howSecond}`;
   }
 
-  editInfo(word) {
-    const image = `${urlGitHub}${word.image.replace('files/', '')}`;
-    this.translation.textContent = word.translation;
-    this.img.src = image;
+  getLoaderTime(timeItem) {
+    this.loadCounter.innerHTML = `${timeItem}`;
+  }
+
+  getBonus() {
+    const star = '<div id="game__sprint__bonus__star">*</div>';
+    this.currentBonus.insertAdjacentHTML('beforeend', star);
+  }
+
+  clearBonus() {
+    while (this.currentBonus.firstChild) {
+      this.currentBonus.removeChild(this.currentBonus.firstChild);
+    }
   }
 
   playAudio(word) {

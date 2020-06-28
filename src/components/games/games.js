@@ -50,6 +50,9 @@ export default class Games {
     startScreen.append(btnExit);
 
     btnStart.addEventListener('click', () => {
+      if (this.game.startDelay) {
+        this.game.startRound();
+      }
       startScreen.classList.add('hide');
     });
     btnExit.addEventListener('click', Games.exitGame.bind(this));
