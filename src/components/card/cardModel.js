@@ -10,32 +10,17 @@ export default class CardModel {
     this.user = user;
     this.data = [];
     this.listToday = [];
-    this.cardIndex = 0;
-    this.nextNewWord = 0;
-    this.consecutive = 0;
-    this.newConsecutive = 0;
-    this.newWordsToday = 0;
-    this.correctAnswer = 0;
-    this.incorrectAnswer = 0;
-    this.currentMistake = false;
-    this.next = false;
     this.allStudyWords = [];
-    // this.settings = localStorage.getItem('settings');
-    // this.getTodayStatStorage();
-    // if (this.settings) {
-    //   this.setSettings();
-    // } else {
-    //   this.getSettings();
-    // }
+    this.defaultRating = 1;
   }
 
-  createList(settings) {
+  createList(settings, generatedListToday) {
     const userWords = localStorage.getItem('userAllStudyWords');
     if (userWords) {
       this.allStudyWords = JSON.parse(userWords);
       this.allStudyWords.sort((a, b) => a.nextTime - b.nextTime);
     }
-    if (!this.generatedListToday) {
+    if (!generatedListToday) {
       this.listToday = [];
       const allWords = [...book1, ...book2, ...book3, ...book4, ...book5, ...book6];
       this.nextNewWord = this.allStudyWords.length;
@@ -47,8 +32,9 @@ export default class CardModel {
       } else if (settings.listAlternately) {
         this.addToList(max, allWords, false, true, settings.newWords);
       }
-      this.generatedListToday = true;
+      return true;
     }
+    return generatedListToday;
   }
 
   addToList(max, allWords, onlyNew, alternately, newWords) {
@@ -70,5 +56,72 @@ export default class CardModel {
         }
       }
     }
+  }
+
+  updateAllStudyWords(word, isNew, isUpdate, isCount, mistake, customRating, state) {
+    const DAY_INTERVAL = 5;
+    const DAY = 60 * 60 * 24 * 1000;
+    if (isNew) {
+      if (!word.translation) word.translation = word.wordTranslate;
+      word.count = (isCount) ? 1 : 0;
+      word.mistakes = Number(mistake);
+      word.state = state; // study|difficult|remove
+      word.customRating = customRating; // undefine|complexity|normal|easy (false|1|3|5)
+      if (isCount || mistake) {
+        word.rating = this.getRating(word.count, word.mistakes);
+      } else {
+        const MAX_RATING = 5;
+        word.rating = MAX_RATING;
+      }
+      word.lastTime = new Date().getTime();
+
+      if (customRating) {
+        word.nextTime = word.lastTime + customRating * DAY * DAY_INTERVAL;
+      } else {
+        word.nextTime = word.lastTime + word.rating * DAY * DAY_INTERVAL;
+      }
+      this.allStudyWords.push(word);
+    } else if (isUpdate) {
+      const index = this.allStudyWords.findIndex((item) => item.word === word.word);
+      if (isCount) this.allStudyWords[index].count += 1;
+      if (mistake) this.allStudyWords[index].mistakes += 1;
+      if (state) this.allStudyWords[index].state = state;
+      if (customRating === 'clear') {
+        this.allStudyWords[index].customRating = false;
+      } else if (customRating) {
+        this.allStudyWords[index].customRating = customRating;
+      }
+      const counts = this.allStudyWords[index].count;
+      const { mistakes } = this.allStudyWords[index];
+      this.allStudyWords[index].rating = this.getRating(counts, mistakes);
+      this.allStudyWords[index].lastTime = new Date().getTime();
+
+      if (this.allStudyWords[index].customRating) {
+        const delta = this.allStudyWords[index].customRating * DAY * DAY_INTERVAL;
+        this.allStudyWords[index].nextTime = this.allStudyWords[index].lastTime + delta;
+      } else {
+        const delta = this.allStudyWords[index].rating * DAY * DAY_INTERVAL;
+        this.allStudyWords[index].nextTime = this.allStudyWords[index].lastTime + delta;
+      }
+    }
+    localStorage.setItem('userAllStudyWords', JSON.stringify(this.allStudyWords));
+    localStorage.setItem('listToday', JSON.stringify(this.listToday));
+  }
+
+  getRating(count, mistakes) {
+    let rating = this.defaultRating;
+    const correctPercent = (1 - mistakes / count) * 100;
+    if (correctPercent >= 20 && correctPercent < 40) {
+      rating = 2;
+    } else if (correctPercent >= 40 && correctPercent < 65) {
+      rating = 3;
+    } else if (correctPercent >= 65 && correctPercent < 90) {
+      rating = 4;
+    } else if (correctPercent >= 90) rating = 5;
+    return rating;
+  }
+
+  clearListToday() {
+    this.listToday = [];
   }
 }
