@@ -31,6 +31,14 @@
   }
 }
 
+a.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+}
+
 $widthLevel: 20;
 
 .levels {
