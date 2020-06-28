@@ -11,7 +11,7 @@ export default class SprintController {
     this.time = 0;
     this.score = 0;
     this.isCorrect = true;
-    this.minutes = 60;
+    this.minutes = 59;
     this.LoadTime = 5;
     this.bonusCount = 0;
     this.countWords = 0;
@@ -19,6 +19,7 @@ export default class SprintController {
 
   init() {
     this.view.renderHTML();
+    this.makeWordField();
 
     // this.createWords();
     this.view.btnChoiceTrue.addEventListener('click', () => {
@@ -125,7 +126,6 @@ export default class SprintController {
 
   getRealtimer() {
     const roundTime = setInterval(() => {
-      // this.minutes = this.minutes < 10 ? `0  ${this.minutes}` : this.minutes;
       this.view.getTime(0, this.minutes);
       this.minutes -= 1;
       if (this.minutes === -1) {
@@ -137,12 +137,11 @@ export default class SprintController {
 
   getLoadTimer() {
     const LoadTime = setInterval(() => {
-      // this.minutes = this.minutes < 10 ? `0  ${this.minutes}` : this.minutes;
       this.view.getLoaderTime(this.LoadTime);
       this.LoadTime -= 1;
       if (this.LoadTime === -1) {
+        this.getRealtimer();
         clearInterval(LoadTime);
-        // this.openPopupResult(this.model.getWords());
       }
     }, 1000);
   }
@@ -157,24 +156,10 @@ export default class SprintController {
     }
   }
 
-  changeNumberPage() {
-    this.model.page = this.model.page === 29 ? 0 : this.model.page + 1;
-  }
-
-  nextCard() {
-    // console.log(document.querySelector('.couple__item'));
-    const preWords = document.querySelector('.couple__item');
-    while (preWords.firstChild) {
-      this.preWords.removeChild(preWords.firstChild);
-    }
-    this.createWords();
-  }
-
   createWords() {
     this.model.getWords()
       .then((data) => {
         this.words = data;
-        // console.log(data);
         this.view.createWords(this.words);
       });
   }
@@ -182,14 +167,6 @@ export default class SprintController {
   startRound() {
     this.view.getPreloader();
     this.getLoadTimer();
-    this.makeWordField();
-    this.getRealtimer();
-  }
-
-  change() {
-    this.stop();
-    this.changeNumberPage();
-    this.createWords();
   }
 
   clickStart() {

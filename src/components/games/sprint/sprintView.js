@@ -19,11 +19,12 @@ export default class SprintView {
   }
 
   createElements() {
+    this.indicationBlock = createElement({ tag: 'div', class: 'game__sprint__main-field' });
     this.preloader = createElement({ tag: 'div', class: 'game__sprint__preloader' });
     this.loader = createElement({ tag: 'div', class: 'game__sprint__loader' });
     this.loadCounter = createElement({ tag: 'div', class: 'game__sprint__loader__count' });
     this.game = createElement({ tag: 'section', class: 'game__sprint' });
-    this.img = createElement({ tag: 'img', class: 'game__sprint__img' });
+    this.wordsBlock = createElement({ tag: 'div', class: 'game__sprint__play-content' });
     this.currentWord = createElement({ tag: 'div', class: 'game__sprint__word' });
     this.currentTranslation = createElement({ tag: 'div', class: 'game__sprint__translation' });
     this.btnsBlock = createElement({ tag: 'div', class: 'game__sprint__btns' });
@@ -36,17 +37,16 @@ export default class SprintView {
     this.currentBonus = createElement({ tag: 'div', class: 'game__sprint__bonus__star', id: 'current_Bonus' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.timer = createElement({ tag: 'div', class: 'timer' });
-    this.timer = createElement({ tag: 'p', class: 'game__sprint__time' });
+    this.timer = createElement({ tag: 'p', class: 'game__sprint__time', content: '1 : 00' });
     this.bonus = createElement({ tag: 'div', class: 'current__Bonus__item', content: '*' });
   }
 
   appendElements() {
-    this.btnsBlock.append(this.btnChoiceTrue, this.timer, this.btnChoiceFalse);
-    // this.preloader.append(this.loader);
-    this.arrowsBlock.append(this.arrowChoiceTrue, this.arrowChoiceFalse);
+    this.btnsBlock.append(this.btnChoiceTrue, this.btnChoiceFalse);
+    this.indicationBlock.append(this.timer, this.scoreBlock, this.currentBonus);
+    this.wordsBlock.append(this.currentWord, this.currentTranslation);
     this.game.append(
-      /* this.preloader, */ this.scoreBlock, this.currentBonus, this.currentWord,
-      this.currentTranslation, this.btnsBlock, this.arrowsBlock,
+      this.indicationBlock, this.wordsBlock, this.btnsBlock, this.arrowsBlock,
     );
   }
 
@@ -54,11 +54,10 @@ export default class SprintView {
     this.preloader.append(this.loadCounter, this.loader);
     this.game.append(this.preloader);
     setTimeout(() => {
-      console.log(this.preloader.classList);
       if (!this.preloader.classList.contains('hide__loader')) {
         this.preloader.classList.add('hide__loader');
       }
-    }, 100000);
+    }, 6000);
   }
 
   createWords(words) {
@@ -91,7 +90,7 @@ export default class SprintView {
   }
 
   getBonus() {
-    const star = '<div id="game__sprint__bonus__star">*</div>';
+    const star = '<div id="game__sprint__bonus__star">Bon</div>';
     this.currentBonus.insertAdjacentHTML('beforeend', star);
   }
 
