@@ -23,6 +23,7 @@ export default class PuzzleController {
     this.puzzleRow = null;
     this.ethaloneSentence = null;
     this.audioTip = null;
+    this.clickListener = this.clickListener.bind(this);
   }
 
   tipsHandler() {
@@ -158,7 +159,7 @@ export default class PuzzleController {
       .appendtranslation(this.roundData.sentences[this.currentRow].textExampleTranslate);
     this.renderView.wordContainer.innerHTML = '';
     this.puzzleRow.innerHTML = '';
-    this.puzzleRow.classList.remove('row__current');
+
     this.puzzleRow.style.outline = 'none';
     this.displayElement('.btn__check', 'none');
 
@@ -228,59 +229,66 @@ export default class PuzzleController {
     this.displayElement('.btn__idk', 'inline-block');
   }
 
-  clickListener() {
-    this.root.addEventListener('click', (e) => {
-      if (e.target.closest('.btn__go')) {
-        this.startRound();
-      }
+  clickListener(e) {
+    if (e.target.closest('.btn__go')) {
+      this.startRound();
+    }
 
-      if (e.target.closest('.btn__continue')) {
-        this.continue();
-      }
+    if (e.target.closest('.btn__continue')) {
+      this.puzzleRow.classList.remove('row__current');
+      this.continue();
+    }
 
-      if (e.target.closest('.btn__continue__modal')) {
-        this.startRound();
-      }
+    if (e.target.closest('.btn__continue__modal')) {
+      this.startRound();
+    }
 
-      if (e.target.closest('.btn__check')) {
-        this.checkPuzzle();
-      }
+    if (e.target.closest('.btn__check')) {
+      this.checkPuzzle();
+    }
 
-      if (e.target.closest('.btn__idk')) {
-        this.roundData.sentences[this.currentRow].success = true;
-        this.dontKnowHandler();
-      }
+    if (e.target.closest('.btn__idk')) {
+      this.roundData.sentences[this.currentRow].success = true;
+      this.dontKnowHandler();
+    }
 
-      if (e.target.closest('.btn__backImg')) {
-        e.target.closest('.btn__backImg').classList.toggle('inactive');
-        this.tips.backImg = !this.tips.backImg;
-      }
+    if (e.target.closest('.btn__backImg')) {
+      e.target.closest('.btn__backImg').classList.toggle('inactive');
+      this.tips.backImg = !this.tips.backImg;
+    }
 
-      if (e.target.closest('.btn__audio')) {
-        this.playAudioTip();
-      }
+    if (e.target.closest('.btn__audio')) {
+      this.playAudioTip();
+    }
 
-      if (e.target.closest('.btn__translate')) {
-        e.target.closest('.btn__translate').classList.toggle('inactive');
-        this.tips.translate = !this.tips.translate;
-      }
+    if (e.target.closest('.btn__translate')) {
+      e.target.closest('.btn__translate').classList.toggle('inactive');
+      this.tips.translate = !this.tips.translate;
+    }
 
-      if (e.target.closest('.btn__audio__tip')) {
-        e.target.closest('.btn__audio__tip').classList.toggle('inactive');
-        this.tips.autoPlay = !this.tips.autoPlay;
-      }
+    if (e.target.closest('.btn__audio__tip')) {
+      e.target.closest('.btn__audio__tip').classList.toggle('inactive');
+      this.tips.autoPlay = !this.tips.autoPlay;
+    }
 
-      if (e.target.closest('.btn__select')) {
-        this.level = parseInt(this.root.querySelector('.select-level').value, 0);
-        this.roundNumber = parseInt(this.root.querySelector('.select-round').value, 0);
-        this.startRound();
-      }
-    });
+    if (e.target.closest('.btn__select')) {
+      this.level = parseInt(this.root.querySelector('.select-level').value, 0);
+      this.roundNumber = parseInt(this.root.querySelector('.select-round').value, 0);
+      this.startRound();
+    }
+  }
+
+  addListeners() {
+    this.root.addEventListener('click', this.clickListener);
+  }
+
+  removeListeners() {
+    this.root.removeEventListener('click', this.clickListener);
   }
 
   async init() {
     this.roundData = await new RoundData(this.level, this.roundNumber, obtainWords);
     this.renderView = new RenderView(this.root, this.roundData, this.imgWidth, this.imgHeight);
-    this.clickListener();
+    this.addListeners();
   }
 }

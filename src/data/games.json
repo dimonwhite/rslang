@@ -7,7 +7,7 @@
   },
   "puzzle": {
     "title": "English puzzle",
-    "desc": "puzzle game",
+    "desc": "Drag & drop puzzles or just click'em to complete the painting, use tips and enjoy world arts!",
     "bgImage": "testbg.jpg",
     "gameClass": "englishPuzzle",
     "settings": {

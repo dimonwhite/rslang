@@ -1,6 +1,6 @@
 .result{
   &-modal{
-    width: 600px;
+    max-width: 600px;
     margin: 0 auto;
     height: 800px;
     padding: 20px;
@@ -17,7 +17,7 @@
     }
   }
   &-window{
-    padding-top: 80px;
+    padding-top: 20px;
   }
   &-sentence{
     display: flex;
@@ -28,6 +28,7 @@
     img{
       width: 40px;
       height: 40px;
+      flex-shrink: 0;
     }
     p{
       display: inline-block;
