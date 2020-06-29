@@ -89,12 +89,7 @@ export default class HttpClient {
       throw new Error('Can`t login user, network problems');
     }
     const content = await response.json();
-    this.userId = content.userId;
-    this.token = content.token;
-    this.tokenCreateTime = new Date().getTime();
-    localStorage.setItem('token', content.token);
-    localStorage.setItem('userId', content.userId);
-    localStorage.setItem('tokenCreateTime', this.tokenCreateTime);
+    this.updateLocalUser(content);
 
     return content;
 
@@ -103,6 +98,26 @@ export default class HttpClient {
       "token": "eyJhbGciO...M",
       "userId": "5eea1b73dffad00017faa748"
     } */
+  }
+
+  updateLocalUser(content) {
+    this.userId = content.userId;
+    this.token = content.token;
+    this.tokenCreateTime = new Date().getTime();
+
+    this.headerNoContentType = {
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'application/json',
+    };
+    this.headerWithContentType = {
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    localStorage.setItem('token', content.token);
+    localStorage.setItem('userId', content.userId);
+    localStorage.setItem('tokenCreateTime', this.tokenCreateTime);
   }
 
   async getUser() {

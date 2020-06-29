@@ -3,6 +3,7 @@ import Router from '@/components/router/Router';
 import Header from './components/header/header';
 // eslint-disable-next-line no-unused-vars
 import HttpClient from './components/httpclient/HttpClient';
+import Authorization from './components/authorization/authorizationController';
 
 require('./prototype.settings');
 
@@ -24,4 +25,5 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   new Header().createEvent();
+  new Authorization().create();
 });

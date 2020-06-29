@@ -1,11 +1,10 @@
 export default class DictionaryView {
   constructor() {
     this.dictionary = document.getElementById('dictionary');
+    this.close = false;
   }
 
   renderHTML() {
-    const row = document.createElement('div');
-    row.innerHTML = 'dictionary';
-    this.dictionary.append(row);
+    this.close = true;
   }
 }
