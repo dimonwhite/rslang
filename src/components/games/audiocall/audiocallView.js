@@ -18,7 +18,10 @@ export default class AudiocallView {
     this.game = createElement({ tag: 'section', class: 'game' });
 
     this.game.innerHTML = `
-    <div class="restart-wrapper"><div class="restart">Restart</div></div>
+    <div class="restart-wrapper">
+    <div class="restart">Restart</div>
+    <div class="exit" href="#/">Exit</div>
+    </div>
     <div class="info-wrapper">
       <div class="icon-container"></div>
       <div class="word-description"></div>
