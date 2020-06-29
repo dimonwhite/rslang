@@ -1,14 +1,18 @@
+import { createElement } from '../../utils';
+
 export default class StatisticsView {
   constructor() {
-    this.statistics = document.getElementById('tbody');
+    this.main = document.getElementById('main');
   }
 
   renderHTML() {
-    this.statistics.innerHTML = '';
-    const row = document.createElement('tr');
-    const date = document.createElement('td');
-    date.innerHTML = 'statistics';
-    row.append(date);
-    this.statistics.append(row);
+    this.main.innerHTML = '';
+  }
+
+  commonProgress(max, currentValue) {
+    this.commonProgressBar = createElement({ tag: 'progress', class: 'common-progress' });
+    this.commonProgressBar.setAttribute('max', max);
+    this.commonProgressBar.setAttribute('value', currentValue);
+    this.commonProgressBar.append(this.main);
   }
 }
