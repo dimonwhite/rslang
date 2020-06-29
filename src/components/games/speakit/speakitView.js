@@ -1,3 +1,4 @@
+import Choices from 'choices.js';
 import emptyImg from '@/assets/img/blank.jpg';
 import Card from '@/components/games/speakit/Card';
 import { urlGitHub } from '@/constants';
@@ -13,14 +14,25 @@ export default class SpeakitView {
     this.createElements();
     this.appendElements();
     this.main.append(this.game);
+    console.log('.game__select-options');
+    // eslint-disable-next-line no-new
+    new Choices('.game__select-options', {
+      searchEnabled: false,
+      searchChoices: false,
+      itemSelectText: '',
+    });
   }
 
   createElements() {
     this.game = createElement({ tag: 'section', class: 'game' });
+    this.gameInfo = createElement({ tag: 'div', class: 'game__info' });
+    this.imgBlock = createElement({ tag: 'div', class: 'game__imgBlock' });
     this.img = createElement({ tag: 'img', class: 'game__img' });
+    this.mic = createElement({ tag: 'div', class: 'game__mic', content: getSvg('mic') });
     this.img.src = emptyImg;
     this.translation = createElement({ tag: 'div', class: 'game__translation' });
     this.gameWord = createElement({ tag: 'div', class: 'game__word' });
+    this.gameText = createElement({ tag: 'div', class: 'game__text' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.btnsBlock = createElement({ tag: 'div', class: 'game__btns' });
     this.newGame = createElement({
@@ -37,13 +49,15 @@ export default class SpeakitView {
   }
 
   appendElements() {
+    this.imgBlock.append(this.img, this.mic);
+    this.gameText.append(this.translation, this.gameWord);
+    this.gameInfo.append(this.imgBlock, this.gameText);
     this.optionsWrap = this.main.querySelector('.game__options');
     this.optionsWrap.append(this.result);
     this.btnsBlock.append(this.startBtn);
     this.topBlock.append(this.scoreBlock, this.newGame, this.close);
     this.game.append(
-      this.topBlock, this.img, this.translation,
-      this.gameWord, this.wordList, this.btnsBlock,
+      this.topBlock, this.gameInfo, this.wordList, this.btnsBlock,
     );
   }
 
@@ -73,8 +87,8 @@ export default class SpeakitView {
     this.img.src = emptyImg;
     this.translation.textContent = '';
     this.gameWord.textContent = '';
-    this.wordList.querySelectorAll('.wordList__item.active').forEach((item) => {
-      item.classList.remove('active');
+    this.wordList.querySelectorAll('.wordList__item').forEach((item) => {
+      item.classList.remove('active', 'success');
     });
     this.scoreBlock.innerHTML = '';
   }
@@ -98,7 +112,7 @@ export default class SpeakitView {
 
   successCard(word, id) {
     const card = this.wordList.querySelector(`.wordList__item[data-id="${id}"]`);
-    card.classList.add('active');
+    card.classList.add('success');
     this.scoreBlock.append(SpeakitView.createStar());
     this.editInfo(word);
     this.gameWord.textContent = word.word;

@@ -53,6 +53,8 @@ export default class SpeakitController {
     this.stop();
     this.changeNumberPage();
     this.createWords();
+    this.dropScore();
+    this.model.dropScore();
   }
 
   createWords() {
@@ -86,7 +88,7 @@ export default class SpeakitController {
   start() {
     this.dropScore();
     this.view.start();
-    this.model.start();
+    this.model.dropScore();
     this.model.game = true;
     this.recognition.start();
     window.resultRecognition = this.resultRecognition.bind(this);

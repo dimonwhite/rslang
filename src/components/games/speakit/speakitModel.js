@@ -22,7 +22,7 @@ export default class SpeakitModel {
     return this.dataWords[id];
   }
 
-  start() {
+  dropScore() {
     this.score = 0;
     this.dataWords.forEach((item) => {
       item.success = false;
