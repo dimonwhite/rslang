@@ -37,5 +37,11 @@
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
     "gameClass": "speakIt"
+  },
+  "filwords": {
+    "title": "filwords",
+    "desc": "filwords game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "filwords"
   }
 }
