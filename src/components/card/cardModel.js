@@ -1,9 +1,9 @@
-import book1 from '@/data/book1';
-import book2 from '@/data/book2';
-import book3 from '@/data/book3';
-import book4 from '@/data/book4';
-import book5 from '@/data/book5';
-import book6 from '@/data/book6';
+// import book1 from '@/data/book1';
+// import book2 from '@/data/book2';
+// import book3 from '@/data/book3';
+// import book4 from '@/data/book4';
+// import book5 from '@/data/book5';
+// import book6 from '@/data/book6';
 
 export default class CardModel {
   constructor(user) {
@@ -14,49 +14,101 @@ export default class CardModel {
     this.defaultRating = 1;
   }
 
-  createList(settings, generatedListToday) {
+  async createList(settings, generatedListToday) { // , newWordsToday = 0) {
     const userWords = localStorage.getItem('userAllStudyWords');
     if (userWords) {
       this.allStudyWords = JSON.parse(userWords);
       this.allStudyWords.sort((a, b) => a.nextTime - b.nextTime);
+    } else {
+      this.allStudyWords = [];
     }
     if (!generatedListToday) {
+      // const words = [...book1, ...book2, ...book3, ...book4, ...book5, ...book6];
       this.listToday = [];
-      const allWords = [...book1, ...book2, ...book3, ...book4, ...book5, ...book6];
-      this.nextNewWord = this.allStudyWords.length;
-      const max = +settings.maxWords;
-      if (settings.listNew) {
-        this.addToList(max, allWords, true, false, settings.newWords);
-      } else if (settings.listRepeat) {
-        this.addToList(max, allWords, false, false, settings.newWords);
-      } else if (settings.listAlternately) {
-        this.addToList(max, allWords, false, true, settings.newWords);
+      const maxWordsPerPage = 600;
+      const maxWords = +settings.maxWords;
+      let settNewWords = +settings.newWords;
+      const learnedWords = this.allStudyWords.length;
+      const ALL_WORDS = 3600;
+      if (learnedWords === ALL_WORDS) settings.listNew = true;
+      if (learnedWords + maxWords > ALL_WORDS) settNewWords = ALL_WORDS - learnedWords;
+      const group = Math.floor(learnedWords / maxWordsPerPage);
+      const groupNext = Math.floor((learnedWords + maxWords) / maxWordsPerPage);
+      const page = 0;
+      const maxLength = 99;
+      let allWords = [];
+      if (group === groupNext) {
+        const wordsPerPage = (learnedWords % maxWordsPerPage) + maxWords;
+        allWords = await this.user.getWords({
+          group, page, maxLength, wordsPerPage,
+        });
+      } else {
+        const wordsPerPage = (learnedWords + maxWords) % maxWordsPerPage;
+        const firstChunk = await this.user.getWords({
+          group, page, maxLength, wordsPerPage: maxWordsPerPage,
+        });
+        const secondChunk = await this.user.getWords({
+          group: groupNext, page, maxLength, wordsPerPage,
+        });
+        allWords = [...firstChunk, ...secondChunk];
       }
+      const newWords = allWords.slice(learnedWords % maxWordsPerPage);
+      // this.nextNewWord = this.allStudyWords.length - newWordsToday;
+      // const max = +settings.maxWords;
+      // if (settings.listNew) {
+      //   this.addToList(max, allWords, true, false, settings.newWords);
+      // } else if (settings.listRepeat) {
+      //   this.addToList(max, allWords, false, false, settings.newWords);
+      // } else if (settings.listAlternately) {
+      //   this.addToList(max, allWords, false, true, settings.newWords);
+      // }
+      // const max
+      if (settings.listNew || settNewWords >= maxWords) {
+        this.listToday = newWords;
+      } else if (settings.listRepeat) {
+        if (learnedWords >= maxWords) {
+          this.listToday = this.allStudyWords.slice(0, maxWords);
+        } else {
+          this.listToday = this.allStudyWords;
+          this.listToday = [...this.listToday, ...newWords.slice(0, maxWords - learnedWords)];
+        }
+      } else if (settings.listAlternately) {
+        const studyWords = maxWords - settNewWords;
+        const time = new Date().getTime();
+        for (let i = 0; i < studyWords && i < this.allStudyWords.length; i += 1) {
+          if (this.allStudyWords[i].nextTime < time) {
+            this.listToday.push(this.allStudyWords[i]);
+          }
+        }
+        const remainder = maxWords - this.listToday.length;
+        this.listToday = [...this.listToday, ...newWords.slice(0, remainder)];
+      }
+      localStorage.setItem('listToday', JSON.stringify(this.listToday));
       return true;
     }
     return generatedListToday;
   }
 
-  addToList(max, allWords, onlyNew, alternately, newWords) {
-    let count = 0;
-    if (!onlyNew) {
-      let repeatWords = max;
-      if (alternately) repeatWords = max - newWords;
-      for (let i = 0; i < this.allStudyWords.length && count < repeatWords; i += 1) {
-        this.listToday.push(this.allStudyWords[i]);
-        count += 1;
-      }
-    }
-    if (max > this.listToday.length) {
-      for (let i = this.nextNewWord; i < allWords.length && count < max; i += 1) {
-        this.nextNewWord += 1;
-        if (!this.allStudyWords.includes(allWords[i].word)) {
-          this.listToday.push(allWords[i]);
-          count += 1;
-        }
-      }
-    }
-  }
+  // addToList(max, allWords, onlyNew, alternately, newWords) {
+  //   let count = 0;
+  //   if (!onlyNew) {
+  //     let repeatWords = max;
+  //     if (alternately) repeatWords = max - newWords;
+  //     for (let i = 0; i < this.allStudyWords.length && count < repeatWords; i += 1) {
+  //       this.listToday.push(this.allStudyWords[i]);
+  //       count += 1;
+  //     }
+  //   }
+  //   if (max > this.listToday.length) {
+  //     for (let i = this.nextNewWord; i < allWords.length && count < max; i += 1) {
+  //       this.nextNewWord += 1;
+  //       if (!this.allStudyWords.includes(allWords[i].word)) {
+  //         this.listToday.push(allWords[i]);
+  //         count += 1;
+  //       }
+  //     }
+  //   }
+  // }
 
   updateAllStudyWords(word, isNew, isUpdate, isCount, mistake, customRating, state) {
     const DAY_INTERVAL = 5;
