@@ -27,19 +27,16 @@ window.addEventListener('DOMContentLoaded', () => {
   new Header().createEvent();
 
   const authorization = new Authorization();
-  authorization.create();
 
   // eslint-disable-next-line no-unused-vars
   const http = new HttpClient(authorization.unauthorizedListener);
+  authorization.create(http);
 
   const testUser = document.querySelector('.test_user');
   const removeUser = document.querySelector('.remove_user');
 
   testUser.addEventListener('click', () => {
-    console.log(http.getUser());
-    const request = http.getUser();
-
-    request.then((res) => {
+    http.getUser().then((res) => {
       console.log(res);
       return res;
     }).catch((res) => {
@@ -47,7 +44,16 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
   removeUser.addEventListener('click', () => {
-    http.removeLocalUser();
-    console.log('remove');
+    // http.removeLocalUser();
+
+    http.deleteUser()
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+      });
+
+    // console.log('remove');
   });
 });

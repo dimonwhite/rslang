@@ -1,27 +1,26 @@
 import AuthorizationView from './authorizationView';
 import AuthorizationModel from './authorizationModel';
-import HttpClient from '../httpclient/HttpClient';
 
 export default class AuthorizationController {
   constructor() {
-    this.showFormListener = this.showForm.bind(this);
-    this.popUpListener = this.clickPopUp.bind(this);
-    this.unauthorizedListener = this.unauthorized.bind(this);
-
-    this.user = new HttpClient(this.unauthorizedListener);
-
-    this.model = new AuthorizationModel(this.user);
     this.view = new AuthorizationView();
-    this.defaulPage = '#/games';
 
     this.formType = {
       signIn: 'signIn',
       signUp: 'signUp',
     };
     this.activeForm = this.formType.signIn;
+    this.defaulPage = '#/games';
+
+    this.showPopUpListener = this.showPopUp.bind(this);
+    this.clickPopUpListener = this.clickPopUp.bind(this);
+    this.unauthorizedListener = this.unauthorized.bind(this);
   }
 
-  async create() {
+  async create(http) {
+    this.http = http;
+    this.model = new AuthorizationModel(http);
+
     if (await this.model.checkAuthorized()) {
       this.initAuthorized();
     } else {
@@ -32,7 +31,7 @@ export default class AuthorizationController {
   authorized() {
     this.view.popUp.remove();
     this.view.background.remove();
-    this.view.clearform();
+    this.view.clearForm();
 
     this.initAuthorized();
   }
@@ -58,20 +57,33 @@ export default class AuthorizationController {
   initUnauthorized() {
     this.view.createLoginBtn();
 
-    this.view.btnLogin.addEventListener('click', this.showFormListener);
-    this.view.popUp.addEventListener('click', this.popUpListener);
+    this.view.btnLogin.addEventListener('click', this.showPopUpListener);
+    this.view.popUp.addEventListener('click', this.clickPopUpListener);
   }
 
   /*--------------------------------------------------------*/
 
-  showForm() {
+  showPopUp() {
     this.view.renderPopUp();
+
+    if (this.activeForm === this.formType.signIn) {
+      this.view.createSignIn();
+    }
+
+    if (this.activeForm === this.formType.signUp) {
+      this.view.createSignUp();
+    }
+
     this.initForm();
   }
 
   initForm() {
     this.view.form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      if (this.view.error) {
+        this.removeError();
+      }
 
       const data = {
         email: this.view.formLogin.value,
@@ -87,12 +99,16 @@ export default class AuthorizationController {
         this.signUp(data);
       }
     });
+
+    this.view.background.addEventListener('click', () => {
+      this.isClickOutside();
+    });
   }
 
   async signIn(data) {
     if (await this.model.signIn(data)) {
-      this.view.btnLogin.removeEventListener('click', this.showFormListener);
-      this.view.popUp.removeEventListener('click', this.popUpListener);
+      this.view.btnLogin.removeEventListener('click', this.showPopUpListener);
+      this.view.popUp.removeEventListener('click', this.clickPopUpListener);
 
       this.authorized();
     } else {
@@ -117,8 +133,8 @@ export default class AuthorizationController {
         return;
       }
 
-      this.view.btnLogin.removeEventListener('click', this.showFormListener);
-      this.view.popUp.removeEventListener('click', this.popUpListener);
+      this.view.btnLogin.removeEventListener('click', this.showPopUpListener);
+      this.view.popUp.removeEventListener('click', this.clickPopUpListener);
 
       this.authorized();
     } else {
@@ -130,14 +146,14 @@ export default class AuthorizationController {
     if (e.target.closest('.close-icon')) {
       this.view.popUp.remove();
       this.view.background.remove();
-      this.view.clearform();
+      this.view.clearForm();
     }
 
-    if (e.target.closest('.form-signUp__link')) {
+    if (e.target.closest('.form-auth__link')) {
       this.toggleForm();
     }
 
-    if (e.target.closest('.getUser')) {
+    /* if (e.target.closest('.getUser')) {
       this.model.getUser();
     }
     if (e.target.closest('.createStatistic')) {
@@ -154,13 +170,13 @@ export default class AuthorizationController {
     }
     if (e.target.closest('.removeUser')) {
       this.model.removeUser();
-    }
+    } */
   }
 
   /*--------------------------------------------------------*/
 
   toggleForm() {
-    this.view.clearform();
+    this.view.clearFormWrap();
     if (this.view.error) {
       this.removeError();
     }
@@ -186,5 +202,11 @@ export default class AuthorizationController {
 
   removeError() {
     this.view.error.remove();
+  }
+
+  isClickOutside() {
+    this.view.popUp.remove();
+    this.view.background.remove();
+    this.view.clearForm();
   }
 }

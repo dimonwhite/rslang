@@ -1,6 +1,8 @@
+// import HttpClient from '../httpclient/HttpClient';
+
 export default class AuthorizationModel {
-  constructor(user) {
-    this.user = user;
+  constructor(http) {
+    this.user = http;
     this.defaultStatistics = {
       learnedWords: 0,
       optional: {
@@ -124,7 +126,7 @@ export default class AuthorizationModel {
 
   /*--------------------------------------------------------*/
 
-  async getUser() {
+  /* async getUser() {
     const request = await this.user.getUser()
       .then((res) => {
         console.log(res);
@@ -174,7 +176,7 @@ export default class AuthorizationModel {
       });
 
     return request;
-  }
+  } */
 
   removeLocalUser() {
     this.user.removeLocalUser();
