@@ -9,11 +9,10 @@ export default class StatisticsController {
   }
 
   init() {
-    this.statisticsView.renderHTML();
-    this.createCommonProgress();
+    this.create();
   }
 
-  createCommonProgress() {
+  create() {
     this.statisticsView.commonProgress(
       this.statisticsModel.quantityAllWords,
       this.statisticsModel.quantityStudyWords,
