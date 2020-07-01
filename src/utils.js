@@ -26,8 +26,24 @@ const randomArray = (arr) => {
   return arr;
 };
 
+const checkAuthorized = () => {
+  if (!localStorage.tokenCreateTime) {
+    return false;
+  }
+
+  const tokenTime = localStorage.tokenCreateTime;
+  const fourHours = 14400000; // ms in 4 hours
+
+  const isExpired = new Date().getTime() > (tokenTime + fourHours);
+  if (isExpired) {
+    return false;
+  }
+  return true;
+};
+
 export {
   createElement,
   createElementAttr,
   randomArray,
+  checkAuthorized,
 };

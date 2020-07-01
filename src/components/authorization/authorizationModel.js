@@ -1,104 +1,163 @@
-import HttpClient from '../httpclient/HttpClient';
-
 export default class AuthorizationModel {
-  constructor() {
-    this.user = new HttpClient();
-  }
-
-  signUp(data) {
-    const request = this.user.createNewUser(data);
-    request.then((res) => {
-      console.log(res);
-      this.signIn(data, true);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
-  }
-
-  signIn(data, isFirst) {
-    const request = this.user.loginUser(data);
-    request.then((res) => {
-      console.log(res);
-      if (isFirst) {
-        this.createStatistic();
-        this.createSettings();
-      }
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
-  }
-
-  getUser() {
-    const request = this.user.getUser();
-
-    request.then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
-  }
-
-  createStatistic() {
-    const request = this.user.createUserStatistics({
+  constructor(user) {
+    this.user = user;
+    this.defaultStatistics = {
       learnedWords: 0,
-      optional: {},
-    });
-
-    request.then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
-  }
-
-  createSettings() {
-    const request = this.user.createUserSettings({
+      optional: {
+        savannah: {},
+        audiocall: {},
+        sprint: {},
+        speakit: {},
+        puzzle: {},
+        own: {},
+        statisticsChart: {},
+      },
+    };
+    this.defaultSettings = {
       wordsPerDay: 1,
-      optional: {},
-    });
-
-    request.then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
+      optional: {
+        lastDate: '2062020',
+        todayTraining: '0,0,0,0,0,0,0,false,false',
+        settings: {
+          lang: 'EN',
+          langEn: true,
+          langRu: false,
+          difficultWord: true,
+          exampleWord: true,
+          imgWord: true,
+          interval: true,
+          listAlternately: false,
+          listNew: true,
+          listRepeat: false,
+          maxWords: '10',
+          newWords: '10',
+          meaningWord: true,
+          numberLetters: true,
+          removeWord: true,
+          showAnswer: true,
+          sound: false,
+          transcription: true,
+          translate: true,
+        },
+        dictSettings: {
+          dictExample: true,
+          dictMeaning: true,
+          dictTranscr: true,
+          dictSound: true,
+          dictImg: true,
+          dictProgress: true,
+        },
+      },
+    };
   }
 
-  logStatistic() {
-    const request = this.user.getUserStatistics();
+  async signUp(data) {
+    const request = await this.user.createNewUser(data)
+      .then(async (res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
 
-    request.then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
+    return request;
   }
 
-  logSettings() {
-    const request = this.user.getUserSettings();
+  async signIn(data) {
+    const request = await this.user.loginUser(data)
+      .then(async (res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
 
-    request.then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
+    return request;
   }
 
-  removeUser() {
-    const request = this.user.deleteUser();
+  async createStatistic() {
+    const request = await this.user.createUserStatistics(this.defaultStatistics)
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
 
-    request.then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
+    return request;
   }
+
+  async createSettings() {
+    const request = await this.user.createUserSettings(this.defaultSettings)
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
+
+    return request;
+  }
+
+  /*--------------------------------------------------------*/
+
+  async getUser() {
+    const request = await this.user.getUser()
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
+
+    return request;
+  }
+
+  async logStatistic() {
+    const request = await this.user.getUserStatistics()
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
+
+    return request;
+  }
+
+  async logSettings() {
+    const request = await this.user.getUserSettings()
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
+
+    return request;
+  }
+
+  async removeUser() {
+    const request = await this.user.deleteUser()
+      .then((res) => {
+        console.log(res);
+        return res;
+      }).catch((res) => {
+        console.log(res);
+        this.error = res;
+      });
+
+    return request;
+  }
+
+  /* removeLocalUser() {
+    this.user.removeLocalUser();
+  } */
 }

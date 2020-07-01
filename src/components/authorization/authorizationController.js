@@ -1,31 +1,71 @@
+import { checkAuthorized } from '@/utils';
 import AuthorizationView from './authorizationView';
 import AuthorizationModel from './authorizationModel';
+import HttpClient from '../httpclient/HttpClient';
 
 export default class AuthorizationController {
   constructor() {
-    this.model = new AuthorizationModel();
-    this.view = new AuthorizationView();
-
     this.formType = {
       signIn: 'signIn',
       signUp: 'signUp',
     };
     this.activeForm = this.formType.signIn;
+
+    this.showFormListener = this.showForm.bind(this);
+    this.popUpListener = this.clickPopUp.bind(this);
+    this.unauthorizedListener = this.unauthorized.bind(this);
+
+    this.user = new HttpClient(this.unauthorizedListener);
+
+    this.model = new AuthorizationModel(this.user);
+    this.view = new AuthorizationView();
   }
 
   create() {
-    this.init();
+    console.log(checkAuthorized());
+
+    this.initUnauthorized();
+    /* if (checkAuthorized()) {
+      this.initAuthorized();
+    } else {
+      this.initUnauthorized();
+    } */
   }
 
-  init() {
-    this.view.btnLogin.addEventListener('click', () => {
-      this.view.renderPopUp();
-      this.initForm();
-    });
+  authorized() {
+    this.view.popUp.remove();
+    this.view.background.remove();
+    this.view.clearform();
 
-    this.view.popUp.addEventListener('click', (e) => {
-      this.clickWrapForm(e);
-    });
+    this.initAuthorized();
+  }
+
+  initAuthorized() {
+    this.view.createLogoutBtn();
+
+    this.view.btnLogin.addEventListener('click', this.unauthorizedListener);
+  }
+
+  unauthorized() {
+    this.view.btnLogin.removeEventListener('click', this.unauthorizedListener);
+
+    // this.model.removeLocalUser();
+    this.view.createLoginBtn();
+    this.initUnauthorized();
+  }
+
+  initUnauthorized() {
+    this.view.createLoginBtn();
+
+    this.view.btnLogin.addEventListener('click', this.showFormListener);
+    this.view.popUp.addEventListener('click', this.popUpListener);
+  }
+
+  /*--------------------------------------------------------*/
+
+  showForm() {
+    this.view.renderPopUp();
+    this.initForm();
   }
 
   initForm() {
@@ -38,17 +78,54 @@ export default class AuthorizationController {
       };
 
       if (this.activeForm === this.formType.signIn) {
-        this.model.signIn(data);
+        this.signIn(data);
         return;
       }
 
       if (this.activeForm === this.formType.signUp) {
-        this.model.signUp(data);
+        this.signUp(data);
       }
     });
   }
 
-  clickWrapForm(e) {
+  async signIn(data) {
+    if (await this.model.signIn(data)) {
+      this.view.btnLogin.removeEventListener('click', this.showFormListener);
+      this.view.popUp.removeEventListener('click', this.popUpListener);
+
+      this.authorized();
+    } else {
+      this.showError();
+    }
+  }
+
+  async signUp(data) {
+    if (await this.model.signUp(data)) {
+      if (!await this.model.signIn(data)) {
+        this.showError();
+        return;
+      }
+
+      if (!await this.model.createStatistic()) {
+        this.showError();
+        return;
+      }
+
+      if (!await this.model.createSettings()) {
+        this.showError();
+        return;
+      }
+
+      this.view.btnLogin.removeEventListener('click', this.showFormListener);
+      this.view.popUp.removeEventListener('click', this.popUpListener);
+
+      this.authorized();
+    } else {
+      this.showError();
+    }
+  }
+
+  clickPopUp(e) {
     if (e.target.closest('.close-icon')) {
       this.view.popUp.remove();
       this.view.background.remove();
@@ -62,14 +139,12 @@ export default class AuthorizationController {
     if (e.target.closest('.getUser')) {
       this.model.getUser();
     }
-
     if (e.target.closest('.createStatistic')) {
       this.model.createStatistic();
     }
     if (e.target.closest('.createSettings')) {
       this.model.createSettings();
     }
-
     if (e.target.closest('.logStatistic')) {
       this.model.logStatistic();
     }
@@ -81,8 +156,13 @@ export default class AuthorizationController {
     }
   }
 
+  /*--------------------------------------------------------*/
+
   toggleForm() {
     this.view.clearform();
+    if (this.view.error) {
+      this.removeError();
+    }
 
     if (this.activeForm === this.formType.signIn) {
       this.activeForm = this.formType.signUp;
@@ -97,15 +177,13 @@ export default class AuthorizationController {
       this.initForm();
     }
   }
-}
 
-/* if (!localStorage.tokenData) {
-  return false;
+  showError() {
+    this.view.showError(this.model.error);
+    this.model.error = undefined;
+  }
+
+  removeError() {
+    this.view.error.remove();
+  }
 }
-this.tokenData = JSON.parse(localStorage.tokenData);
-const fourHours = 14400000; / ms in 4 hours /
-const isExpired = new Date().getTime() > (this.tokenData.createTime + fourHours);
-if (isExpired) {
-  return false;
-}
-return true; */

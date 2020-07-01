@@ -1,7 +1,7 @@
 import { backendUrl } from '../../constants';
 /* eslint-disable class-methods-use-this */
 export default class HttpClient {
-  constructor() {
+  constructor(unauthorized) {
     this.token = localStorage.token;
     this.userId = localStorage.userId;
     this.headerNoToken = {
@@ -17,6 +17,40 @@ export default class HttpClient {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
+    this.unauthorized = unauthorized;
+  }
+
+  test() {
+    console.log(this);
+  }
+
+  updateLocalUser(content) {
+    this.userId = content.userId;
+    this.token = content.token;
+    this.tokenCreateTime = new Date().getTime();
+
+    this.headerNoContentType = {
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'application/json',
+    };
+    this.headerWithContentType = {
+      Authorization: `Bearer ${this.token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    localStorage.setItem('token', content.token);
+    localStorage.setItem('userId', content.userId);
+    localStorage.setItem('tokenCreateTime', this.tokenCreateTime);
+  }
+
+  removeLocalUser() {
+    this.userId = undefined;
+    this.token = undefined;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('tokenCreateTime');
   }
 
   async getWords({
@@ -100,26 +134,6 @@ export default class HttpClient {
     } */
   }
 
-  updateLocalUser(content) {
-    this.userId = content.userId;
-    this.token = content.token;
-    this.tokenCreateTime = new Date().getTime();
-
-    this.headerNoContentType = {
-      Authorization: `Bearer ${this.token}`,
-      Accept: 'application/json',
-    };
-    this.headerWithContentType = {
-      Authorization: `Bearer ${this.token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    };
-
-    localStorage.setItem('token', content.token);
-    localStorage.setItem('userId', content.userId);
-    localStorage.setItem('tokenCreateTime', this.tokenCreateTime);
-  }
-
   async getUser() {
     const response = await fetch(`${backendUrl}/users/${this.userId}`, {
       method: 'GET',
@@ -127,6 +141,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
+      this.unauthorized();
+
       throw new Error('Access token is missing or invalid, try relogin');
     }
     if (response.status === 404) {

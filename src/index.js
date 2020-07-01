@@ -25,5 +25,28 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   new Header().createEvent();
-  new Authorization().create();
+
+  const authorization = new Authorization();
+  authorization.create();
+
+  // eslint-disable-next-line no-unused-vars
+  const http = new HttpClient(authorization.unauthorizedListener);
+
+  const testUser = document.querySelector('.test_user');
+  const removeUser = document.querySelector('.remove_user');
+
+  testUser.addEventListener('click', () => {
+    const request = http.getUser();
+
+    request.then((res) => {
+      console.log(res);
+      return res;
+    }).catch((res) => {
+      console.log(res);
+    });
+  });
+  removeUser.addEventListener('click', () => {
+    http.removeLocalUser();
+    console.log('remove');
+  });
 });
