@@ -3,7 +3,7 @@ import volumeImg from '../../../assets/img/volume.svg';
 import soundTip from '../../../assets/img/puzzle/speaker.svg';
 import backTip from '../../../assets/img/puzzle/photo.svg';
 import textTip from '../../../assets/img/puzzle/text.svg';
-import playTip from '../../../assets/img/puzzle/video-player.svg';
+import playTip from '../../../assets/img/puzzle/sound.svg';
 
 export default class RenderView {
   constructor(root, data, containerWidth, containerHeight) {
@@ -40,21 +40,21 @@ export default class RenderView {
         <div class="control-block">
         <a class="btn btn__exit" href="#/">Exit</a>
         <div class="btn__block">
-          <button class="btn btn__backImg"><img src=${backTip} class="tip"><span class="tooltiptext">Click to toggle background images of puzzles in next step</span></button>
-          <button class="btn btn__audio__tip"><img src=${soundTip} class="tip"><span class="tooltiptext">Click to toggle audio tip in next step</span></button>
-          <button class="btn btn__translate"><img src=${textTip} class="tip"><span class="tooltiptext">Click to toggle sentence translation in next step</span></button>
+          <button class="btn btn__icon btn__backImg"><img src=${backTip} class="tip"><span class="tooltiptext">Click to toggle background images of puzzles in next step</span></button>
+          <button class="btn btn__icon btn__audio__tip"><img src=${soundTip} class="tip"><span class="tooltiptext">Click to toggle audio tip in next step</span></button>
+          <button class="btn btn__icon btn__translate"><img src=${textTip} class="tip"><span class="tooltiptext">Click to toggle sentence translation in next step</span></button>
           <select class="btn select-level">
-            <option value="0">1</option>
-            <option value="1">2</option>
-            <option value="2">3</option>
-            <option value="3">4</option>
-            <option value="4">5</option>
-            <option value="5">6</option>
+            <option value="0">Level 1</option>
+            <option value="1">Level 2</option>
+            <option value="2">Level 3</option>
+            <option value="3">Level 4</option>
+            <option value="4">Level 5</option>
+            <option value="5">Level 6</option>
           </select>
           <select class="btn select-round"></select>
           <button class="btn btn__select">Select round</button>
         </div>
-        <div class="btn__audio__wrapper"><button class="btn btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
+        <div class="btn__audio__wrapper"><button class="btn btn__icon btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
         <div class="sentence-translation"></div>
         </div>
         <div class="puzzle-container"></div>
@@ -77,7 +77,7 @@ export default class RenderView {
     while (maxroundNumber) {
       const option = document.createElement('option');
       option.setAttribute('value', maxroundNumber);
-      option.innerText = maxroundNumber;
+      option.innerText = `Round ${maxroundNumber}`;
       this.root.querySelector('.select-round').append(option);
       maxroundNumber -= 1;
     }
@@ -101,6 +101,7 @@ export default class RenderView {
     this.row.classList.add('row');
     this.row.style.height = `${this.rowHeight}px`;
     this.row.style.outline = '2px dotted gray';
+
     return this.row;
   }
 
