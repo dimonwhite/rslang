@@ -36,6 +36,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const removeUser = document.querySelector('.remove_user');
 
   testUser.addEventListener('click', () => {
+    console.log(http.getUser());
     const request = http.getUser();
 
     request.then((res) => {

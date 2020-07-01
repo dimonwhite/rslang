@@ -1,16 +1,9 @@
-import { checkAuthorized } from '@/utils';
 import AuthorizationView from './authorizationView';
 import AuthorizationModel from './authorizationModel';
 import HttpClient from '../httpclient/HttpClient';
 
 export default class AuthorizationController {
   constructor() {
-    this.formType = {
-      signIn: 'signIn',
-      signUp: 'signUp',
-    };
-    this.activeForm = this.formType.signIn;
-
     this.showFormListener = this.showForm.bind(this);
     this.popUpListener = this.clickPopUp.bind(this);
     this.unauthorizedListener = this.unauthorized.bind(this);
@@ -19,17 +12,21 @@ export default class AuthorizationController {
 
     this.model = new AuthorizationModel(this.user);
     this.view = new AuthorizationView();
+    this.defaulPage = '#/games';
+
+    this.formType = {
+      signIn: 'signIn',
+      signUp: 'signUp',
+    };
+    this.activeForm = this.formType.signIn;
   }
 
-  create() {
-    console.log(checkAuthorized());
-
-    this.initUnauthorized();
-    /* if (checkAuthorized()) {
+  async create() {
+    if (await this.model.checkAuthorized()) {
       this.initAuthorized();
     } else {
       this.initUnauthorized();
-    } */
+    }
   }
 
   authorized() {
@@ -49,9 +46,13 @@ export default class AuthorizationController {
   unauthorized() {
     this.view.btnLogin.removeEventListener('click', this.unauthorizedListener);
 
-    // this.model.removeLocalUser();
+    this.model.removeLocalUser();
     this.view.createLoginBtn();
     this.initUnauthorized();
+
+    if (window.location.hash !== this.defaulPage) {
+      window.location.hash = this.defaulPage;
+    }
   }
 
   initUnauthorized() {

@@ -51,9 +51,28 @@ export default class AuthorizationModel {
     };
   }
 
+  async checkAuthorized() {
+    if (!localStorage.token) {
+      return false;
+    }
+
+    const request = await this.user.getUser()
+      .then((res) => {
+        console.log(res);
+        return true;
+      }).catch((res) => {
+        console.log(res);
+        return false;
+      });
+
+    return request;
+  }
+
+  /*--------------------------------------------------------*/
+
   async signUp(data) {
     const request = await this.user.createNewUser(data)
-      .then(async (res) => {
+      .then((res) => {
         console.log(res);
         return res;
       }).catch((res) => {
@@ -66,7 +85,7 @@ export default class AuthorizationModel {
 
   async signIn(data) {
     const request = await this.user.loginUser(data)
-      .then(async (res) => {
+      .then((res) => {
         console.log(res);
         return res;
       }).catch((res) => {
@@ -157,7 +176,7 @@ export default class AuthorizationModel {
     return request;
   }
 
-  /* removeLocalUser() {
+  removeLocalUser() {
     this.user.removeLocalUser();
-  } */
+  }
 }
