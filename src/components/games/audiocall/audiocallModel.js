@@ -12,8 +12,12 @@ export default class AudiocallModel {
     this.score = 0;
   }
 
-  formWordarray() {
-    this.wordArray = shuffleArray(Object.values(book1)).slice(0, 10);
+  async formWordarray() {
+    const randomPage = Math.floor(Math.random() * 60);
+
+    this.wordArray = await this.user.getWords({
+      group: this.level, page: randomPage, maxLength: 20, wordsPerPage: 10,
+    });
 
     this.wordArray.forEach((el) => {
       const optionWords = Object.values(book1)

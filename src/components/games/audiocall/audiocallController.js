@@ -3,13 +3,16 @@ import AudiocallModel from './audiocallModel';
 import right from '../../../assets/img/audiocall/right.svg';
 import wrong from '../../../assets/img/audiocall/wrong.svg';
 import idk from '../../../assets/img/audiocall/idk.svg';
+import HttpClient from '../../httpclient/http-client';
 
 export default class AudiocallController {
   constructor(user, openPopupResult) {
+    this.user = user;
+    this.client = new HttpClient();
     this.startDelay = true;
     this.openPopupResult = openPopupResult;
     this.view = new AudiocallView();
-    this.model = new AudiocallModel(user);
+    this.model = new AudiocallModel(this.client);
     this.level = 0;
     this.clickHandler = this.clickHandler.bind(this);
     this.keypressHandler = this.keypressHandler.bind(this);
@@ -120,20 +123,19 @@ export default class AudiocallController {
     this.view.wordDescription.innerHTML = '';
   }
 
-  startRound() {
+  async startRound() {
     this.resetGame();
     this.view.getBackColor();
     this.view.setBackground();
-    this.model.formWordarray();
+    await this.model.formWordarray();
     this.view.wordWrapper.innerHTML = '';
     this.startStep();
   }
 
-  endRound() {
+  async endRound() {
     this.view.renderEndgamePost();
-    this.openPopupResult(this.model.wordArray);
+    await this.openPopupResult(this.model.wordArray);
     this.resetGame();
-    console.log(this.model.wordArray);
   }
 
   change() {
