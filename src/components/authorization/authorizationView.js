@@ -18,33 +18,6 @@ export default class AuthorizationModel {
 
     this.main.append(this.popUp);
 
-    /* this.getUser = createElement({ tag: 'div', class: 'getUser', content: 'getUser' });
-    this.formWrap.append(this.getUser);
-
-    this.createStatistic = createElement({
-      tag: 'div',
-      class: 'createStatistic',
-      content: 'createStatistic'
-    });
-    this.createSettings = createElement({
-      tag: 'div',
-      class: 'createSettings',
-      content: 'createSettings'
-    });
-    this.formWrap.append(this.createStatistic);
-    this.formWrap.append(this.createSettings);
-
-    this.logStatistic = createElement({
-      tag: 'div',
-      class: 'logStatistic',
-      content: 'logStatistic'
-    });
-    this.logSettings = createElement({ tag: 'div', class: 'logSettings', content: 'logSettings' });
-    this.removeUser = createElement({ tag: 'div', class: 'removeUser', content: 'removeUser' });
-    this.formWrap.append(this.logStatistic);
-    this.formWrap.append(this.logSettings);
-    this.formWrap.append(this.removeUser); */
-
     this.createBackground();
   }
 

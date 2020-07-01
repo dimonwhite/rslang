@@ -1,5 +1,3 @@
-// import HttpClient from '../httpclient/HttpClient';
-
 export default class AuthorizationModel {
   constructor(http) {
     this.user = http;
@@ -59,26 +57,16 @@ export default class AuthorizationModel {
     }
 
     const request = await this.user.getUser()
-      .then((res) => {
-        console.log(res);
-        return true;
-      }).catch((res) => {
-        console.log(res);
-        return false;
-      });
+      .then(() => true)
+      .catch(() => false);
 
     return request;
   }
 
-  /*--------------------------------------------------------*/
-
   async signUp(data) {
     const request = await this.user.createNewUser(data)
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
+      .then((res) => res)
+      .catch((res) => {
         this.error = res;
       });
 
@@ -87,11 +75,8 @@ export default class AuthorizationModel {
 
   async signIn(data) {
     const request = await this.user.loginUser(data)
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
+      .then((res) => res)
+      .catch((res) => {
         this.error = res;
       });
 
@@ -100,11 +85,8 @@ export default class AuthorizationModel {
 
   async createStatistic() {
     const request = await this.user.createUserStatistics(this.defaultStatistics)
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
+      .then((res) => res)
+      .catch((res) => {
         this.error = res;
       });
 
@@ -113,70 +95,13 @@ export default class AuthorizationModel {
 
   async createSettings() {
     const request = await this.user.createUserSettings(this.defaultSettings)
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
+      .then((res) => res)
+      .catch((res) => {
         this.error = res;
       });
 
     return request;
   }
-
-  /*--------------------------------------------------------*/
-
-  /* async getUser() {
-    const request = await this.user.getUser()
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
-        this.error = res;
-      });
-
-    return request;
-  }
-
-  async logStatistic() {
-    const request = await this.user.getUserStatistics()
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
-        this.error = res;
-      });
-
-    return request;
-  }
-
-  async logSettings() {
-    const request = await this.user.getUserSettings()
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
-        this.error = res;
-      });
-
-    return request;
-  }
-
-  async removeUser() {
-    const request = await this.user.deleteUser()
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
-        this.error = res;
-      });
-
-    return request;
-  } */
 
   removeLocalUser() {
     this.user.removeLocalUser();

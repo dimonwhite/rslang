@@ -61,8 +61,6 @@ export default class AuthorizationController {
     this.view.popUp.addEventListener('click', this.clickPopUpListener);
   }
 
-  /*--------------------------------------------------------*/
-
   showPopUp() {
     this.view.renderPopUp();
 
@@ -152,28 +150,7 @@ export default class AuthorizationController {
     if (e.target.closest('.form-auth__link')) {
       this.toggleForm();
     }
-
-    /* if (e.target.closest('.getUser')) {
-      this.model.getUser();
-    }
-    if (e.target.closest('.createStatistic')) {
-      this.model.createStatistic();
-    }
-    if (e.target.closest('.createSettings')) {
-      this.model.createSettings();
-    }
-    if (e.target.closest('.logStatistic')) {
-      this.model.logStatistic();
-    }
-    if (e.target.closest('.logSettings')) {
-      this.model.logSettings();
-    }
-    if (e.target.closest('.removeUser')) {
-      this.model.removeUser();
-    } */
   }
-
-  /*--------------------------------------------------------*/
 
   toggleForm() {
     this.view.clearFormWrap();

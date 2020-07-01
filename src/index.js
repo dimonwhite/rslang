@@ -1,7 +1,6 @@
 import './scss/main.scss';
 import Router from '@/components/router/Router';
 import Header from './components/header/header';
-// eslint-disable-next-line no-unused-vars
 import HttpClient from './components/httpclient/HttpClient';
 import Authorization from './components/authorization/authorizationController';
 
@@ -27,33 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
   new Header().createEvent();
 
   const authorization = new Authorization();
-
-  // eslint-disable-next-line no-unused-vars
   const http = new HttpClient(authorization.unauthorizedListener);
   authorization.create(http);
-
-  const testUser = document.querySelector('.test_user');
-  const removeUser = document.querySelector('.remove_user');
-
-  testUser.addEventListener('click', () => {
-    http.getUser().then((res) => {
-      console.log(res);
-      return res;
-    }).catch((res) => {
-      console.log(res);
-    });
-  });
-  removeUser.addEventListener('click', () => {
-    // http.removeLocalUser();
-
-    http.deleteUser()
-      .then((res) => {
-        console.log(res);
-        return res;
-      }).catch((res) => {
-        console.log(res);
-      });
-
-    // console.log('remove');
-  });
 });
