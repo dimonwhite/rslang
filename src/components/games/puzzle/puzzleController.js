@@ -181,6 +181,7 @@ export default class PuzzleController {
     this.renderView = await new RenderView(this.root,
       this.roundData, this.imgWidth, this.imgHeight);
 
+    this.renderView.renderPreloader();
     await this.roundData.formSentenceData();
     this.renderView.init();
     this.makeRow();

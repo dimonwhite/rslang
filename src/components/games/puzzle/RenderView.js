@@ -4,6 +4,7 @@ import soundTip from '../../../assets/img/puzzle/speaker.svg';
 import backTip from '../../../assets/img/puzzle/photo.svg';
 import textTip from '../../../assets/img/puzzle/text.svg';
 import playTip from '../../../assets/img/puzzle/sound.svg';
+import { createElement } from '../../../utils';
 
 export default class RenderView {
   constructor(root, data, containerWidth, containerHeight) {
@@ -156,6 +157,18 @@ export default class RenderView {
       }
     });
     return this.resultWindow;
+  }
+
+  renderPreloader() {
+    this.preloader = createElement({ tag: 'div', class: 'loading' });
+    this.preloader.innerHTML = `
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    `;
+    this.root.append(this.preloader);
   }
 
   appendtranslation(translation) {

@@ -1,5 +1,3 @@
-import paintings from './imgData/paintings';
-
 export default class RoundData {
   constructor(level, roundNumber, obtainWords) {
     this.level = level;
@@ -25,8 +23,12 @@ export default class RoundData {
     });
   }
 
-  getRoundImg() {
+  async getRoundImg() {
+    const urlPaintings = 'https://raw.githubusercontent.com/timurkalimullin/rslang_data_paintings/master/';
     const modRoundNumber = this.roundNumber < 10 ? `0${this.roundNumber}` : this.roundNumber;
+
+    const response = await fetch(`${urlPaintings}paintings.json`);
+    const paintings = await response.json();
 
     paintings.forEach((el) => {
       if (el.id === `${parseInt(this.level, 0) + 1}_${modRoundNumber}`) {
@@ -34,12 +36,12 @@ export default class RoundData {
       }
     });
 
-    this.roundImg = `https://raw.githubusercontent.com/timurkalimullin/rslang_data_paintings/master/${this.roundImgData.imageSrc}`;
-    this.cutRoundImg = `https://raw.githubusercontent.com/timurkalimullin/rslang_data_paintings/master/${this.roundImgData.cutSrc}`;
+    this.roundImg = `${urlPaintings}${this.roundImgData.imageSrc}`;
+    this.cutRoundImg = `${urlPaintings}${this.roundImgData.cutSrc}`;
   }
 
   async formSentenceData() {
     await this.makeSentences();
-    this.getRoundImg();
+    await this.getRoundImg();
   }
 }
