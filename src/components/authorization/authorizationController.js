@@ -39,6 +39,7 @@ export default class AuthorizationController {
   }
 
   initAuthorized() {
+    document.body.classList.remove('unauthorized');
     this.view.createLogoutBtn();
 
     this.view.btnLogin.addEventListener('click', this.unauthorizedListener);
@@ -57,6 +58,7 @@ export default class AuthorizationController {
   }
 
   initUnauthorized() {
+    document.body.classList.add('unauthorized');
     this.view.createLoginBtn();
 
     this.view.btnLogin.addEventListener('click', this.showPopUpListener);
