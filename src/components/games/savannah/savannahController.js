@@ -66,7 +66,7 @@ export default class SavannahController {
     this.attempt = 0;
     this.correctly = 0;
     this.heart = this.maxHeart;
-    // this.addStatistics();
+    // Place to call creating statistics for a new game: this.addStatistics();
     this.startNextRound();
   }
 
@@ -111,10 +111,10 @@ export default class SavannahController {
         this.view.getIncorrectlyAnswer(countHeart);
         this.model.words[this.attempt].success = false;
         this.heart -= 1;
-        // this.changeWordStatistics();
+        // Place to call the method for changing the word statistics: this.changeWordStatistics();
       }
       this.attempt += 1;
-      // this.changeStatistics();
+      // Place to call the method for changing the statistics of the game: this.changeStatistics();
       this.view.top.addEventListener('animationend', this.checkEndGame.bind(this));
       this.view.bottom.addEventListener('animationend', this.checkEndGame.bind(this));
     }
@@ -155,7 +155,6 @@ export default class SavannahController {
   cancel() {
     this.sound = false;
     this.view.cancel();
-    document.getElementById('navPage').click();
   }
 
   getSpeed({ target }) {

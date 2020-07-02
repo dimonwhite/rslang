@@ -23,6 +23,7 @@ export default class SavannahView {
   createGame() {
     this.game = createElement({ tag: 'section', class: 'savannah__game' });
     const cancel = createElement({ tag: 'div', class: 'savannah__game-cancel', id: 'cancel' });
+    cancel.href = '#/';
     const sound = createElement({ tag: 'div', class: 'savannah__game-sound', id: 'sound' });
     const wrap = createElement({ tag: 'div', class: 'savannah__game-wrapper' });
     wrap.append(cancel);
@@ -254,6 +255,9 @@ export default class SavannahView {
 
   cancel() {
     this.main.className = 'main';
+    const cancel = createElement({ tag: 'a' });
+    cancel.href = '#/';
+    cancel.click();
   }
 
   setAnswer(result, target) {
