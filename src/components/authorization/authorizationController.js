@@ -122,17 +122,20 @@ export default class AuthorizationController {
     const isSignUp = await this.model.signUp(data);
 
     if (isSignUp) {
-      if (!await this.model.signIn(data)) {
+      const isSignIn = await this.model.signIn(data);
+      if (!isSignIn) {
         this.showError();
         return;
       }
 
-      if (!await this.model.createStatistic()) {
+      const isСreateStatistic = await this.model.createStatistic();
+      if (!isСreateStatistic) {
         this.showError();
         return;
       }
 
-      if (!await this.model.createSettings()) {
+      const isCreateSettings = await this.model.createSettings();
+      if (!isCreateSettings) {
         this.showError();
         return;
       }
