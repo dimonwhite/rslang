@@ -26,8 +26,15 @@ const randomArray = (arr) => {
   return arr;
 };
 
+const getSvg = (id) => `
+  <svg class="svg_icon">
+    <use xlink:href="sprite.svg#${id}"></use>
+  </svg>
+`;
+
 export {
   createElement,
   createElementAttr,
   randomArray,
+  getSvg,
 };

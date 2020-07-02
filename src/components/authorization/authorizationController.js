@@ -21,7 +21,9 @@ export default class AuthorizationController {
     this.http = http;
     this.model = new AuthorizationModel(http);
 
-    if (await this.model.checkAuthorized()) {
+    const isAuthorized = await this.model.checkAuthorized();
+
+    if (isAuthorized) {
       this.initAuthorized();
     } else {
       this.initUnauthorized();
@@ -104,7 +106,9 @@ export default class AuthorizationController {
   }
 
   async signIn(data) {
-    if (await this.model.signIn(data)) {
+    const isSignIn = await this.model.signIn(data);
+
+    if (isSignIn) {
       this.view.btnLogin.removeEventListener('click', this.showPopUpListener);
       this.view.popUp.removeEventListener('click', this.clickPopUpListener);
 
@@ -115,7 +119,9 @@ export default class AuthorizationController {
   }
 
   async signUp(data) {
-    if (await this.model.signUp(data)) {
+    const isSignUp = await this.model.signUp(data);
+
+    if (isSignUp) {
       if (!await this.model.signIn(data)) {
         this.showError();
         return;
@@ -141,7 +147,7 @@ export default class AuthorizationController {
   }
 
   clickPopUp(e) {
-    if (e.target.closest('.close-icon')) {
+    if (e.target.closest('.svg_icon')) {
       this.view.popUp.remove();
       this.view.background.remove();
       this.view.clearForm();

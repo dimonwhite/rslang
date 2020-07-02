@@ -24,33 +24,19 @@ export default class HttpClient {
     this.userId = content.userId;
     this.token = content.token;
 
-    this.headerNoContentType = {
-      Authorization: `Bearer ${this.token}`,
-      Accept: 'application/json',
-    };
-    this.headerWithContentType = {
-      Authorization: `Bearer ${this.token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    };
+    this.headerNoContentType.Authorization = `Bearer ${this.token}`;
+    this.headerWithContentType.Authorization = `Bearer ${this.token}`;
 
     localStorage.setItem('token', content.token);
     localStorage.setItem('userId', content.userId);
   }
 
   removeLocalUser() {
-    this.userId = undefined;
-    this.token = undefined;
+    this.userId = null;
+    this.token = null;
 
-    this.headerNoContentType = {
-      Authorization: `Bearer ${this.token}`,
-      Accept: 'application/json',
-    };
-    this.headerWithContentType = {
-      Authorization: `Bearer ${this.token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    };
+    this.headerNoContentType.Authorization = `Bearer ${this.token}`;
+    this.headerWithContentType.Authorization = `Bearer ${this.token}`;
 
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
@@ -146,8 +132,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (response.status === 404) {
       throw new Error('Can`t get user with this ID');
@@ -175,8 +159,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t update user, network problems');
@@ -200,8 +182,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t delete user, network problems');
@@ -220,8 +200,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -242,8 +220,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -269,8 +245,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (response.status === 417) {
       throw new Error('Such user word already exists');
@@ -304,8 +278,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t create user word, network problems');
@@ -324,8 +296,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -351,8 +321,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t create user statistics, network problems');
@@ -378,8 +346,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (response.status === 404) {
       throw new Error('Can`t find user statistics');
@@ -415,8 +381,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (!response.ok) {
       throw new Error('Can`t create user settings, network problems');
@@ -442,8 +406,6 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-
-      throw new Error('Access token is missing or invalid, try relogin');
     }
     if (response.status === 404) {
       throw new Error('Can`t find user settings');

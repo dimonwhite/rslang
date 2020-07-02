@@ -1,54 +1,8 @@
+import { defaultStatistics, defaultSettings } from '@/constants';
+
 export default class AuthorizationModel {
   constructor(http) {
-    this.user = http;
-    this.defaultStatistics = {
-      learnedWords: 0,
-      optional: {
-        savannah: {},
-        audiocall: {},
-        sprint: {},
-        speakit: {},
-        puzzle: {},
-        own: {},
-        statisticsChart: {},
-      },
-    };
-    this.defaultSettings = {
-      wordsPerDay: 1,
-      optional: {
-        lastDate: '2062020',
-        todayTraining: '0,0,0,0,0,0,0,false,false',
-        settings: {
-          lang: 'EN',
-          langEn: true,
-          langRu: false,
-          difficultWord: true,
-          exampleWord: true,
-          imgWord: true,
-          interval: true,
-          listAlternately: false,
-          listNew: true,
-          listRepeat: false,
-          maxWords: '10',
-          newWords: '10',
-          meaningWord: true,
-          numberLetters: true,
-          removeWord: true,
-          showAnswer: true,
-          sound: false,
-          transcription: true,
-          translate: true,
-        },
-        dictSettings: {
-          dictExample: true,
-          dictMeaning: true,
-          dictTranscr: true,
-          dictSound: true,
-          dictImg: true,
-          dictProgress: true,
-        },
-      },
-    };
+    this.http = http;
   }
 
   async checkAuthorized() {
@@ -56,7 +10,7 @@ export default class AuthorizationModel {
       return false;
     }
 
-    const request = await this.user.getUser()
+    const request = await this.http.getUser()
       .then(() => true)
       .catch(() => false);
 
@@ -64,46 +18,46 @@ export default class AuthorizationModel {
   }
 
   async signUp(data) {
-    const request = await this.user.createNewUser(data)
+    const request = await this.http.createNewUser(data)
       .then((res) => res)
-      .catch((res) => {
-        this.error = res;
+      .catch((error) => {
+        this.error = error;
       });
 
     return request;
   }
 
   async signIn(data) {
-    const request = await this.user.loginUser(data)
+    const request = await this.http.loginUser(data)
       .then((res) => res)
-      .catch((res) => {
-        this.error = res;
+      .catch((error) => {
+        this.error = error;
       });
 
     return request;
   }
 
   async createStatistic() {
-    const request = await this.user.createUserStatistics(this.defaultStatistics)
+    const request = await this.http.createUserStatistics(defaultStatistics)
       .then((res) => res)
-      .catch((res) => {
-        this.error = res;
+      .catch((error) => {
+        this.error = error;
       });
 
     return request;
   }
 
   async createSettings() {
-    const request = await this.user.createUserSettings(this.defaultSettings)
+    const request = await this.http.createUserSettings(defaultSettings)
       .then((res) => res)
-      .catch((res) => {
-        this.error = res;
+      .catch((error) => {
+        this.error = error;
       });
 
     return request;
   }
 
   removeLocalUser() {
-    this.user.removeLocalUser();
+    this.http.removeLocalUser();
   }
 }

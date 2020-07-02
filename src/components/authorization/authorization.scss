@@ -8,27 +8,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 30px;
 
   width: 400px;
-  // height: 400px;
-  z-index: 11;
+  padding: 30px;
 
   border-radius: 80px;
   background: #7F1B91;
+  z-index: 11;
 
-  .close-icon {
+  .svg_icon {
       position: absolute;
       top: 30px;
       right: 50px;
 
+      width: 36px;
+      height: 36px;
+
+      fill: #A586FF;
+      opacity: .5;
+      transition: .3s;
       cursor: pointer;
 
-      &__path {
-          opacity: .5;
-          transition: .3s;
-      }
-      &__path:hover {
+      &:hover {
           opacity: 1;
       }
   }
