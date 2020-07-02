@@ -71,7 +71,9 @@ export default class SavannahController {
   }
 
   startNextRound() {
-    this.view.startNextRound(this.model.gameWords, this.attempt, this.model.words);
+    this.view.startNextRound({
+      gameWords: this.model.gameWords, attempt: this.attempt, words: this.model.words,
+    });
     const countHeart = this.maxHeart - this.heart;
     if (this.view.top.classList.length > 0) {
       this.view.top.addEventListener('animationend', () => {
@@ -92,20 +94,21 @@ export default class SavannahController {
   }
 
   getAnswer({ target }) {
-    if (target.tagName === 'BUTTON' && target.classList.length < 2) {
+    const TARGET_WAS_ALREADY_SELECTED = 2;
+    if (target.tagName === 'BUTTON' && target.classList.length < TARGET_WAS_ALREADY_SELECTED) {
       this.answer = true;
-      if (target.dataset.answer === 'true') {
+      if (target.dataset.answer === 'correct') {
         this.view.setAnswer('correct', target);
         this.getAudio('correctly');
         this.correctly += 1;
         const delta = (this.correctly / this.count);
-        this.view.getCorrectlyAnswer(target, delta);
+        this.view.getCorrectlyAnswer(delta);
         this.model.words[this.attempt].success = true;
       } else {
         this.view.setAnswer('mistake', target);
         this.getAudio('mistake');
         const countHeart = this.maxHeart - this.heart;
-        this.view.getIncorrectlyAnswer(target, countHeart);
+        this.view.getIncorrectlyAnswer(countHeart);
         this.model.words[this.attempt].success = false;
         this.heart -= 1;
         // this.changeWordStatistics();
@@ -126,17 +129,7 @@ export default class SavannahController {
 
   checkEndGame() {
     if (this.correctly === this.count || this.heart === 0) {
-      if (this.heart === 0) {
-        this.getAudio('game-over');
-      } else {
-        this.getAudio('win');
-      }
-      if (this.view.top) this.view.top.remove();
-      if (this.view.bottom) this.view.bottom.remove();
-      setTimeout(() => {
-        this.view.endGame();
-        this.callResult(this.model.words.slice(0, this.attempt));
-      }, 4000);
+      this.endGame();
     } else {
       this.view.bottom.remove();
       this.view.top.remove();
@@ -144,9 +137,24 @@ export default class SavannahController {
     }
   }
 
+  endGame() {
+    if (this.heart === 0) {
+      this.getAudio('game-over');
+    } else {
+      this.getAudio('win');
+    }
+    if (this.view.top) this.view.top.remove();
+    if (this.view.bottom) this.view.bottom.remove();
+    const DELAY_ENDING = 4000;
+    setTimeout(() => {
+      this.view.endGame();
+      this.callResult(this.model.words.slice(0, this.attempt));
+    }, DELAY_ENDING);
+  }
+
   cancel() {
     this.sound = false;
-    document.getElementById('main').className = 'main';
+    this.view.cancel();
     document.getElementById('navPage').click();
   }
 

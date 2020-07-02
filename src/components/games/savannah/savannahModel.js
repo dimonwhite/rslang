@@ -73,14 +73,14 @@ export default class SavannahModel {
       contents.forEach((content, index) => {
         const find = content.find((item) => item.text === this.words[index].word);
         const part = find.meanings[0].partOfSpeechCode;
-        this.gameWords[index] = this.randWords(index, part, partsOfSpeech);
+        this.gameWords[index] = this.randWords({ index, part, partsOfSpeech });
       });
     } catch (error) {
       this.error = error.message;
     }
   }
 
-  randWords(index, part, partsOfSpeech) {
+  randWords({ index, part, partsOfSpeech }) {
     let choiceWords;
     if (this.lang === 'EN') {
       if (partsOfSpeech.includes(part)) {

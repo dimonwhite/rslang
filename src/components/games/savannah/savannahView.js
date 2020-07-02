@@ -10,13 +10,13 @@ export default class SavannahView {
   }
 
   renderHTML() {
-    const main = document.getElementById('main');
+    this.main = document.getElementById('main');
     document.getElementById('gameOptions').classList.add('show');
     document.getElementById('closePopup').innerHTML = 'Close Game';
     this.createGameOptions();
     this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });
     this.savannah.append(this.createGame());
-    main.append(this.savannah);
+    this.main.append(this.savannah);
     this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
   }
 
@@ -120,7 +120,7 @@ export default class SavannahView {
     this.field.classList.add('show-flex');
   }
 
-  startNextRound(gameWords, attempt, words) {
+  startNextRound({ gameWords, attempt, words }) {
     if (this.top) this.top.remove();
     if (this.bottom) this.bottom.remove();
 
@@ -131,9 +131,9 @@ export default class SavannahView {
       item.innerHTML = `${index + 1}. ${word}`;
       item.className = 'savannah__game-answer';
       if (this.randIndexes[index] === 0) {
-        item.setAttribute('data-answer', 'true');
+        item.setAttribute('data-answer', 'correct');
       } else {
-        item.setAttribute('data-answer', 'false');
+        item.setAttribute('data-answer', 'incorr');
       }
     });
 
@@ -195,8 +195,7 @@ export default class SavannahView {
     }
   }
 
-  getCorrectlyAnswer(target, delta) {
-    // target.classList.add('savannah__correct');
+  getCorrectlyAnswer(delta) {
     if (this.top.classList.length > 1) {
       this.top.innerHTML = '';
       const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
@@ -224,8 +223,7 @@ export default class SavannahView {
     }, 2000);
   }
 
-  getIncorrectlyAnswer(target, countHeart) {
-    // target.classList.add('savannah__incorrect');
+  getIncorrectlyAnswer(countHeart) {
     if (this.top.classList.length > 1) {
       this.top.innerHTML = '';
       const matrix = window.getComputedStyle(this.top).getPropertyValue('transform');
@@ -254,6 +252,10 @@ export default class SavannahView {
     this.savannah.classList.remove('show');
   }
 
+  cancel() {
+    this.main.className = 'main';
+  }
+
   setAnswer(result, target) {
     if (result === 'correct') {
       Array.from(this.options.children).forEach((item) => {
@@ -262,17 +264,17 @@ export default class SavannahView {
       target.classList.add('answer-correct');
     } else if (result === 'mistake') {
       Array.from(this.options.children).forEach((item) => {
-        if (target !== item && item.dataset.answer !== 'true') {
+        if (target !== item && item.dataset.answer === 'incorr') {
           item.classList.add('answer-dark');
         }
-        if (item.dataset.answer === 'true') {
+        if (item.dataset.answer === 'correct') {
           item.classList.add('answer-auto');
         }
       });
       target.classList.add('answer-incorrect');
     } else {
       Array.from(this.options.children).forEach((item) => {
-        if (item.dataset.answer === 'true') {
+        if (item.dataset.answer === 'correct') {
           item.classList.add('answer-auto');
         } else {
           item.classList.add('answer-dark');
