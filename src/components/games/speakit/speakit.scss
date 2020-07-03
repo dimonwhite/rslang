@@ -86,7 +86,7 @@ $red: #BF123D;
       order: 2;
       width: 100%;
       margin-top: auto;
-      padding: 0.8rem 0 2.5rem;
+      padding: 1.2rem 0 2.5rem;
     }
     &__select {
       position: absolute;
@@ -225,6 +225,29 @@ $red: #BF123D;
     &::-webkit-scrollbar-thumb {
       background-color: darkgrey;
       border-radius: 6px;
+    }
+  }
+  .choices {
+    &__inner {
+      background-color: #BF123D;
+      border-color: #ff638a;
+    }
+    &__list {
+      &--single {
+        padding: 0;
+      }
+      &--dropdown {
+        border-color: #ff638a;
+        .choices__item {
+          &--choice {
+            background-color: #E51747;
+            border-bottom-color: #ff638a;
+            &.choices__item--selectable.is-highlighted {
+              background-color: #BF123D;
+            }
+          }
+        }
+      }
     }
   }
 }

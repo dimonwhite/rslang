@@ -14,7 +14,6 @@ export default class SpeakitView {
     this.createElements();
     this.appendElements();
     this.main.append(this.game);
-    console.log('.game__select-options');
     // eslint-disable-next-line no-new
     new Choices('.game__select-options', {
       searchEnabled: false,
@@ -45,7 +44,7 @@ export default class SpeakitView {
     this.scoreBlock = createElement({ tag: 'div', class: 'score' });
     this.topBlock = createElement({ tag: 'div', class: 'topBlock' });
     this.close = createElement({ tag: 'a', class: 'close', content: getSvg('close') });
-    this.close.setAttribute('href', '#/');
+    this.close.setAttribute('href', '#/games/');
   }
 
   appendElements() {
