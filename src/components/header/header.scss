@@ -67,12 +67,17 @@
   }
   &__user {
     margin-left: auto;
+
     &-login {
-      width: 4rem;
-      height: 4rem;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      color: #F1BC19;
+      font-size: 1.2rem;
+
       .svg_icon {
-        width: 100%;
-        height: 100%;
+        width: 4rem;
+        height: 4rem;
       }
     }
   }

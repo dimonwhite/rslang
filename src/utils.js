@@ -56,6 +56,12 @@ function getDiffFormatDate(date) {
   return `${obj.days} ${declOfNum(obj.days, ['день', 'дня', 'дней'])}`;
 }
 
+const getSvg = (id) => `
+  <svg class="svg_icon">
+    <use xlink:href="sprite.svg#${id}"></use>
+  </svg>
+`;
+
 export {
   createElement,
   createElementAttr,
@@ -63,4 +69,5 @@ export {
   declOfNum,
   getDiffTime,
   getDiffFormatDate,
+  getSvg,
 };
