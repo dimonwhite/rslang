@@ -2,10 +2,10 @@ import SpeakitView from './speakitView';
 import SpeakitModel from './speakitModel';
 
 export default class SpeakitController {
-  constructor(user, openPopupResult) {
+  constructor(http, openPopupResult) {
     this.openPopupResult = openPopupResult;
     this.view = new SpeakitView();
-    this.model = new SpeakitModel(user);
+    this.model = new SpeakitModel(http);
     this.level = 0;
   }
 
@@ -46,10 +46,11 @@ export default class SpeakitController {
   }
 
   changeNumberPage() {
-    this.model.page = this.model.page === 29 ? 0 : this.model.page + 1;
+    this.model.page = Math.round(Math.random() * 29);
   }
 
   change() {
+    this.model.level = this.level;
     this.stop();
     this.changeNumberPage();
     this.createWords();

@@ -44,7 +44,7 @@ export default class SpeakitView {
     this.scoreBlock = createElement({ tag: 'div', class: 'score' });
     this.topBlock = createElement({ tag: 'div', class: 'topBlock' });
     this.close = createElement({ tag: 'a', class: 'close', content: getSvg('close') });
-    this.close.setAttribute('href', '#/games/');
+    this.close.setAttribute('href', '#/games');
   }
 
   appendElements() {
@@ -73,7 +73,7 @@ export default class SpeakitView {
 
   editInfo(word) {
     const image = `${urlGitHub}${word.image.replace('files/', '')}`;
-    this.translation.textContent = word.translation;
+    this.translation.textContent = word.translation || word.wordTranslate;
     this.img.src = image;
   }
 

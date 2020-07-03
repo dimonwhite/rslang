@@ -2,16 +2,21 @@ import dataWords from '@/data/mock_StudyWords';
 import { randomArray } from '@/utils';
 
 export default class SpeakitModel {
-  constructor(user) {
-    this.user = user;
+  constructor(http) {
+    this.http = http;
     this.game = false;
     this.score = 0;
-    this.page = 0;
+    this.page = Math.round(Math.random() * 29);
     this.dataWords = dataWords;
     this.countWords = 10;
+    this.level = 0;
   }
 
-  getWords() {
+  async getWords() {
+    this.dataWords = await this.http.getWords({
+      group: this.level, page: this.page, maxLength: 0, wordsPerPage: 0,
+    });
+    console.log(this.dataWords);
     randomArray(this.dataWords);
     let arrWords = [...this.dataWords];
     arrWords = arrWords.slice(0, this.countWords);
