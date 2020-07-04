@@ -9,7 +9,8 @@ import SprintController from './sprint/sprintController';
 import GamesPageController from './gamesPage/GamesPageController';
 
 export default class Games {
-  constructor() {
+  constructor(http) {
+    this.http = http;
     this.games = {
       savannah: SavannahController,
       puzzle: PuzzleController,

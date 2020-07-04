@@ -1,13 +1,11 @@
 import SprintView from './sprintView';
 import SprintModel from './sprintModel';
-import HttpClient from '../../httpclient/HttpClient';
 
 export default class SprintController {
-  constructor(user, openPopupResult) {
-    this.user = new HttpClient();
+  constructor(http, openPopupResult) {
     this.openPopupResult = openPopupResult;
     this.view = new SprintView();
-    this.model = new SprintModel(this.user);
+    this.model = new SprintModel(http);
     this.startDelay = true;
     this.level = 0;
     this.time = 0;
@@ -26,10 +24,7 @@ export default class SprintController {
 
   init() {
     this.makerArray();
-
     this.view.renderHTML();
-    // this.model.getWords();
-    //  this.model.getHTTpWords('2');
     this.view.btnChoiceTrue.addEventListener('click', () => {
       this.checkBtnTrue();
     });
@@ -54,8 +49,6 @@ export default class SprintController {
   async makerArray() {
     this.trueArray = await this.model.getWords(this.hard, this.wordCount);
     this.makeWordField();
-    console.log(this.trueArray);
-    console.log(this.falseArray);
   }
 
   makeWordField() {

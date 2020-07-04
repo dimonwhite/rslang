@@ -2,8 +2,8 @@ import dataWords from '@/data/mock_StudyWords';
 import { randomArray } from '@/utils';
 
 export default class SprintModel {
-  constructor(user) {
-    this.user = user;
+  constructor(http) {
+    this.http = http;
     this.game = false;
     this.score = 0;
     this.page = 0;
@@ -22,25 +22,13 @@ export default class SprintModel {
     this.allStudyWords = [];
   }
 
-  // eslint-disable-next-line consistent-return
   async getWords(group, count) {
-    /*
-    let arrWords = randomArray([...this.dataWords]);
-    arrWords = arrWords.slice(0, this.countWords);
-    return arrWords;
-
-*/
-    // let arrWords;
     const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=2&wordsPerExampleSentenceLTE=10&wordsPerPage=${count}`);
     const data = await response.json();
     data.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
     });
-    console.log(this.user);
-    console.log(randomArray(this.gameFalseWords));
-    console.log(data);
-    console.log(this.gameWords);
     return data;
   }
 
@@ -94,22 +82,4 @@ export default class SprintModel {
     }
     await this.getPartsOfSpeech();
   }
-
-  /*
-  async  getPartsOfSpeech() {
-    const response = await fetch('https://afternoon-falls-25894.herokuapp.com/words?group=0&page=2&wordsPerExampleSentenceLTE=5');
-    const data = await response.json();
-    return data;
-  }
-*/
-/*
-  async geWords() {
-    this.gameWords = await fetch('https://afternoon-falls-25894.herokuapp.com/words?group=0&page=2&wordsPerExampleSentenceLTE=10&wordsPerPage=100');
-    const data = await this.gameWords.json();
-    console.log(data);
-    let arrWords = randomArray([...this.data]);
-    arrWords = arrWords.slice(0, this.countWords);
-    return arrWords;
-  }
-  */
 }

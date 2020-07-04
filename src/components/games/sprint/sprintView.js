@@ -10,6 +10,7 @@ export default class SprintView {
     this.createElements();
     this.appendElements();
     this.main.append(this.game);
+    this.createLevels();
     this.findOptions();
   }
 
@@ -33,6 +34,8 @@ export default class SprintView {
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.timer = createElement({ tag: 'p', class: 'game__sprint__time', content: '1 : 00' });
     this.bonus = createElement({ tag: 'div', class: 'current__Bonus__item', content: '*' });
+    this.span = createElement({ tag: 'span', class: 'radio__decor' });
+    this.input = createElement({ tag: 'input', class: 'radio__input' });
   }
 
   appendElements() {
@@ -44,6 +47,36 @@ export default class SprintView {
     );
   }
 
+  createHardLevel(i) {
+    this.input.value = i;
+    this.input.type = 'radio';
+    this.input.name = 'group';
+    if (i === 0) this.input.checked = 'checked';
+    this.radio.append(this.input);
+    this.radio.append(this.span);
+    return this.radio;
+  }
+
+  createLevels() {
+    const wrap = createElement({ tag: 'div', class: 'levels', id: 'levels' });
+    const levelsParent = createElement({ tag: 'div', class: 'levels__wrap' });
+    wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Levels' }));
+    wrap.append(levelsParent);
+    for (let i = 0; i < this.countLevels; i += 1) {
+      levelsParent.append(this.createRadioLevel(5));
+    }
+    wrap.addEventListener('change', (e) => {
+      this.game.level = +e.target.value;
+      this.game.change();
+    });
+    return wrap;
+  }
+
+  findOptions() {
+    const start = document.querySelector('.game__startScreen');
+    start.append(this.createLevels());
+  }
+
   getPreloader() {
     this.preloader.append(this.loadCounter, this.loader);
     this.game.append(this.preloader);
@@ -52,13 +85,6 @@ export default class SprintView {
         this.preloader.classList.add('hide__loader');
       }
     }, 6000);
-  }
-
-  findOptions() {
-    const start = document.querySelector('.game__startScreen');
-    const levels = document.querySelector('.levels');
-    start.append(levels);
-    return this.start;
   }
 
   restartLoader() {
