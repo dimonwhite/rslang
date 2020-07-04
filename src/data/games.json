@@ -36,7 +36,7 @@
     "title": "SPRINT",
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
-    "gameClass": "speakIt",
+    "gameClass": "sprint",
     "settings": {
       "countWords": false,
       "countWordsParams": {
@@ -44,7 +44,7 @@
         "step": 5,
         "options": 3
       },
-      "levels": false
+      "levels": true
     }
   }
 }

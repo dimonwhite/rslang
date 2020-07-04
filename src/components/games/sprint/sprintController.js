@@ -1,11 +1,13 @@
 import SprintView from './sprintView';
 import SprintModel from './sprintModel';
+import HttpClient from '../../httpclient/HttpClient';
 
 export default class SprintController {
   constructor(user, openPopupResult) {
+    this.user = new HttpClient();
     this.openPopupResult = openPopupResult;
     this.view = new SprintView();
-    this.model = new SprintModel(user);
+    this.model = new SprintModel(this.user);
     this.startDelay = true;
     this.level = 0;
     this.time = 0;
@@ -15,13 +17,19 @@ export default class SprintController {
     this.LoadTime = 5;
     this.bonusCount = 0;
     this.countWords = 0;
+    this.trueArray = [];
+    this.falseArray = [];
+    this.wordCount = 30;
+    this.hard = 0;
+    this.options = 1;
   }
 
   init() {
-    this.view.renderHTML();
-    this.makeWordField();
+    this.makerArray();
 
-    // this.createWords();
+    this.view.renderHTML();
+    // this.model.getWords();
+    //  this.model.getHTTpWords('2');
     this.view.btnChoiceTrue.addEventListener('click', () => {
       this.checkBtnTrue();
     });
@@ -31,55 +39,41 @@ export default class SprintController {
     });
 
     document.addEventListener('keydown', (event) => {
-      // eslint-disable-next-line eqeqeq
-      if (event.code == 'ArrowLeft') {
+      if (event.code === 'ArrowLeft') {
         this.checkBtnTrue();
       }
     });
 
     document.addEventListener('keydown', (event) => {
-      // eslint-disable-next-line eqeqeq
-      if (event.code == 'ArrowRight') {
+      if (event.code === 'ArrowRight') {
         this.checkBtnFalse();
       }
     });
+  }
 
-    /*
-    this.view.wordList.addEventListener('click', (e) => {
-      this.clickWordList(e);
-    });
-
-    this.view.startBtn.addEventListener('click', () => {
-      this.clickStart();
-    });
-    this.view.newGame.addEventListener('click', () => {
-      this.stop();
-      this.change();
-    });
-
-    this.createRecognition();
-    */
+  async makerArray() {
+    this.trueArray = await this.model.getWords(this.hard, this.wordCount);
+    this.makeWordField();
+    console.log(this.trueArray);
+    console.log(this.falseArray);
   }
 
   makeWordField() {
-    const trueArray = this.model.getWords();
-    const falseArray = this.model.getFalseWords();
     const rand = Math.floor(Math.random() * 2);
     if (rand) {
-      this.view.getTrueCouple(trueArray[this.time], trueArray[this.time]);
+      this.view.getTrueCouple(this.trueArray[this.time], this.trueArray[this.time]);
       this.isCorrect = true;
       this.time += 1;
     } else {
-      this.view.getFalseCouple(trueArray[this.time], falseArray[this.time]);
+      this.view.getFalseCouple(this.trueArray[this.time], this.model.gameFalseWords[this.time]);
       this.isCorrect = false;
       this.time += 1;
     }
   }
 
   checkBtnTrue() {
-    const obj = this.model.getWords();
     if (this.isCorrect) {
-      obj[this.time].success = true;
+      this.trueArray[this.time].success = true;
       this.score += 10;
       this.countWords += 1;
       this.view.getScore(this.score);
@@ -89,17 +83,16 @@ export default class SprintController {
       this.makeWordField();
     } else {
       this.bonusCount = 0;
-      obj[this.time].success = false;
+      this.trueArray[this.time - 1].success = false;
       this.view.clearBonus();
-      this.makeWordField();
       this.bonusScore(this.bonusCount);
+      this.makeWordField();
     }
   }
 
   checkBtnFalse() {
-    const obj = this.model.getWords();
     if (!this.isCorrect) {
-      obj[this.time].success = true;
+      this.trueArray[this.time].success = true;
       this.countWords += 1;
       this.bonusCount += 1;
       this.score += 10;
@@ -108,7 +101,7 @@ export default class SprintController {
       this.view.getBonus();
       this.makeWordField();
     } else {
-      obj[this.time].success = false;
+      this.trueArray[this.time].success = false;
       this.bonusCount = 0;
       this.view.clearBonus();
       this.bonusScore(this.bonusCount);
@@ -130,7 +123,9 @@ export default class SprintController {
       this.minutes -= 1;
       if (this.minutes === -1) {
         clearInterval(roundTime);
-        // this.openPopupResult(this.model.getWords());
+        this.minutes = 59;
+        this.view.getTime('1', '00');
+        this.openPopupResult(this.trueArray);
       }
     }, 1000);
   }
@@ -142,6 +137,7 @@ export default class SprintController {
       if (this.LoadTime === -1) {
         this.getRealtimer();
         clearInterval(LoadTime);
+        this.LoadTime = 5;
       }
     }, 1000);
   }
@@ -186,14 +182,16 @@ export default class SprintController {
     this.dropScore();
     this.view.stop();
     this.model.stop();
-    this.recognition.stop();
   }
 
-  start() {
-    this.dropScore();
-    this.view.start();
-    this.model.game = true;
-    this.recognition.start();
+  change() {
+    this.view.dropScore();
+    this.view.clearBonus();
+    this.makeWordField();
+    this.view.getLoaderTime(5);
+    this.view.restartLoader();
+    this.view.getPreloader();
+    this.getLoadTimer();
   }
 
   successCard() {
@@ -208,7 +206,7 @@ export default class SprintController {
   win() {
     this.dropScore();
     this.stop();
-    this.openPopupResult(this.words);
+    this.openPopupResult(this.trueArray);
   }
 
   changeCountWords(count) {

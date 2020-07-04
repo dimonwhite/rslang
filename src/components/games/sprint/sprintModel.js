@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import dataWords from '@/data/mock_StudyWords';
 import { randomArray } from '@/utils';
 
@@ -12,50 +11,49 @@ export default class SprintModel {
     this.dataWords = dataWords;
     this.countWords = 24;
     this.isCorrect = true;
+    this.words = [];
+    this.gameWords = [];
+    this.gameFalseWords = [];
+    this.maxHeart = 5;
+    this.countWords = 10;
+    this.level = 0;
+    this.page = 1;
+    this.lang = 'EN';
+    this.allStudyWords = [];
   }
 
-  getWords() {
-    let arrWords = [...this.dataWords];
+  // eslint-disable-next-line consistent-return
+  async getWords(group, count) {
+    /*
+    let arrWords = randomArray([...this.dataWords]);
     arrWords = arrWords.slice(0, this.countWords);
     return arrWords;
+
+*/
+    // let arrWords;
+    const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=2&wordsPerExampleSentenceLTE=10&wordsPerPage=${count}`);
+    const data = await response.json();
+    data.forEach((e) => {
+      this.gameWords.push(e);
+      this.gameFalseWords.push(e.wordTranslate);
+    });
+    console.log(this.user);
+    console.log(randomArray(this.gameFalseWords));
+    console.log(data);
+    console.log(this.gameWords);
+    return data;
   }
 
   getWord(id) {
     return this.dataWords[id];
   }
-  /*
-  makeRandomWord() {
-    const shuffleWords = [...this.dataWords];
-    // eslint-disable-next-line no-unused-vars
-    const rand = Math.floor(Math.random() * 2);
-    const arr = this.getFalseWords();
-
-    console.log(rand);
-    if (rand === 1) {
-      this.index += 1;
-      console.log(this.index);
-      console.log(shuffleWords[this.index].word);
-      console.log(shuffleWords[this.index].translation);
-      this.index += 1;
-      isCorrect = true;
-    } else {
-      console.log(dataWords[this.index].word);
-      console.log(arr[this.index]);
-      isCorrect = false;
-      this.index += 1;
-    }
-  }
-  */
 
   getFalseWords() {
     const falseWords = [...this.dataWords];
     const falseArray = [];
-    // console.log(falseWords);
-
     falseWords.forEach((e) => {
-      falseArray.push(e.translation);
+      falseArray.push(e.wordTranslate);
     });
-    // console.log(falseWords);
     const randomFalseArray = randomArray(falseArray);
 
     return randomFalseArray;
@@ -87,4 +85,31 @@ export default class SprintModel {
     });
     return success;
   }
+
+  async getNewWords() {
+    if (this.lang === 'EN') {
+      this.words.forEach((item) => this.gameWords.push([item.wordTranslate]));
+    } else {
+      this.words.forEach((item) => this.gameWords.push([item.word]));
+    }
+    await this.getPartsOfSpeech();
+  }
+
+  /*
+  async  getPartsOfSpeech() {
+    const response = await fetch('https://afternoon-falls-25894.herokuapp.com/words?group=0&page=2&wordsPerExampleSentenceLTE=5');
+    const data = await response.json();
+    return data;
+  }
+*/
+/*
+  async geWords() {
+    this.gameWords = await fetch('https://afternoon-falls-25894.herokuapp.com/words?group=0&page=2&wordsPerExampleSentenceLTE=10&wordsPerPage=100');
+    const data = await this.gameWords.json();
+    console.log(data);
+    let arrWords = randomArray([...this.data]);
+    arrWords = arrWords.slice(0, this.countWords);
+    return arrWords;
+  }
+  */
 }

@@ -265,11 +265,14 @@
     opacity: 1;
   }
   &__wrap {
+
     width: 800px;
     max-width: 100%;
     padding: 40px;
     border-radius: 10px;
     background-color: #fff;
+    overflow-x: auto;
+    max-height: 90%;
   }
   &__btns {
     display: flex;

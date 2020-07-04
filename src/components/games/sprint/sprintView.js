@@ -1,7 +1,3 @@
-import emptyImg from '@/assets/img/blank.jpg';
-
-import SprintCard from '@/components/games/sprint/SprintCouple';
-
 import { urlGitHub } from '@/constants';
 import { createElement } from '../../../utils';
 
@@ -13,9 +9,8 @@ export default class SprintView {
   renderHTML() {
     this.createElements();
     this.appendElements();
-
     this.main.append(this.game);
-    // this.getPreloader();
+    this.findOptions();
   }
 
   createElements() {
@@ -36,7 +31,6 @@ export default class SprintView {
     this.scoreBlock = createElement({ tag: 'div', class: 'game__sprint__score', content: 'Score: 0' });
     this.currentBonus = createElement({ tag: 'div', class: 'game__sprint__bonus__star', id: 'current_Bonus' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
-    this.timer = createElement({ tag: 'div', class: 'timer' });
     this.timer = createElement({ tag: 'p', class: 'game__sprint__time', content: '1 : 00' });
     this.bonus = createElement({ tag: 'div', class: 'current__Bonus__item', content: '*' });
   }
@@ -60,16 +54,22 @@ export default class SprintView {
     }, 6000);
   }
 
-  createWords(words) {
-    words.forEach((item, key) => {
-      const card = new SprintCard(item, key);
-      this.wordList.append(card.create());
-    });
+  findOptions() {
+    const start = document.querySelector('.game__startScreen');
+    const levels = document.querySelector('.levels');
+    start.append(levels);
+    return this.start;
+  }
+
+  restartLoader() {
+    if (this.preloader.classList.contains('hide__loader')) {
+      this.preloader.classList.remove('hide__loader');
+    }
   }
 
   getTrueCouple(trueword, truetranslate) {
     this.currentWord.textContent = `${trueword.word}`;
-    this.currentTranslation.textContent = `${truetranslate.translation}`;
+    this.currentTranslation.textContent = `${truetranslate.wordTranslate}`;
   }
 
   getFalseCouple(trueword, falsetranslate) {
@@ -106,18 +106,10 @@ export default class SprintView {
   }
 
   dropScore() {
-    this.img.src = emptyImg;
-    this.translation.textContent = '';
-    this.gameWord.textContent = '';
-    this.wordList.querySelectorAll('.wordList__item.active').forEach((item) => {
-      item.classList.remove('active');
-    });
-    this.scoreBlock.innerHTML = '';
+    this.scoreBlock.innerHTML = 'Score: 0';
   }
 
   stop() {
-    this.startBtn.classList.remove('active');
-    this.startBtn.innerText = 'Start';
     this.game.classList.remove('active');
   }
 
