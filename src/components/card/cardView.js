@@ -168,17 +168,17 @@ export default class CardView {
       document.getElementById('maxWords').value = '3';
       this.settings.maxWords = '3';
     }
-    if (+this.settings.maxWords > 200) {
-      document.getElementById('maxWords').value = '200';
-      this.settings.maxWords = '200';
+    if (+this.settings.maxWords > 300) {
+      document.getElementById('maxWords').value = '300';
+      this.settings.maxWords = '300';
     }
     if (+this.settings.newWords < 0) {
       document.getElementById('newWords').value = '0';
       this.settings.newWords = '0';
     }
-    if (+this.settings.newWords > 200) {
-      document.getElementById('newWords').value = '0';
-      this.settings.newWords = '200';
+    if (+this.settings.newWords > 100) {
+      document.getElementById('newWords').value = '100';
+      this.settings.newWords = '100';
     }
     if (newW && maxW && (newW !== this.settings.newWords || maxW !== this.settings.maxWords)) {
       return true;
