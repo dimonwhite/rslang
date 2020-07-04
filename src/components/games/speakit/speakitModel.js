@@ -16,7 +16,6 @@ export default class SpeakitModel {
     this.dataWords = await this.http.getWords({
       group: this.level, page: this.page, maxLength: 0, wordsPerPage: 0,
     });
-    console.log(this.dataWords);
     randomArray(this.dataWords);
     let arrWords = [...this.dataWords];
     arrWords = arrWords.slice(0, this.countWords);

@@ -59,9 +59,9 @@ export default class SpeakitController {
   }
 
   createWords() {
-    this.view.clearWordList();
     this.model.getWords()
       .then((data) => {
+        this.view.clearWordList();
         this.words = data;
         this.view.createWords(this.words);
       });

@@ -4,10 +4,13 @@ $red: #BF123D;
 
 .speakIt {
   position: relative;
-  padding: 0 60px;
+  padding: 0 3rem;
 
   display: flex;
   flex-direction: column;
+  @include media(1024px) {
+    padding: 0 1.5rem;
+  }
   .btn {
     background-color: $red;
     border: 0;
@@ -87,6 +90,38 @@ $red: #BF123D;
       width: 100%;
       margin-top: auto;
       padding: 1.2rem 0 2.5rem;
+      &:before {
+        @include media(1024px) {
+          content: '';
+          order: 1;
+
+          width: 25%;
+          margin-left: auto;
+        }
+        @include media(850px) {
+          width: 10%;
+        }
+        @include media(768px) {
+          content: none;
+        }
+      }
+      @include media(1024px) {
+        flex-wrap: wrap;
+        justify-content: center;
+        .game__select {
+          position: static;
+          order: 2;
+
+          margin-left: auto;
+
+          transform: none;
+        }
+        .btn {
+          order: 2;
+
+          margin-top: 1rem;
+        }
+      }
     }
     &__select {
       position: absolute;
@@ -171,7 +206,10 @@ $red: #BF123D;
     align-items: center;
     flex-wrap: wrap;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
+    @include media(1400px) {
+      justify-content: center;
+    }
     &__item {
       display: flex;
       align-items: center;
@@ -183,6 +221,22 @@ $red: #BF123D;
       border: 0.2rem solid #6842C2;
       cursor: pointer;
       transition: 0.5s;
+      @include media(1400px) {
+        width: 23.5%;
+        margin-right: 2%;
+        &:nth-child(4n), &:last-child {
+          margin-right: 0;
+        }
+      }
+      @include media(1024px) {
+        width: 32%;
+        &:nth-child(4n) {
+          margin-right: 2%;
+        }
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
       &:hover {
         background-color: darken(#6842C2, 10);
       }
@@ -197,20 +251,20 @@ $red: #BF123D;
       .svg_icon {
         width: 2rem;
         height: 2rem;
-        margin-right: 20px;
+        margin-right: 1rem;
         margin-left: 1.5rem;
       }
       &-text {
-        width: calc(100% - 50px);
+        width: calc(100% - 2.5rem);
         text-align: center;
       }
       &-title {
-        font-size: 22px;
+        font-size: 1.1rem;
         font-weight: 500;
         color: #F1BC19;
       }
       &-transcription {
-        font-size: 20px;
+        font-size: 1rem;
         font-weight: 400;
         color: #FBDA85;
       }
@@ -220,11 +274,11 @@ $red: #BF123D;
     max-height: 90%;
     overflow-y: auto;
     &::-webkit-scrollbar {
-      width: 6px;
+      width: 0.3rem;
     }
     &::-webkit-scrollbar-thumb {
       background-color: darkgrey;
-      border-radius: 6px;
+      border-radius: 0.3rem;
     }
   }
   .choices {
