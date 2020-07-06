@@ -277,7 +277,11 @@ progress[value]::-webkit-progress-value {
 }
 
 .hide-text {
-    font-size: 0!important;
+    font-size: 0 !important;
 }
 
+.lock-btn {
+    background-color: rgb(190, 190, 190) !important;
+    outline: 2px solid rgb(190, 190, 190) !important;
+}
 /*----------------END TOGGLE CLASSES-----------------*/

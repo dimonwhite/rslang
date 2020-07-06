@@ -7,15 +7,17 @@ export default class CardView {
     this.card = document.getElementById('main');
     this.currentMistake = false;
     this.next = false;
-    this.settings = localStorage.getItem('settings');
+    this.settings = null; // = localStorage.getItem('settings');
   }
 
   renderHTML() {
-    if (this.settings) {
-      this.setSettings();
-    } else {
-      this.getSettings();
-    }
+    document.body.className = 'body show-main';
+    this.setSettings();
+    // if (this.settings) {
+    //   this.setSettings();
+    // } else {
+    //   this.getSettings();
+    // }
     this.card.append(this.createCard());
     this.card.append(this.endTraining());
   }
@@ -43,11 +45,11 @@ export default class CardView {
     wrapTranslation.append(spanTranscription);
 
     const answer = createElement({ tag: 'div', class: 'card__answer' });
-    const removeBtn = createElement({ tag: 'button', id: 'cardRemove', content: 'Remove' });
+    this.cardRemove = createElement({ tag: 'button', id: 'cardRemove', content: 'Remove' });
     this.cardDiff = createElement({ tag: 'button', id: 'cardDifficult', content: 'Difficult' });
     this.cardDiff.classList.add('lock-element');
     const showBtn = createElement({ tag: 'button', id: 'cardShow', content: 'Show the answer' });
-    answer.append(removeBtn);
+    answer.append(this.cardRemove);
     answer.append(this.cardDiff);
     answer.append(showBtn);
 
@@ -70,8 +72,8 @@ export default class CardView {
     wrapRange.append(range);
     wrapRange.append(secondNumber);
 
-    this.buttonLeft = createElement({ tag: 'button', class: 'card__left', id: 'cardLeft' });
-    this.buttonRight = createElement({ tag: 'button', class: 'card__right', id: 'cardRight' });
+    this.leftArrow = createElement({ tag: 'button', class: 'card__left', id: 'cardLeft' });
+    this.rightArrow = createElement({ tag: 'button', class: 'card__right', id: 'cardRight' });
     const wrapCard = createElement({ tag: 'div', class: 'card__wrapper' });
 
     wrapCard.append(playBtn);
@@ -85,9 +87,9 @@ export default class CardView {
     wrapCard.append(answer);
     wrapCard.append(this.interval);
     wrapCard.append(wrapRange);
-    card.append(this.buttonLeft);
+    card.append(this.leftArrow);
     card.append(wrapCard);
-    card.append(this.buttonRight);
+    card.append(this.rightArrow);
     this.input.focus();
     return card;
   }
@@ -176,6 +178,10 @@ export default class CardView {
       document.getElementById('newWords').value = '0';
       this.settings.newWords = '0';
     }
+    if (+this.settings.newWords > +this.settings.maxWords) {
+      document.getElementById('newWords').value = this.settings.maxWords;
+      this.settings.newWords = this.settings.maxWords;
+    }
     if (+this.settings.newWords > 100) {
       document.getElementById('newWords').value = '100';
       this.settings.newWords = '100';
@@ -183,12 +189,11 @@ export default class CardView {
     if (newW && maxW && (newW !== this.settings.newWords || maxW !== this.settings.maxWords)) {
       return true;
     }
-    localStorage.setItem('settings', JSON.stringify(this.settings));
+    // localStorage.setItem('settings', JSON.stringify(this.settings));
     return false;
   }
 
   setSettings() {
-    this.settings = JSON.parse(this.settings);
     const keys = Object.keys(this.settings);
     keys.forEach((item) => {
       document.getElementById(item).checked = this.settings[item];
@@ -197,20 +202,18 @@ export default class CardView {
     document.getElementById('maxWords').value = this.settings.maxWords;
   }
 
-  setWordInCard(next, passedTodaY, word, cardIndeX, notPrev = true) {
+  setWordInCard(next, numberWords, passedTodaY, word, cardIndeX, notPrev = true) {
     let passedToday = passedTodaY;
     let cardIndex = cardIndeX;
     if (document.getElementById('maxWords').value === passedToday) {
       document.getElementById('card').classList.add('hide');
       document.getElementById('message').classList.add('show-flex');
     } else {
-      // const again = document.getElementById('cardAgain').classList.contains('lock-element');
-      // document.getElementById('cardAgain').classList.remove('lock-element');
-      // !again &&
+      // this.next и currentMistake вероятно лишние.
       if (next && !this.next) cardIndex += 1;
       this.currentMistake = false;
       this.setDataInCard(word, cardIndex, passedToday);
-      if (notPrev) passedToday = this.changeRange(false, passedToday);
+      if (notPrev) passedToday = this.changeRange(false, passedToday, numberWords);
       this.next = false;
     }
     return [cardIndex, passedToday, this.next];
@@ -241,7 +244,6 @@ export default class CardView {
       document.getElementById('cardExample').innerHTML = this.replace(
         word.word, word.textExample, cardIndex, passedToday,
       );
-      // document.getElementById('transcriptionWord').innerHTML = word.transcription;
       document.getElementById('translationWord').innerHTML = word.wordTranslate;
     } else {
       document.getElementById('cardMeaning').innerHTML = this.replace(
@@ -250,7 +252,6 @@ export default class CardView {
       document.getElementById('cardExample').innerHTML = this.replace(
         word.wordTranslate, word.textExampleTranslate, cardIndex, passedToday,
       );
-      // document.getElementById('transcriptionWord').innerHTML = word.transcription;
       document.getElementById('translationWord').innerHTML = word.word;
     }
     this.setSettingsInCard(word);
@@ -265,7 +266,11 @@ export default class CardView {
       compare = word.slice(0, word.length - 2).toLowerCase();
     }
     for (let i = 0; i < words.length; i += 1) {
-      if (words[i].toLowerCase().startsWith(compare)) {
+      if (words[i].toLowerCase().startsWith(compare)
+        || words[i].includes('<i>')
+        || words[i].includes('<b>')
+      ) {
+        words[i] = words[i].replace(/(<([^>]+)>)/gi, '');
         if (this.settings.numberLetters && cardIndex === passedToday) {
           words[i] = String('*').repeat(words[i].length);
         } else {
@@ -300,7 +305,11 @@ export default class CardView {
     }
     this.setSettingsInCard(word, false, false, false, prev);
     document.getElementById('cardPlay').classList.add('show');
-    document.getElementById('cardRight').classList.add('go-next');
+    if (prev) {
+      this.rightArrow.classList.add('go-next');
+    } else {
+      setTimeout(() => this.rightArrow.classList.add('go-next'), 500);
+    }
   }
 
   setSettingsInCard(word, cardIndex, passedToday, change, prev) {
@@ -356,7 +365,7 @@ export default class CardView {
     }
 
     if (change) {
-      const hideAnswer = document.getElementById('cardRight').classList.contains('go-next') || prev;
+      const hideAnswer = this.rightArrow.classList.contains('go-next') || prev;
       if (hideAnswer) {
         if (this.settings.langEn) {
           this.input.value = word.word;
@@ -423,15 +432,14 @@ export default class CardView {
     }
   }
 
-  changeRange(next, passedTodaY) {
+  changeRange(next, passedTodaY, numberWords) {
     let passedToday = passedTodaY;
     if (next) passedToday += 1;
     this.firstNumber.innerHTML = passedToday;
-    const secondNumber = document.getElementById('maxWords').value;
-    document.getElementById('secondNumber').innerHTML = secondNumber;
+    document.getElementById('secondNumber').innerHTML = numberWords;
     const range = document.getElementById('rangeWords');
     range.setAttribute('min', 0);
-    range.setAttribute('max', secondNumber);
+    range.setAttribute('max', numberWords);
     range.value = passedToday;
     return passedToday;
   }
@@ -503,6 +511,10 @@ export default class CardView {
     return lock;
   }
 
+  isLock() {
+    return this.cardRemove.classList.contains('lock-element');
+  }
+
   isShow(word) {
     if (!document.getElementById('cardShow').classList.contains('lock-element')) {
       if (this.settings.langEn) {
@@ -530,8 +542,18 @@ export default class CardView {
     document.getElementById('cardDifficult').classList.remove('lock-element');
   }
 
+  lockArrows(lock) {
+    if (lock) {
+      this.rightArrow.classList.add('lock-btn');
+      this.leftArrow.classList.add('lock-btn');
+    } else {
+      this.rightArrow.classList.remove('lock-btn');
+      this.leftArrow.classList.remove('lock-btn');
+    }
+  }
+
   clearCard() {
-    document.getElementById('cardRight').classList.remove('go-next');
+    this.rightArrow.classList.remove('go-next');
     document.getElementById('cardRemove').classList.remove('lock-element');
     document.getElementById('cardShow').classList.remove('lock-element');
     document.getElementById('cardDifficult').classList.add('lock-element');
@@ -544,7 +566,7 @@ export default class CardView {
     document.getElementById('translationWord').innerHTML = '';
     document.getElementById('transcriptionWord').innerHTML = '';
     document.getElementById('cardPlay').classList.remove('show');
-    this.buttonLeft.classList.remove('lock-element');
+    this.leftArrow.classList.remove('lock-element');
     this.input.removeAttribute('readonly');
     this.input.classList.remove('correct-color');
     this.input.value = '';
