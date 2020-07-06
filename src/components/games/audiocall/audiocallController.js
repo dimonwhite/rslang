@@ -77,6 +77,13 @@ export default class AudiocallController {
     window.document.removeEventListener('keypress', this.keypressHandler);
   }
 
+  isModelUserWords() {
+    if (!this.model.isUserWords) {
+      return this.model.wordArray[this.model.step];
+    }
+    return this.model.wordArray[this.model.step].optional;
+  }
+
   startStep() {
     if (this.model.step < this.model.wordArray.length) {
       this.model.isStepGoing = true;
@@ -84,8 +91,8 @@ export default class AudiocallController {
       this.view.displayElement(this.view.btnIdk, 'block');
       this.view.wordDescription.innerText = '';
       this.view.renderSoundIcon();
-      this.view.playAudio(this.model.wordArray[this.model.step]);
-      this.view.renderStepWords(this.model.wordArray[this.model.step]);
+      this.view.playAudio(this.isModelUserWords());
+      this.view.renderStepWords(this.isModelUserWords());
     } else {
       this.endRound();
     }
@@ -98,8 +105,8 @@ export default class AudiocallController {
     this.model.wordArray[this.model.step].success = isRight;
     this.view.displayElement(this.view.btnNext, 'block');
     this.view.displayElement(this.view.btnIdk, 'none');
-    this.view.wordDescription.innerText = this.model.wordArray[this.model.step].word;
-    this.view.renderWordIcon(this.model.wordArray[this.model.step]);
+    this.view.wordDescription.innerText = this.isModelUserWords().word;
+    this.view.renderWordIcon(this.isModelUserWords());
   }
 
   idkTip() {
@@ -136,6 +143,7 @@ export default class AudiocallController {
     this.view.renderEndgamePost();
     await this.openPopupResult(this.model.wordArray);
     this.resetGame();
+    this.model.isUserWords = false;
   }
 
   change() {
