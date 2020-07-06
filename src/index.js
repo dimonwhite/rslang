@@ -1,16 +1,21 @@
 import './scss/main.scss';
+import Router from '@/components/router/Router';
 import Header from './components/header/header';
-import User from './components/user/user';
-import CardController from './components/card/cardController';
-// import HttpClient from './components/httpclient/http-client';
+import HttpClient from './components/httpclient/HttpClient';
+import Authorization from './components/authorization/authorizationController';
+
+require('./prototype.settings');
 
 function importAll(r) {
   return r.keys().map(r);
 }
+
 importAll(require.context('./assets/img/', false, /\.svg$/));
 
-window.addEventListener('load', () => {
-  const user = new User();
+window.addEventListener('DOMContentLoaded', () => {
+  const router = new Router();
+  router.init();
+
   document.body.addEventListener('click', (e) => {
     const nav = document.getElementById('nav');
     if (nav.classList.length > 1 && !(e.target.tagName === 'NAV' || !e.target.tagName === 'LI')) {
@@ -18,7 +23,9 @@ window.addEventListener('load', () => {
     }
   });
 
-  document.body.className = 'body show-main';
-  new Header(user).createEvent();
-  new CardController(user).create();
+  new Header().createEvent();
+
+  const authorization = new Authorization();
+  const http = new HttpClient(authorization.unauthorizedListener);
+  authorization.create(http);
 });

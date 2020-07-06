@@ -1,3 +1,10 @@
+.show-game {
+  padding-top: 30px;
+  .header {
+    transform: translateY(-100%);
+  }
+}
+
 .game {
   &__startScreen {
     position: fixed;

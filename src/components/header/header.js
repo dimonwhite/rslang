@@ -1,56 +1,45 @@
-import Games from '../games/games';
-import DictionaryController from '../dictionary/dictionaryController';
-import CardController from '../card/cardController';
-import StatisticsController from '../statistics/statisticsController';
+import HeaderView from '@/components/header/HeaderView';
 
 export default class Header {
-  constructor(user) {
-    this.user = user;
-    this.mainPage = document.getElementById('main');
-    this.nav = document.getElementById('nav');
-    this.body = document.body;
+  constructor() {
+    this.openedNav = false;
+    this.view = new HeaderView();
   }
 
   createEvent() {
-    const btn = document.getElementById('headerBtn');
-    this.nav.addEventListener('click', this.eventNav.bind(this));
+    this.view.btn.addEventListener('click', () => {
+      this.view.toggleShowNav();
+      this.openedNav = !this.openedNav;
+    });
 
-    btn.addEventListener('click', (e) => {
-      btn.classList.toggle('header__click');
-      this.nav.classList.toggle('nav__show');
-      e.stopPropagation();
+    this.view.nav.addEventListener('click', (e) => {
+      this.clickNav(e);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (this.isClickOutside(e)) {
+        this.closeNav();
+      }
     });
   }
 
-  eventNav({ target }) {
-    if (target.tagName === 'LI' && !target.classList.contains('decoration')) {
-      this.mainPage.innerHTML = '';
-      this.createClass(target.dataset.name);
-      const list = document.getElementById('list');
-      Array.from(list.children).forEach((el) => el.classList.remove('decoration'));
-      target.classList.add('decoration');
-      this.nav.classList.toggle('nav__show');
+  isClickOutside(e) {
+    return this.openedNav && !this.view.nav.contains(e.target) && !this.view.btn.contains(e.target);
+  }
+
+  clickNav(e) {
+    if (e.target.closest('.nav__list-link')) {
+      this.closeNav();
+      return;
+    }
+    const showBtn = e.target.closest('.nav__list-open');
+    if (showBtn) {
+      this.view.toggleShowSubmenu(showBtn);
     }
   }
 
-  createClass(name) {
-    switch (name) {
-      case 'main':
-        this.body.className = 'body show-main';
-        new CardController(this.user).create();
-        break;
-      case 'statistics':
-        this.body.className = 'body show-statistics';
-        new StatisticsController(this.user).create();
-        break;
-      case 'dictionary':
-        this.body.className = 'body show-dictionary';
-        new DictionaryController(this.user).create();
-        break;
-      default:
-        this.body.className = 'body show-game';
-        new Games().create(name);
-        break;
-    }
+  closeNav() {
+    this.view.closeNav();
+    this.openedNav = false;
   }
 }
