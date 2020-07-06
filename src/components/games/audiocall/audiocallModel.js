@@ -5,7 +5,7 @@ export default class AudiocallModel {
   constructor(user) {
     this.user = user;
     this.wordArray = null;
-    this.isUserWords = true;
+    this.isUserWords = false;
     this.level = 0;
     this.optionWordsNumber = 4;
     this.step = 0;
@@ -34,6 +34,9 @@ export default class AudiocallModel {
     } else {
       const words = await this.user.getAllUserWords();
       this.wordArray = shuffleArray(words).slice(0, 10);
+      if (this.wordArray.length < 10) {
+        throw new Error('Not enough words');
+      }
       this.wordArray.forEach((el) => {
         const optionWords = Object.values(book1)
           .filter((item) => item.wordTranslate.startsWith(el.optional.wordTranslate[0])

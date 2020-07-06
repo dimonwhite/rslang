@@ -19,6 +19,7 @@ export default class AudiocallView {
 
     this.game.innerHTML = `
     <div class="restart-wrapper">
+    <div class="user-words">User words</div>
     <div class="restart">Restart</div>
     <div class="exit" href="#/">Exit</div>
     </div>
@@ -118,5 +119,17 @@ export default class AudiocallView {
     this.backColor.g -= 20;
     this.backColor.b -= 30;
     this.setBackground();
+  }
+
+  renderPreloader() {
+    this.preloader = createElement({ tag: 'div', class: 'loading' });
+    this.preloader.innerHTML = `
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    `;
+    this.main.append(this.preloader);
   }
 }

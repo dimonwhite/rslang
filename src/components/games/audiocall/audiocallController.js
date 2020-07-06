@@ -49,6 +49,11 @@ export default class AudiocallController {
     if (e.target.closest('.restart')) {
       this.startRound();
     }
+
+    if (e.target.closest('.user-words')) {
+      this.model.isUserWords = true;
+      this.startRound();
+    }
   }
 
   keypressHandler(e) {
@@ -98,11 +103,14 @@ export default class AudiocallController {
     }
   }
 
-  endStep(isRight) {
+  async endStep(isRight) {
+    if (this.model.isUserWords && !isRight) {
+      await this.updateWord(this.model.wordArray[this.model.step]);
+    }
     this.model.isStepGoing = false;
     this.view.rightWord.classList.add('right');
     this.view.appendanswerIcon(right, this.view.rightWord);
-    this.model.wordArray[this.model.step].success = isRight;
+    this.isModelUserWords().success = isRight;
     this.view.displayElement(this.view.btnNext, 'block');
     this.view.displayElement(this.view.btnIdk, 'none');
     this.view.wordDescription.innerText = this.isModelUserWords().word;
@@ -115,7 +123,7 @@ export default class AudiocallController {
     this.view.appendanswerIcon(idk, this.view.rightWord);
   }
 
-  proceedStep() {
+  async proceedStep() {
     this.model.step += 1;
     this.view.wordWrapper.innerHTML = '';
     this.view.changeBackground();
@@ -130,23 +138,41 @@ export default class AudiocallController {
     this.view.wordDescription.innerHTML = '';
   }
 
+  async updateWord(word) {
+    word.optional.optionWords = false;
+    word.optional.nextTime = new Date().getTime();
+    await this.client.updateUserWord({
+      wordId: word.wordId,
+      difficulty: word.difficulty,
+      wordData: word.optional,
+    });
+  }
+
   async startRound() {
     this.resetGame();
     this.view.getBackColor();
     this.view.setBackground();
+    this.view.renderPreloader();
     await this.model.formWordarray();
+    this.view.preloader.remove();
     this.view.wordWrapper.innerHTML = '';
     this.startStep();
   }
 
   async endRound() {
     this.view.renderEndgamePost();
+    if (this.model.isUserWords) {
+      this.model.wordArray = this.model.wordArray.map((el) => {
+        const modEl = el.optional;
+        return modEl;
+      });
+    }
     await this.openPopupResult(this.model.wordArray);
     this.resetGame();
-    this.model.isUserWords = false;
   }
 
   change() {
+    this.model.isUserWords = false;
     this.model.level = this.level;
     this.startRound();
   }
