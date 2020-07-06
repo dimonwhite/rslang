@@ -3,7 +3,7 @@ import AudiocallModel from './audiocallModel';
 import right from '../../../assets/img/audiocall/right.svg';
 import wrong from '../../../assets/img/audiocall/wrong.svg';
 import idk from '../../../assets/img/audiocall/idk.svg';
-import HttpClient from '../../httpclient/http-client';
+import HttpClient from '../../httpclient/HttpClient';
 
 export default class AudiocallController {
   constructor(user, openPopupResult) {
