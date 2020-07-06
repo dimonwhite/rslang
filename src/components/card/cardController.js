@@ -93,7 +93,6 @@ export default class CardController {
     this.params.cardIndex = this.params.passedToday;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
     this.params.cardIndex = cardIndex;
-    // await this.model.putListToday();
   }
 
   createEvent() {
@@ -114,7 +113,8 @@ export default class CardController {
       await this.setTodayStatStorage();
     };
     document.getElementById('cardLeft').onclick = async () => {
-      if (this.params.cardIndex > 0) {
+      if (this.params.cardIndex > 0 && !this.view.leftArrow.classList.contains('lock-btn')) {
+        this.cut = false;
         await this.setAnswerInCard('left');
         this.left = true;
         this.view.moveToLeft();
@@ -122,9 +122,19 @@ export default class CardController {
     };
     document.getElementById('cardPlay').onclick = this.playWord.bind(this);
     document.getElementById('inputWord').oninput = () => {
-      const cardCorrect = document.getElementById('cardCorrect');
-      cardCorrect.innerHTML = '';
-      cardCorrect.classList.remove('opacity-correct');
+      if (document.getElementById('inputWord').value !== '') {
+        this.view.cardCorrect.innerHTML = '';
+        this.view.cardCorrect.classList.remove('opacity-correct');
+      } else {
+        const word = this.model.listToday[this.params.cardIndex];
+        if (this.view.settings.langEn) {
+          this.view.input.setAttribute('maxlength', word.word.length);
+          this.view.incorrectWord('', '*'.repeat(word.word.length));
+        } else {
+          this.view.input.setAttribute('maxlength', word.wordTranslate.length);
+          this.view.incorrectWord('', '*'.repeat(word.wordTranslate.length));
+        }
+      }
     };
     document.body.onkeydown = (e) => {
       if (e.code === 'Enter') this.eventRight();
@@ -301,16 +311,21 @@ export default class CardController {
   }
 
   async eventCardAgain() {
-    if (!document.getElementById('cardAgain').classList.contains('lock-element')) {
-      document.getElementById('cardAgain').classList.add('lock-element');
+    if (!this.view.cardAgain.classList.contains('lock-element')) {
+      this.view.lockArrows(true);
+      this.view.cardAgain.classList.add('lock-element');
       const cutWord = this.model.listToday.splice(this.params.cardIndex, 1)[0];
+      cutWord.isPassed = false;
+      cutWord.timeToday = new Date().getTime();
       this.model.listToday.push(cutWord);
       this.params.passedToday -= 1;
       this.next = true;
+      this.view.again = true;
       this.cut = true;
       this.view.changeRange(false, this.params.passedToday, this.model.listToday.length);
-      // await this.setTodayStatStorage();
-      this.model.putListToday();
+      await this.setTodayStatStorage();
+      await this.model.putListToday();
+      this.view.lockArrows(false);
     }
   }
 
@@ -401,12 +416,14 @@ export default class CardController {
       this.params.currentMistake = true;
       this.params.newConsecutive = 0;
       this.params.incorrectAnswer += 1;
+      this.view.cardCorrect.classList.remove('opacity-correct');
       if (isNotNew && !prev) {
         await this.model.updateAllStudyWords(word, false, true, true, true);
       } else {
         this.params.newWordsToday += 1;
         await this.model.updateAllStudyWords(word, true, false, true, true, false, 'study');
       }
+
       if (this.view.settings.langEn) {
         this.view.incorrectWord(answer, word.word);
       } else {

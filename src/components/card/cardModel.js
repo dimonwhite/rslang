@@ -1,10 +1,3 @@
-// import book1 from '@/data/book1';
-// import book2 from '@/data/book2';
-// import book3 from '@/data/book3';
-// import book4 from '@/data/book4';
-// import book5 from '@/data/book5';
-// import book6 from '@/data/book6';
-
 export default class CardModel {
   constructor(user) {
     this.user = user;
@@ -94,7 +87,6 @@ export default class CardModel {
         this.listToday = [...wordsStudyForToday, ...newWords];
       }
 
-      // await this.putListToday();
       const WORDS_PER_PAGE = 10;
       const newNumberListPages = Math.ceil(this.listToday.length / WORDS_PER_PAGE);
       this.lockBtns = false;
