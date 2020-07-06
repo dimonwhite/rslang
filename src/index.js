@@ -3,6 +3,7 @@ import Router from '@/components/router/Router';
 import Header from './components/header/header';
 // eslint-disable-next-line no-unused-vars
 import HttpClient from './components/httpclient/HttpClient';
+import AboutTeamView from './components/aboutTeam/aboutTeamView';
 
 require('./prototype.settings');
 
