@@ -2,20 +2,39 @@ import DictionaryView from './dictionaryView';
 import DictionaryModel from './dictionaryModel';
 
 export default class DictionaryController {
-  constructor(user) {
-    this.model = new DictionaryModel(user);
+  constructor(http) {
+    this.model = new DictionaryModel(http);
     this.view = new DictionaryView();
     this.filter = this.model.state.all;
     this.strSearch = '';
     this.page = 0;
     this.isLoadFullData = false;
+    this.settings = {
+      image: true,
+      sound: true,
+      transcription: true,
+      example: true,
+      meaning: true,
+      progress: true,
+    };
   }
 
-  create() {
+  async create() {
+    const dataWords = await this.model.getDataWords();
+    console.log(dataWords);
+
     this.view.renderHTML();
-    this.listTopLimit = this.view.list.getBoundingClientRect().top;
-    this.createList();
-    this.init();
+    if (dataWords && dataWords.length > 0) {
+      this.model.dataWords = dataWords;
+      console.log(this.model.dataWords);
+
+      this.view.renderDictionary();
+      this.listTopLimit = this.view.list.getBoundingClientRect().top;
+      this.createList();
+      this.init();
+    } else {
+      this.view.showEmptyMsg();
+    }
   }
 
   init() {
@@ -70,13 +89,9 @@ export default class DictionaryController {
     this.createCard(word, card.dataset.id);
   }
 
-  playAudio(word) {
-    this.view.playAudio(word);
-  }
-
   createCard(word, wordId) {
     this.view.createCardBackground();
-    this.view.createCard(word, wordId);
+    this.view.createCard({ word, wordId, settings: this.settings });
     this.initCard();
   }
 
@@ -102,6 +117,36 @@ export default class DictionaryController {
     if (e.target.closest('.card__state')) {
       this.stateCard(e);
     }
+
+    if (e.target.closest('.card__prev-icon')) {
+      this.createPrevCard();
+    }
+
+    if (e.target.closest('.card__next-icon')) {
+      this.createNextCard();
+    }
+  }
+
+  createPrevCard() {
+    const word = this.model.getWord(this.model.prev.wordId);
+    this.view.card.remove();
+    this.view.createCard({
+      word,
+      wordId: word.wordId,
+      settings: this.settings,
+    });
+    this.initCard();
+  }
+
+  createNextCard() {
+    const word = this.model.getWord(this.model.next.wordId);
+    this.view.card.remove();
+    this.view.createCard({
+      word,
+      wordId: word.wordId,
+      settings: this.settings,
+    });
+    this.initCard();
   }
 
   stateCard(e) {
@@ -112,6 +157,7 @@ export default class DictionaryController {
     }
     state.classList.add('card__state-item_active');
 
+    // обновление state
     const word = this.model.getWord(this.view.card.dataset.id);
     this.view.updateListItem(word);
   }
@@ -123,15 +169,13 @@ export default class DictionaryController {
       strSearch,
     });
     if (list) {
-      list.then((data) => {
-        if (data) {
-          this.view.createList(data);
-          this.listBottomLimit = this.listTopLimit + this.view.list.getBoundingClientRect().height;
-          this.page += 1;
-        } else {
-          this.isLoadFullData = true;
-        }
-      });
+      console.log(list);
+
+      this.view.createList(list, this.settings);
+      this.listBottomLimit = this.listTopLimit + this.view.list.getBoundingClientRect().height;
+      this.page += 1;
+    } else {
+      this.isLoadFullData = true;
     }
   }
 
@@ -157,5 +201,9 @@ export default class DictionaryController {
       this.view.clearList();
       this.createList(this.filter, this.strSearch);
     }
+  }
+
+  playAudio(word) {
+    this.view.playAudio(word);
   }
 }
