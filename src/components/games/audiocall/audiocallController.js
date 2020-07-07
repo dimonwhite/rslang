@@ -52,6 +52,7 @@ export default class AudiocallController {
 
     if (e.target.closest('.user-words')) {
       this.model.isUserWords = true;
+      this.view.btnuserWords.classList.add('active');
       this.startRound();
     }
   }
@@ -149,14 +150,24 @@ export default class AudiocallController {
   }
 
   async startRound() {
-    this.resetGame();
-    this.view.getBackColor();
-    this.view.setBackground();
-    this.view.renderPreloader();
-    await this.model.formWordarray();
-    this.view.preloader.remove();
-    this.view.wordWrapper.innerHTML = '';
-    this.startStep();
+    try {
+      this.resetGame();
+      this.view.getBackColor();
+      this.view.setBackground();
+      if (this.view.preloader) {
+        this.view.preloader.remove();
+      }
+      this.view.renderPreloader();
+      await this.model.formWordarray();
+      this.view.preloader.remove();
+      this.view.wordWrapper.innerHTML = '';
+      this.startStep();
+    } catch (error) {
+      this.view.wordDescription.innerText = error.message;
+      if (this.view.preloader) {
+        this.view.preloader.remove();
+      }
+    }
   }
 
   async endRound() {
@@ -173,6 +184,7 @@ export default class AudiocallController {
 
   change() {
     this.model.isUserWords = false;
+    this.view.btnuserWords.classList.remove('active');
     this.model.level = this.level;
     this.startRound();
   }

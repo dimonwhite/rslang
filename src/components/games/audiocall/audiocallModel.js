@@ -35,7 +35,7 @@ export default class AudiocallModel {
       const words = await this.user.getAllUserWords();
       this.wordArray = shuffleArray(words).slice(0, 10);
       if (this.wordArray.length < 10) {
-        throw new Error('Not enough words');
+        throw new Error('Not enough words, try to change level');
       }
       this.wordArray.forEach((el) => {
         const optionWords = Object.values(book1)

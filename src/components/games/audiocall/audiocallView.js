@@ -41,6 +41,7 @@ export default class AudiocallView {
     this.infoWrapper = this.game.querySelector('.info-wrapper');
     this.btnIdk = this.game.querySelector('.btn__idk');
     this.btnNext = this.game.querySelector('.btn__next');
+    this.btnuserWords = this.game.querySelector('.user-words');
     this.displayElement(this.btnNext, 'none');
   }
 
