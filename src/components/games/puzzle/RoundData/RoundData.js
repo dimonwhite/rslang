@@ -10,7 +10,7 @@ export default class RoundData {
     this.roundImg = null;
     this.cutRoundImg = null;
     this.client = new HttpClient();
-    this.isUserWords = false;
+    this.isUserWords = true;
     this.fail = 0;
   }
 
@@ -47,6 +47,14 @@ export default class RoundData {
 
     const response = await fetch(`${urlPaintings}paintings.json`);
     const paintings = await response.json();
+
+    if (this.isUserWords) {
+      const randomImage = Math.floor(Math.random() * paintings.length);
+      this.roundImgData = paintings[randomImage];
+      this.roundImg = `${urlPaintings}${this.roundImgData.imageSrc}`;
+      this.cutRoundImg = `${urlPaintings}${this.roundImgData.cutSrc}`;
+      return;
+    }
 
     paintings.forEach((el) => {
       if (el.id === `${parseInt(this.level, 0) + 1}_${modRoundNumber}`) {
