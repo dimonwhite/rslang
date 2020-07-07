@@ -1,26 +1,44 @@
+import HttpClient from '../../../httpclient/HttpClient';
+
 export default class RoundData {
-  constructor(level, roundNumber, obtainWords) {
-    this.level = level;
-    this.roundNumber = roundNumber;
+  constructor(obtainWords) {
+    this.level = 0;
+    this.roundNumber = 1;
     this.obtainWords = obtainWords;
     this.rawData = null;
     this.roundImgData = null;
     this.roundImg = null;
     this.cutRoundImg = null;
+    this.client = new HttpClient();
+    this.isUserWords = false;
+    this.fail = 0;
+  }
+
+  static makeSingleSentence(el) {
+    const currentSentence = {};
+    currentSentence.img = `https://raw.githubusercontent.com/timurkalimullin/rslang-data/master/${el.image}`;
+    currentSentence.audio = `https://raw.githubusercontent.com/timurkalimullin/rslang-data/master/${el.audioExample}`;
+    currentSentence.word = el.word;
+    currentSentence.wordTranslate = el.wordTranslate;
+    currentSentence.textExampleTranslate = el.textExampleTranslate;
+    currentSentence.textExample = el.textExample;
+    return currentSentence;
   }
 
   async makeSentences() {
     this.rawData = await this.obtainWords(this.level, this.roundNumber);
-    this.sentences = Object.values(this.rawData).map((el) => {
-      const currentSentence = {};
-      currentSentence.img = `https://raw.githubusercontent.com/timurkalimullin/rslang-data/master/${el.image}`;
-      currentSentence.audio = `https://raw.githubusercontent.com/timurkalimullin/rslang-data/master/${el.audioExample}`;
-      currentSentence.word = el.word;
-      currentSentence.wordTranslate = el.wordTranslate;
-      currentSentence.textExampleTranslate = el.textExampleTranslate;
-      currentSentence.textExample = el.textExample;
-      return currentSentence;
-    });
+    this.sentences = Object.values(this.rawData).map((el) => RoundData.makeSingleSentence(el));
+  }
+
+  async makeUserSentence() {
+    this.rawData = await this.client.getAllUserWords();
+    if (this.rawData.length < 11) {
+      throw new Error('Not enough user words, try to change level');
+    }
+    this.rawData = this.rawData.sort(() => 0.5 - Math.random())
+      .filter((data) => data.optional.textExample.split(' ').length < 11).slice(0, 10);
+    this.sentences = Object.values(this.rawData)
+      .map((el) => RoundData.makeSingleSentence(el.optional));
   }
 
   async getRoundImg() {
@@ -41,7 +59,11 @@ export default class RoundData {
   }
 
   async formSentenceData() {
-    await this.makeSentences();
+    if (this.isUserWords) {
+      await this.makeUserSentence();
+    } else {
+      await this.makeSentences();
+    }
     await this.getRoundImg();
   }
 }

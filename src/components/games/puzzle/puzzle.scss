@@ -47,6 +47,10 @@
   background-color: #7B4C8F;
   color: #FFCB29;
   font-size: 22px;
+  &.chosen{
+    border-style: dotted;
+    background-color: green;
+  }
   .tooltiptext{
     position: absolute;
     visibility: hidden;

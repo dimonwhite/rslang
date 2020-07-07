@@ -54,6 +54,7 @@ export default class RenderView {
           </select>
           <select class="btn select-round"></select>
           <button class="btn btn__select">Select round</button>
+          <button class="btn btn__userwords">User words</button>
         </div>
         <div class="btn__audio__wrapper"><button class="btn btn__icon btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
         <div class="sentence-translation"></div>
@@ -118,7 +119,7 @@ export default class RenderView {
     return this.word;
   }
 
-  renderResult(sentenceData) {
+  renderResult(sentenceData, fails) {
     this.resultWindow = document.createElement('div');
     this.resultWindow.classList.add('result-window');
     this.resultWindow.innerHTML = `
@@ -128,9 +129,9 @@ export default class RenderView {
           <p class="result-modal__title">${sentenceData.roundImgData.author}, ${sentenceData.roundImgData.name} (${sentenceData.roundImgData.year}) </p>
         </div>
         <div class="result-modal__info">
-          <h2>I don't know</h2>
+          <h2>I don't know - ${fails}</h2>
           <div class="dont-know"></div>
-          <h2>I know</h2>
+          <h2>I know - ${10 - fails}</h2>
           <div class="know"></div>
         </div>
         <div class="result-modal__btn">
@@ -173,6 +174,10 @@ export default class RenderView {
 
   appendtranslation(translation) {
     this.sentenceTranslation.innerHTML = translation;
+  }
+
+  showError(error) {
+    this.sentenceTranslation.innerText = error;
   }
 
   init() {

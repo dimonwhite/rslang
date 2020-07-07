@@ -177,14 +177,21 @@ export default class PuzzleController {
       translate: true,
       autoPlay: true,
     };
-    this.roundData = await new RoundData(this.level, this.roundNumber, obtainWords);
-    this.renderView = await new RenderView(this.root,
-      this.roundData, this.imgWidth, this.imgHeight);
+    this.roundData.level = this.level;
+    this.roundData.roundNumber = this.roundNumber;
 
     this.renderView.renderPreloader();
-    await this.roundData.formSentenceData();
-    this.renderView.init();
-    this.makeRow();
+    try {
+      await this.roundData.formSentenceData();
+      this.renderView.init();
+      if (this.roundData.isUserWords) {
+        this.root.querySelector('.btn__userwords').classList.add('chosen');
+      }
+      this.makeRow();
+    } catch (error) {
+      this.renderView.showError(error.message);
+      this.renderView.preloader.remove();
+    }
   }
 
   finishRound() {
@@ -204,7 +211,8 @@ export default class PuzzleController {
 
     setTimeout(() => {
       this.root.innerHTML = '';
-      this.root.append(this.renderView.renderResult(this.roundData));
+      this.root.append(this.renderView.renderResult(this.roundData, this.roundData.fail));
+      this.roundData.fail = 0;
     }, hidePaintingDelay);
   }
 
@@ -219,6 +227,9 @@ export default class PuzzleController {
     } else {
       this.finishRound();
       this.currentRow = 0;
+      if (this.roundData.isUserWords) {
+        return;
+      }
       if (this.roundNumber < 25) {
         this.roundNumber += 1;
       } else if (this.roundNumber === 25 && this.level < 5) {
@@ -249,6 +260,7 @@ export default class PuzzleController {
     }
 
     if (e.target.closest('.btn__idk')) {
+      this.roundData.fail += 1;
       this.roundData.sentences[this.currentRow].success = true;
       this.dontKnowHandler();
     }
@@ -273,8 +285,14 @@ export default class PuzzleController {
     }
 
     if (e.target.closest('.btn__select')) {
+      this.roundData.isUserWords = false;
       this.level = parseInt(this.root.querySelector('.select-level').value, 0);
       this.roundNumber = parseInt(this.root.querySelector('.select-round').value, 0);
+      this.startRound();
+    }
+
+    if (e.target.closest('.btn__userwords')) {
+      this.roundData.isUserWords = true;
       this.startRound();
     }
   }
@@ -288,7 +306,9 @@ export default class PuzzleController {
   }
 
   async init() {
-    this.roundData = await new RoundData(this.level, this.roundNumber, obtainWords);
+    this.roundData = await new RoundData(obtainWords);
+    this.roundData.level = this.level;
+    this.roundData.roundNumber = this.roundNumber;
     this.renderView = new RenderView(this.root, this.roundData, this.imgWidth, this.imgHeight);
     this.addListeners();
   }
