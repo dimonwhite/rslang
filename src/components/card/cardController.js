@@ -73,12 +73,12 @@ export default class CardController {
         this.params.generatedListToday,
         this.params.numberWordsForToday,
         this.params.numberListPages,
-      ] = await this.model.createList(
-        this.view.settings,
-        this.params.generatedListToday,
-        this.params.wordsRepeatToday,
-        this.params.numberListPages,
-      );
+      ] = await this.model.createList({
+        settings: this.view.settings,
+        generatedListToday: this.params.generatedListToday,
+        wordsRepeatToday: this.params.wordsRepeatToday,
+        numberListPages: this.params.numberListPages,
+      });
       // await this.setTodayStatStorage();
     } else {
       await this.model.getAllUserWords();
@@ -103,9 +103,12 @@ export default class CardController {
         this.params.generatedListToday,
         this.params.numberWordsForToday,
         this.params.numberListPages,
-      ] = await this.model.createList(
-        this.view.settings, false, this.params.wordsRepeatToday, this.numberListPages,
-      );
+      ] = await this.model.createList({
+        settings: this.view.settings,
+        generatedListToday: false,
+        wordsRepeatToday: this.params.wordsRepeatToday,
+        numberListPages: this.numberListPages,
+      });
       this.view.setWordInCard(
         false, this.model.listToday.length, 0, this.model.listToday[0], 0,
       );
@@ -177,10 +180,12 @@ export default class CardController {
           const INTERVAL_FACTOR = (index * 2) + 1;
           if (word.customRating !== INTERVAL_FACTOR) {
             this.view.setCustomRating(INTERVAL_FACTOR);
-            await this.model.updateAllStudyWords(word, false, true, false, false, INTERVAL_FACTOR);
+            await this.model.updateAllStudyWords({
+              word, isUpdate: true, customRating: INTERVAL_FACTOR,
+            });
           } else {
             this.view.setCustomRating('clear');
-            await this.model.updateAllStudyWords(word, false, true, false, false, 'clear');
+            await this.model.updateAllStudyWords({ word, isUpdate: true, customRating: 'clear' });
           }
           await this.model.putListPage(word);
           if (this.unlock) this.view.lockElements(false);
@@ -195,9 +200,12 @@ export default class CardController {
             this.params.generatedListToday,
             this.params.numberWordsForToday,
             this.params.numberListPages,
-          ] = await this.model.createList(
-            this.view.settings, false, this.params.wordsRepeatToday, this.numberListPages,
-          );
+          ] = await this.model.createList({
+            settings: this.view.settings,
+            generatedListToday: false,
+            wordsRepeatToday: this.params.wordsRepeatToday,
+            numberListPages: this.numberListPages,
+          });
           this.params.passedToday = 0;
           this.params.cardIndex = 0;
           this.view.clearCard();
@@ -263,14 +271,10 @@ export default class CardController {
       let isNew = false;
       if (this.model.allStudyWords.find((item) => item.word === removeWord.word)) {
         if (!removeWord.isPassed) isNew = true;
-        await this.model.updateAllStudyWords(
-          removeWord, false, true, false, false, false, state,
-        );
+        await this.model.updateAllStudyWords({ word: removeWord, isUpdate: true, state });
       } else {
         isNew = true;
-        await this.model.updateAllStudyWords(
-          removeWord, true, false, false, false, false, state,
-        );
+        await this.model.updateAllStudyWords({ word: removeWord, isNew: true, state });
       }
       if (isNew) {
         this.params.currentMistake = false;
@@ -296,7 +300,12 @@ export default class CardController {
 
   async eventBookmark() {
     this.view.lockElements(true);
-    const word = this.model.listToday[this.params.cardIndex];
+    let word;
+    if (this.cut) {
+      word = this.model.listToday[this.model.listToday.length - 1];
+    } else {
+      word = this.model.listToday[this.params.cardIndex];
+    }
     let state = 'difficult';
     if (word.state === state) state = 'study';
 
@@ -304,9 +313,13 @@ export default class CardController {
     const { customRating } = word;
     const compare = word.word.toLowerCase();
     if (this.model.allStudyWords.find((item) => item.word.toLowerCase() === compare)) {
-      await this.model.updateAllStudyWords(word, false, true, false, false, customRating, state);
+      await this.model.updateAllStudyWords({
+        word, isUpdate: true, customRating, state,
+      });
     } else {
-      await this.model.updateAllStudyWords(word, true, false, false, false, customRating, state);
+      await this.model.updateAllStudyWords({
+        word, isNew: true, customRating, state,
+      });
     }
     await this.model.putListPage(word);
     this.view.lockElements(false);
@@ -387,10 +400,14 @@ export default class CardController {
         }
         const mistake = show || false;
         if (isNotNew && !prev) {
-          await this.model.updateAllStudyWords(word, false, true, true, mistake);
+          await this.model.updateAllStudyWords({
+            word, isUpdate: true, isCount: true, mistake,
+          });
         } else if (!prev) {
           this.params.newWordsToday += 1;
-          await this.model.updateAllStudyWords(word, true, false, true, mistake, false, 'study');
+          await this.model.updateAllStudyWords({
+            word, isNew: true, isCount: true, mistake, customRating: false, state: 'study',
+          });
         }
 
         if (!this.params.currentMistake) {
@@ -425,10 +442,14 @@ export default class CardController {
       this.params.incorrectAnswer += 1;
       this.view.cardCorrect.classList.remove('opacity-correct');
       if (isNotNew && !prev) {
-        await this.model.updateAllStudyWords(word, false, true, true, true);
+        await this.model.updateAllStudyWords({
+          word, isUpdate: true, isCount: true, mistake: true,
+        });
       } else {
         this.params.newWordsToday += 1;
-        await this.model.updateAllStudyWords(word, true, false, true, true, false, 'study');
+        await this.model.updateAllStudyWords({
+          word, isNew: true, isCount: true, mistake: true, state: 'study',
+        });
       }
 
       if (this.view.settings.langEn) {

@@ -7,7 +7,24 @@ export default class CardModel {
     this.defaultRating = 1;
   }
 
-  async createList(settings, generatedListToday, wordsRepeatToday, numberListPages) {
+  async createList({
+    settings, generatedListToday, wordsRepeatToday, numberListPages,
+  }) {
+    await this.createAllStudyWords();
+
+    if (!generatedListToday) {
+      await this.createNewWords(settings);
+      this.listToday = [];
+      const wordsForToday = await this.createListToday();
+
+      const WORDS_PER_PAGE = 10;
+      const newNumberListPages = Math.ceil(this.listToday.length / WORDS_PER_PAGE);
+      return [true, wordsForToday, newNumberListPages];
+    }
+    return [generatedListToday, wordsRepeatToday, numberListPages];
+  }
+
+  async createAllStudyWords() {
     const WORDS_START_WITH = 10;
     const userWords = await this.user.getAllUserWords();
     if (userWords.length > WORDS_START_WITH) {
@@ -24,72 +41,69 @@ export default class CardModel {
         await this.user.createUserWord({ wordData, wordId, difficulty });
       }
     }
+  }
 
-    if (!generatedListToday) {
-      this.listToday = [];
-      const maxWordsPerPage = 600;
-      const maxWords = +settings.maxWords;
-      let settingsNewWords = +settings.newWords;
-      const learnedWords = this.allStudyWords.length;
-      const ALL_WORDS = 3600;
-      if (learnedWords + maxWords > ALL_WORDS) settingsNewWords = ALL_WORDS - learnedWords;
-      const group = Math.floor(learnedWords / maxWordsPerPage);
-      const groupNext = Math.floor((learnedWords + maxWords) / maxWordsPerPage);
-      const page = 0;
-      const maxLength = 99;
-      let allWords = [];
-      if (group === groupNext) {
-        const wordsPerPage = (learnedWords % maxWordsPerPage) + settingsNewWords;
-        allWords = await this.user.getWords({
-          group, page, maxLength, wordsPerPage,
-        });
-      } else {
-        const wordsPerPage = (learnedWords + settingsNewWords) % maxWordsPerPage;
-        const firstChunk = await this.user.getWords({
-          group, page, maxLength, wordsPerPage: maxWordsPerPage,
-        });
-        const secondChunk = await this.user.getWords({
-          group: groupNext, page, maxLength, wordsPerPage,
-        });
-        allWords = [...firstChunk, ...secondChunk];
-      }
-      let newWords = allWords.slice(learnedWords % maxWordsPerPage);
-
-      let dateToday = new Date();
-      dateToday = `${dateToday.getDate()}${(dateToday.getMonth() + 1)}${dateToday.getFullYear()}`;
-      let wordsStudyForToday = this.allStudyWords.filter((item) => {
-        if (item.state !== 'remove') {
-          let date = new Date(item.nextTime);
-          date = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}`;
-          if (date === dateToday) return true;
-        }
-        return false;
+  async createNewWords(settings) {
+    const maxWordsPerPage = 600;
+    const maxWords = +settings.maxWords;
+    let settingsNewWords = +settings.newWords;
+    const learnedWords = this.allStudyWords.length;
+    const ALL_WORDS = 3600;
+    if (learnedWords + maxWords > ALL_WORDS) settingsNewWords = ALL_WORDS - learnedWords;
+    const group = Math.floor(learnedWords / maxWordsPerPage);
+    const groupNext = Math.floor((learnedWords + maxWords) / maxWordsPerPage);
+    const page = 0;
+    const maxLength = 99;
+    let allWords = [];
+    if (group === groupNext) {
+      const wordsPerPage = (learnedWords % maxWordsPerPage) + settingsNewWords;
+      allWords = await this.user.getWords({
+        group, page, maxLength, wordsPerPage,
       });
-
-      const maxForToday = maxWords - settingsNewWords;
-      wordsStudyForToday = wordsStudyForToday.map((item) => {
-        item.isNew = false;
-        item.isPassed = false;
-        item.timeToday = new Date().getTime();
-        return item;
+    } else {
+      const wordsPerPage = (learnedWords + settingsNewWords) % maxWordsPerPage;
+      const firstChunk = await this.user.getWords({
+        group, page, maxLength, wordsPerPage: maxWordsPerPage,
       });
-      newWords = newWords.map((item) => {
-        item.isNew = true;
-        item.isPassed = false;
-        item.timeToday = new Date().getTime();
-        return item;
+      const secondChunk = await this.user.getWords({
+        group: groupNext, page, maxLength, wordsPerPage,
       });
-      if (wordsStudyForToday.length > maxForToday) {
-        this.listToday = [...wordsStudyForToday.slice(0, maxForToday), ...newWords];
-      } else {
-        this.listToday = [...wordsStudyForToday, ...newWords];
-      }
-
-      const WORDS_PER_PAGE = 10;
-      const newNumberListPages = Math.ceil(this.listToday.length / WORDS_PER_PAGE);
-      return [true, wordsStudyForToday.length, newNumberListPages];
+      allWords = [...firstChunk, ...secondChunk];
     }
-    return [generatedListToday, wordsRepeatToday, numberListPages];
+    this.maxForToday = maxWords - settingsNewWords;
+    this.newWords = allWords.slice(learnedWords % maxWordsPerPage);
+  }
+
+  async createListToday() {
+    let dateToday = new Date();
+    dateToday = `${dateToday.getDate()}${(dateToday.getMonth() + 1)}${dateToday.getFullYear()}`;
+    let wordsStudyForToday = this.allStudyWords.filter((item) => {
+      if (item.state !== 'remove') {
+        let date = new Date(item.nextTime);
+        date = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}`;
+        if (date === dateToday) return true;
+      }
+      return false;
+    });
+
+    wordsStudyForToday = wordsStudyForToday.map((item) => {
+      item.isNew = false;
+      item.isPassed = false;
+      item.timeToday = new Date().getTime();
+      return item;
+    });
+    this.newWords = this.newWords.map((item) => {
+      item.isNew = true;
+      item.isPassed = false;
+      item.timeToday = new Date().getTime();
+      return item;
+    });
+    if (wordsStudyForToday.length > this.maxForToday) {
+      this.listToday = [...wordsStudyForToday.slice(0, this.maxForToday), ...this.newWords];
+    } else {
+      this.listToday = [...wordsStudyForToday, ...this.newWords];
+    }
+    return wordsStudyForToday.length;
   }
 
   async putListToday() {
@@ -139,79 +153,99 @@ export default class CardModel {
     this.allStudyWords = userWords.slice(WORDS_START_WITH).map((item) => item.optional);
   }
 
-  async updateAllStudyWords(word, isNew, isUpdate, isCount, mistake, customRating, state) {
-    const DAY = 60 * 60 * 24 * 1000;
+  async updateAllStudyWords({
+    word, isNew, isUpdate, isCount = false, mistake = false, customRating = false, state,
+  }) {
     if (isNew) {
-      word.count = (isCount) ? 1 : 0;
-      word.mistakes = Number(mistake);
-      if (state) word.state = state;
-      word.customRating = customRating;
-      word.interval = -1;
-      if (isCount || mistake) {
-        word.rating = this.getRating(word.count, word.mistakes);
-      } else if (state === 'remove') {
-        const MIN_RATING = 1;
-        word.rating = MIN_RATING;
-      } else {
-        const MAX_RATING = 5;
-        word.rating = MAX_RATING;
-      }
-      word.lastTime = new Date().getTime();
-
-      if (customRating) {
-        word.nextTime = word.lastTime + (customRating ** customRating + 2) * DAY;
-      } else {
-        word.nextTime = word.lastTime + DAY;
-      }
-      const id = this.allStudyWords.length + 1;
-      word.id = `${String('0').repeat(24 - String(id).length)}${id}`;
-      this.allStudyWords.push(word);
-      await this.user.createUserWord({ wordData: word, wordId: word.id, difficulty: 'string' });
+      await this.setNewWord({
+        word, isCount, mistake, customRating, state,
+      });
     } else if (isUpdate && !isNew) {
-      const update = this.allStudyWords.find((item) => item.word === word.word);
-      if (isCount) update.count += 1;
-      if (mistake) {
-        update.mistakes += 1;
-        update.interval = -1;
-      } else {
-        let dateToday = new Date();
-        dateToday = `${dateToday.getDate()}${dateToday.getMonth()}${dateToday.getFullYear()}`;
-        let date = new Date(update.nextTime);
-        date = `${date.getDate()}${date.getMonth()}${date.getFullYear()}`;
-        if (date !== dateToday) update.interval += 1;
-      }
-      if (state) update.state = state;
-      if (customRating === 'clear') {
-        update.customRating = false;
-      } else if (customRating) {
-        update.customRating = customRating;
-      }
-      const counts = update.count;
-      const { mistakes } = update;
-      update.rating = this.getRating(counts, mistakes);
-      update.lastTime = new Date().getTime();
-
-      if (update.customRating) {
-        update.nextTime = update.lastTime + (update.customRating ** update.customRating + 2) * DAY;
-      } else {
-        const interval = (update.interval === -1) ? 0 : update.interval;
-        update.nextTime = update.lastTime + (2 ** interval) * DAY;
-      }
-      Object.keys(update).forEach((key) => { word[key] = update[key]; });
-      await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
+      await this.updateWord({
+        word, isCount, mistake, customRating, state,
+      });
     }
+  }
+
+  async setNewWord({
+    word, isCount, mistake, customRating, state,
+  }) {
+    const DAY = 60 * 60 * 24 * 1000;
+    word.count = (isCount) ? 1 : 0;
+    word.mistakes = Number(mistake);
+    if (state) word.state = state;
+    word.customRating = customRating;
+    word.interval = -1;
+    if (isCount || mistake) {
+      word.rating = this.getRating(word.count, word.mistakes);
+    } else if (state === 'remove') {
+      const MIN_RATING = 1;
+      word.rating = MIN_RATING;
+    } else {
+      const MAX_RATING = 5;
+      word.rating = MAX_RATING;
+    }
+    word.lastTime = new Date().getTime();
+
+    if (customRating) {
+      word.nextTime = word.lastTime + (customRating ** customRating + 2) * DAY;
+    } else {
+      word.nextTime = word.lastTime + DAY;
+    }
+    const id = this.allStudyWords.length + 1;
+    word.id = `${String('0').repeat(24 - String(id).length)}${id}`;
+    this.allStudyWords.push(word);
+    await this.user.createUserWord({ wordData: word, wordId: word.id, difficulty: 'string' });
+  }
+
+  async updateWord({
+    word, isCount, mistake, customRating, state,
+  }) {
+    const DAY = 60 * 60 * 24 * 1000;
+    const update = this.allStudyWords.find((item) => item.word === word.word);
+    if (isCount) update.count += 1;
+    if (mistake) {
+      update.mistakes += 1;
+      update.interval = -1;
+    } else {
+      let dateToday = new Date();
+      dateToday = `${dateToday.getDate()}${dateToday.getMonth()}${dateToday.getFullYear()}`;
+      let date = new Date(update.nextTime);
+      date = `${date.getDate()}${date.getMonth()}${date.getFullYear()}`;
+      if (date !== dateToday) update.interval += 1;
+    }
+    if (state) update.state = state;
+    if (customRating === 'clear') {
+      update.customRating = false;
+    } else if (customRating) {
+      update.customRating = customRating;
+    }
+    const counts = update.count;
+    const { mistakes } = update;
+    update.rating = this.getRating(counts, mistakes);
+    update.lastTime = new Date().getTime();
+
+    if (update.customRating) {
+      update.nextTime = update.lastTime + (update.customRating ** update.customRating + 2) * DAY;
+    } else {
+      const interval = (update.interval === -1) ? 0 : update.interval;
+      update.nextTime = update.lastTime + (2 ** interval) * DAY;
+    }
+    Object.keys(update).forEach((key) => { word[key] = update[key]; });
+    await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
   }
 
   getRating(count, mistakes) {
     let rating = this.defaultRating;
+    const PERCENT = [20, 40, 65, 90];
     const correctPercent = (1 - mistakes / count) * 100;
-    if (correctPercent >= 20 && correctPercent < 40) {
+    if (correctPercent >= PERCENT[0] && correctPercent < PERCENT[1]) {
       rating = 2;
-    } else if (correctPercent >= 40 && correctPercent < 65) {
+    } else if (correctPercent >= PERCENT[1] && correctPercent < PERCENT[2]) {
       rating = 3;
-    } else if (correctPercent >= 65 && correctPercent < 90) {
+    } else if (correctPercent >= PERCENT[2] && correctPercent < PERCENT[3]) {
       rating = 4;
-    } else if (correctPercent >= 90) rating = 5;
+    } else if (correctPercent >= PERCENT[3]) rating = 5;
     return rating;
   }
 
