@@ -98,7 +98,7 @@
         padding-left: 10px;
         padding-right: 10px;
         font-size: 14px;
-        height: 35px;
+        min-height: 35px;
         text-align: left;
         width: 100%;
     }
@@ -221,23 +221,22 @@
 
 /*------------------PROGRESS----------------------*/
 progress[value] {
-  -webkit-appearance: none;
-   appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
 
-  width: 250px;
-  height: 20px;
-  border-radius: 5px;
+    width: 250px;
+    height: 20px;
+    border-radius: 5px;
 }
 
 progress[value]::-webkit-progress-bar {
-  background-color: #eee;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
 }
 
 progress[value]::-webkit-progress-value {
-    background-image:
-        -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)),
+    background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)),
         -webkit-linear-gradient(left, #09c, rgb(54, 145, 36));
     border-radius: 5px;
     background-size: 35px 20px, 100% 100%, 100% 100%;
@@ -265,7 +264,12 @@ progress[value]::-webkit-progress-value {
 }
 
 .lock-element {
-    background-color: rgb(190, 190, 190);
+    background-color: rgb(190, 190, 190) !important;
+    color: black !important;
+}
+.lock-arrow {
+    background-color: rgb(190, 190, 190) !important;
+    outline: 2px solid rgb(190, 190, 190) !important;
 }
 
 .checked-element {
@@ -274,14 +278,37 @@ progress[value]::-webkit-progress-value {
 
 .custom-rating {
     background-color: brown;
+    color: whitesmoke;
 }
 
 .hide-text {
     font-size: 0 !important;
 }
 
-.lock-btn {
-    background-color: rgb(190, 190, 190) !important;
-    outline: 2px solid rgb(190, 190, 190) !important;
+.lock-elements {
+    .card__answer {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+    .card__interval {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+    .card__left {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+    .card__right {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
 }
 /*----------------END TOGGLE CLASSES-----------------*/

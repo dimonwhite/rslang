@@ -1,11 +1,9 @@
-// import defImg from '@/assets/img/default.jpg';
 import { createElement } from '@/utils';
 import { urlGitHub } from '@/constants';
 
 export default class CardView {
   constructor() {
     this.card = document.getElementById('main');
-    this.currentMistake = false;
     this.next = false;
     this.again = false;
     this.settings = null;
@@ -22,7 +20,6 @@ export default class CardView {
     const card = createElement({ tag: 'section', class: 'card', id: 'card' });
     const playBtn = createElement({ tag: 'button', class: 'card__play', id: 'cardPlay' });
     const img = createElement({ tag: 'img', class: 'card__img', id: 'cardImg' });
-    // img.src = defImg;
     const explanation = createElement({ tag: 'p', id: 'cardMeaning' });
     const translation = createElement({ tag: 'p', id: 'cardMeaningTranslation' });
     const sentence = createElement({ tag: 'p', id: 'cardExample' });
@@ -166,9 +163,9 @@ export default class CardView {
       document.getElementById('maxWords').value = '3';
       this.settings.maxWords = '3';
     }
-    if (+this.settings.maxWords > 300) {
-      document.getElementById('maxWords').value = '300';
-      this.settings.maxWords = '300';
+    if (+this.settings.maxWords > 100) {
+      document.getElementById('maxWords').value = '100';
+      this.settings.maxWords = '100';
     }
     if (+this.settings.newWords < 0) {
       document.getElementById('newWords').value = '0';
@@ -185,7 +182,6 @@ export default class CardView {
     if (newW && maxW && (newW !== this.settings.newWords || maxW !== this.settings.maxWords)) {
       return true;
     }
-    // localStorage.setItem('settings', JSON.stringify(this.settings));
     return false;
   }
 
@@ -205,9 +201,8 @@ export default class CardView {
       document.getElementById('card').classList.add('hide');
       document.getElementById('message').classList.add('show-flex');
     } else {
-      // this.next и currentMistake вероятно лишние.
+      // this.next вероятно лишние.
       if (next && !this.next && !this.again) cardIndex += 1;
-      this.currentMistake = false;
       this.setDataInCard(word, cardIndex, passedToday);
       if (notPrev) passedToday = this.changeRange(false, passedToday, numberWords);
       this.next = false;
@@ -256,22 +251,33 @@ export default class CardView {
 
   replace(word, text, cardIndex, passedToday) {
     const words = text.split(' ');
-    let compare;
-    if (word.length > 5) {
-      compare = word.slice(0, word.length - 4).toLowerCase();
-    } else {
-      compare = word.slice(0, word.length - 2).toLowerCase();
-    }
     for (let i = 0; i < words.length; i += 1) {
-      if (words[i].toLowerCase().startsWith(compare)
-        || words[i].includes('<i>')
-        || words[i].includes('<b>')
-      ) {
-        words[i] = words[i].replace(/(<([^>]+)>)/gi, '');
-        if (this.settings.numberLetters && cardIndex === passedToday) {
-          words[i] = String('*').repeat(words[i].length);
+      let punct = '';
+      if (words[i][words[i].length - 1] === '.' || words[i][words[i].length - 1] === ',') {
+        punct = words[i][words[i].length - 1];
+      }
+      if (this.settings.langEn) {
+        if (words[i].includes('<i>') || words[i].includes('<b>')) {
+          words[i] = words[i].replace(/(<([^>]+)>)/gi, '');
+          if (this.settings.numberLetters && cardIndex === passedToday) {
+            words[i] = String('*').repeat(words[i].length - punct.length) + punct;
+          } else {
+            words[i] = String('*').repeat(3) + punct;
+          }
+        }
+      } else {
+        let compare;
+        if (word.length > 5) {
+          compare = word.slice(0, word.length - 4).toLowerCase();
         } else {
-          words[i] = String('*').repeat(3);
+          compare = word.slice(0, word.length - 2).toLowerCase();
+        }
+        if (words[i].toLowerCase().startsWith(compare)) {
+          if (this.settings.numberLetters && cardIndex === passedToday) {
+            words[i] = String('*').repeat(words[i].length - punct.length) + punct;
+          } else {
+            words[i] = String('*').repeat(3) + punct;
+          }
         }
       }
     }
@@ -280,7 +286,7 @@ export default class CardView {
 
   setAnswerInCard(word, currentMistake, prev) {
     document.getElementById('transcriptionWord').innerHTML = word.transcription;
-    if (currentMistake) {
+    if (currentMistake && prev !== 'right') {
       this.cardAgain.classList.add('lock-element');
     }
     if (this.settings.langEn) {
@@ -310,13 +316,21 @@ export default class CardView {
   }
 
   setSettingsInCard(word, cardIndex, passedToday, change, prev) {
+    if (this.settings.interval && (prev || cardIndex !== passedToday)) {
+      document.getElementById('intervalBtns').classList.add('show-flex');
+      this.setCustomRating(word.customRating);
+    } else {
+      document.getElementById('intervalBtns').classList.remove('show-flex');
+    }
     if (this.settings.removeWord) {
       document.getElementById('cardRemove').classList.remove('hide');
+      this.setInDictionary(word.state);
     } else {
       document.getElementById('cardRemove').classList.add('hide');
     }
     if (this.settings.difficultWord) {
       document.getElementById('cardDifficult').classList.remove('hide');
+      this.setInDictionary(word.state);
     } else {
       document.getElementById('cardDifficult').classList.add('hide');
     }
@@ -441,15 +455,17 @@ export default class CardView {
     return passedToday;
   }
 
-  inputTodayStatistics(passed, incorr, corr, newWords, consecutive) {
+  inputTodayStatistics({
+    passedToday, incorrectAnswer, correctAnswer, newWordsToday, consecutive,
+  }) {
     document.getElementById('card').classList.add('hide');
     this.message.classList.add('show-flex');
-    document.getElementById('statCount').innerHTML = passed;
-    if (incorr + corr > 0) {
+    document.getElementById('statCount').innerHTML = passedToday;
+    if (incorrectAnswer + correctAnswer > 0) {
       document.getElementById('statCorrect')
-        .innerHTML = `${Math.floor((corr / (incorr + corr)) * 100)}%`;
+        .innerHTML = `${Math.floor((correctAnswer / (incorrectAnswer + correctAnswer)) * 100)}%`;
     }
-    document.getElementById('statNewWords').innerHTML = newWords;
+    document.getElementById('statNewWords').innerHTML = newWordsToday;
     document.getElementById('statLong').innerHTML = consecutive;
   }
 
@@ -482,12 +498,26 @@ export default class CardView {
 
   setCustomRating(customRating) {
     Array.from(this.interval.children).forEach((item) => item.classList.remove('custom-rating'));
-    if (customRating === 1) {
+    const [HARD, NORMAL, EASY] = [1, 3, 5];
+    if (customRating === HARD) {
       this.cardHard.classList.add('custom-rating');
-    } else if (customRating === 3) {
+    } else if (customRating === NORMAL) {
       this.cardNormal.classList.add('custom-rating');
-    } else if (customRating === 5) {
+    } else if (customRating === EASY) {
       this.cardEasy.classList.add('custom-rating');
+    }
+  }
+
+  setInDictionary(state) {
+    if (state === 'difficult') {
+      this.cardDiff.classList.add('custom-rating');
+    } else {
+      this.cardDiff.classList.remove('custom-rating');
+    }
+    if (state === 'remove') {
+      this.cardRemove.classList.add('custom-rating');
+    } else {
+      this.cardRemove.classList.remove('custom-rating');
     }
   }
 
@@ -497,13 +527,8 @@ export default class CardView {
   }
 
   changeMark() {
-    this.cardDiff.classList.toggle('lock-element');
-    const lock = this.cardDiff.classList.contains('lock-element');
-    if (lock) {
-      this.setCustomRating(1);
-    } else {
-      this.setCustomRating();
-    }
+    this.cardDiff.classList.toggle('custom-rating');
+    const lock = this.cardDiff.classList.contains('custom-rating');
     return lock;
   }
 
@@ -535,17 +560,28 @@ export default class CardView {
     cardCorrect.classList.remove('opacity-correct');
     document.getElementById('cardRemove').classList.remove('lock-element');
     document.getElementById('cardShow').classList.add('lock-element');
-    document.getElementById('intervalBtns').classList.add('show-flex');
     document.getElementById('cardDifficult').classList.remove('lock-element');
   }
 
   lockArrows(lock) {
     if (lock) {
-      this.rightArrow.classList.add('lock-btn');
-      this.leftArrow.classList.add('lock-btn');
+      this.rightArrow.classList.add('lock-arrow');
+      this.leftArrow.classList.add('lock-arrow');
     } else {
-      this.rightArrow.classList.remove('lock-btn');
-      this.leftArrow.classList.remove('lock-btn');
+      this.rightArrow.classList.remove('lock-arrow');
+      this.leftArrow.classList.remove('lock-arrow');
+    }
+  }
+
+  lockElements(lock) {
+    if (lock) {
+      this.card.classList.add('lock-elements');
+      this.rightArrow.classList.add('lock-arrow');
+      this.leftArrow.classList.add('lock-arrow');
+    } else {
+      this.rightArrow.classList.remove('lock-arrow');
+      this.leftArrow.classList.remove('lock-arrow');
+      this.card.classList.remove('lock-elements');
     }
   }
 
@@ -563,6 +599,8 @@ export default class CardView {
     document.getElementById('transcriptionWord').innerHTML = '';
     document.getElementById('cardPlay').classList.remove('show');
     this.cardAgain.classList.remove('lock-element');
+    this.cardDiff.classList.remove('custom-rating');
+    this.cardRemove.classList.remove('custom-rating');
     this.rightArrow.classList.remove('go-next');
     this.leftArrow.classList.remove('lock-element');
     this.input.removeAttribute('readonly');
