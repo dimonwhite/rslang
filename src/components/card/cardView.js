@@ -41,10 +41,10 @@ export default class CardView {
     this.cardRemove = createElement({ tag: 'button', id: 'cardRemove', content: 'Remove' });
     this.cardDiff = createElement({ tag: 'button', id: 'cardDifficult', content: 'Difficult' });
     this.cardDiff.classList.add('lock-element');
-    const showBtn = createElement({ tag: 'button', id: 'cardShow', content: 'Show the answer' });
+    this.cardShow = createElement({ tag: 'button', id: 'cardShow', content: 'Show the answer' });
     answer.append(this.cardRemove);
     answer.append(this.cardDiff);
-    answer.append(showBtn);
+    answer.append(this.cardShow);
 
     this.interval = createElement({ tag: 'div', class: 'card__interval', id: 'intervalBtns' });
     this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Again' });
@@ -201,7 +201,6 @@ export default class CardView {
       document.getElementById('card').classList.add('hide');
       document.getElementById('message').classList.add('show-flex');
     } else {
-      // this.next вероятно лишние.
       if (next && !this.next && !this.again) cardIndex += 1;
       this.setDataInCard(word, cardIndex, passedToday);
       if (notPrev) passedToday = this.changeRange(false, passedToday, numberWords);
@@ -516,20 +515,16 @@ export default class CardView {
     }
     if (state === 'remove') {
       this.cardRemove.classList.add('custom-rating');
+      this.cardAgain.classList.add('lock-element');
     } else {
       this.cardRemove.classList.remove('custom-rating');
+      this.cardAgain.classList.remove('lock-element');
     }
   }
 
   nextCard() {
     this.message.classList.remove('show-flex');
     document.getElementById('card').classList.remove('hide');
-  }
-
-  changeMark() {
-    this.cardDiff.classList.toggle('custom-rating');
-    const lock = this.cardDiff.classList.contains('custom-rating');
-    return lock;
   }
 
   isLock() {
@@ -551,7 +546,7 @@ export default class CardView {
     return false;
   }
 
-  moveToLeft() {
+  moveToLeft(state) {
     this.input.setAttribute('readonly', 'readonly');
     this.input.classList.add('correct-color');
     const cardCorrect = document.getElementById('cardCorrect');
@@ -561,6 +556,7 @@ export default class CardView {
     document.getElementById('cardRemove').classList.remove('lock-element');
     document.getElementById('cardShow').classList.add('lock-element');
     document.getElementById('cardDifficult').classList.remove('lock-element');
+    this.setInDictionary(state);
   }
 
   lockArrows(lock) {

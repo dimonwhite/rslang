@@ -36,6 +36,7 @@ export default class CardController {
     this.lockBtns = true;
     this.next = false;
     this.cut = false;
+    this.removeWords = 0;
     this.unlock = true;
   }
 
@@ -95,6 +96,7 @@ export default class CardController {
   createEvent() {
     document.getElementById('addition').onclick = async () => {
       this.view.nextCard();
+      this.view.clearCard();
       Object.keys(this.params).forEach((key) => { this.params[key] = 0; });
       this.model.clearListToday();
       [
@@ -114,7 +116,8 @@ export default class CardController {
       if (this.params.cardIndex > 0 && !this.view.leftArrow.classList.contains('lock-arrow')) {
         this.cut = false;
         await this.setAnswerInCard('left');
-        this.view.moveToLeft();
+        const word = this.model.listToday[this.params.cardIndex];
+        this.view.moveToLeft(word.state);
       }
     };
     document.getElementById('cardPlay').onclick = this.playWord.bind(this);
@@ -142,11 +145,13 @@ export default class CardController {
     document.getElementById('cardAgain').onclick = this.eventCardAgain.bind(this);
     document.getElementById('cardCorrect').onclick = () => document.getElementById('inputWord').focus();
     document.getElementById('cardShow').onclick = async () => {
-      if (this.view.isShow(this.model.listToday[this.params.cardIndex])) {
+      const word = this.model.listToday[this.params.cardIndex];
+      if (this.view.isShow(word)) {
         this.view.lockElements(true);
         this.params.currentMistake = true;
         await this.setAnswerInCard(false, true);
         if (this.params.newConsecutive === this.params.consecutive) this.params.consecutive -= 1;
+        word.isPassed = false;
         this.params.newConsecutive -= 1;
         this.params.correctAnswer -= 1;
         this.params.newConsecutive = 0;
@@ -219,15 +224,6 @@ export default class CardController {
   }
 
   async eventRight() {
-    // if (this.params.cardIndex >= this.params.passedToday - 1) {
-    //   if (this.lockBtns || this.view.rightArrow.classList.contains('lock-arrow')) return;
-    //   this.lockBtns = true;
-    //   this.view.lockArrows(true);
-    //   this.timeout = setTimeout(() => {
-    //     this.view.lockArrows();
-    //     this.lockBtns = false;
-    //   }, 1500);
-    // }
     if (this.view.rightArrow.classList.contains('lock-arrow')) return;
     this.view.lockElements(true);
     if (this.view.rightArrow.classList.contains('go-next')
@@ -258,62 +254,59 @@ export default class CardController {
   }
 
   async eventRemove() {
-    if (!this.view.isLock()) {
-      if (this.model.listToday.length > 0) {
-        const removeWord = this.model.listToday[this.params.cardIndex];
-        let state = 'remove';
-        if (removeWord.state === state) state = 'study';
-        const INTERVAL_FACTOR = 'clear';
-        let isNew = false;
-        if (this.model.allStudyWords.find((item) => item.word === removeWord.word)) {
-          if (!removeWord.isPassed) isNew = true;
-          await this.model.updateAllStudyWords(
-            removeWord, false, true, false, false, INTERVAL_FACTOR, state,
-          );
+    if (!this.view.isLock() && this.model.listToday.length > 0) {
+      this.view.lockElements(true);
+      const removeWord = this.model.listToday[this.params.cardIndex];
+      let state = 'remove';
+      if (removeWord.state === state) state = 'study';
+
+      let isNew = false;
+      if (this.model.allStudyWords.find((item) => item.word === removeWord.word)) {
+        if (!removeWord.isPassed) isNew = true;
+        await this.model.updateAllStudyWords(
+          removeWord, false, true, false, false, false, state,
+        );
+      } else {
+        isNew = true;
+        await this.model.updateAllStudyWords(
+          removeWord, true, false, false, false, false, state,
+        );
+      }
+      if (isNew) {
+        this.params.currentMistake = false;
+        this.model.listToday.splice(this.params.cardIndex, 1);
+        if (this.params.passedToday === this.model.listToday.length) {
+          this.params.generatedListToday = false;
+          this.view.inputTodayStatistics(this.params);
+          this.model.clearListToday();
         } else {
-          isNew = true;
-          await this.model.updateAllStudyWords(
-            removeWord, true, false, false, false, INTERVAL_FACTOR, state,
-          );
-        }
-        if (isNew) {
-          this.model.lockBtns = true;
-          this.model.listToday.splice(this.params.cardIndex, 1);
-          let nextNewWord = this.model.allStudyWords.length + this.params.numberNewWords;
-          nextNewWord -= this.params.newWordsToday;
-          const maxWordsPerPage = 600;
-          const group = Math.floor(nextNewWord / maxWordsPerPage);
-          const pagesInGroup = 30;
-          const wordsInGroup = nextNewWord % maxWordsPerPage;
-          const page = Math.floor(wordsInGroup / pagesInGroup);
-          const indexInPage = wordsInGroup % pagesInGroup;
-          const words = await this.user.getWords({
-            group, page, maxLength: 99, wordsPerPage: 20,
-          });
-          const word = words[indexInPage];
-          this.model.listToday.push(word);
           const setWord = this.model.listToday[this.params.passedToday];
           const len = this.model.listToday.length;
           this.view.setWordInCard(
             false, len, this.params.passedToday, setWord, this.params.passedToday,
           );
         }
-        await this.setTodayStatStorage();
-        await this.model.putListToday;
       }
+      if (!isNew) this.view.setInDictionary(state);
+      await this.setTodayStatStorage();
+      await this.model.putListToday();
+      this.view.lockElements(false);
     }
   }
 
   async eventBookmark() {
     this.view.lockElements(true);
-    const mark = this.view.changeMark() ? 'difficult' : 'study';
     const word = this.model.listToday[this.params.cardIndex];
+    let state = 'difficult';
+    if (word.state === state) state = 'study';
+
+    this.view.setInDictionary(state);
     const { customRating } = word;
     const compare = word.word.toLowerCase();
     if (this.model.allStudyWords.find((item) => item.word.toLowerCase() === compare)) {
-      await this.model.updateAllStudyWords(word, false, true, false, false, customRating, mark);
+      await this.model.updateAllStudyWords(word, false, true, false, false, customRating, state);
     } else {
-      await this.model.updateAllStudyWords(word, true, false, false, false, customRating, mark);
+      await this.model.updateAllStudyWords(word, true, false, false, false, customRating, state);
     }
     await this.model.putListPage(word);
     this.view.lockElements(false);
@@ -384,6 +377,7 @@ export default class CardController {
         } else if (this.view.settings.nextCard) {
           this.unlock = false;
         }
+        word.timeToday = new Date().getTime();
         const { customRating } = this.model.listToday[this.params.cardIndex];
         this.view.blockButtons(customRating);
         this.params.newConsecutive += 1;
@@ -400,6 +394,7 @@ export default class CardController {
         }
 
         if (!this.params.currentMistake) {
+          word.isPassed = true;
           this.params.passedToday = this.view.changeRange(
             true, this.params.passedToday, this.model.listToday.length,
           );
@@ -418,9 +413,7 @@ export default class CardController {
         }
         this.params.currentMistake = false;
         if (!this.view.settings.sound && this.view.settings.nextCard) {
-          // clearTimeout(this.timeout);
           this.view.lockElements();
-          // this.lockBtns = false;
           this.unlock = true;
           this.eventRight();
         }

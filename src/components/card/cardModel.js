@@ -76,7 +76,6 @@ export default class CardModel {
       newWords = newWords.map((item) => {
         item.isNew = true;
         item.isPassed = false;
-        item.interval = 0;
         item.timeToday = new Date().getTime();
         return item;
       });
@@ -145,11 +144,14 @@ export default class CardModel {
     if (isNew) {
       word.count = (isCount) ? 1 : 0;
       word.mistakes = Number(mistake);
-      if (state) word.state = state; // study|difficult|remove
-      word.customRating = customRating; // undefine|complexity|normal|easy (false|1|3|5)
+      if (state) word.state = state;
+      word.customRating = customRating;
       word.interval = -1;
       if (isCount || mistake) {
         word.rating = this.getRating(word.count, word.mistakes);
+      } else if (state === 'remove') {
+        const MIN_RATING = 1;
+        word.rating = MIN_RATING;
       } else {
         const MAX_RATING = 5;
         word.rating = MAX_RATING;
