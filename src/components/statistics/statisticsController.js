@@ -28,5 +28,6 @@ export default class StatisticsController {
     this.statisticsView.drawScale(this.statisticsModel.dataScale(), 'y');
     this.statisticsView.drawSignaturesScale(this.statisticsModel.dataScale(), 'x');
     this.statisticsView.drawSignaturesScale(this.statisticsModel.dataScale(), 'y');
+    this.statisticsView.drawMainChartLines(this.statisticsModel.dataScale());
   }
 }

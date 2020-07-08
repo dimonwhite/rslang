@@ -57,9 +57,10 @@ export default class StatisticsView {
     this.canvasMainChartContext.lineWidth = 3.0;
     this.canvasMainChartContext.lineCap = 'round';
     const lengthScaleIndent = 10;
-    for (let i = 0; i < data.getStudyPeriod; i += 1) {
+    for (let i = 0; i <= data.getStudyPeriod; i += 1) {
       switch (axis) {
         case 'x':
+          if (i === data.getStudyPeriod) break;
           this.canvasMainChartContext.moveTo(
             (this.mainIndent + (i * data.indents[axis])),
             (this.canvasMainChartHeight - this.mainIndent),
@@ -76,6 +77,7 @@ export default class StatisticsView {
       }
       switch (axis) {
         case 'x':
+          if (i === data.getStudyPeriod) break;
           this.canvasMainChartContext.lineTo(
             (this.mainIndent + (i * data.indents[axis])),
             (this.canvasMainChartHeight - this.mainIndent - lengthScaleIndent),
@@ -98,11 +100,12 @@ export default class StatisticsView {
     this.canvasMainChartContext.fillStyle = '#ffeb00';
     this.canvasMainChartContext.font = 'bold 12px Raleway';
     const scaleIndent = 40;
-    for (let i = 0; i < data.getStudyPeriod; i += 1) {
+    for (let i = 0; i <= data.getStudyPeriod; i += 1) {
       let coordX;
       let coordY;
       switch (axis) {
         case 'x':
+          if (i === data.getStudyPeriod) break;
           coordX = this.mainIndent + (i * data.indents[axis]);
           coordY = this.canvasMainChartHeight - this.mainIndent + scaleIndent;
           break;
@@ -115,5 +118,22 @@ export default class StatisticsView {
       }
       this.canvasMainChartContext.fillText(data.axisSignatures[axis][i], coordX, coordY);
     }
+  }
+
+  drawMainChartLines(data) {
+    this.canvasMainChartContext.strokeStyle = '#ffeb00';
+    this.canvasMainChartContext.lineWidth = 3.0;
+    this.canvasMainChartContext.lineCap = 'round';
+    for (let i = 0; i <= data.getStudyPeriod; i += 1) {
+      this.canvasMainChartContext.moveTo(
+        ((i * data.indents.x) + this.mainIndent),
+        data.convertedValues[i],
+      );
+      this.canvasMainChartContext.lineTo(
+        (((i + 1) * data.indents.x) + this.mainIndent),
+        data.convertedValues[i + 1],
+      );
+    }
+    this.canvasMainChartContext.stroke();
   }
 }

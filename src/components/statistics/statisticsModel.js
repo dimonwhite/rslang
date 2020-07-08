@@ -8,13 +8,16 @@ export default class StatisticsModel {
     this.quantityStudyWords = studyWords.length;
     this.widthWindow = document.documentElement.clientWidth;
     this.data = {
-      '01-07-2020': 15,
-      '02-07-2020': 25,
-      '03-07-2020': 35,
-      '04-07-2020': 19,
-      '05-07-2020': 7,
-      '06-07-2020': 51,
-      '07-07-2020': 107,
+      '01-07': 15,
+      '02-07': 25,
+      '03-07': 35,
+      '04-07': 19,
+      '05-07': 7,
+      '06-07': 51,
+      '07-07': 107,
+      '08-07': 5,
+      '09-07': 52,
+      '10-07': 47,
     };
     this.mainIndent = indent;
   }
@@ -71,14 +74,11 @@ export default class StatisticsModel {
   }
 
   getMaxActiveDay(obj) {
-    this.search = function () {
-      let maxQuantityWord = 0;
-      Object.keys(obj).forEach((key) => {
-        if (obj[key] > maxQuantityWord) maxQuantityWord = obj[key];
-      });
-      return maxQuantityWord;
-    };
-    return this.search;
+    this.maxQuantityWord = 0;
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] > this.maxQuantityWord) this.maxQuantityWord = obj[key];
+    });
+    return this.maxQuantityWord;
   }
 
   getStudyPeriod(obj) {
@@ -99,15 +99,33 @@ export default class StatisticsModel {
   }
 
   getAxisSignatures(obj) {
-    this.quantityWords = Object.values(obj);
-    this.quantityWords.sort((a, b) => a - b);
-
+    this.decrease = Math.round(this.getMaxActiveDay(this.data) / this.quantityDaysStudy);
+    this.arrayDataWord = [];
+    for (let i = this.getStudyPeriod(this.data); i >= 0; i -= 1) {
+      this.arrayDataWord.push(this.decrease * i);
+    }
+    this.arrayDataWord.reverse();
     this.datesWords = Object.keys(obj);
 
     return {
       x: this.datesWords,
-      y: this.quantityWords,
+      y: this.arrayDataWord,
     };
+  }
+
+  determineScaleCoefficient() {
+    this.scaleCoefficient = this.getMaxActiveDay(this.data)
+    / this.determineAxisLength().y;
+    return this.scaleCoefficient;
+  }
+
+  scaleWordsValues() {
+    const convertedValues = Object.values(this.data);
+    convertedValues.forEach((value, i) => {
+      convertedValues[i] = this.canvasSizeHeight - this.mainIndent
+      - (convertedValues[i] / this.scaleCoefficient);
+    });
+    return convertedValues;
   }
 
   dataScale() {
@@ -117,8 +135,9 @@ export default class StatisticsModel {
       indents: this.determinScaleIndent(),
       axisLength: this.determineAxisLength(),
       axisSignatures: this.getAxisSignatures(this.data),
+      scaleCoefficient: this.determineScaleCoefficient(),
+      convertedValues: this.scaleWordsValues(),
     };
-
     return mainScaleElements;
   }
 }
