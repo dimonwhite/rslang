@@ -8,16 +8,9 @@ export default class StatisticsModel {
     this.quantityStudyWords = studyWords.length;
     this.widthWindow = document.documentElement.clientWidth;
     this.data = {
-      '01-07': 15,
-      '02-07': 25,
-      '03-07': 35,
-      '04-07': 19,
-      '05-07': 7,
-      '06-07': 51,
-      '07-07': 107,
-      '08-07': 5,
-      '09-07': 52,
-      '10-07': 47,
+      '01-07': 0,
+      '02-07': 0,
+      '04-07': 15,
     };
     this.mainIndent = indent;
   }
@@ -99,10 +92,10 @@ export default class StatisticsModel {
   }
 
   getAxisSignatures(obj) {
-    this.decrease = Math.round(this.getMaxActiveDay(this.data) / this.quantityDaysStudy);
+    this.decrease = this.getMaxActiveDay(this.data) / this.quantityDaysStudy;
     this.arrayDataWord = [];
     for (let i = this.getStudyPeriod(this.data); i >= 0; i -= 1) {
-      this.arrayDataWord.push(this.decrease * i);
+      this.arrayDataWord.push(Math.round(this.decrease * i));
     }
     this.arrayDataWord.reverse();
     this.datesWords = Object.keys(obj);
@@ -122,8 +115,13 @@ export default class StatisticsModel {
   scaleWordsValues() {
     const convertedValues = Object.values(this.data);
     convertedValues.forEach((value, i) => {
-      convertedValues[i] = this.canvasSizeHeight - this.mainIndent
+      if (convertedValues[i] === 0) {
+        convertedValues[i] = this.canvasSizeHeight - this.mainIndent
+      - (convertedValues[i]);
+      } else {
+        convertedValues[i] = this.canvasSizeHeight - this.mainIndent
       - (convertedValues[i] / this.scaleCoefficient);
+      }
     });
     return convertedValues;
   }

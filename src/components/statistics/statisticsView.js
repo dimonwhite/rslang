@@ -122,18 +122,36 @@ export default class StatisticsView {
 
   drawMainChartLines(data) {
     this.canvasMainChartContext.strokeStyle = '#ffeb00';
+    this.canvasMainChartContext.fillStyle = '#a902ff';
     this.canvasMainChartContext.lineWidth = 3.0;
     this.canvasMainChartContext.lineCap = 'round';
     for (let i = 0; i <= data.getStudyPeriod; i += 1) {
+      const coordinates = {
+        firstPoint: [
+          ((i * data.indents.x) + this.mainIndent),
+          data.convertedValues[i],
+        ],
+        secondPoint: [
+          (((i + 1) * data.indents.x) + this.mainIndent),
+          data.convertedValues[i + 1],
+        ],
+      };
+      const pointR = 7;
+      this.canvasMainChartContext.beginPath();
       this.canvasMainChartContext.moveTo(
-        ((i * data.indents.x) + this.mainIndent),
-        data.convertedValues[i],
+        coordinates.firstPoint[0],
+        coordinates.firstPoint[1],
       );
       this.canvasMainChartContext.lineTo(
-        (((i + 1) * data.indents.x) + this.mainIndent),
-        data.convertedValues[i + 1],
+        coordinates.secondPoint[0],
+        coordinates.secondPoint[1],
       );
+      this.canvasMainChartContext.stroke();
+
+      this.canvasMainChartContext.beginPath();
+      this.canvasMainChartContext.arc(coordinates.firstPoint[0],
+        coordinates.firstPoint[1], pointR, 0, 2 * Math.PI);
+      this.canvasMainChartContext.fill();
     }
-    this.canvasMainChartContext.stroke();
   }
 }
