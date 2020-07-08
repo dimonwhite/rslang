@@ -1,14 +1,10 @@
 import { urlGitHub } from '@/constants';
 import CardView from './cardView';
 import CardModel from './cardModel';
-import HttpClient from '../httpclient/HttpClient';
 
 export default class CardController {
   constructor(user) {
     this.user = user;
-    this.user = new HttpClient();
-    this.user.userId = localStorage.getItem('userId');
-    this.user.token = localStorage.getItem('token');
 
     this.view = new CardView();
     this.model = new CardModel(this.user);
