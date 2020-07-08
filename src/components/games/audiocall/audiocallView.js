@@ -19,7 +19,7 @@ export default class AudiocallView {
 
     this.game.innerHTML = `
     <div class="restart-wrapper">
-    <div class="user-words">User words</div>
+    <div class="user-words active">User words</div>
     <div class="restart">Restart</div>
     <div class="exit" href="#/">Exit</div>
     </div>

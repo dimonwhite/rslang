@@ -51,8 +51,8 @@ export default class AudiocallController {
     }
 
     if (e.target.closest('.user-words')) {
-      this.model.isUserWords = true;
-      this.view.btnuserWords.classList.add('active');
+      this.model.isUserWords = !this.model.isUserWords;
+      this.view.btnuserWords.classList.toggle('active');
       this.startRound();
     }
   }
@@ -167,6 +167,7 @@ export default class AudiocallController {
       if (this.view.preloader) {
         this.view.preloader.remove();
       }
+      setTimeout(this.change.bind(this), 2000);
     }
   }
 

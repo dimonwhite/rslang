@@ -5,7 +5,7 @@ export default class AudiocallModel {
   constructor(user) {
     this.user = user;
     this.wordArray = null;
-    this.isUserWords = false;
+    this.isUserWords = true;
     this.level = 0;
     this.optionWordsNumber = 4;
     this.step = 0;
