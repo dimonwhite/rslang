@@ -36,7 +36,7 @@ export default class CardModel {
       for (let i = 0; i < WORDS_START_WITH; i += 1) {
         const wordId = String(i).repeat(ID_LENGTH);
         const wordData = {};
-        wordData.listToday = 'empty';
+        wordData.listToday = 'empty2';
         // eslint-disable-next-line no-await-in-loop
         await this.user.createUserWord({ wordData, wordId, difficulty });
       }
