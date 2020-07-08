@@ -97,8 +97,8 @@ export default class DictionaryView {
   }
 
   updateListItem(word, settings) {
-    const item = this.list.querySelector(`.card-list[data-id="${word.id}"]`);
-    const content = DictionaryView.contentListItem(item, settings);
+    const item = this.list.querySelector(`.card-list[data-id="${word.wordId}"]`);
+    const content = DictionaryView.contentListItem(word, settings);
     item.innerHTML = content;
   }
 
@@ -140,10 +140,10 @@ export default class DictionaryView {
     this.audio.play();
   }
 
-  createCardBackground() {
-    this.cardBackground = createElement({ tag: 'div', class: 'background' });
-    this.cardBackground.style.background = blackGradient;
-    this.dictionary.append(this.cardBackground);
+  createBackground() {
+    this.background = createElement({ tag: 'div', class: 'background' });
+    this.background.style.background = blackGradient;
+    this.dictionary.append(this.background);
   }
 
   createCard({ word, wordId, settings }) {
@@ -186,8 +186,8 @@ export default class DictionaryView {
         contentBody += `<div class="card__progress">
           <div class="card__rating">Прогресс изучения: ${word.optional.rating}</div>
           <div class="card__repeat">Повторейний: ${word.optional.count}</div>
-          <div class="card__last-time">Давность: ${word.optional.lastTimeText} назад</div>
-          <div class="card__next-time">Повтор: через ${word.optional.nextTimeText}</div>
+          <div class="card__last-time">Давность: ${word.lastTimeText} назад</div>
+          <div class="card__next-time">Повтор: через ${word.nextTimeText}</div>
         </div>`;
       }
       contentBody += '</div>';
@@ -219,13 +219,13 @@ export default class DictionaryView {
       ${contentBody}
       <div class="card__bot">
         <div class="card__state">
-          <svg class="card__state-item card__study-icon" title="Изучемое слово">
+          <svg class="card__state-item card__study-icon" data-type="study" title="Изучемое слово">
             <use xlink:href="sprite.svg#dictionary-filter-study"></use>
           </svg>
-          <svg class="card__state-item card__difficult-icon" title="Сложное слово">
+          <svg class="card__state-item card__difficult-icon" data-type="difficult" title="Сложное слово">
             <use xlink:href="sprite.svg#dictionary-filter-difficult"></use>
           </svg>
-          <svg class="card__state-item card__remove-icon" title="Удаленное слово">
+          <svg class="card__state-item card__remove-icon" data-type="remove" title="Удаленное слово">
             <use xlink:href="sprite.svg#dictionary-filter-remove"></use>
           </svg>
         </div>

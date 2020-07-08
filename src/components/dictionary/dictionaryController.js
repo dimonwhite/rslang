@@ -90,7 +90,7 @@ export default class DictionaryController {
   }
 
   createCard(word, wordId) {
-    this.view.createCardBackground();
+    this.view.createBackground();
     this.view.createCard({ word, wordId, settings: this.settings });
     this.initCard();
   }
@@ -98,6 +98,11 @@ export default class DictionaryController {
   initCard() {
     this.view.card.addEventListener('click', (e) => {
       this.clickCard(e);
+    });
+
+    this.view.background.addEventListener('click', () => {
+      this.view.card.remove();
+      this.view.background.remove();
     });
   }
 
@@ -110,7 +115,7 @@ export default class DictionaryController {
 
     if (e.target.closest('.close-icon')) {
       this.view.card.remove();
-      this.view.cardBackground.remove();
+      this.view.background.remove();
       return;
     }
 
@@ -149,17 +154,24 @@ export default class DictionaryController {
     this.initCard();
   }
 
-  stateCard(e) {
+  async stateCard(e) {
     const state = e.target.closest('.card__state-item');
     const stateActive = this.view.card.querySelector('.card__state-item_active');
-    if (stateActive) {
-      stateActive.classList.remove('card__state-item_active');
-    }
-    state.classList.add('card__state-item_active');
+    const stateType = state.dataset.type;
 
-    // обновление state
-    const word = this.model.getWord(this.view.card.dataset.id);
-    this.view.updateListItem(word);
+    const updateState = await this.model.updateState(stateType);
+
+    if (updateState) {
+      if (stateActive) {
+        stateActive.classList.remove('card__state-item_active');
+      }
+      state.classList.add('card__state-item_active');
+
+      // обновление state
+      this.view.updateListItem(updateState, this.settings);
+
+      await this.model.getDataWords();
+    }
   }
 
   createList(filter, strSearch) {

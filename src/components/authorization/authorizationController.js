@@ -52,9 +52,9 @@ export default class AuthorizationController {
     this.view.createLoginBtn();
     this.initUnauthorized();
 
-    /* if (window.location.hash !== this.defaulPage) {
+    if (window.location.hash !== this.defaulPage) {
       window.location.hash = this.defaulPage;
-    } */
+    }
   }
 
   initUnauthorized() {

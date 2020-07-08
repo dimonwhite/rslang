@@ -58,15 +58,18 @@ export default class DictionaryModel {
     console.log(word.prev);
     console.log(word.next);
 
-    word.optional.lastTimeText = this.getLastTimeText();
-    word.optional.nextTimeText = this.getNextTimeText();
+    word.lastTimeText = this.getLastTimeText();
+    word.nextTimeText = this.getNextTimeText();
 
     return word;
   }
 
   getLastTimeText() {
     const lastTime = getDiffFormatDate(
-      getDiffTime(new Date(this.word.optional.lastTime), new Date()),
+      getDiffTime(
+        new Date(Number(this.word.optional.lastTime)),
+        new Date(),
+      ),
     );
 
     return lastTime;
@@ -74,9 +77,30 @@ export default class DictionaryModel {
 
   getNextTimeText() {
     const nextTime = getDiffFormatDate(
-      getDiffTime(new Date(), new Date(this.word.optional.nextTime)),
+      getDiffTime(
+        new Date(),
+        new Date(Number(this.word.optional.nextTime)),
+      ),
     );
 
     return nextTime;
+  }
+
+  async updateState(state) {
+    const word = this.dataWords.find((item) => item.wordId === this.word.wordId);
+    word.optional.state = state;
+    console.log(word);
+
+    const request = await this.http.updateUserWord({
+      wordId: word.wordId,
+      wordData: word.optional,
+      difficulty: word.difficulty,
+    })
+      .then((res) => res)
+      .catch((error) => {
+        this.error = error;
+      });
+
+    return request;
   }
 }
