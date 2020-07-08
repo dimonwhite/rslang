@@ -183,7 +183,7 @@ export default class CardController {
   }
 
   async eventBookmark() {
-    this.view.lockElements(true);
+    if (this.unlock) this.view.lockElements(true);
     const l = this.model.listToday.length - 1;
     const word = (this.cut) ? this.model.listToday[l] : this.model.listToday[this.params.cardIndex];
 
@@ -203,12 +203,12 @@ export default class CardController {
       });
     }
     await this.model.putListPage(word);
-    this.view.lockElements(false);
+    if (this.unlock) this.view.lockElements(false);
   }
 
   async eventCardAgain() {
     if (!this.view.cardAgain.classList.contains('lock-element')) {
-      this.view.lockArrows(true);
+      if (this.unlock) this.view.lockElements(true);
       this.view.cardAgain.classList.add('lock-element');
       const cutWord = this.model.listToday.splice(this.params.cardIndex, 1)[0];
       cutWord.isPassed = false;
@@ -221,7 +221,7 @@ export default class CardController {
       this.view.changeRange(false, this.params.passedToday, this.model.listToday.length);
       await this.setTodayStatStorage();
       await this.model.putListToday();
-      this.view.lockArrows(false);
+      if (this.unlock) this.view.lockElements(false);
     }
   }
 
@@ -321,6 +321,7 @@ export default class CardController {
       });
     } else if (!prev) {
       this.params.newWordsToday += 1;
+      this.addChartStatistics();
       await this.model.updateAllStudyWords({
         word, isNew: true, isCount: true, mistake, customRating: false, state: 'study',
       });
@@ -362,6 +363,7 @@ export default class CardController {
       });
     } else {
       this.params.newWordsToday += 1;
+      this.addChartStatistics();
       await this.model.updateAllStudyWords({
         word, isNew: true, isCount: true, mistake: true, state: 'study',
       });
@@ -525,6 +527,7 @@ export default class CardController {
           next: false, numberWords: len, passedTodaY: 0, word, cardIndeX: 0,
         });
         await this.setTodayStatStorage();
+        await this.model.putListToday();
       }
 
       const len = this.model.listToday.length;
@@ -536,6 +539,22 @@ export default class CardController {
       this.view.setSettingsInCard({
         word, cardIndex: index, passedToday: this.params.passedToday, change: true,
       });
+    }
+  }
+
+  addChartStatistics() {
+    const days = this.statistics.optional.statisticsChart;
+    let today = new Date();
+    let [day, month] = [today.getDate(), today.getMonth() + 1];
+    if (day < 10) day = `0${day}`;
+    if (month < 10) month = `0${month}`;
+    today = `${day}-${month}-${today.getFullYear()}`;
+    const find = Object.keys(days).find((item) => item === today);
+    if (find) {
+      days[today] = +days[today] + 1;
+    } else {
+      days[today] = 1;
+      days.length = +days.length + 1;
     }
   }
 }

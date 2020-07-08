@@ -33,13 +33,14 @@ export default class CardModel {
     } else if (userWords.length === 0) {
       const difficulty = 'today';
       const ID_LENGTH = 24;
+      const promises = [];
       for (let i = 0; i < WORDS_START_WITH; i += 1) {
         const wordId = String(i).repeat(ID_LENGTH);
         const wordData = {};
-        wordData.listToday = 'empty2';
-        // eslint-disable-next-line no-await-in-loop
-        await this.user.createUserWord({ wordData, wordId, difficulty });
+        wordData.listToday = 'empty';
+        promises.push(this.user.createUserWord({ wordData, wordId, difficulty }));
       }
+      await Promise.all(promises);
     }
   }
 
@@ -56,12 +57,12 @@ export default class CardModel {
     const maxLength = 99;
     let allWords = [];
     if (group === groupNext) {
-      const wordsPerPage = (learnedWords % maxWordsPerPage) + settingsNewWords;
+      const wordsPerPage = (learnedWords % maxWordsPerPage) + settingsNewWords + 1;
       allWords = await this.user.getWords({
         group, page, maxLength, wordsPerPage,
       });
     } else {
-      const wordsPerPage = (learnedWords + settingsNewWords) % maxWordsPerPage;
+      const wordsPerPage = (learnedWords + settingsNewWords + 1) % maxWordsPerPage;
       const firstChunk = await this.user.getWords({
         group, page, maxLength, wordsPerPage: maxWordsPerPage,
       });
@@ -71,7 +72,7 @@ export default class CardModel {
       allWords = [...firstChunk, ...secondChunk];
     }
     this.maxForToday = maxWords - settingsNewWords;
-    this.newWords = allWords.slice(learnedWords % maxWordsPerPage);
+    this.newWords = allWords.slice((learnedWords + 1) % maxWordsPerPage);
   }
 
   async createListToday() {
@@ -111,12 +112,13 @@ export default class CardModel {
     const difficulty = 'today';
     const ID_LENGTH = 24;
     const numberListPages = Math.ceil(this.listToday.length / WORDS_PER_PAGE);
+    const promises = [];
     for (let i = 0; i < numberListPages; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);
       const wordData = this.parseToObj(i);
-      // eslint-disable-next-line no-await-in-loop
-      await this.user.updateUserWord({ wordId, wordData, difficulty });
+      promises.push(this.user.updateUserWord({ wordId, wordData, difficulty }));
     }
+    await Promise.all(promises);
   }
 
   parseToObj(index) {
@@ -129,12 +131,15 @@ export default class CardModel {
 
   async getListToday(numberListPages) {
     const ID_LENGTH = 24;
+    const promises = [];
     for (let i = 0; i < numberListPages; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);
-      // eslint-disable-next-line no-await-in-loop
-      const page = await this.user.getUserWordById(wordId);
-      this.listToday = [...this.listToday, ...Object.values(page.optional)];
+      promises.push(this.user.getUserWordById(wordId));
     }
+    const pages = await Promise.all(promises);
+    pages.forEach((page) => {
+      this.listToday = [...this.listToday, ...Object.values(page.optional)];
+    });
   }
 
   async putListPage(word) {
