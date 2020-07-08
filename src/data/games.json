@@ -17,7 +17,7 @@
         "step": 5,
         "options": 3
       },
-      "levels": true
+      "levels": false
     }
   },
   "audiocall": {

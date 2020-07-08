@@ -70,11 +70,7 @@ export default class RenderView {
         </div>
       </div>
     `;
-    this.root.querySelector('.select-level').querySelectorAll('option').forEach((el) => {
-      if (parseInt(el.value, 0) === this.data.level) {
-        el.setAttribute('selected', 'true');
-      }
-    });
+
     let maxroundNumber = 25;
     while (maxroundNumber) {
       const option = document.createElement('option');
@@ -83,11 +79,6 @@ export default class RenderView {
       this.root.querySelector('.select-round').append(option);
       maxroundNumber -= 1;
     }
-    this.root.querySelector('.select-round').querySelectorAll('option').forEach((el) => {
-      if (parseInt(el.value, 0) === this.data.roundNumber) {
-        el.setAttribute('selected', 'true');
-      }
-    });
 
     this.puzzleContainer = this.root.querySelector('.puzzle-container');
     this.wordContainer = this.root.querySelector('.word-container');
@@ -96,6 +87,39 @@ export default class RenderView {
     this.wordContainer.style.height = `${this.rowHeight + 20}px`;
     this.puzzleContainer.style.width = `${this.containerWidth}px`;
     this.puzzleContainer.style.height = `${this.containerHeight}px`;
+
+    this.markElements();
+  }
+
+  markElements() {
+    if (this.data.isUserWords) {
+      this.root.querySelector('.btn__userwords').classList.add('chosen');
+    }
+
+    this.root.querySelector('.select-round').querySelectorAll('option').forEach((el) => {
+      if (parseInt(el.value, 0) === this.data.roundNumber) {
+        el.setAttribute('selected', 'true');
+      }
+    });
+
+    this.root.querySelector('.select-level').querySelectorAll('option').forEach((el) => {
+      if (parseInt(el.value, 0) === this.data.level) {
+        el.setAttribute('selected', 'true');
+      }
+    });
+
+    if (!this.data.tips.backImg) {
+      this.root.querySelector('.btn__backImg').classList.add('inactive');
+    }
+
+    if (!this.data.tips.translate) {
+      this.root.querySelector('.btn__translate').classList.add('inactive');
+    }
+
+    if (!this.data.tips.autoPlay) {
+      this.root.querySelector('.btn__audio__tip').classList.add('inactive');
+      this.root.querySelector('.btn__audio').style.display = 'none';
+    }
   }
 
   renderRow() {
@@ -177,7 +201,12 @@ export default class RenderView {
   }
 
   showError(error) {
-    this.sentenceTranslation.innerText = error;
+    const msg = document.createElement('div');
+    msg.classList.add('msg');
+    msg.innerText = error;
+    this.root.append(msg);
+
+    setTimeout(msg.remove(), 1000);
   }
 
   init() {

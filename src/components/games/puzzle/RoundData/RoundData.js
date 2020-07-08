@@ -2,8 +2,8 @@ import HttpClient from '../../../httpclient/HttpClient';
 
 export default class RoundData {
   constructor(obtainWords) {
-    this.level = 0;
-    this.roundNumber = 1;
+    this.level = this.getLocalStorage('level');
+    this.roundNumber = this.getLocalStorage('roundNumber');
     this.obtainWords = obtainWords;
     this.rawData = null;
     this.roundImgData = null;
@@ -12,6 +12,34 @@ export default class RoundData {
     this.client = new HttpClient();
     this.isUserWords = true;
     this.fail = 0;
+    this.tips = {
+      backImg: this.getLocalStorage('tips').backImg,
+      translate: this.getLocalStorage('tips').translate,
+      autoPlay: this.getLocalStorage('tips').autoPlay,
+    };
+  }
+
+  setLocalStorage(key, value) {
+    this.parsed = JSON.parse(localStorage.puzzle);
+    this.parsed[key] = value;
+    localStorage.setItem('puzzle', JSON.stringify(this.parsed));
+  }
+
+  getLocalStorage(key) {
+    if (!localStorage.puzzle) {
+      const newObj = {
+        tips: {
+          backImg: true,
+          translate: true,
+          autoPlay: true,
+        },
+        level: 0,
+        roundNumber: 1,
+      };
+      localStorage.setItem('puzzle', JSON.stringify(newObj));
+    }
+    this.parsed = JSON.parse(localStorage.puzzle);
+    return this.parsed[key];
   }
 
   static makeSingleSentence(el) {
