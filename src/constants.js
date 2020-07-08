@@ -41,6 +41,7 @@ const defaultStatistics = {
         wordsRepeatToday: 0,
         generatedListToday: 0,
         currentMistake: 0,
+        length: 0,
       },
     },
   },

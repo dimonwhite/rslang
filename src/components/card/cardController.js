@@ -21,6 +21,7 @@ export default class CardController {
       numberListPages: 0,
       generatedListToday: false,
       currentMistake: false,
+      length: 0,
     };
     this.next = false;
     this.cut = false;
@@ -77,6 +78,7 @@ export default class CardController {
   async setTodayStatStorage() {
     const { cardIndex } = this.params;
     this.params.cardIndex = this.params.passedToday;
+    this.params.length = this.listToday.length;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
     this.params.cardIndex = cardIndex;
   }
