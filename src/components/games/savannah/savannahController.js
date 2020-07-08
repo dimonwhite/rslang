@@ -164,11 +164,15 @@ export default class SavannahController {
   }
 
   setEventsKeyboard(e) {
-    if (e.code.includes('Digit')) {
-      const id = +e.code.replace('Digit', '');
-      if (id > 0 && id <= this.maxKeyId) {
-        document.getElementById(`savAnswer${id}`).click();
+    try {
+      if (e.code.includes('Digit')) {
+        const id = +e.code.replace('Digit', '');
+        if (id > 0 && id <= this.maxKeyId) {
+          document.getElementById(`savAnswer${id}`).click();
+        }
       }
+    } catch (error) {
+      this.error = error;
     }
   }
 
