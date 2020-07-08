@@ -312,7 +312,7 @@ export default class CardView {
       this.cardExampleTranslation.innerHTML = word.textExample;
     }
     this.setSettingsInCard({
-      word, cardIndex: false, passedToday: false, change: false, prev,
+      word, cardIndex: false, passedToday: false, change: false, prev, mistake: currentMistake,
     });
     this.cardPlay.classList.add('show');
     if (prev) {
@@ -323,7 +323,7 @@ export default class CardView {
   }
 
   setSettingsInCard({
-    word, cardIndex, passedToday, change, prev,
+    word, cardIndex, passedToday, change, prev, mistake,
   }) {
     const hide = cardIndex === passedToday;
     if (this.settings.interval && (prev || !hide)) {
@@ -334,13 +334,13 @@ export default class CardView {
     }
     if (this.settings.removeWord) {
       this.cardRemove.classList.remove('hide');
-      this.setInDictionary(word.state);
+      this.setInDictionary(word.state, mistake);
     } else {
       this.cardRemove.classList.add('hide');
     }
     if (this.settings.difficultWord) {
       this.cardDiff.classList.remove('hide');
-      this.setInDictionary(word.state);
+      this.setInDictionary(word.state, mistake);
     } else {
       this.cardDiff.classList.add('hide');
     }
@@ -539,7 +539,7 @@ export default class CardView {
     }
   }
 
-  setInDictionary(state) {
+  setInDictionary(state, mistake) {
     if (state === 'difficult') {
       this.cardDiff.classList.add('custom-rating');
     } else {
@@ -550,7 +550,7 @@ export default class CardView {
       this.cardAgain.classList.add('lock-element');
     } else {
       this.cardRemove.classList.remove('custom-rating');
-      this.cardAgain.classList.remove('lock-element');
+      if (!mistake) this.cardAgain.classList.remove('lock-element');
     }
   }
 

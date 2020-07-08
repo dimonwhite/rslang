@@ -203,7 +203,19 @@ export default class CardModel {
   }) {
     const DAY = 60 * 60 * 24 * 1000;
     const update = this.allStudyWords.find((item) => item.word === word.word);
-    if (isCount) update.count += 1;
+    if (state) update.state = state;
+    if (customRating === 'clear') {
+      update.customRating = false;
+    } else if (customRating) {
+      update.customRating = customRating;
+    }
+    if (isCount) this.changeWordStat({ update, mistake, DAY });
+    Object.keys(update).forEach((key) => { word[key] = update[key]; });
+    await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
+  }
+
+  changeWordStat({ update, mistake, DAY }) {
+    update.count += 1;
     if (mistake) {
       update.mistakes += 1;
       update.interval = -1;
@@ -214,12 +226,7 @@ export default class CardModel {
       date = `${date.getDate()}${date.getMonth()}${date.getFullYear()}`;
       if (date !== dateToday) update.interval += 1;
     }
-    if (state) update.state = state;
-    if (customRating === 'clear') {
-      update.customRating = false;
-    } else if (customRating) {
-      update.customRating = customRating;
-    }
+
     const counts = update.count;
     const { mistakes } = update;
     update.rating = this.getRating(counts, mistakes);
@@ -231,8 +238,6 @@ export default class CardModel {
       const interval = (update.interval === -1) ? 0 : update.interval;
       update.nextTime = update.lastTime + (2 ** interval) * DAY;
     }
-    Object.keys(update).forEach((key) => { word[key] = update[key]; });
-    await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
   }
 
   getRating(count, mistakes) {
