@@ -5,33 +5,62 @@ const backendUrl = 'https://afternoon-falls-25894.herokuapp.com';
 const defaultStatistics = {
   learnedWords: 0,
   optional: {
-    savannah: {},
-    audiocall: {},
-    sprint: {},
-    speakit: {},
-    puzzle: {},
-    own: {},
-    statisticsChart: {},
+    savannah: {
+      length: 0,
+    },
+    audiocall: {
+      length: 0,
+    },
+    sprint: {
+      length: 0,
+    },
+    speakit: {
+      length: 0,
+    },
+    puzzle: {
+      length: 0,
+    },
+    own: {
+      length: 0,
+    },
+    statisticsChart: {
+      length: 0,
+    },
+    todayTraining: {
+      lastDate: 2062020,
+      params: {
+        passedToday: 0,
+        cardIndex: 0,
+        passedNew: 0,
+        numberNewWords: 0,
+        newWordsToday: 0,
+        consecutive: 0,
+        newConsecutive: 0,
+        correctAnswer: 0,
+        incorrectAnswer: 0,
+        wordsRepeatToday: 0,
+        generatedListToday: 0,
+        currentMistake: 0,
+        length: 0,
+      },
+    },
   },
 };
 const defaultSettings = {
   wordsPerDay: 1,
   optional: {
-    lastDate: '2062020',
-    todayTraining: '0,0,0,0,0,0,0,false,false',
+    lang: 'EN',
     settings: {
-      lang: 'EN',
       langEn: true,
       langRu: false,
       difficultWord: true,
       exampleWord: true,
       imgWord: true,
-      interval: true,
-      listAlternately: false,
-      listNew: true,
+      listAlternately: true,
+      listNew: false,
       listRepeat: false,
-      maxWords: '10',
-      newWords: '10',
+      maxWords: '24',
+      newWords: '12',
       meaningWord: true,
       numberLetters: true,
       removeWord: true,

@@ -40,10 +40,12 @@ export default class Games {
   }
 
   createStartScreen() {
-    const startScreen = createElement({ tag: 'div', class: 'game__startScreen' });
-    const title = createElement({ tag: 'div', class: 'game__startScreen-title', content: this.gameInfo.title });
-    const desc = createElement({ tag: 'div', class: 'game__startScreen-desc', content: this.gameInfo.desc });
-    const btnStart = createElement({ tag: 'button', class: 'btn', content: 'Start' });
+    const startScreen = createElement({ tag: 'section', class: 'game__startScreen', id: 'startScreen' });
+    const title = createElement({ tag: 'h2', class: 'game__startScreen-title', content: this.gameInfo.title });
+    const desc = createElement({ tag: 'p', class: 'game__startScreen-desc', content: this.gameInfo.desc });
+    const btnStart = createElement({
+      tag: 'button', class: 'btn', id: 'startGame', content: 'Start',
+    });
     const btnExit = createElement({ tag: 'a', class: 'btn', content: 'Go back' });
     btnExit.href = '#/';
     const image = require(`@/assets/img/${this.gameInfo.bgImage}`);
@@ -62,7 +64,7 @@ export default class Games {
   }
 
   createSettings() {
-    const wrap = createElement({ tag: 'div', class: 'game__options' });
+    const wrap = createElement({ tag: 'div', class: 'game__options', id: 'gameOptions' });
     if (this.gameInfo.settings.levels) {
       wrap.append(this.createLevels());
     }
@@ -85,7 +87,9 @@ export default class Games {
     this.successBlock = createElement({ tag: 'div', class: 'resultPopup__success' });
 
     const btnBlock = createElement({ tag: 'div', class: 'resultPopup__btns' });
-    this.btnClosePopup = createElement({ tag: 'button', class: 'btn', content: 'Close' });
+    this.btnClosePopup = createElement({
+      tag: 'button', class: 'btn', id: 'closePopup', content: 'Close',
+    });
     this.btnNewGame = createElement({ tag: 'button', class: 'btn', content: 'New game' });
     this.appendResultPopupElements({
       wrap, titleError, titleSuccess, btnBlock,
