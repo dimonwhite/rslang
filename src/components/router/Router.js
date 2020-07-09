@@ -4,7 +4,8 @@ import CardController from '../card/cardController';
 import StatisticsController from '../statistics/statisticsController';
 
 export default class Router {
-  constructor() {
+  constructor(http) {
+    this.http = http;
     this.mainSection = document.querySelector('main');
     this.hash = window.location.hash;
     this.pages = {
@@ -35,7 +36,7 @@ export default class Router {
       this.mainSection.className = 'main';
       document.body.className = 'body';
       document.body.removeAttribute('style');
-      this.currentPage = new PageClass();
+      this.currentPage = new PageClass(this.http);
       this.currentPage.create(...this.urlArray);
       this.changeActiveLink();
     }
