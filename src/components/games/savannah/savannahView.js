@@ -58,6 +58,9 @@ export default class SavannahView {
     const ALL_PAGES = 30;
     const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
     this.createOptions('Страница:', pages, 'selectPage');
+    this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__btn', content: 'Выученные слова' });
+    this.learnedWords.classList.add('active-learned');
+    this.start.append(this.learnedWords);
   }
 
   createOptions(content, options, id) {
@@ -307,5 +310,10 @@ export default class SavannahView {
         this.randIndexes.push(rand);
       }
     }
+  }
+
+  selectLearnedWords() {
+    this.learnedWords.classList.add('active-learned');
+    return -1;
   }
 }

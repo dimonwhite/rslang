@@ -7,7 +7,7 @@ export default class SavannahModel {
     this.gameWords = [];
     this.maxHeart = 5;
     this.countWords = 10;
-    this.level = 0;
+    this.level = -1;
     this.page = 1;
     this.lang = 'EN';
     this.allStudyWords = [];
@@ -15,8 +15,11 @@ export default class SavannahModel {
 
   async createWords() {
     const SENTENCE = 99;
-    // this.allStudyWords = await this.user.getAllUserWords();
-    if (this.allStudyWords && this.allStudyWords.length > 100 && this.level === -1) {
+    const userWords = await this.user.getAllUserWords();
+    const WORDS_START_WITH = 10;
+    this.time = new Date().getTime();
+    if (userWords.length > WORDS_START_WITH + 100 && this.level === -1) {
+      this.allStudyWords = userWords.slice(WORDS_START_WITH).map((item) => item.optional);
       this.random(this.allStudyWords);
     } else {
       const HANDICAP = 10;

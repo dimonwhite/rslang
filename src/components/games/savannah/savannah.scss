@@ -152,6 +152,16 @@
     }
 }
 
+.savannah-start {
+    &__btn {
+        width: 150px;
+        height: 40px;
+        border-radius: 10px;
+        outline: 0;
+        border: 2px solid green;
+    }
+}
+
 @keyframes top {
     0% {
         transform: translateY(0);
@@ -296,4 +306,8 @@
     .game__startScreen {
         position: unset;
     }
+}
+
+.active-learned {
+    background-color: rgb(135, 135, 245);
 }

@@ -9,7 +9,8 @@ import SprintController from './sprint/sprintController';
 import GamesPageController from './gamesPage/GamesPageController';
 
 export default class Games {
-  constructor() {
+  constructor(http) {
+    this.http = http;
     this.games = {
       savannah: SavannahController,
       puzzle: PuzzleController,
@@ -25,7 +26,7 @@ export default class Games {
   create(name) {
     if (this.games[name]) {
       document.body.className = 'body show-game';
-      this.game = new this.games[name](this.user, this.openPopupResult.bind(this));
+      this.game = new this.games[name](this.http, this.openPopupResult.bind(this));
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
       main.append(this.createStartScreen());

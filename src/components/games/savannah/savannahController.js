@@ -5,15 +5,15 @@ import soundGO from '@/assets/sounds/game-over.mp3';
 import soundMist from '@/assets/sounds/mistake.mp3';
 import SavannahView from './savannahView';
 import SavannahModel from './savannahModel';
-import HttpClient from '../../httpclient/HttpClient';
+// import HttpClient from '../../httpclient/HttpClient';
 
 export default class SavannahController {
   constructor(user, callResult) {
-    this.user = new HttpClient();
+    this.user = user;
     this.view = new SavannahView();
     this.callResult = callResult;
     this.model = new SavannahModel(this.user);
-    this.level = 0;
+    this.level = -1;
     this.maxHeart = 5;
     this.heart = 5;
     this.count = 10;
@@ -31,6 +31,7 @@ export default class SavannahController {
 
   createEvent() {
     this.view.options.addEventListener('click', this.getAnswer.bind(this));
+    this.view.learnedWords.addEventListener('click', this.selectWords.bind(this));
     document.getElementById('startGame').addEventListener('click', this.getStart.bind(this));
     document.body.addEventListener('keydown', this.setEventsKeyboard.bind(this));
     document.getElementById('cancel').addEventListener('click', this.cancel.bind(this));
@@ -52,13 +53,14 @@ export default class SavannahController {
   }
 
   async getStart() {
-    this.getAudio('start');
-    this.view.getStart();
     this.model.countWords = this.count;
     this.model.level = this.level;
-    setTimeout(this.getStartRound.bind(this), 3000);
+    await this.addStatistics();
     await this.model.createWords();
     await this.model.getWords();
+    this.getAudio('start');
+    this.view.getStart();
+    setTimeout(this.getStartRound.bind(this), 3000);
   }
 
   getStartRound() {
@@ -66,7 +68,6 @@ export default class SavannahController {
     this.attempt = 0;
     this.correctly = 0;
     this.heart = this.maxHeart;
-    // Place to call creating statistics for a new game: this.addStatistics();
     this.startNextRound();
   }
 
@@ -93,8 +94,9 @@ export default class SavannahController {
     this.answer = false;
   }
 
-  getAnswer({ target }) {
+  async getAnswer({ target }) {
     const TARGET_WAS_ALREADY_SELECTED = 2;
+    let copyWord;
     if (target.tagName === 'BUTTON' && target.classList.length < TARGET_WAS_ALREADY_SELECTED) {
       this.answer = true;
       if (target.dataset.answer === 'correct') {
@@ -105,35 +107,39 @@ export default class SavannahController {
         this.view.getCorrectlyAnswer(delta);
         this.model.words[this.attempt].success = true;
       } else {
+        copyWord = { ...this.model.words[this.attempt] };
         this.view.setAnswer('mistake', target);
         this.getAudio('mistake');
         const countHeart = this.maxHeart - this.heart;
         this.view.getIncorrectlyAnswer(countHeart);
         this.model.words[this.attempt].success = false;
         this.heart -= 1;
-        // Place to call the method for changing the word statistics: this.changeWordStatistics();
       }
       this.attempt += 1;
-      // Place to call the method for changing the statistics of the game: this.changeStatistics();
       this.view.top.addEventListener('animationend', this.checkEndGame.bind(this));
       this.view.bottom.addEventListener('animationend', this.checkEndGame.bind(this));
+      if (copyWord) await this.changeWordStatistics(copyWord);
+      await this.changeStatistics();
     }
   }
 
-  nextWord() {
-    this.model.words[this.attempt].correctly = false;
+  async nextWord() {
+    const copyWord = { ...this.model.words[this.attempt] };
+    this.model.words[this.attempt].success = false;
     this.heart -= 1;
     this.attempt += 1;
-    this.checkEndGame();
+    await this.checkEndGame(copyWord);
   }
 
-  checkEndGame() {
+  async checkEndGame(word) {
     if (this.correctly === this.count || this.heart === 0) {
       this.endGame();
     } else {
       this.view.bottom.remove();
       this.view.top.remove();
       this.startNextRound();
+      if (word.id) await this.changeWordStatistics(word);
+      await this.changeStatistics();
     }
   }
 
@@ -206,6 +212,34 @@ export default class SavannahController {
       }
     }
     return count;
+  }
+
+  selectWords() {
+    this.level = this.view.selectLearnedWords();
+  }
+
+  async addStatistics() {
+    this.statistics = await this.user.getUserStatistics();
+    this.stat = this.statistics.optional.savannah;
+    const save = Object.keys(this.stat);
+    const MAX_PROP = 50;
+    if (save.length > MAX_PROP) {
+      delete this.stat[save[1]];
+      this.stat.length -= 1;
+    }
+    this.timeCurGame = new Date().getTime();
+    this.stat[this.timeCurGame] = `${this.correctly},${this.attempt}`;
+    this.stat.length = +this.stat.length + 1;
+  }
+
+  async changeStatistics() {
+    this.stat[this.timeCurGame] = `${this.correctly},${this.attempt}`;
+    await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
+  }
+
+  async changeWordStatistics(word) {
+    word.nextTime = new Date().getTime();
+    await this.user.updateUserWord({ wordData: word, wordId: word.id, difficulty: 'string' });
   }
 
   getAudio(stateGame) {
