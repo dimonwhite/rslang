@@ -86,7 +86,9 @@ export default class AudiocallView {
         <h3>Click anywhere to continue</h3>
       </div>
     `;
-    this.main.append(this.statWindow);
+    if (!this.main.querySelector('.stat-window')) {
+      this.main.append(this.statWindow);
+    }
 
     this.statMessage = this.statWindow.querySelector('.stat-modal');
 

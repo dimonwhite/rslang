@@ -60,6 +60,15 @@ export default class AudiocallModel {
     const date = new Date().getTime();
     const info = `${this.score}, ${10 - this.score}`;
 
+    if (Object.keys(stats.optional.audiocall).length > 20) {
+      const keys = Object.keys(stats.optional.audiocall).slice(-20);
+      const temp = {};
+      keys.forEach((key) => {
+        temp[key] = stats.optional.audiocall[key];
+      });
+      stats.optional.audiocall = temp;
+    }
+
     stats.optional.audiocall[date] = info;
 
     await this.user.createUserStatistics({
