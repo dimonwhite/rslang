@@ -154,8 +154,11 @@ export default class CardController {
         isNew = true;
         await this.model.updateAllStudyWords({ word: removeWord, isNew: true, state });
       }
-      if (isNew) this.removeWord();
-      if (!isNew) this.view.setInDictionary(state, this.currentMistake);
+      if (isNew) {
+        this.removeWord();
+      } else {
+        this.view.setInDictionary(state, this.currentMistake);
+      }
       await this.setTodayStatStorage();
       await this.model.putListToday();
       this.view.lockElements(false);
@@ -182,8 +185,8 @@ export default class CardController {
 
   async eventBookmark() {
     if (this.unlock) this.view.lockElements(true);
-    const l = this.model.listToday.length - 1;
-    const word = (this.cut) ? this.model.listToday[l] : this.model.listToday[this.params.cardIndex];
+    const lastWord = this.model.listToday[this.model.listToday.length - 1];
+    const word = (this.cut) ? lastWord : this.model.listToday[this.params.cardIndex];
 
     let state = 'difficult';
     if (word.state === state) state = 'study';
@@ -543,7 +546,8 @@ export default class CardController {
   addChartStatistics() {
     const days = this.statistics.optional.statisticsChart;
     let today = new Date();
-    let [day, month] = [today.getDate(), today.getMonth() + 1];
+    let day = today.getDate();
+    let month = today.getMonth() + 1;
     if (day < 10) day = `0${day}`;
     if (month < 10) month = `0${month}`;
     today = `${day}-${month}-${today.getFullYear()}`;

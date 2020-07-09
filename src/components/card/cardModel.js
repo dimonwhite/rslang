@@ -5,6 +5,8 @@ export default class CardModel {
     this.listToday = [];
     this.allStudyWords = [];
     this.defaultRating = 1;
+    this.WORDS_PER_PAGE = 10;
+    this.DAY = 60 * 60 * 24 * 1000;
   }
 
   async createList({
@@ -17,8 +19,7 @@ export default class CardModel {
       this.listToday = [];
       const wordsForToday = await this.createListToday();
 
-      const WORDS_PER_PAGE = 10;
-      const newNumberListPages = Math.ceil(this.listToday.length / WORDS_PER_PAGE);
+      const newNumberListPages = Math.ceil(this.listToday.length / this.WORDS_PER_PAGE);
       return [true, wordsForToday, newNumberListPages];
     }
     return [generatedListToday, wordsRepeatToday, numberListPages];
@@ -108,10 +109,9 @@ export default class CardModel {
   }
 
   async putListToday() {
-    const WORDS_PER_PAGE = 10;
     const difficulty = 'today';
     const ID_LENGTH = 24;
-    const numberListPages = Math.ceil(this.listToday.length / WORDS_PER_PAGE);
+    const numberListPages = Math.ceil(this.listToday.length / this.WORDS_PER_PAGE);
     const promises = [];
     for (let i = 0; i < numberListPages; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);
@@ -122,8 +122,8 @@ export default class CardModel {
   }
 
   parseToObj(index) {
-    const WORDS_PER_PAGE = 10;
-    const part = this.listToday.slice(index * WORDS_PER_PAGE, (index + 1) * WORDS_PER_PAGE);
+    const next = index + 1;
+    const part = this.listToday.slice(index * this.WORDS_PER_PAGE, next * this.WORDS_PER_PAGE);
     const resultObj = {};
     part.forEach((item, i) => { resultObj[i] = item; });
     return resultObj;
@@ -144,8 +144,7 @@ export default class CardModel {
 
   async putListPage(word) {
     const index = this.listToday.findIndex((item) => item.word === word.word);
-    const WORDS_PER_PAGE = 10;
-    const page = Math.floor(index / WORDS_PER_PAGE);
+    const page = Math.floor(index / this.WORDS_PER_PAGE);
     const ID_LENGTH = 24;
     const wordId = String(page).repeat(ID_LENGTH);
     const wordData = this.parseToObj(page);
@@ -153,9 +152,8 @@ export default class CardModel {
   }
 
   async getAllUserWords() {
-    const WORDS_START_WITH = 10;
     const userWords = await this.user.getAllUserWords();
-    this.allStudyWords = userWords.slice(WORDS_START_WITH).map((item) => item.optional);
+    this.allStudyWords = userWords.slice(this.WORDS_PER_PAGE).map((item) => item.optional);
   }
 
   async updateAllStudyWords({
@@ -175,7 +173,7 @@ export default class CardModel {
   async setNewWord({
     word, isCount, mistake, customRating, state,
   }) {
-    const DAY = 60 * 60 * 24 * 1000;
+    this.DAY = 60 * 60 * 24 * 1000;
     word.count = (isCount) ? 1 : 0;
     word.mistakes = Number(mistake);
     if (state) word.state = state;
@@ -193,9 +191,9 @@ export default class CardModel {
     word.lastTime = new Date().getTime();
 
     if (customRating) {
-      word.nextTime = word.lastTime + (customRating ** customRating + 2) * DAY;
+      word.nextTime = word.lastTime + (customRating ** customRating + 2) * this.DAY;
     } else {
-      word.nextTime = word.lastTime + DAY;
+      word.nextTime = word.lastTime + this.DAY;
     }
     const id = this.allStudyWords.length + 1;
     word.id = `${String('0').repeat(24 - String(id).length)}${id}`;
@@ -206,7 +204,6 @@ export default class CardModel {
   async updateWord({
     word, isCount, mistake, customRating, state,
   }) {
-    const DAY = 60 * 60 * 24 * 1000;
     const update = this.allStudyWords.find((item) => item.word === word.word);
     if (state) update.state = state;
     if (customRating === 'clear') {
@@ -214,12 +211,12 @@ export default class CardModel {
     } else if (customRating) {
       update.customRating = customRating;
     }
-    if (isCount) this.changeWordStat({ update, mistake, DAY });
+    if (isCount) this.changeWordStat({ update, mistake });
     Object.keys(update).forEach((key) => { word[key] = update[key]; });
     await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
   }
 
-  changeWordStat({ update, mistake, DAY }) {
+  changeWordStat({ update, mistake }) {
     update.count += 1;
     if (mistake) {
       update.mistakes += 1;
@@ -238,10 +235,11 @@ export default class CardModel {
     update.lastTime = new Date().getTime();
 
     if (update.customRating) {
-      update.nextTime = update.lastTime + (update.customRating ** update.customRating + 2) * DAY;
+      const interval = update.customRating ** update.customRating + 2;
+      update.nextTime = update.lastTime + interval * this.DAY;
     } else {
       const interval = (update.interval === -1) ? 0 : update.interval;
-      update.nextTime = update.lastTime + (2 ** interval) * DAY;
+      update.nextTime = update.lastTime + (2 ** interval) * this.DAY;
     }
   }
 
