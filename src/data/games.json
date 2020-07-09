@@ -46,5 +46,14 @@
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
     "gameClass": "speakIt"
+  },
+  "filwords": {
+    "title": "FILLWORDS",
+    "desc": "fillwords game",
+    "bgImage": "fillwordsbg.jpg",
+    "gameClass": "fillwords",
+    "settings": {
+      "levels": true
+    }
   }
 }

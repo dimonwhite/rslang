@@ -62,6 +62,11 @@ const getSvg = (id) => `
   </svg>
 `;
 
+const randomInteger = (min, max) => {
+  const rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+};
+
 export {
   createElement,
   createElementAttr,
@@ -70,4 +75,5 @@ export {
   getDiffTime,
   getDiffFormatDate,
   getSvg,
+  randomInteger,
 };

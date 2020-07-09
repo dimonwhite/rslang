@@ -15,7 +15,7 @@ importAll(require.context('./assets/img/', false, /\.svg$/));
 window.addEventListener('DOMContentLoaded', () => {
   const authorization = new Authorization();
   const http = new HttpClient(authorization.unauthorizedListener);
-  
+
   const router = new Router(http);
   router.init();
 

@@ -1,6 +1,7 @@
 import gamesInfo from '@/data/games.json';
 import { blackGradient, urlGitHub } from '@/constants';
 import { createElement } from '@/utils';
+import FillwordsController from '@/components/games/fillwords/fillwordsController';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
@@ -9,13 +10,15 @@ import SprintController from './sprint/sprintController';
 import GamesPageController from './gamesPage/GamesPageController';
 
 export default class Games {
-  constructor() {
+  constructor(http) {
+    this.http = http;
     this.games = {
       savannah: SavannahController,
       puzzle: PuzzleController,
       audiocall: AudiocallController,
       speakit: SpeakitController,
       sprint: SprintController,
+      filwords: FillwordsController,
     };
     this.countLevels = 6;
     this.gamesInfo = gamesInfo;
@@ -25,7 +28,7 @@ export default class Games {
   create(name) {
     if (this.games[name]) {
       document.body.className = 'body show-game';
-      this.game = new this.games[name](this.user, this.openPopupResult.bind(this));
+      this.game = new this.games[name](this.http, this.openPopupResult.bind(this));
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
       main.append(this.createStartScreen());
