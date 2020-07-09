@@ -1,10 +1,9 @@
 import HttpClient from '../../../httpclient/HttpClient';
 
 export default class RoundData {
-  constructor(obtainWords) {
+  constructor() {
     this.level = this.getLocalStorage('level');
     this.roundNumber = this.getLocalStorage('roundNumber');
-    this.obtainWords = obtainWords;
     this.rawData = null;
     this.roundImgData = null;
     this.roundImg = null;
@@ -42,6 +41,24 @@ export default class RoundData {
     return this.parsed[key];
   }
 
+  async setStatistics() {
+    const stats = await this.getStatistics();
+    const date = new Date().getTime();
+    const info = `${10 - this.fail}, ${this.fail}`;
+
+    stats.optional.puzzle[date] = info;
+
+    await this.client.createUserStatistics({
+      learnedWords: stats.learnedWords,
+      optional: stats.optional,
+    });
+  }
+
+  async getStatistics() {
+    const stats = await this.client.getUserStatistics();
+    return stats;
+  }
+
   static makeSingleSentence(el) {
     const currentSentence = {};
     currentSentence.img = `https://raw.githubusercontent.com/timurkalimullin/rslang-data/master/${el.image}`;
@@ -54,7 +71,12 @@ export default class RoundData {
   }
 
   async makeSentences() {
-    this.rawData = await this.obtainWords(this.level, this.roundNumber);
+    this.rawData = await this.client.getWords({
+      group: this.level,
+      page: this.roundNumber - 1,
+      maxLength: 10,
+      wordsPerPage: 10,
+    });
     this.sentences = Object.values(this.rawData).map((el) => RoundData.makeSingleSentence(el));
   }
 

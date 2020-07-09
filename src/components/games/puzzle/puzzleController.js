@@ -2,7 +2,6 @@ import Sortable from 'sortablejs';
 
 import RoundData from './RoundData/RoundData';
 import RenderView from './RenderView';
-import obtainWords from './RoundData/obtainWords';
 
 export default class PuzzleController {
   constructor() {
@@ -173,14 +172,13 @@ export default class PuzzleController {
       this.renderView.init();
       this.makeRow();
     } catch (error) {
-      this.renderView.showError(error.message);
+      this.renderView.showError(error);
       this.roundData.isUserWords = false;
-      this.renderView.preloader.remove();
       setTimeout(this.startRound.bind(this), 2000);
     }
   }
 
-  finishRound() {
+  async finishRound() {
     this.displayElement('.btn__idk', 'none');
     const fullpainting = new Image();
     fullpainting.src = this.roundData.roundImg;
@@ -192,6 +190,8 @@ export default class PuzzleController {
       ${this.roundData.roundImgData.author}, ${this.roundData.roundImgData.name} (${this.roundData.roundImgData.year})
       `;
     };
+
+    await this.roundData.setStatistics();
 
     const hidePaintingDelay = 3000;
 
@@ -211,7 +211,7 @@ export default class PuzzleController {
       this.currentRow += 1;
       this.makeRow();
     } else {
-      this.finishRound();
+      await this.finishRound();
       this.currentRow = 0;
       if (this.roundData.isUserWords) {
         return;
@@ -286,6 +286,14 @@ export default class PuzzleController {
       this.roundData.isUserWords = !this.roundData.isUserWords;
       this.startRound();
     }
+
+    if (e.target.closest('.btn__statistics')) {
+      this.showStats().then(() => {
+        this.renderView.statWindow.addEventListener('click', () => {
+          this.renderView.removeModal();
+        });
+      });
+    }
   }
 
   addListeners() {
@@ -296,8 +304,13 @@ export default class PuzzleController {
     this.root.removeEventListener('click', this.clickListener);
   }
 
+  async showStats() {
+    const stats = await this.roundData.getStatistics();
+    this.renderView.renderStats(stats.optional.puzzle);
+  }
+
   async init() {
-    this.roundData = await new RoundData(obtainWords);
+    this.roundData = await new RoundData();
     this.renderView = new RenderView(this.root, this.roundData, this.imgWidth, this.imgHeight);
     this.addListeners();
   }

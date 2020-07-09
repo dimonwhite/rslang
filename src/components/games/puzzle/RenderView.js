@@ -55,6 +55,7 @@ export default class RenderView {
           <select class="btn select-round"></select>
           <button class="btn btn__select">Select round</button>
           <button class="btn btn__userwords">User words</button>
+          <button class="btn btn__statistics">Statistics</button>
         </div>
         <div class="btn__audio__wrapper"><button class="btn btn__icon btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
         <div class="sentence-translation"></div>
@@ -160,7 +161,7 @@ export default class RenderView {
         </div>
         <div class="result-modal__btn">
           <button class="btn btn__continue__modal">Continue</button>
-          <button class="btn btn__statistics__modal">Statistics</button>
+          <button class="btn btn__statistics">Statistics</button>
         </div>
       </div>
     `;
@@ -184,6 +185,34 @@ export default class RenderView {
     return this.resultWindow;
   }
 
+  renderStats(data) {
+    this.statWindow = document.createElement('div');
+    this.statWindow.classList.add('stat-window', 'modal-window');
+
+    this.statWindow.innerHTML = `
+      <div class="stat-modal">
+        <h2 class="stat-modal__title">STATISTICS</h2>
+        <h3>Click anywhere to continue</h3>
+      </div>
+    `;
+    this.root.append(this.statWindow);
+
+    this.statMessage = this.statWindow.querySelector('.stat-modal');
+
+    Object.keys(data).forEach((key) => {
+      if (key !== 'length') {
+        const statLine = document.createElement('p');
+        const parsedStat = data[key].replace(' ', '').split(',');
+        statLine.innerText = `${new Date(parseInt(key, 0)).toLocaleString()} Right answers: ${parsedStat[0]}, Wrong answers: ${parsedStat[1]}`;
+        this.statMessage.append(statLine);
+      }
+    });
+  }
+
+  removeModal() {
+    this.root.querySelector('.modal-window').remove();
+  }
+
   renderPreloader() {
     this.preloader = createElement({ tag: 'div', class: 'loading' });
     this.preloader.innerHTML = `
@@ -205,8 +234,6 @@ export default class RenderView {
     msg.classList.add('msg');
     msg.innerText = error;
     this.root.append(msg);
-
-    setTimeout(msg.remove(), 1000);
   }
 
   init() {
