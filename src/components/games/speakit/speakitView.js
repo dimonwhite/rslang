@@ -35,8 +35,8 @@ export default class SpeakitView {
     this.gameText = createElement({ tag: 'div', class: 'game__text' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.btnsBlock = createElement({ tag: 'div', class: 'game__btns' });
-    this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Start' });
-    this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Result' });
+    this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Старт' });
+    this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Результаты' });
     this.topBlock = createElement({ tag: 'div', class: 'topBlock' });
     this.createTopBlockElements();
     this.createPreloader();
