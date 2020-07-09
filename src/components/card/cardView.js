@@ -10,7 +10,7 @@ export default class CardView {
   }
 
   renderHTML() {
-    document.body.className = 'body show-main';
+    document.body.classList.add('show-main');
     this.setSettings();
     this.card.append(this.createCard());
     this.card.append(this.endTraining());

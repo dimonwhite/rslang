@@ -10,6 +10,7 @@ export default class SpeakitModel {
     this.dataWords = dataWords;
     this.countWords = 10;
     this.level = -1;
+    this.maxStatistics = 30;
   }
 
   async getRandomWords() {
@@ -71,7 +72,15 @@ export default class SpeakitModel {
 
   async setUserStatistics() {
     const statistics = await this.http.getUserStatistics();
-    statistics.optional.speakit[new Date().getTime()] = `${this.score}, 0`;
+    const statisticsGame = statistics.optional.speakit;
+    const statisticsGameKeys = Object.keys(statisticsGame);
+
+    if (statisticsGameKeys.length >= this.maxStatistics) {
+      statisticsGame[statisticsGameKeys[0]] = undefined;
+    }
+
+    statisticsGame[new Date().getTime()] = `${this.score}, 0`;
+
     this.http.createUserStatistics({
       learnedWords: statistics.learnedWords,
       optional: statistics.optional,

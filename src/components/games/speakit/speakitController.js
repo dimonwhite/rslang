@@ -123,7 +123,6 @@ export default class SpeakitController {
     this.model.dropScore();
     this.model.game = true;
     this.recognition.start();
-    window.resultRecognition = this.resultRecognition.bind(this);
   }
 
   createRecognition() {
