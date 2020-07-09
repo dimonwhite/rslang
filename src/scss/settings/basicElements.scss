@@ -82,6 +82,13 @@ $widthLevel: 1;
 
           background-color: #F1BC19;
           border-radius: 50%;
+          @include media(650px) {
+            top: 0.1rem;
+            left: 0.1rem;
+
+            width: calc(100% - 0.2rem);
+            height: calc(100% - 0.2rem);
+          }
         }
       }
     }
@@ -94,6 +101,10 @@ $widthLevel: 1;
 
       background-color: #FF0048;
       border-radius: 50%;
+      @include media(650px) {
+        width: $widthLevel - 0.4+rem;
+        height: $widthLevel - 0.4+rem;
+      }
     }
     &:last-child {
       margin-right: 0;
@@ -104,6 +115,10 @@ $widthLevel: 1;
         .radio__decor {
           width: $widthLevel+rem;
           height: $widthLevel+rem;
+          @include media(650px) {
+            width: $widthLevel - 0.4+rem;
+            height: $widthLevel - 0.4+rem;
+          }
         }
       }
     }

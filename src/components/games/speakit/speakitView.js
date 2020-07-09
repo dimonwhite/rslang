@@ -11,9 +11,10 @@ export default class SpeakitView {
   }
 
   renderHTML() {
+    this.levelsWrap = document.querySelector('#levels');
     this.createElements();
     this.appendElements();
-    this.main.append(this.game);
+    this.main.append(this.game, this.loader);
     // eslint-disable-next-line no-new
     new Choices('.game__select-options', {
       searchEnabled: false,
@@ -34,17 +35,30 @@ export default class SpeakitView {
     this.gameText = createElement({ tag: 'div', class: 'game__text' });
     this.wordList = createElement({ tag: 'div', class: 'wordList' });
     this.btnsBlock = createElement({ tag: 'div', class: 'game__btns' });
+    this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Start' });
+    this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Result' });
+    this.topBlock = createElement({ tag: 'div', class: 'topBlock' });
+    this.createTopBlockElements();
+    this.createPreloader();
+  }
+
+  createTopBlockElements() {
+    this.btnUserWords = createElement({ tag: 'button', class: 'btn btn-circle btnUserWords active', content: 'Свои слова' });
+    this.scoreBlock = createElement({ tag: 'div', class: 'score' });
     this.newGame = createElement({
       tag: 'button',
       class: 'btn btn-circle',
       content: `${getSvg('repeat')}Новая игра`,
     });
-    this.startBtn = createElement({ tag: 'button', class: 'btn  btn-circle start', content: 'Start' });
-    this.result = createElement({ tag: 'button', class: 'btn  btn-circle', content: 'Result' });
-    this.scoreBlock = createElement({ tag: 'div', class: 'score' });
-    this.topBlock = createElement({ tag: 'div', class: 'topBlock' });
     this.close = createElement({ tag: 'a', class: 'close', content: getSvg('close') });
     this.close.setAttribute('href', '#/games');
+    this.topBlock.append(this.scoreBlock, this.btnUserWords, this.newGame, this.close);
+  }
+
+  createPreloader() {
+    this.loader = createElement({ tag: 'div', class: 'loader' });
+    this.micWrapLoader = createElement({ tag: 'div', class: 'micWrap', content: getSvg('mic') });
+    this.loader.append(this.micWrapLoader);
   }
 
   appendElements() {
@@ -54,7 +68,6 @@ export default class SpeakitView {
     this.optionsWrap = this.main.querySelector('.game__options');
     this.optionsWrap.append(this.result);
     this.btnsBlock.append(this.startBtn);
-    this.topBlock.append(this.scoreBlock, this.newGame, this.close);
     this.game.append(
       this.topBlock, this.gameInfo, this.wordList, this.btnsBlock,
     );
@@ -124,5 +137,33 @@ export default class SpeakitView {
       </svg>
     `;
     return createElement({ tag: 'div', class: 'star', content: svg });
+  }
+
+  uncheckedLevels() {
+    this.checkedLevel = document.querySelector('.levels__wrap input:checked');
+    if (this.checkedLevel) {
+      this.checkedLevel.checked = false;
+    }
+  }
+
+  addClassBtnUserWords() {
+    this.btnUserWords.classList.add('active');
+  }
+
+  removeClassBtnUserWords() {
+    this.btnUserWords.classList.remove('active');
+  }
+
+  checkFirstLevel() {
+    this.firstLevel = document.querySelector('.levels__wrap .radio:first-child input');
+    this.firstLevel.checked = true;
+  }
+
+  addLoadedClass() {
+    this.main.classList.add('loaded');
+  }
+
+  removeLoadedClass() {
+    this.main.classList.remove('loaded');
   }
 }

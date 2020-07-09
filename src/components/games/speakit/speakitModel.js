@@ -9,17 +9,29 @@ export default class SpeakitModel {
     this.page = Math.round(Math.random() * 29);
     this.dataWords = dataWords;
     this.countWords = 10;
-    this.level = 0;
+    this.level = -1;
+  }
+
+  async getRandomWords() {
+    randomArray(this.dataWords);
+    let arrWords = [...this.dataWords];
+    arrWords = arrWords.slice(0, this.countWords);
+    return arrWords;
   }
 
   async getWords() {
     this.dataWords = await this.http.getWords({
       group: this.level, page: this.page, maxLength: 0, wordsPerPage: 0,
     });
-    randomArray(this.dataWords);
-    let arrWords = [...this.dataWords];
-    arrWords = arrWords.slice(0, this.countWords);
-    return new Promise((resolve) => resolve(arrWords));
+  }
+
+  async getUserWords() {
+    this.userWords = await this.http.getAllUserWords();
+    this.userWordsLength = this.userWords.length;
+  }
+
+  mapUserWords() {
+    this.dataWords = this.userWords.map((word) => word.optional);
   }
 
   getWord(id) {

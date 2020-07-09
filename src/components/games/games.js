@@ -25,7 +25,7 @@ export default class Games {
 
   create(name) {
     if (this.games[name]) {
-      document.body.className = 'body show-game';
+      document.body.classList.add('show-game');
       this.game = new this.games[name](this.http, this.openPopupResult.bind(this));
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
