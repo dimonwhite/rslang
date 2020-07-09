@@ -46,6 +46,15 @@ export default class RoundData {
     const date = new Date().getTime();
     const info = `${10 - this.fail}, ${this.fail}`;
 
+    if (Object.keys(stats.optional.audiocall).length > 20) {
+      const keys = Object.keys(stats.optional.puzzle).slice(-20);
+      const temp = {};
+      keys.forEach((key) => {
+        temp[key] = stats.optional.puzzle[key];
+      });
+      stats.optional.audiocall = temp;
+    }
+
     stats.optional.puzzle[date] = info;
 
     await this.client.createUserStatistics({

@@ -195,7 +195,9 @@ export default class RenderView {
         <h3>Click anywhere to continue</h3>
       </div>
     `;
-    this.root.append(this.statWindow);
+    if (!this.root.querySelector('.stat-window')) {
+      this.root.append(this.statWindow);
+    }
 
     this.statMessage = this.statWindow.querySelector('.stat-modal');
 
