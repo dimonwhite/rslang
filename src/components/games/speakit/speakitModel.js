@@ -68,4 +68,13 @@ export default class SpeakitModel {
     });
     return success;
   }
+
+  async setUserStatistics() {
+    const statistics = await this.http.getUserStatistics();
+    statistics.optional.speakit[new Date().getTime()] = `${this.score}, 0`;
+    this.http.createUserStatistics({
+      learnedWords: statistics.learnedWords,
+      optional: statistics.optional,
+    });
+  }
 }

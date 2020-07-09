@@ -109,12 +109,14 @@ export default class SpeakitView {
     this.startBtn.classList.remove('active');
     this.startBtn.innerText = 'Start';
     this.game.classList.remove('active');
+    this.main.classList.remove('speakItStart');
   }
 
   start() {
     this.startBtn.classList.add('active');
     this.startBtn.innerText = 'Stop';
     this.game.classList.add('active');
+    this.main.classList.add('speakItStart');
   }
 
   displayWord(e) {

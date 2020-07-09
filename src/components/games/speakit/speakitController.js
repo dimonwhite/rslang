@@ -165,7 +165,7 @@ export default class SpeakitController {
     this.dropScore();
     this.stop();
     this.openPopupResult(this.words);
-    console.log(`'${new Date().getTime()}': '${this.model.score}, 0'`);
+    this.model.setUserStatistics();
   }
 
   changeCountWords(count) {

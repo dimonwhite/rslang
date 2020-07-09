@@ -29,6 +29,11 @@ $red: #BF123D;
       }
     }
   }
+  &.speakItStart {
+    .resultPopup__errors {
+      pointer-events: none;
+    }
+  }
   .loader {
     position: fixed;
     top: 0;
@@ -94,12 +99,14 @@ $red: #BF123D;
       margin-right: 2rem;
       display: inline-flex;
       align-items: center;
-      @include media(650px) {
+      @include media(680px) {
         order: 1;
 
         margin-left: 0;
         margin-right: 0;
+        margin-top: 1rem;
         width: 100%;
+        justify-content: center;
       }
       .svg_icon {
         width: 2.2rem;
@@ -116,9 +123,6 @@ $red: #BF123D;
 
       border-radius: 50%;
       background-color: #740080;
-      @include media(650px) {
-        margin-bottom: 1rem;
-      }
       .svg_icon {
         width: 1.5rem;
         height: 1.5rem;
@@ -128,13 +132,18 @@ $red: #BF123D;
     }
   }
   .score {
+    justify-content: flex-start;
     height: auto;
     margin-right: auto;
     @include media(1024px) {
       order: 3;
 
+      justify-content: center;
       width: 100%;
       padding-top: 1rem;
+    }
+    @include media(680px) {
+      flex-wrap: wrap;
     }
     .star {
       margin-right: 1.3rem;
@@ -144,6 +153,11 @@ $red: #BF123D;
         width: 2rem;
         height: 2.5rem;
         margin-right: 0.6rem;
+      }
+      @include media(680px) {
+        width: 1.5rem;
+        height: 2rem;
+        margin-right: 0.3rem;
       }
       .svg_icon {
         width: 100%;
@@ -163,10 +177,19 @@ $red: #BF123D;
       align-items: center;
       width: 100%;
       margin-bottom: 2rem;
+      @include media(800px) {
+        flex-direction: column;
+      }
     }
     &__text {
       font-size: 2rem;
       font-weight: 600;
+      @include media(800px) {
+        text-align: center;
+      }
+      @include media(600px) {
+        font-size: 1.2rem;
+      }
     }
     &__options {
       position: relative;
@@ -254,6 +277,10 @@ $red: #BF123D;
       position: relative;
 
       margin-right: 3rem;
+      @include media(800px) {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
     }
     &__img {
       width: 15rem;
@@ -287,6 +314,9 @@ $red: #BF123D;
     &__word {
       display: none;
       padding-top: 1.5rem;
+      @include media(800px) {
+        padding-top: 1rem;
+      }
     }
     &__btns {
       display: flex;
@@ -449,6 +479,21 @@ $red: #BF123D;
   .btnUserWords {
     &.active {
       background-color: #231540;
+    }
+  }
+
+  .resultPopup__btns {
+    @include media(500px) {
+      flex-wrap: wrap;
+    }
+    .btn {
+      @include media(500px) {
+        width: 100%;
+        margin-bottom: 0.6rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }
