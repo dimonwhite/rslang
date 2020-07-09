@@ -481,21 +481,6 @@ $red: #BF123D;
       background-color: #231540;
     }
   }
-
-  .resultPopup__btns {
-    @include media(500px) {
-      flex-wrap: wrap;
-    }
-    .btn {
-      @include media(500px) {
-        width: 100%;
-        margin-bottom: 0.6rem;
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
 }
 
 .levels {

@@ -307,10 +307,20 @@
 
   &__wrap {
     width: 40rem;
+    overflow-y: auto;
     max-width: 98%;
+    max-height: 90%;
     padding: 2rem;
+
     border-radius: 0.5rem;
     background-color: #fff;
+    &::-webkit-scrollbar {
+      width: 0.3rem;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: darkgrey;
+      border-radius: 0.3rem;
+    }
     @include media(500px) {
       padding: 1.2rem 0.5rem;
     }
@@ -320,6 +330,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @include media(500px) {
+      flex-wrap: wrap;
+    }
+    .btn {
+      @include media(500px) {
+        width: 100%;
+        margin-bottom: 0.6rem;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
   &__title {
