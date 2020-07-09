@@ -55,6 +55,14 @@ export default class AudiocallController {
       this.view.btnuserWords.classList.toggle('active');
       this.startRound();
     }
+
+    if (e.target.closest('.stats')) {
+      this.showStats().then(() => {
+        this.view.statWindow.addEventListener('click', () => {
+          this.view.removeModal();
+        });
+      });
+    }
   }
 
   keypressHandler(e) {
@@ -131,6 +139,11 @@ export default class AudiocallController {
     this.startStep();
   }
 
+  async showStats() {
+    const stats = await this.model.getStats();
+    this.view.renderStats(stats.optional.audiocall);
+  }
+
   resetGame() {
     this.model.score = 0;
     this.model.step = 0;
@@ -172,6 +185,7 @@ export default class AudiocallController {
   }
 
   async endRound() {
+    await this.model.setStats();
     this.view.renderEndgamePost();
     if (this.model.isUserWords) {
       this.model.wordArray = this.model.wordArray.map((el) => {

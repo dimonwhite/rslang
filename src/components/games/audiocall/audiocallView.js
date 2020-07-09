@@ -19,9 +19,10 @@ export default class AudiocallView {
 
     this.game.innerHTML = `
     <div class="restart-wrapper">
-    <div class="user-words active">User words</div>
-    <div class="restart">Restart</div>
-    <div class="exit" href="#/">Exit</div>
+    <div class="btn__top stats">Statistics</div>
+    <div class="btn__top user-words active">User words</div>
+    <div class="btn__top restart">Restart</div>
+    <div class="btn__top exit" href="#/">Exit</div>
     </div>
     <div class="info-wrapper">
       <div class="icon-container"></div>
@@ -73,6 +74,34 @@ export default class AudiocallView {
     this.iconContainer.innerHTML = '';
     this.iconContainer.style.background = `white url(${urlGitHub}${word.image.replace('files/', '')}) no-repeat`;
     this.iconContainer.style.backgroundSize = 'cover';
+  }
+
+  renderStats(data) {
+    this.statWindow = document.createElement('div');
+    this.statWindow.classList.add('stat-window', 'modal-window');
+
+    this.statWindow.innerHTML = `
+      <div class="stat-modal">
+        <h2 class="stat-modal__title">STATISTICS</h2>
+        <h3>Click anywhere to continue</h3>
+      </div>
+    `;
+    this.main.append(this.statWindow);
+
+    this.statMessage = this.statWindow.querySelector('.stat-modal');
+
+    Object.keys(data).forEach((key) => {
+      if (key !== 'length') {
+        const statLine = document.createElement('p');
+        const parsedStat = data[key].replace(' ', '').split(',');
+        statLine.innerText = `${new Date(parseInt(key, 0)).toLocaleString()} Right answers: ${parsedStat[0]}, Wrong answers: ${parsedStat[1]}`;
+        this.statMessage.append(statLine);
+      }
+    });
+  }
+
+  removeModal() {
+    this.main.querySelector('.modal-window').remove();
   }
 
   appendanswerIcon(answer, nodeElement) {

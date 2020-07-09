@@ -49,4 +49,22 @@ export default class AudiocallModel {
       });
     }
   }
+
+  async getStats() {
+    const stats = await this.user.getUserStatistics();
+    return stats;
+  }
+
+  async setStats() {
+    const stats = await this.getStats();
+    const date = new Date().getTime();
+    const info = `${this.score}, ${10 - this.score}`;
+
+    stats.optional.audiocall[date] = info;
+
+    await this.user.createUserStatistics({
+      learnedWords: stats.learnedWords,
+      optional: stats.optional,
+    });
+  }
 }
