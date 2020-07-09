@@ -49,8 +49,8 @@ const defaultStatistics = {
 const defaultSettings = {
   wordsPerDay: 1,
   optional: {
+    lang: 'EN',
     settings: {
-      lang: 'EN',
       langEn: true,
       langRu: false,
       difficultWord: true,
