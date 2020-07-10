@@ -28,7 +28,7 @@
   },
   "speakit": {
     "title": "SPEAKIT",
-    "desc": "Click on the words to hear them sound.<br>Click on the button and speak the words into the microphone.",
+    "desc": "Нажмите на слова, чтобы услышать их звучание. <br> Нажмите на кнопку Старт и произносите слова в микрофон.",
     "bgImage": "speakitbg.jpg",
     "gameClass": "speakIt",
     "settings": {

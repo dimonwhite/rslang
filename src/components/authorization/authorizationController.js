@@ -130,8 +130,8 @@ export default class AuthorizationController {
         return;
       }
 
-      const isСreateStatistic = await this.model.createStatistic();
-      if (!isСreateStatistic) {
+      const isCreateStatistic = await this.model.createStatistic();
+      if (!isCreateStatistic) {
         this.showError();
         return;
       }
