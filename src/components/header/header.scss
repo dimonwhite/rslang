@@ -115,24 +115,32 @@
       }
     }
     &-open {
-      content: '';
-      position: relative;
-      left: 0.5rem;
-      bottom: 0.45rem;
-
       display: inline-block;
-      width: 0.8rem;
-      height: 0.8rem;
+      width: 2rem;
 
-      border-bottom: 0.2rem solid #F1BC19;
-      border-right: 0.2rem solid #F1BC19;
-      transform: rotate(45deg);
       cursor: pointer;
+      &:before {
+        content: '';
+        position: relative;
+        left: 0.5rem;
+        bottom: 0.45rem;
 
-      transition: 0.5s;
+        display: inline-block;
+        width: 0.8rem;
+        height: 0.8rem;
+
+        border-bottom: 0.2rem solid #F1BC19;
+        border-right: 0.2rem solid #F1BC19;
+        transform: rotate(45deg);
+
+        transition: 0.5s;
+      }
       &.active {
-        transform: rotate(-135deg);
-        bottom: 0;
+        &:before {
+          bottom: 0;
+
+          transform: rotate(-135deg);
+        }
       }
     }
     &-link {
@@ -169,7 +177,7 @@
 }
 
 .show-flex {
-  display: flex;
+  display: flex !important;
 }
 
 .hide {
