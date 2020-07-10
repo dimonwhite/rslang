@@ -1,0 +1,296 @@
+@import './_resultModal.scss';
+@import './_preloader.scss';
+
+@mixin textStroke {
+  text-shadow: gray 1px 1px 0, gray -1px -1px 0,
+  rgb(10, 10, 10) -1px 1px 0, rgb(20, 20, 20) 1px -1px 0;
+}
+
+.englishPuzzle{
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  font-size: 16px;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgb(232, 110, 243) rgb(132, 226, 243);
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgb(132, 226, 243);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(232, 110, 243);
+    border-radius: 20px;
+    border: 3px solid rgb(132, 226, 243);
+  }
+  .btn{
+    min-width: 0;
+    margin-bottom: 8px;
+  }
+}
+
+.container{
+  width: 700px;
+  margin: 0 auto;
+  padding-top: 15px;
+  text-align: center;
+}
+
+.msg{
+  font-size: 2em;
+  color: white;
+  top: 30%;
+  position: relative;
+  margin: 0 auto;
+  max-width: 300px;
+  text-align: center;
+}
+
+.btn {
+  width: max-content;
+  vertical-align: top;
+  height: 45px;
+  border-radius: 12px;
+  background-color: #7B4C8F;
+  color: #FFCB29;
+  font-size: 22px;
+  &.chosen{
+    border-style: dotted;
+    background-color: green;
+  }
+  .tooltiptext{
+    position: absolute;
+    visibility: hidden;
+    width: 135px;
+    background-color: rgb(245, 139, 139);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    font-size: 16px;
+    z-index: 1;
+  }
+  &:hover{
+    background-color: rgb(177, 20, 177);
+    border-color: #FFCB29;
+    .tooltiptext{
+      visibility: visible;
+    }
+  }
+  &.inactive{
+    background-color: lightslategray;
+  }
+  &__icon{
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    .tip{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 25px;
+      height: 25px;
+      transform:translate(-50%, -50%) ;
+    }
+  }
+  &__exit{
+    margin-bottom: 10px;
+  }
+  &__check{
+    display: none;
+  }
+  &__continue{
+    display: none;
+  }
+  &__idk{
+    display: inline-block;
+  }
+  &__audio{
+    &.playing{
+      background-color: red;
+    }
+    &__wrapper{
+      height: 60px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+  &__block{
+    &_bottom{
+      margin-top: 30px;
+    }
+  }
+}
+
+.ghost {
+  opacity: 0.4;
+}
+
+.sentence-translation {
+  margin-top: 10px;
+  height: 60px;
+  border-radius: 7px;
+  background-color: white;
+  font-size: 24px;
+  overflow: auto;
+}
+
+.word-container{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+  border-radius: 7px;
+  background-color: rgb(255, 255, 255);
+  margin-top: 20px;
+}
+
+.puzzle-container {
+  outline: 8px ridge #787dc6;
+  background-color: beige;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.row {
+  display: flex;
+}
+
+.word{
+  text-align: center;
+  color: white;
+  height: 40px;
+  outline: 1px solid gray;
+  user-select: none;
+  padding-top: 5px;
+  font-size: 20px;
+  @include textStroke;
+  cursor: grab;
+  &__no-back{
+    background-image: none !important;
+    background-color: gray !important;
+  }
+  span{
+    pointer-events: none;
+  }
+}
+
+.right{
+  outline: 2px solid green;
+}
+
+.wrong {
+  outline: 2px solid red;
+}
+
+.start-screen{
+  max-width: 480px;
+  height: 400px;
+  margin-top: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-75%);
+  text-align: center;
+  color: white;
+  @include textStroke;
+  font-size: 25px;
+}
+
+.stat-window{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+  background-color: rgba(0,0,0,0.5);
+
+  .stat-line{
+    margin-bottom: 10px;
+    background-color: #D493DB;
+    border-radius: 20px;
+  }
+}
+.stat-modal {
+  position: relative;
+  margin: 0 auto;
+  top: 10%;
+  max-width: 600px;
+  padding: 30px;
+  background-color: #823A93;
+  text-align: center;
+  border-radius: 15px;
+  color: #660066;
+  overflow: auto;
+  max-height: 600px;
+  &__title, h3{
+    color: #F1AEFF;
+    width: auto !important;
+    margin-bottom: 10px;
+  }
+}
+
+.logout__wrapper {
+  width: max-content;
+  float: right;
+}
+
+@media (max-width: 715px) {
+  .englishPuzzle{
+    .container{
+      width: 100%;
+    }
+    .word{
+      background: rgb(98, 225, 241) !important;
+      margin-bottom: 8px;
+    }
+    .puzzle-container{
+      width: 300px !important;
+      height: auto !important;
+      min-height: 40px;
+      background: beige !important;
+    }
+    .row{
+      display: none;
+      &__current{
+        display: flex;
+        width: max-content;
+        height: auto !important;
+        min-height: 40px;
+        min-width: 60px;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+      }
+    }
+    .word-container{
+      height: auto !important;
+      width: 300px !important;
+      min-height: 40px;
+      margin: 0 auto;
+      margin-top: 30px;
+      padding-bottom: 10px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sentence-translation{
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .result-sentence{
+      padding-left: 0;
+    }
+
+    h2 {
+      font-size: 28px;
+      width: 220px;
+    }
+  }
+}
