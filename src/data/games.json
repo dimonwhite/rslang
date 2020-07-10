@@ -48,9 +48,9 @@
     "gameClass": "speakIt"
   },
   "filwords": {
-    "title": "filwords",
-    "desc": "filwords game",
+    "title": "fillwords",
+    "desc": "fillwords game",
     "bgImage": "testbg.jpg",
-    "gameClass": "filwords"
+    "gameClass": "fillwords"
   }
 }
