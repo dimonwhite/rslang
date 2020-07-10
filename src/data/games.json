@@ -30,10 +30,15 @@
     }
   },
   "audiocall": {
-    "title": "audiocall",
-    "desc": "audiocall game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "title": "Audiocall",
+    "desc": "Слушайте произношение слова и выбирайте из вариантов ответа используя мышь или клавиши 1-5",
+    "bgImage": "audiocallbg.png",
+    "gameClass": "audiocall",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {},
+      "levels": true
+    }
   },
   "speakit": {
     "title": "SPEAKIT",

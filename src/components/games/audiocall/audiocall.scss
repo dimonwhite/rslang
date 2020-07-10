@@ -1,0 +1,252 @@
+@import './_preloader.scss';
+
+.main {
+  margin-top: -30px;
+}
+
+.audiocall .game{
+  margin-top: 10px;
+  padding-top: 15px;
+  padding-bottom: 30px;
+  transition: 0.5s all;
+  .word{
+    position: relative;
+    margin: 15px;
+    width: 300px;
+    height: 75px;
+    text-align: center;
+    border-radius: 100px;
+    padding: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: 0.4s all;
+    border: 3px double #681BB0;
+    color: #681BB0;
+    background-color: #9EFFFF;
+    font-size: 30px;
+    line-height: 35px;
+    cursor: pointer;
+    &-wrapper{
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      overflow: hidden;
+    }
+    &-description{
+      margin-top: 10px;
+      height: 30px;
+      font-size: 30px;
+      text-align: center;
+      color: #9effff;
+      line-height: 20px;
+      text-shadow: 2px -2px 4px #1d0c4a;
+    }
+  }
+
+  .info-wrapper{
+    margin-top: 15px;
+  }
+
+  .btn{
+    cursor: pointer;
+    width: max-content;
+    min-width: 60px;
+    margin: 0 auto;
+    &-wrapper{
+      margin-top: 30px;
+    }
+    &__next{
+      cursor: pointer;
+      width: 85px;
+      height: 85px;
+      border-radius: 100%;
+      background-color: #681BB0;
+      padding: 10px;
+      &__img{
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .answer-icon{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 5%;
+    top: 26%;
+  }
+
+  .wrong {
+    background: #f16179;
+    border: 5px solid #f18c49;
+    text-decoration: line-through;
+  }
+
+  .right {
+    background: #8fec72;
+    border: 5px solid #A586FF;
+  }
+
+  .idk {
+    animation: pulse 5s infinite;
+    background: #A586FF;
+    border: 5px solid rgb(236, 247, 142);
+  }
+
+  .restart, .btn__top{
+    width: 170px;
+    height: 45px;
+    margin-right: 20px;
+    background-color: #BF123D;
+    border-radius: 40px;
+    color: #F1BC19;
+    text-align: center;
+    font-size: 26px;
+    cursor: pointer;
+    transition: 0.2s all;
+    line-height: 40px;
+    text-decoration: none;
+    &-wrapper{
+      width: 100%;
+      display: flex;
+      justify-content: end;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    &:hover{
+      box-shadow: 3px -3px 3px black;
+    }
+    &:active{
+      transform: scale(1.1);
+    }
+  }
+
+  .user-words{
+    height: auto;
+    margin-left: 10px;
+    padding: 6px;
+    font-size: 20px;
+    line-height: 22px;
+    &.active{
+      background-color: rgb(60, 179, 179);
+    }
+  }
+
+  .exit {
+    width: 100px;
+  }
+
+  .icon-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border: 9px solid #9EFFFF;
+    border-radius: 100%;
+    transition: 0.4s all;
+    cursor: pointer;
+  }
+
+  .sound-icon {
+    width: 80%;
+    height: 80%;
+    position: relative;
+    left: 12%;
+    top: 8%;
+  }
+
+  .slide-away {
+    animation: slide-away 0.4s linear;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    25% {
+        box-shadow: 0 0 0 20px rgba(204,169,44, 0);
+    }
+    50% {
+      box-shadow: 0 0 0 40px rgba(204,169,44, 0);
+    }
+    75% {
+      box-shadow: 0 0 0 20px rgba(204,169,44, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+  }
+
+  @keyframes slide-away {
+    0% {
+      left: 0%;
+    }
+    100% {
+      left: 200%;
+      display: none;
+    }
+  }
+}
+
+.stat-window{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+  background-color: rgba(0,0,0,0.5);
+  .stat-line{
+    margin-bottom: 10px;
+  }
+}
+.stat-modal {
+  position: relative;
+  margin: 0 auto;
+  top: 10%;
+  max-width: 600px;
+  padding: 30px;
+  background-color: #cb54ec;
+  text-align: center;
+  overflow: auto;
+  max-height: 600px;
+  border-radius: 16px;
+  color: #660066;
+  &__title, &__subtitle{
+    color: #F1AEFF;
+    width: auto !important;
+    margin-bottom: 10px;
+  }
+  &__title{
+    font-size: 32px !important;
+  }
+}
+
+@media (max-width: 660px) {
+  .audiocall .game {
+    .word{
+      width: 180px;
+      height: 40px;
+      padding: 0;
+      padding-left: 10px;
+      font-size: 21px;
+      line-height: 32px;
+    }
+    .answer-icon{
+      width: 20px;
+      height: 20px;
+      left: 5%;
+      top: 20%;
+    }
+    .restart{
+      &-wrapper{
+        justify-content: center;
+        height: 175px;
+      }
+    }
+  }
+}
