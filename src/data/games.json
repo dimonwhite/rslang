@@ -15,10 +15,19 @@
     }
   },
   "puzzle": {
-    "title": "puzzle",
-    "desc": "puzzle game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "title": "English puzzle",
+    "desc": "Перетаскивайте паззлы мышкой или просто кликайте по ним, чтобы собрать картинку и наслаждайтесь шедеврами мировой живописи!",
+    "bgImage": "puzzlebg.jpg",
+    "gameClass": "englishPuzzle",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": false
+    }
   },
   "audiocall": {
     "title": "audiocall",
