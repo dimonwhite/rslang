@@ -23,12 +23,13 @@ export default class SprintModel {
   }
 
   async getWords(group, count) {
-    const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=2&wordsPerExampleSentenceLTE=10&wordsPerPage=${count}`);
+    const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=3&wordsPerExampleSentenceLTE=10&wordsPerPage=${count}`);
     const data = await response.json();
     data.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
     });
+    console.log(data);
     return data;
   }
 

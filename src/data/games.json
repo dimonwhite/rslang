@@ -33,9 +33,9 @@
     }
   },
   "sprint": {
-    "title": "SPRINT",
-    "desc": "sprint game",
-    "bgImage": "testbg.jpg",
+    "title": "Спринт",
+    "desc": "Ваша задача указать, совпадают ли слово и перевод",
+    "bgImage": "sprintBg.jpg",
     "gameClass": "sprint",
     "settings": {
       "countWords": false,
@@ -44,7 +44,7 @@
         "step": 5,
         "options": 3
       },
-      "levels": true
+      "levels": false
     }
   }
 }
