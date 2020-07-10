@@ -212,22 +212,24 @@ export default class DictionaryView {
     const content = `
       ${word.prev ? prev : ''}
       ${word.next ? next : ''}
-      <svg class="card__close close-icon">
-        <use xlink:href="sprite.svg#close"></use>
-      </svg>
-      ${contentHead}
-      ${contentBody}
-      <div class="card__bot">
-        <div class="card__state">
-          <svg class="card__state-item card__study-icon" data-type="study" title="Изучемое слово">
-            <use xlink:href="sprite.svg#dictionary-filter-study"></use>
-          </svg>
-          <svg class="card__state-item card__difficult-icon" data-type="difficult" title="Сложное слово">
-            <use xlink:href="sprite.svg#dictionary-filter-difficult"></use>
-          </svg>
-          <svg class="card__state-item card__remove-icon" data-type="remove" title="Удаленное слово">
-            <use xlink:href="sprite.svg#dictionary-filter-remove"></use>
-          </svg>
+      <div class="card__content-wrap">
+        <svg class="card__close close-icon">
+          <use xlink:href="sprite.svg#close"></use>
+        </svg>
+        ${contentHead}
+        ${contentBody}
+        <div class="card__bot">
+          <div class="card__state">
+            <svg class="card__state-item card__study-icon" data-type="study" title="Изучемое слово">
+              <use xlink:href="sprite.svg#dictionary-filter-study"></use>
+            </svg>
+            <svg class="card__state-item card__difficult-icon" data-type="difficult" title="Сложное слово">
+              <use xlink:href="sprite.svg#dictionary-filter-difficult"></use>
+            </svg>
+            <svg class="card__state-item card__remove-icon" data-type="remove" title="Удаленное слово">
+              <use xlink:href="sprite.svg#dictionary-filter-remove"></use>
+            </svg>
+          </div>
         </div>
       </div>
     `;

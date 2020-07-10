@@ -30,11 +30,11 @@ export default class DictionaryModel {
     let arrWords = [...this.dataWords];
 
     if (filter && filter !== this.state.all) {
-      arrWords = this.dataWords.filter((item) => item.optional.state === filter);
+      arrWords = arrWords.filter((item) => item.optional.state === filter);
     }
 
     if (strSearch) {
-      arrWords = this.dataWords.filter((item) => item.optional.word.indexOf(strSearch) !== -1);
+      arrWords = arrWords.filter((item) => item.optional.word.indexOf(strSearch) !== -1);
     }
 
     arrWords = arrWords.slice(first, last);

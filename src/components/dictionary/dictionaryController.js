@@ -87,6 +87,7 @@ export default class DictionaryController {
     }
 
     this.createCard(word, card.dataset.id);
+    document.body.classList.add('scroll-off');
   }
 
   createCard(word, wordId) {
@@ -103,6 +104,7 @@ export default class DictionaryController {
     this.view.background.addEventListener('click', () => {
       this.view.card.remove();
       this.view.background.remove();
+      document.body.classList.remove('scroll-off');
     });
   }
 
@@ -116,6 +118,7 @@ export default class DictionaryController {
     if (e.target.closest('.close-icon')) {
       this.view.card.remove();
       this.view.background.remove();
+      document.body.classList.remove('scroll-off');
       return;
     }
 
