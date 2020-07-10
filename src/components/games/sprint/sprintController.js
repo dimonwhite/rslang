@@ -19,7 +19,7 @@ export default class SprintController {
     this.countWords = 0;
     this.trueArray = [];
     this.falseArray = [];
-    this.wordCount = 15;
+    this.wordCount = 25;
     this.hard = 0;
     this.options = 1;
     this.chekedTranslate = [];

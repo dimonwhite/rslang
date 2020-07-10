@@ -23,8 +23,19 @@ export default class SprintModel {
   }
 
   async getWords(group, count) {
-    const response = await fetch(`https://afternoon-falls-25894.herokuapp.com/words?group=${group}&page=3&wordsPerExampleSentenceLTE=10&wordsPerPage=${count}`);
-    const data = await response.json();
+    const words = await this.http.getAllUserWords();
+    const userWords = words.map((word) => word.optional);
+    if (userWords.length === 100) {
+      userWords.forEach((e) => {
+        this.gameWords.push(e);
+        this.gameFalseWords.push(e.wordTranslate);
+      });
+      console.log(userWords);
+      return userWords;
+    }
+    const data = await this.http.getWords({
+      group, page: 3, maxLength: 50, wordsPerPage: count,
+    });
     data.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
