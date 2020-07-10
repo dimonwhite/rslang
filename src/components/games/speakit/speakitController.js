@@ -2,16 +2,18 @@ import SpeakitView from './speakitView';
 import SpeakitModel from './speakitModel';
 
 export default class SpeakitController {
-  constructor(user, openPopupResult) {
+  constructor(http, openPopupResult) {
     this.openPopupResult = openPopupResult;
     this.view = new SpeakitView();
-    this.model = new SpeakitModel(user);
-    this.level = 0;
+    this.model = new SpeakitModel(http);
+    this.level = -1;
+    this.quantityPages = 29;
+    this.minUserWords = 20;
   }
 
-  init() {
+  async init() {
     this.view.renderHTML();
-    this.createWords();
+    await this.createWords();
     this.view.result.addEventListener('click', () => {
       this.openPopupResult(this.words);
     });
@@ -26,6 +28,14 @@ export default class SpeakitController {
     this.view.newGame.addEventListener('click', () => {
       this.stop();
       this.change();
+    });
+    this.view.btnUserWords.addEventListener('click', () => {
+      if (!this.view.btnUserWords.classList.contains('active')) {
+        this.level = -1;
+        this.view.addClassBtnUserWords();
+        this.stop();
+        this.change();
+      }
     });
 
     this.createRecognition();
@@ -46,22 +56,46 @@ export default class SpeakitController {
   }
 
   changeNumberPage() {
-    this.model.page = this.model.page === 29 ? 0 : this.model.page + 1;
+    this.model.page = Math.round(Math.random() * this.quantityPages);
   }
 
-  change() {
+  async change() {
+    if (this.level >= 0) {
+      this.view.removeClassBtnUserWords();
+    }
+    this.model.level = this.level;
     this.stop();
     this.changeNumberPage();
-    this.createWords();
+    await this.createWords();
+    this.dropScore();
+    this.model.dropScore();
   }
 
-  createWords() {
+  async createWords() {
+    this.view.addLoadedClass();
+    if (this.level < 0) {
+      await this.model.getUserWords();
+    }
+    if (this.level === -1 && this.isUserWords()) {
+      this.level = 0;
+      this.model.level = this.level;
+      this.view.removeClassBtnUserWords();
+      this.view.checkFirstLevel();
+    }
+    if (this.level >= 0 || this.isUserWords()) {
+      await this.model.getWords();
+    } else {
+      this.view.uncheckedLevels();
+      this.model.mapUserWords();
+    }
+    this.words = await this.model.getRandomWords();
     this.view.clearWordList();
-    this.model.getWords()
-      .then((data) => {
-        this.words = data;
-        this.view.createWords(this.words);
-      });
+    this.view.createWords(this.words);
+    this.view.removeLoadedClass();
+  }
+
+  isUserWords() {
+    return !this.model.userWordsLength || this.model.userWordsLength < this.minUserWords;
   }
 
   clickStart() {
@@ -73,7 +107,6 @@ export default class SpeakitController {
   }
 
   dropScore() {
-    this.model.score = 0;
     this.view.dropScore();
   }
 
@@ -87,6 +120,7 @@ export default class SpeakitController {
   start() {
     this.dropScore();
     this.view.start();
+    this.model.dropScore();
     this.model.game = true;
     this.recognition.start();
   }
@@ -101,6 +135,11 @@ export default class SpeakitController {
     this.recognition.maxAlternatives = 30;
     this.recognition.addEventListener('result', (e) => {
       this.resultRecognition(e);
+    });
+    this.recognition.addEventListener('end', () => {
+      if (this.model.game) {
+        this.recognition.start();
+      }
     });
   }
 
@@ -125,6 +164,7 @@ export default class SpeakitController {
     this.dropScore();
     this.stop();
     this.openPopupResult(this.words);
+    this.model.setUserStatistics();
   }
 
   changeCountWords(count) {
