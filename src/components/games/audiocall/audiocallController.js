@@ -34,7 +34,8 @@ export default class AudiocallController {
     }
 
     if (e.target.closest('.btn__next')) {
-      this.proceedStep();
+      this.view.slideAway();
+      setTimeout(this.proceedStep.bind(this), 400);
       this.view.displayElement(this.view.btnNext, 'none');
     }
 

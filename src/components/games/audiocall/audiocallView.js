@@ -19,10 +19,10 @@ export default class AudiocallView {
 
     this.game.innerHTML = `
     <div class="restart-wrapper">
-    <div class="btn__top stats">Statistics</div>
-    <div class="btn__top user-words active">User words</div>
-    <div class="btn__top restart">Restart</div>
-    <div class="btn__top exit" href="#/">Exit</div>
+    <div class="btn__top stats">Статистика</div>
+    <div class="btn__top user-words active">Слова пользователя</div>
+    <div class="btn__top restart">Рестарт</div>
+    <div class="btn__top exit" href="#/">Выход</div>
     </div>
     <div class="info-wrapper">
       <div class="icon-container"></div>
@@ -82,8 +82,8 @@ export default class AudiocallView {
 
     this.statWindow.innerHTML = `
       <div class="stat-modal">
-        <h2 class="stat-modal__title">STATISTICS</h2>
-        <h3>Click anywhere to continue</h3>
+        <h2 class="stat-modal__title">СТАТИСТИКА</h2>
+        <h3 class="stat-modal__subtitle">Кликай для продолжения</h3>
       </div>
     `;
     if (!this.main.querySelector('.stat-window')) {
@@ -95,8 +95,9 @@ export default class AudiocallView {
     Object.keys(data).forEach((key) => {
       if (key !== 'length') {
         const statLine = document.createElement('p');
+        statLine.classList.add('stat-line');
         const parsedStat = data[key].replace(' ', '').split(',');
-        statLine.innerText = `${new Date(parseInt(key, 0)).toLocaleString()} Right answers: ${parsedStat[0]}, Wrong answers: ${parsedStat[1]}`;
+        statLine.innerText = `${new Date(parseInt(key, 0)).toLocaleString()} правильные ответы: ${parsedStat[0]}, Неправильные ответы: ${parsedStat[1]}`;
         this.statMessage.append(statLine);
       }
     });
@@ -163,5 +164,11 @@ export default class AudiocallView {
     <div class="dot"></div>
     `;
     this.main.append(this.preloader);
+  }
+
+  slideAway() {
+    [...this.wordWrapper.children].forEach((el) => {
+      el.classList.add('slide-away');
+    });
   }
 }

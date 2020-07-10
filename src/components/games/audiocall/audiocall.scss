@@ -29,6 +29,7 @@
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
+      overflow: hidden;
     }
     &-description{
       margin-top: 10px;
@@ -120,15 +121,16 @@
   .user-words{
     height: auto;
     margin-left: 10px;
-    padding: 0 5px;
+    padding: 6px;
     font-size: 20px;
+    line-height: 22px;
     &.active{
       background-color: rgb(60, 179, 179);
     }
   }
 
   .exit {
-    width: 85px;
+    width: 100px;
   }
 
   .icon-container {
@@ -149,34 +151,8 @@
     top: 8%;
   }
 
-  .stat-window{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 25px;
-    background-color: rgba(0,0,0,0.5);
-
-    p{
-      margin-bottom: 10px;
-    }
-  }
-  .stat-modal {
-    position: relative;
-    margin: 0 auto;
-    top: 10%;
-    max-width: 600px;
-    padding: 30px;
-    background-color: beige;
-    text-align: center;
-    border: 4px ridge rgb(43, 73, 240);
-    overflow: auto;
-    max-height: 600px;
-    &__title, h3{
-      width: auto !important;
-      margin-bottom: 10px;
-    }
+  .slide-away {
+    animation: slide-away 0.4s linear;
   }
 
   @keyframes pulse {
@@ -196,6 +172,16 @@
         box-shadow: 0 0 0 0 rgba(204,169,44, 0);
     }
   }
+
+  @keyframes slide-away {
+    0% {
+      left: 0%;
+    }
+    100% {
+      left: 200%;
+      display: none;
+    }
+  }
 }
 
 .stat-window{
@@ -206,8 +192,7 @@
   height: 100%;
   padding: 25px;
   background-color: rgba(0,0,0,0.5);
-
-  p{
+  .stat-line{
     margin-bottom: 10px;
   }
 }
@@ -222,10 +207,14 @@
   overflow: auto;
   max-height: 600px;
   border-radius: 16px;
-  color: #f9f7f5;
-  &__title, h3{
+  color: #660066;
+  &__title, &__subtitle{
+    color: #F1AEFF;
     width: auto !important;
     margin-bottom: 10px;
+  }
+  &__title{
+    font-size: 32px !important;
   }
 }
 
@@ -248,7 +237,7 @@
     .restart{
       &-wrapper{
         justify-content: center;
-        height: 150px;
+        height: 175px;
       }
     }
   }
