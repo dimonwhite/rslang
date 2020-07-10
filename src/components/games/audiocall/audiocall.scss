@@ -27,6 +27,10 @@
     font-size: 30px;
     line-height: 35px;
     cursor: pointer;
+    outline: none;
+    &:hover{
+      animation: pulse linear 1s infinite;
+    }
     &-wrapper{
       max-width: 1200px;
       margin: 0 auto;
