@@ -19,6 +19,10 @@ export default class RenderView {
     this.sentenceTranslation = null;
   }
 
+  displayElement(nodeSelector, display) {
+    this.root.querySelector(nodeSelector).style.display = display;
+  }
+
   modifyData() {
     let offsetY = 0;
     Object.values(this.data.sentences).forEach((el) => {
@@ -39,34 +43,34 @@ export default class RenderView {
     this.root.innerHTML = `
       <div class="container">
         <div class="control-block">
-        <a class="btn btn__exit" href="#/">Exit</a>
+        <a class="btn btn__exit" href="#/">Выход</a>
         <div class="btn__block">
-          <button class="btn btn__icon btn__backImg"><img src=${backTip} class="tip"><span class="tooltiptext">Click to toggle background images of puzzles in next step</span></button>
-          <button class="btn btn__icon btn__audio__tip"><img src=${soundTip} class="tip"><span class="tooltiptext">Click to toggle audio tip in next step</span></button>
-          <button class="btn btn__icon btn__translate"><img src=${textTip} class="tip"><span class="tooltiptext">Click to toggle sentence translation in next step</span></button>
+          <button class="btn btn__icon btn__backImg"><img src=${backTip} class="tip"><span class="tooltiptext">Кликай для включения / выключения фона паззлов в следующем ряду</span></button>
+          <button class="btn btn__icon btn__audio__tip"><img src=${soundTip} class="tip"><span class="tooltiptext">Кликай для включения / выключения аудиоподсказки в следующем ряду</span></button>
+          <button class="btn btn__icon btn__translate"><img src=${textTip} class="tip"><span class="tooltiptext">Кликай для включения / выключения перевода предложения в следующем ряду</span></button>
           <select class="btn select-level">
-            <option value="0">Level 1</option>
-            <option value="1">Level 2</option>
-            <option value="2">Level 3</option>
-            <option value="3">Level 4</option>
-            <option value="4">Level 5</option>
-            <option value="5">Level 6</option>
+            <option value="0">Уровень 1</option>
+            <option value="1">Уровень 2</option>
+            <option value="2">Уровень 3</option>
+            <option value="3">Уровень 4</option>
+            <option value="4">Уровень 5</option>
+            <option value="5">Уровень 6</option>
           </select>
           <select class="btn select-round"></select>
-          <button class="btn btn__select">Select round</button>
-          <button class="btn btn__userwords">User words</button>
-          <button class="btn btn__statistics">Statistics</button>
+          <button class="btn btn__select">Выбрать раунд</button>
+          <button class="btn btn__userwords">Слова пользователя</button>
+          <button class="btn btn__statistics">Статистика</button>
         </div>
-        <div class="btn__audio__wrapper"><button class="btn btn__icon btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Click to play audio pronounce of current sentence</span></button></div>
+        <div class="btn__audio__wrapper"><button class="btn btn__icon btn__audio"><img src=${playTip} class="tip"><span class="tooltiptext">Кликай для воспроизведения аудиоподсказки текущего предложения</span></button></div>
         <div class="sentence-translation"></div>
         </div>
         <div class="puzzle-container"></div>
         <div class="word-container"></div>
         <div class="control-block">
           <div class="btn__block btn__block_bottom">
-            <button class="btn btn__check">Check</button>
-            <button class="btn btn__continue">Continue</button>
-            <button class="btn btn__idk">I don't know</button>
+            <button class="btn btn__check">Проверить</button>
+            <button class="btn btn__continue">Продолжить</button>
+            <button class="btn btn__idk">Я не знаю</button>
           </div>
         </div>
       </div>
@@ -76,7 +80,7 @@ export default class RenderView {
     while (maxroundNumber) {
       const option = document.createElement('option');
       option.setAttribute('value', maxroundNumber);
-      option.innerText = `Round ${maxroundNumber}`;
+      option.innerText = `Раунд ${maxroundNumber}`;
       this.root.querySelector('.select-round').append(option);
       maxroundNumber -= 1;
     }
@@ -154,14 +158,14 @@ export default class RenderView {
           <p class="result-modal__title">${sentenceData.roundImgData.author}, ${sentenceData.roundImgData.name} (${sentenceData.roundImgData.year}) </p>
         </div>
         <div class="result-modal__info">
-          <h2>I don't know - ${fails}</h2>
+          <h2>Я не знаю- ${fails}</h2>
           <div class="dont-know"></div>
-          <h2>I know - ${10 - fails}</h2>
+          <h2>Я знаю - ${10 - fails}</h2>
           <div class="know"></div>
         </div>
         <div class="result-modal__btn">
-          <button class="btn btn__continue__modal">Continue</button>
-          <button class="btn btn__statistics">Statistics</button>
+          <button class="btn btn__continue__modal">Продолжить</button>
+          <button class="btn btn__statistics">Статистика</button>
         </div>
       </div>
     `;
@@ -191,8 +195,8 @@ export default class RenderView {
 
     this.statWindow.innerHTML = `
       <div class="stat-modal">
-        <h2 class="stat-modal__title">STATISTICS</h2>
-        <h3>Click anywhere to continue</h3>
+        <h2 class="stat-modal__title">СТАТИСТИКА</h2>
+        <h3>Кликай для продолжения</h3>
       </div>
     `;
     if (!this.root.querySelector('.stat-window')) {
@@ -203,9 +207,10 @@ export default class RenderView {
 
     Object.keys(data).forEach((key) => {
       if (key !== 'length') {
-        const statLine = document.createElement('p');
+        const statLine = document.createElement('div');
+        statLine.classList.add('stat-line');
         const parsedStat = data[key].replace(' ', '').split(',');
-        statLine.innerText = `${new Date(parseInt(key, 0)).toLocaleString()} Right answers: ${parsedStat[0]}, Wrong answers: ${parsedStat[1]}`;
+        statLine.innerText = `${new Date(parseInt(key, 0)).toLocaleString()} Правильные ответы: ${parsedStat[0]}, Неправильные ответы: ${parsedStat[1]}`;
         this.statMessage.append(statLine);
       }
     });

@@ -7,7 +7,7 @@
   },
   "puzzle": {
     "title": "English puzzle",
-    "desc": "Drag & drop puzzles or just click'em to complete the painting, use tips and enjoy world arts!",
+    "desc": "Перетаскивайте паззлы мышкой или просто кликайте по ним, чтобы собрать картинку и наслаждайтесь шедеврами мировой живописи!",
     "bgImage": "puzzlebg.jpg",
     "gameClass": "englishPuzzle",
     "settings": {

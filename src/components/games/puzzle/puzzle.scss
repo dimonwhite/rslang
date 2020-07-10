@@ -65,13 +65,13 @@
   .tooltiptext{
     position: absolute;
     visibility: hidden;
-    width: 120px;
+    width: 135px;
     background-color: rgb(245, 139, 139);
     color: #fff;
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
-    font-size: 22px;
+    font-size: 16px;
     z-index: 1;
   }
   &:hover{
@@ -210,8 +210,10 @@
   padding: 25px;
   background-color: rgba(0,0,0,0.5);
 
-  p{
+  .stat-line{
     margin-bottom: 10px;
+    background-color: #D493DB;
+    border-radius: 20px;
   }
 }
 .stat-modal {
@@ -220,12 +222,14 @@
   top: 10%;
   max-width: 600px;
   padding: 30px;
-  background-color: beige;
+  background-color: #823A93;
   text-align: center;
-  border: 4px ridge rgb(43, 73, 240);
+  border-radius: 15px;
+  color: #660066;
   overflow: auto;
   max-height: 600px;
   &__title, h3{
+    color: #F1AEFF;
     width: auto !important;
     margin-bottom: 10px;
   }

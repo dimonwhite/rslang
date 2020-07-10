@@ -4,7 +4,7 @@ export default class RoundData {
   constructor() {
     this.level = this.getLocalStorage('level');
     this.roundNumber = this.getLocalStorage('roundNumber');
-    this.rawData = null;
+    this.wordData = null;
     this.roundImgData = null;
     this.roundImg = null;
     this.cutRoundImg = null;
@@ -80,23 +80,23 @@ export default class RoundData {
   }
 
   async makeSentences() {
-    this.rawData = await this.client.getWords({
+    this.wordData = await this.client.getWords({
       group: this.level,
       page: this.roundNumber - 1,
       maxLength: 10,
       wordsPerPage: 10,
     });
-    this.sentences = Object.values(this.rawData).map((el) => RoundData.makeSingleSentence(el));
+    this.sentences = Object.values(this.wordData).map((el) => RoundData.makeSingleSentence(el));
   }
 
   async makeUserSentence() {
-    this.rawData = await this.client.getAllUserWords();
-    if (this.rawData.length < 11) {
+    this.wordData = await this.client.getAllUserWords();
+    if (this.wordData.length < 11) {
       throw new Error('Not enough user words, try to change level');
     }
-    this.rawData = this.rawData.sort(() => 0.5 - Math.random())
+    this.wordData = this.wordData.sort(() => 0.5 - Math.random())
       .filter((data) => data.optional.textExample.split(' ').length < 11).slice(0, 10);
-    this.sentences = Object.values(this.rawData)
+    this.sentences = Object.values(this.wordData)
       .map((el) => RoundData.makeSingleSentence(el.optional));
   }
 
