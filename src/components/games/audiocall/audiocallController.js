@@ -162,25 +162,17 @@ export default class AudiocallController {
   }
 
   async startRound() {
-    try {
-      this.resetGame();
-      this.view.getBackColor();
-      this.view.setBackground();
-      if (this.view.preloader) {
-        this.view.preloader.remove();
-      }
-      this.view.renderPreloader();
-      await this.model.formWordarray();
+    this.resetGame();
+    this.view.getBackColor();
+    this.view.setBackground();
+    if (this.view.preloader) {
       this.view.preloader.remove();
-      this.view.wordWrapper.innerHTML = '';
-      this.startStep();
-    } catch (error) {
-      this.view.wordDescription.innerText = error.message;
-      if (this.view.preloader) {
-        this.view.preloader.remove();
-      }
-      setTimeout(this.change.bind(this), 2000);
     }
+    this.view.renderPreloader();
+    await this.model.formWordarray();
+    this.view.preloader.remove();
+    this.view.wordWrapper.innerHTML = '';
+    this.startStep();
   }
 
   async endRound() {
