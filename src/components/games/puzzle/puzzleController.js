@@ -4,7 +4,8 @@ import RoundData from './RoundData/RoundData';
 import RenderView from './RenderView';
 
 export default class PuzzleController {
-  constructor() {
+  constructor(http) {
+    this.http = http;
     this.root = document.querySelector('.main');
     this.imgWidth = 600;
     this.imgHeight = 400;
@@ -307,7 +308,7 @@ export default class PuzzleController {
   }
 
   async init() {
-    this.roundData = await new RoundData();
+    this.roundData = await new RoundData(this.http);
     this.renderView = new RenderView(this.root, this.roundData, this.imgWidth, this.imgHeight);
     this.addListeners();
   }

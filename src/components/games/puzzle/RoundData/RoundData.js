@@ -1,14 +1,12 @@
-import HttpClient from '../../../httpclient/HttpClient';
-
 export default class RoundData {
-  constructor() {
+  constructor(http) {
     this.level = this.getLocalStorage('level');
     this.roundNumber = this.getLocalStorage('roundNumber');
     this.wordData = null;
     this.roundImgData = null;
     this.roundImg = null;
     this.cutRoundImg = null;
-    this.client = new HttpClient();
+    this.client = http;
     this.isUserWords = true;
     this.fail = 0;
     this.tips = {
