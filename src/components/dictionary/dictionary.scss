@@ -85,7 +85,6 @@
             border-left-width: 1px;
             border-right-width: 1px;
 
-<<<<<<< HEAD
             font-weight: bold;
             font-size: 24px;
             color: #FFC100;
@@ -121,54 +120,10 @@
 
 
     .card-list {
-=======
-        overflow: hidden;
-        cursor: pointer;
-        transition: .3s;
-    }
-
-    &__item {
-        &:hover,
-        &_active {
-            background: #6C55AD;
-        }
-    }
-
-    &__all {
-        border-left-width: 2px;
-        border-radius: 10px 0 0 10px;
-    }
-    &__remove {
-        border-right-width: 2px;
-        border-radius: 0 10px 10px 0;
-    }
-    &__item-icon {
-        width: 35px;
-    }
-}
-
-
-.card-list {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    width: 100%;
-    height: 105px;
-    padding: 0 30px 0 55px;
-    margin-bottom: 15px;
-
-    background: #540D6D;
-    border-radius: 15px;
-    cursor: pointer;
-
-    &__left, &__right {
->>>>>>> develop
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-<<<<<<< HEAD
         width: 100%;
         height: 105px;
         padding: 0 30px 0 55px;
@@ -176,11 +131,6 @@
         
         background: #540D6D;
         border-radius: 15px;
-=======
-    &__sound {
-        margin-right: 35px;
-
->>>>>>> develop
         cursor: pointer;
 
         @include media(768px) {
@@ -201,17 +151,9 @@
             align-items: center;
         }
 
-<<<<<<< HEAD
         &__sound {
             margin-right: 35px;
             cursor: pointer;
-=======
-.card-item {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
->>>>>>> develop
 
             @include media(768px) {
                 margin-right: 15px;
@@ -293,26 +235,11 @@
             padding: 50px 20px 20px;
             border-radius: 50px;
 
-<<<<<<< HEAD
             &__example,
             &__meaning {
                 margin-bottom: 5px;
             }
         }
-=======
-    &__head-right {
-        display: flex;
-    }
-    &__sound {
-        margin: 35px 35px 0 0;
-    }
-    &__sound-icon {
-        width: 65px;
-        height: 55px;
-
-        cursor: pointer;
-    }
->>>>>>> develop
 
         @include media(1024px) {
             width: 550px;
@@ -356,23 +283,9 @@
                 opacity: 1;
             }
         }
-<<<<<<< HEAD
         
         &__prev {
             left: -100px;
-=======
-    }
-
-    &__example {
-        margin: 15px 0 25px;
-    }
-    &__meaning {
-        margin-bottom: 15px;
-    }
-    &__progress {
-        margin-bottom: 15px;
-    }
->>>>>>> develop
 
             @include media(1024px) {
                 left: -65px;
@@ -412,7 +325,6 @@
             fill: #A586FF;
             opacity: .5;
             transition: .3s;
-<<<<<<< HEAD
             cursor: pointer;
             
             @include media(1440px) {
@@ -426,10 +338,6 @@
                 right: 30px;
             }
         
-=======
-
-            &_active,
->>>>>>> develop
             &:hover {
                 opacity: 1;
             }
@@ -618,7 +526,6 @@
             }
         }
     }
-<<<<<<< HEAD
 
     .background {
         position: fixed;
@@ -631,16 +538,3 @@
         z-index: 10;
     }
 }
-=======
-
-}
-
-.card-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-}
->>>>>>> develop
