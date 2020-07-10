@@ -9,6 +9,9 @@ export default class AboutTeamView {
   }
 
   renderMainLayout() {
+    const introText = `Приветствуем тебя на борту научно-развлекательного лингвистического круизного звездолета "<span class="span_yellow">po</span><span class="span_red">BEDA</span>"! <br>
+    У нас ты сможешь приятно провести время, подтянуть <strike class="clingon">клингонский</strike> английский язык и увидеть неизведанные уголки галактики. <br>
+    А сейчас самое время познакомиться с командой нашего звездолета!`;
     document.body.style.backgroundImage = 'none';
     this.root.innerHTML = `
     <div class="about__container">
@@ -17,10 +20,9 @@ export default class AboutTeamView {
     <div id='stars3'></div>
     <header class="about__header">
       <h1 class="about__title anaglyph">О команде</h1>
-      <div class="about__title__image"><img src=${starShip}></div>
-      <h3 class="about__subtitle">Приветствуем тебя на борту научно-развлекательного лингвистического круизного звездолета "<span class="span_yellow">po</span><span class="span_red">BEDA</span>"! <br>
-      У нас ты сможешь приятно провести время, подтянуть <strike>клингонский</strike> английский язык и увидеть неизведанные уголки галактики. <br>
-      А сейчас самое время познакомиться с командой нашего звездолета!
+      <div class="about__title__image"><img class="starship-image" src=${starShip}></div>
+      <h3 class="about__subtitle">
+      ${introText}
       </h3>
     </header>
     <section class="about__info">

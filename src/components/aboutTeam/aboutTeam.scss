@@ -9,7 +9,7 @@
     text-align: center;
     font-size: 26px;
     text-shadow: 2px -2px #843c72;
-    strike{
+    .clingon{
       color: #777171;
       text-shadow: none;
       text-decoration-color: white;
@@ -22,7 +22,7 @@
       text-align: center;
       transition: 0.3s all;
       animation: fly 8s infinite;
-      img{
+      .starship-image{
         width: 60%;
         height: 60%;
       }
@@ -61,17 +61,16 @@
       width: 200px;
       height: 200px;
       .helmet{
+        width: 100%;
         position: absolute;
         z-index: 2;
         transform: scale(1.2);
       }
       .portrait{
+        width: 100%;
         position: relative;
         z-index: 1;
         border-radius: 100%;
-      }
-      img{
-        width: 100%;
       }
     }
     &__info{
