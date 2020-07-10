@@ -1,106 +1,312 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+
 $teal: #009688;
 .couple__item{
   margin: 0 auto;
+}
+
+.fix__padding{
+  padding: 0;
+  padding-top: 0px;
+}
+
+.show-game{
+  padding-top: 0px !important;
+
 }
 .game__sprint {
 
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 0px;
 
 
-    width: 60%;
-    height: 450px;
+   // width: 60%;
+  //  height: 450px;
     margin: 0 auto;
 
-    border-radius: 30px;
-    background-image: url(/src/assets/img/main-page-background.jpg);
+   // border-radius: 30px;
+   // background-image: url(/src/assets/img/main-page-background.jpg);
     background-size: contain;
 
   &__main-field{
     display: flex;
     justify-content: space-around;
+    width: 85%;
 
-    width: 80%;
-    height: 200px;
-    padding: 30px;
+    @media (min-width: 320px) and (max-width: 600px) {
+      align-items: center;
+      justify-content: space-around;
+      width: 80%;
+      flex-direction: column;
+    }
 
   }
 
-  &__time{
+
+
+
+  &__time__block{
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border: 2px solid black;
     width: 30%;
-    height: 100px;
-    font-size: 26px;
-    font-weight: 500;
+    //height: 200px;
+    @media (min-width: 320px) and (max-width: 600px) {
+      margin-right: 42px;
+    }
+
+
   }
+
+  &__time__count{
+    font-family: Raleway, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 71.2425px;
+    line-height: 84px;
+    color: #FF0071;
+    position: relative;
+  }
+
+
   &__score{
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border: 2px solid black;
     width: 30%;
-    height: 100px;
+
+    font-family: Raleway, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2rem;
+
+color: #FCDA00;
+@media (min-width: 600px) and (max-width: 825px) {
+  font-size: 1.3rem;
+}
+
+@media (min-width: 320px) and (max-width: 600px) {
+  font-size: 1.4rem;
+  width: 80%;
+}
+  }
+
+
+  &__bonus__star{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 30%;
+    //height: 200px;
     font-size: 26px;
     font-weight: 500;
+    @media (min-width: 320px) and (max-width: 600px) {
+      width: 80%;
+    }
   }
-  &__bonus__star{
+
+  &__bonus__area__1,  &__bonus__area__2,  &__bonus__area__3{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border: 2px solid black;
-    width: 30%;
-    height: 100px;
-    font-size: 26px;
+    @media (min-width: 320px) and (max-width: 800px) {
+      width: 50px;
+    height: 50px;
+    }
+
+  }
+  &__true__check__item{
+    width: 40px;
+    @media (min-width: 320px) and (max-width: 800px) {
+      width: 20px;
+    height: 20px;
+    }
+  }
+
+  &__bonus__area__1{
+    background: #E1FF8F;
+    border: 6px solid #BEE64B;
+  }
+  &__bonus__area__2{
+    background: #FF70B0;
+    border: 6px solid #B5507D;
+    margin-bottom: 40px;
+  }
+
+  &__bonus__area__3{
+    background: #9F80BF;
+    border: 6px solid #B172ED;
+  }
+
+  &__bonus__area__count{
+
+    height: 300px;
+    width: 80%;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    //background-size: cover;
+    background-repeat: no-repeat;
+
+    @media (min-width: 320px) and (max-width: 600px) {
+      height: 50px;
+    }
+  }
+
+  &__bonus__item__planet__icon1, &__bonus__item__planet__icon2, &__bonus__item__planet__icon3, &__bonus__item__planet__icon4{
+width: 100%;
+height: 100%;
+  }
+  &__bonus__item1{
+    width: 15%;
+  }
+  &__bonus__item2{
+    width: 35%;
+  }
+  &__bonus__item3{
+    width: 25%;
+  }
+  &__bonus__item4{
+    width: 25%;
+  }
+
+
+  &__checkAnswer__area{
+    height: 150px;
+    width: 50%;
+    margin-bottom: 1%;
+    color: #FCDA00;;
+    //color: white;
+    font-size: 2.5rem;
     font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+    @media (min-width: 700px) and (max-width: 875px) {
+      font-size: 1.1rem;
+    }
+
+    @media (min-width: 320px) and (max-width: 600px) {
+      padding-top: 12px;
+      width: 80%;
+      font-size: 0.5rem;
+      height: 50px;
+         }
+
+
   }
 
   &__play-content{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 
-    width: 40%;
+    width: 60%;
+    border-radius: 65px;
+    background-color: rgba(159, 128, 191, 1);
+    border: 10px solid #610D89;
+    position: relative;
+    z-index: 1;
+    @media (min-width: 320px) and (max-width: 600px) {
 
-    border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 65px;
+
+    }
 
   }
+  .btn-circle-true, .btn-circle-false {
+    color: #A741AB;
+    border-radius: 25px;
+    background: #E1FF8F;
+border: 5px solid #610D89;
+position: relative;
+
+@media (min-width: 320px) and (max-width: 600px) {
+  flex-direction: column;
+  width: 80%;
+  min-width: 204px;
+  text-align: center;
+  font-size: 0.8rem;
+  height: 40px;
+}
+
+@media (min-width: 600px) and (max-width: 825px) {
+  min-width: 110px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+  }
+  .btn-circle-true{
+    left: 2%
+  }
+  .btn-circle-false{
+    right: 2%;
+
+    @media (min-width: 320px) and (max-width: 600px) {
+      right: -2%;
+    }
+
+
+@media (min-width: 600px) and (max-width: 825px) {
+  min-width: 110px;
+  text-align: center;
+  font-size: 1rem;
+  padding-left: 10px;
+}
+  }
+
+
 
   &__word, &__translation {
 
     width: 100%;
-    color: #F1BC19;
-    font-size: 2.5rem;
+    color: #FCDA00;;
+    //color: white;
+    font-size: 2.1rem;
     font-weight: 500;
     text-align: center;
+    text-transform: uppercase;
+
+    @media (min-width: 600px) and (max-width: 875px) {
+      font-size: 0.9rem;
+    }
+    @media (min-width: 320px) and (max-width: 600px) {
+      font-size: 0.9rem;
+    }
   }
 
   &__btns {
     display: flex;
-    justify-content: space-around;
     align-items: center;
     width: 80%;
-    padding: 10px;
+    @media (min-width: 320px) and (max-width: 600px) {
+      flex-direction: column;
+      width: 80%;
+
+    }
+
+
     .btn {
-      width: 18%;
+      width: 5%;
       &.start {
         width: 60%;
       }
     }
   }
-  &__time{
 
-    font-size: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
 
   &.active {
     .game__word {
@@ -118,8 +324,8 @@ $teal: #009688;
   font-size: 50px;
 }
 
-.sprint{
-  margin-top: 10%;
+.game__startScreen{
+  background-image: url(/src/assets/img/Sprint/main-page-background.jpg);
 }
 
 $radioBg: #FF0048;
@@ -146,8 +352,8 @@ $radioBg: #FF0048;
 
 
 .game__sprint__preloader{
-  width: 61%;
-  height: 455px;
+  width: 100%;
+  height: 100%;
   position: fixed;
 
 
@@ -188,15 +394,20 @@ $radioBg: #FF0048;
 .game__sprint__loader__count{
   position: relative;
   left: 49%;
-  top: 45%;
+  top: 47%;
 
-  margin-left: -11px;
-  margin-top: -27px;
+  margin-left: -13px;
+  margin-top: -23px;
 
   z-index: 4;
   font-size: 70px;
   font-weight: 400;
   color: lightgrey;
+
+  @media (min-width: 320px) and (max-width: 600px) {
+    margin-left: -19px;
+    margin-top: -31px;
+  }
 
 }
 
@@ -208,4 +419,62 @@ $radioBg: #FF0048;
     transform: translate(-50%,-50%)rotate(360deg);
   }
   }
+/*
+  .progress-ring__circle{
+    stroke-dasharray: 10 20;
+    stroke-dashoffset: 100;
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 0.3s;
+  }
+  */
 
+  @keyframes circletimer {
+    0% {
+      stroke-dashoffset: 0;
+      stroke-dasharray: 500;
+    }
+    100% {
+      stroke-dashoffset: -500;
+      stroke-dasharray: 500;
+    }
+  }
+  .timer_svg {
+    background-color: transparent;
+    transform: rotate(-90deg);
+    .circle {
+      stroke: #FF0071;
+      stroke-width: 15;
+      fill: transparent;
+    }
+    &.timer_svg .circle {
+
+      stroke-dashoffset: 500;
+      stroke-dasharray: 500;
+    }
+  }
+
+  .start_timer{
+    animation: 80s circletimer linear;
+  }
+  .game__sprint__time__block_svg{
+    position: relative;
+    z-index: 1;
+    margin-right: -107px;
+    margin-top: 32px;
+  }
+
+  .true_choice{
+    background-color: yellow;
+  }
+  .false_choice{
+    background-color:  #FF0071;;
+  }
+  .small-text{
+    font-size: 0.4rem;
+  }
+
+  .game__sprint__btns{
+
+    padding-left: 3%;
+  }
