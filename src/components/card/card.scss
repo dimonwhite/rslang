@@ -1,8 +1,315 @@
-.main {
-    flex: 1 0 auto;
-    h2 {
-        font-size: 40px;
-        margin: 0 auto;
-        width: 200px;
+/*--------------------SETTINGS-----------------------*/
+
+.settings {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    background-color: #f3f3f3;
+    border-top: 2px solid #7d7777;
+
+    &__title {
+        width: 150px;
+        text-align: center;
+    }
+    &__cards {
+        &-item {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    &__buttons {
+        &-item {
+            display: flex;
+        }
     }
 }
+
+/*-------------------END SETTINGS----------------------*/
+
+.main {
+    min-height: 60vh;
+}
+
+/*---------------------CARD-----------------------*/
+
+.card {
+    width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid gray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    background-color: whitesmoke;
+
+    &__left,
+    &__right {
+        min-width: 35px;
+        min-height: 60px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border: 0;
+        outline: none;
+    }
+    &__left {
+        background-image: url("/src/assets/img/arrow-left.png");
+        background-position: left -11px top 0px;
+    }
+    &__right {
+        background-image: url("/src/assets/img/arrow-right.png");
+        background-position: left -14px top 0px;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-content: space-between;
+        align-items: center;
+        width: 380px;
+    }
+
+    &__play {
+        display: none;
+        border: 0;
+        outline: 0;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        left: 0;
+        background-image: url("/src/assets/img/voice.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    &__img {
+        background-image: url("/src/assets/img/default.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        width: 300px;
+        height: 200px;
+    }
+    p {
+        margin: 0;
+        margin-top: 5px;
+        padding: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 14px;
+        min-height: 35px;
+        text-align: left;
+        width: 100%;
+    }
+
+    &__input {
+        width: 300px;
+        height: 50px;
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+        position: relative;
+
+        &-item {
+            font-size: 24px;
+            width: 100%;
+            outline: none;
+            padding-left: 8px;
+            font-family: Courier New, monospace;
+            font-weight: 700;
+        }
+        &-correct {
+            position: absolute;
+            left: 10px;
+            top: 11px;
+            font-size: 24px;
+            font-family: Courier New, monospace;
+            font-weight: 700;
+        }
+    }
+    &__translation {
+        display: flex;
+        justify-content: space-around;
+
+        span {
+            width: 150px;
+            text-align: center;
+            font-size: 18px;
+            height: 20px;
+        }
+    }
+    &__range,
+    &__interval,
+    &__answer {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-around;
+        width: 300px;
+
+        button {
+            width: 70px;
+            border: 1px solid black;
+            font-size: 12px;
+        }
+    }
+    &__interval {
+        display: none;
+    }
+    &__answer {
+        button {
+            width: 120px;
+            height: 40px;
+            border: 1px solid black;
+            font-size: 14px;
+            padding: 5px;
+        }
+    }
+    &__range {
+        input {
+            width: 240px;
+        }
+    }
+}
+
+/*-------------------END CARD-----------------------*/
+
+.finished {
+    display: none;
+    border: 3px solid gray;
+    width: 300px;
+    margin: 0 auto;
+    background-color: whitesmoke;
+    flex-direction: column;
+    align-items: stretch;
+
+    &__message {
+        font-size: 26px;
+        text-align: center;
+    }
+    &__btn {
+        font-size: 24px;
+        width: 200px;
+        height: 50px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        align-self: center;
+        border: 2px solid brown;
+    }
+    &__statistics {
+        div {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            margin-top: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        &-count {
+            color: brown;
+        }
+        &-correct {
+            color: green;
+        }
+        &-new {
+            color: orange;
+        }
+        &-long {
+            color: goldenrod;
+        }
+    }
+}
+
+/*------------------PROGRESS----------------------*/
+progress[value] {
+    -webkit-appearance: none;
+    appearance: none;
+
+    width: 250px;
+    height: 20px;
+    border-radius: 5px;
+}
+
+progress[value]::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress[value]::-webkit-progress-value {
+    background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)),
+        -webkit-linear-gradient(left, #09c, rgb(54, 145, 36));
+    border-radius: 5px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+/*------------------END PROGRESS----------------------*/
+
+/*------------------TOGGLE CLASSES-------------------*/
+
+.hidden {
+    visibility: hidden;
+}
+
+.opacity-correct {
+    opacity: 0.5;
+}
+
+.go-next {
+    outline: 2px solid gold;
+    background-color: goldenrod;
+}
+
+.correct-color {
+    color: green;
+}
+
+.lock-element {
+    background-color: rgb(190, 190, 190) !important;
+    color: black !important;
+}
+.lock-arrow {
+    background-color: rgb(190, 190, 190) !important;
+    outline: 2px solid rgb(190, 190, 190) !important;
+}
+
+.checked-element {
+    background-color: rgb(189, 230, 189);
+}
+
+.custom-rating {
+    background-color: brown;
+    color: whitesmoke;
+}
+
+.hide-text {
+    font-size: 0 !important;
+}
+
+.lock-elements {
+    .card__answer {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+    .card__interval {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+    .card__left {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+    .card__right {
+        button {
+            pointer-events: none;
+            background-color: rgb(190, 190, 190)
+        }
+    }
+}
+/*----------------END TOGGLE CLASSES-----------------*/
