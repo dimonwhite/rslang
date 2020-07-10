@@ -3,6 +3,10 @@
   .header {
     transform: translateY(-100%);
   }
+
+  .main {
+    flex: 1 0 auto;
+  }
 }
 
 .game {
@@ -250,6 +254,7 @@
   position: fixed;
   top: 0;
   left: -9999px;
+  z-index: 3;
 
   width: 100%;
   height: 100%;
