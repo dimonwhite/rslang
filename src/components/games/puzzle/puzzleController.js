@@ -165,15 +165,9 @@ export default class PuzzleController {
 
   async startRound() {
     this.renderView.renderPreloader();
-    try {
-      await this.roundData.formSentenceData();
-      this.renderView.init();
-      this.makeRow();
-    } catch (error) {
-      this.renderView.showError(error);
-      this.roundData.isUserWords = false;
-      setTimeout(this.startRound.bind(this), 2000);
-    }
+    await this.roundData.formSentenceData();
+    this.renderView.init();
+    this.makeRow();
   }
 
   async finishRound() {
