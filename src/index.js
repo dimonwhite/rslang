@@ -13,7 +13,10 @@ function importAll(r) {
 importAll(require.context('./assets/img/', false, /\.svg$/));
 
 window.addEventListener('DOMContentLoaded', () => {
-  const router = new Router();
+  const authorization = new Authorization();
+  const http = new HttpClient(authorization.unauthorizedListener);
+
+  const router = new Router(http);
   router.init();
 
   document.body.addEventListener('click', (e) => {
@@ -24,8 +27,5 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   new Header().createEvent();
-
-  const authorization = new Authorization();
-  const http = new HttpClient(authorization.unauthorizedListener);
   authorization.create(http);
 });

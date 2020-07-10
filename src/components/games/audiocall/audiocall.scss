@@ -48,6 +48,9 @@
 
   .btn{
     cursor: pointer;
+    width: max-content;
+    min-width: 60px;
+    margin: 0 auto;
     &-wrapper{
       margin-top: 30px;
     }

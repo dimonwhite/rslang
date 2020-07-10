@@ -9,7 +9,8 @@ import SprintController from './sprint/sprintController';
 import GamesPageController from './gamesPage/GamesPageController';
 
 export default class Games {
-  constructor() {
+  constructor(http) {
+    this.http = http;
     this.games = {
       savannah: SavannahController,
       puzzle: PuzzleController,
@@ -24,8 +25,8 @@ export default class Games {
 
   create(name) {
     if (this.games[name]) {
-      document.body.className = 'body show-game';
-      this.game = new this.games[name](this.user, this.openPopupResult.bind(this));
+      document.body.classList.add('show-game');
+      this.game = new this.games[name](this.http, this.openPopupResult.bind(this));
       this.gameInfo = this.gamesInfo[name];
       const main = document.getElementById('main');
       main.append(this.createStartScreen());
@@ -39,11 +40,13 @@ export default class Games {
   }
 
   createStartScreen() {
-    const startScreen = createElement({ tag: 'div', class: 'game__startScreen' });
-    const title = createElement({ tag: 'div', class: 'game__startScreen-title', content: this.gameInfo.title });
-    const desc = createElement({ tag: 'div', class: 'game__startScreen-desc', content: this.gameInfo.desc });
-    const btnStart = createElement({ tag: 'button', class: 'btn', content: 'Start' });
-    const btnExit = createElement({ tag: 'a', class: 'btn', content: 'Go back' });
+    const startScreen = createElement({ tag: 'section', class: 'game__startScreen', id: 'startScreen' });
+    const title = createElement({ tag: 'h2', class: 'game__startScreen-title', content: this.gameInfo.title });
+    const desc = createElement({ tag: 'p', class: 'game__startScreen-desc', content: this.gameInfo.desc });
+    const btnStart = createElement({
+      tag: 'button', class: 'btn', id: 'startGame', content: 'Начать',
+    });
+    const btnExit = createElement({ tag: 'a', class: 'btn', content: 'Назад' });
     btnExit.href = '#/';
     const image = require(`@/assets/img/${this.gameInfo.bgImage}`);
     startScreen.style.backgroundImage = `url("${image.default}")`;
@@ -64,7 +67,7 @@ export default class Games {
   }
 
   createSettings() {
-    const wrap = createElement({ tag: 'div', class: 'game__options' });
+    const wrap = createElement({ tag: 'div', class: 'game__options', id: 'gameOptions' });
     if (this.gameInfo.settings.levels) {
       wrap.append(this.createLevels());
     }
@@ -87,8 +90,10 @@ export default class Games {
     this.successBlock = createElement({ tag: 'div', class: 'resultPopup__success' });
 
     const btnBlock = createElement({ tag: 'div', class: 'resultPopup__btns' });
-    this.btnClosePopup = createElement({ tag: 'button', class: 'btn', content: 'Close' });
-    this.btnNewGame = createElement({ tag: 'button', class: 'btn', content: 'New game' });
+    this.btnClosePopup = createElement({
+      tag: 'button', class: 'btn', id: 'closePopup', content: 'Закрыть',
+    });
+    this.btnNewGame = createElement({ tag: 'button', class: 'btn', content: 'Новая игра' });
     this.appendResultPopupElements({
       wrap, titleError, titleSuccess, btnBlock,
     });
@@ -178,7 +183,7 @@ export default class Games {
   createLevels() {
     const wrap = createElement({ tag: 'div', class: 'levels', id: 'levels' });
     const levelsParent = createElement({ tag: 'div', class: 'levels__wrap' });
-    wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Levels' }));
+    wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Сложность' }));
     wrap.append(levelsParent);
     for (let i = 0; i < this.countLevels; i += 1) {
       levelsParent.append(Games.createRadioLevel(i));

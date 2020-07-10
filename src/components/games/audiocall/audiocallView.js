@@ -30,8 +30,8 @@ export default class AudiocallView {
     </div>
     <div class="word-wrapper"></div>
     <div class="btn-wrapper">
-      <div class="btn btn__idk">I don't know</div>
-      <div class="btn__next"><img class ="btn__next__img" src=${arrow}></div>
+      <div class="btn btn__idk">Я не знаю</div>
+      <div class="btn btn__next"><img class ="btn__next__img" src=${arrow}></div>
     </div>
     `;
     this.main.append(this.game);
