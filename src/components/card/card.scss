@@ -4,6 +4,7 @@
     width: 100%;
     height: 200px;
     display: flex;
+    display: none;
     background-color: #f3f3f3;
     border-top: 2px solid #7d7777;
 
@@ -33,16 +34,21 @@
 /*---------------------CARD-----------------------*/
 
 .card {
-    width: 500px;
+    width: 100%;
     margin: 0 auto;
     padding: 20px;
-    border: 2px solid gray;
+    max-height: 88vh;
+    min-height: calc(100vh - 90px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
     background-color: whitesmoke;
+    background-image: url("/src/assets/img/bg-card.jpg");
+    background-size: cover;
+    border-radius: 2.8rem 2.8rem 0 0;
+    background-position: center;
 
     &__left,
     &__right {
@@ -68,28 +74,33 @@
         justify-content: space-between;
         align-content: space-between;
         align-items: center;
-        width: 380px;
+        width: 80%;
+        outline: 3px solid crimson;
+        position: relative;
     }
 
     &__play {
-        display: none;
-        border: 0;
-        outline: 0;
-        width: 50px;
-        height: 50px;
-        position: absolute;
-        left: 0;
-        background-image: url("/src/assets/img/voice.png");
-        background-repeat: no-repeat;
-        background-size: cover;
+    border: 0;
+    outline: 0;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    background-image: url("/src/assets/img/voice.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    left: 0;
+    border-radius: 50%;
+    background-color: #45005E;
     }
 
     &__img {
         background-image: url("/src/assets/img/default.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-        width: 300px;
-        height: 200px;
+        object-fit: cover;
+        width: 270px;
+        height: 270px;
+        border-radius: 50%;
+        align-self: self-start;
+        border: 7px solid #45005e;
     }
     p {
         margin: 0;
@@ -172,6 +183,37 @@
     }
 }
 
+.card__wrapper {
+    &-image {
+        position: relative;
+    }
+    &-meaning {
+        display: flex;
+        flex-direction: column;
+    }
+    &-example {
+        display: flex;
+        flex-direction: column;
+    }
+    &-text {
+        display: flex;
+        flex-direction: column;
+    }
+    &-help {
+        display: flex;
+    }
+    &-words {
+        display: flex;
+        flex-direction: column;
+    }
+    &-dict {
+        display: flex;
+        flex-direction: column;
+    }
+    &-panel {
+        display: flex;
+    }
+}
 /*-------------------END CARD-----------------------*/
 
 .finished {
@@ -290,25 +332,25 @@ progress[value]::-webkit-progress-value {
     .card__answer {
         button {
             pointer-events: none;
-            background-color: rgb(190, 190, 190)
+            background-color: rgb(190, 190, 190);
         }
     }
     .card__interval {
         button {
             pointer-events: none;
-            background-color: rgb(190, 190, 190)
+            background-color: rgb(190, 190, 190);
         }
     }
     .card__left {
         button {
             pointer-events: none;
-            background-color: rgb(190, 190, 190)
+            background-color: rgb(190, 190, 190);
         }
     }
     .card__right {
         button {
             pointer-events: none;
-            background-color: rgb(190, 190, 190)
+            background-color: rgb(190, 190, 190);
         }
     }
 }

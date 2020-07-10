@@ -78,7 +78,7 @@ export default class CardController {
   async setTodayStatStorage() {
     const { cardIndex } = this.params;
     this.params.cardIndex = this.params.passedToday;
-    this.params.length = this.listToday.length;
+    this.params.length = (this.listToday) ? this.listToday.length : 0;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
     this.params.cardIndex = cardIndex;
   }

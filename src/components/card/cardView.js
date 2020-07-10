@@ -30,11 +30,6 @@ export default class CardView {
     wrapTranslation.append(this.translationWord);
     wrapTranslation.append(this.transcriptionWord);
 
-    const answer = createElement({ tag: 'div', class: 'card__answer' });
-    answer.append(this.cardRemove);
-    answer.append(this.cardDiff);
-    answer.append(this.cardShow);
-
     const wrapRange = createElement({ tag: 'div', class: 'card__range' });
     const range = createElement({ tag: 'progress', id: 'rangeWords' });
     range.setAttribute('value', 0);
@@ -43,9 +38,23 @@ export default class CardView {
     wrapRange.append(this.secondNumber);
     const wrapCard = createElement({ tag: 'div', class: 'card__wrapper' });
 
-    wrapCard.append(...[this.cardPlay, this.cardImg, this.cardMeaning,
-      this.cardMeaningTranslation, this.cardExample, this.cardExampleTranslation,
-      input, wrapTranslation, answer, this.interval, wrapRange]);
+    const wrapImage = createElement({ tag: 'div', class: 'card__wrapper-image' });
+    wrapImage.append(...[this.cardPlay, this.cardImg]);
+    const wrapMean = createElement({ tag: 'div', class: 'card__wrapper-meaning' });
+    wrapMean.append(...[this.cardMeaning, this.cardMeaningTranslation]);
+    const wrapExample = createElement({ tag: 'div', class: 'card__wrapper-example' });
+    wrapExample.append(...[this.cardExample, this.cardExampleTranslation]);
+    const wrapText = createElement({ tag: 'div', class: 'card__wrapper-text' });
+    wrapText.append(...[wrapMean, wrapExample]);
+    const wrapHelp = createElement({ tag: 'div', class: 'card__wrapper-help' });
+    wrapHelp.append(...[wrapImage, wrapText]);
+    const wrapWords = createElement({ tag: 'div', class: 'card__wrapper-words' });
+    wrapWords.append(...[wrapTranslation, input, this.cardShow]);
+    const wrapDict = createElement({ tag: 'div', class: 'card__wrapper-dict' });
+    wrapDict.append(...[this.cardDiff, this.cardRemove]);
+    const wrapPanel = createElement({ tag: 'div', class: 'card__wrapper-panel' });
+    wrapPanel.append(...[wrapDict, wrapWords]);
+    wrapCard.append(...[wrapRange, wrapHelp, this.interval, wrapPanel]);
 
     card.append(...[this.leftArrow, wrapCard, this.rightArrow]);
     this.input.focus();
