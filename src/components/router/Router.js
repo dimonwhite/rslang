@@ -2,6 +2,7 @@ import Games from '../games/games';
 import DictionaryController from '../dictionary/dictionaryController';
 import CardController from '../card/cardController';
 import StatisticsController from '../statistics/statisticsController';
+import AboutTeamView from '../aboutTeam/aboutTeamView';
 
 export default class Router {
   constructor(http) {
@@ -13,8 +14,10 @@ export default class Router {
       games: Games,
       dictionary: DictionaryController,
       statistics: StatisticsController,
+      aboutteam: AboutTeamView,
     };
     this.nav = document.getElementById('nav');
+    this.main = document.querySelector('.main');
   }
 
   init() {
@@ -34,8 +37,13 @@ export default class Router {
       this.removeListeners();
       this.mainSection.innerHTML = '';
       this.mainSection.className = 'main';
-      document.body.className = 'body';
+      if (document.body.classList.contains('unauthorized')) {
+        document.body.className = 'body unauthorized';
+      } else {
+        document.body.className = 'body';
+      }
       document.body.removeAttribute('style');
+      this.main.removeAttribute('style');
       this.currentPage = new PageClass(this.http);
       this.currentPage.create(...this.urlArray);
       this.changeActiveLink();

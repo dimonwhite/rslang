@@ -280,7 +280,7 @@ export default class HttpClient {
       this.removeLocalUser();
     }
     if (!response.ok) {
-      throw new Error('Can`t create user word, network problems');
+      throw new Error('Can`t update user word, network problems');
     }
     const content = await response.json();
 
