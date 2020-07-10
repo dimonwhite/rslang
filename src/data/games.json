@@ -1,9 +1,18 @@
 {
   "savannah": {
-    "title": "savannah",
+    "title": "SAVANNAH",
     "desc": "savannah game",
     "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "gameClass": "clear-main",
+    "settings": {
+      "countWords": true,
+      "countWordsParams": {
+        "min": 10,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
   },
   "puzzle": {
     "title": "puzzle",
@@ -19,7 +28,7 @@
   },
   "speakit": {
     "title": "SPEAKIT",
-    "desc": "Click on the words to hear them sound.<br>Click on the button and speak the words into the microphone.",
+    "desc": "Нажмите на слова, чтобы услышать их звучание. <br> Нажмите на кнопку Старт и произносите слова в микрофон.",
     "bgImage": "speakitbg.jpg",
     "gameClass": "speakIt",
     "settings": {

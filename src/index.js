@@ -1,9 +1,8 @@
 import './scss/main.scss';
 import Router from '@/components/router/Router';
 import Header from './components/header/header';
-// eslint-disable-next-line no-unused-vars
 import HttpClient from './components/httpclient/HttpClient';
-// import AboutTeamView from './components/aboutTeam/aboutTeamView';
+import Authorization from './components/authorization/authorizationController';
 
 require('./prototype.settings');
 
@@ -14,7 +13,10 @@ function importAll(r) {
 importAll(require.context('./assets/img/', false, /\.svg$/));
 
 window.addEventListener('DOMContentLoaded', () => {
-  const router = new Router();
+  const authorization = new Authorization();
+  const http = new HttpClient(authorization.unauthorizedListener);
+
+  const router = new Router(http);
   router.init();
 
   document.body.addEventListener('click', (e) => {
@@ -25,4 +27,5 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   new Header().createEvent();
+  authorization.create(http);
 });

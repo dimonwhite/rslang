@@ -1,7 +1,7 @@
 import { backendUrl } from '../../constants';
 /* eslint-disable class-methods-use-this */
 export default class HttpClient {
-  constructor() {
+  constructor(unauthorized) {
     this.token = localStorage.token;
     this.userId = localStorage.userId;
     this.headerNoToken = {
@@ -17,6 +17,29 @@ export default class HttpClient {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     };
+    this.unauthorized = unauthorized;
+  }
+
+  updateLocalUser(content) {
+    this.userId = content.userId;
+    this.token = content.token;
+
+    this.headerNoContentType.Authorization = `Bearer ${this.token}`;
+    this.headerWithContentType.Authorization = `Bearer ${this.token}`;
+
+    localStorage.setItem('token', content.token);
+    localStorage.setItem('userId', content.userId);
+  }
+
+  removeLocalUser() {
+    this.userId = null;
+    this.token = null;
+
+    this.headerNoContentType.Authorization = `Bearer ${this.token}`;
+    this.headerWithContentType.Authorization = `Bearer ${this.token}`;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
   }
 
   async getWords({
@@ -89,12 +112,7 @@ export default class HttpClient {
       throw new Error('Can`t login user, network problems');
     }
     const content = await response.json();
-    this.userId = content.userId;
-    this.token = content.token;
-    this.tokenCreateTime = new Date().getTime();
-    localStorage.setItem('token', content.token);
-    localStorage.setItem('userId', content.userId);
-    localStorage.setItem('tokenCreateTime', this.tokenCreateTime);
+    this.updateLocalUser(content);
 
     return content;
 
@@ -112,7 +130,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (response.status === 404) {
       throw new Error('Can`t get user with this ID');
@@ -138,7 +157,8 @@ export default class HttpClient {
       body: JSON.stringify(newUserData),
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t update user, network problems');
@@ -160,7 +180,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t delete user, network problems');
@@ -177,7 +198,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -196,7 +218,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -220,7 +243,8 @@ export default class HttpClient {
       body: JSON.stringify(requestBody),
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (response.status === 417) {
       throw new Error('Such user word already exists');
@@ -252,7 +276,8 @@ export default class HttpClient {
       body: JSON.stringify(requestBody),
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t create user word, network problems');
@@ -269,7 +294,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
@@ -293,7 +319,8 @@ export default class HttpClient {
       body: JSON.stringify(requestBody),
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t create user statistics, network problems');
@@ -317,7 +344,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (response.status === 404) {
       throw new Error('Can`t find user statistics');
@@ -351,7 +379,8 @@ export default class HttpClient {
       body: JSON.stringify(requestBody),
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (!response.ok) {
       throw new Error('Can`t create user settings, network problems');
@@ -375,7 +404,8 @@ export default class HttpClient {
       headers: this.headerNoContentType,
     });
     if (response.status === 401) {
-      throw new Error('Access token is missing or invalid, try relogin');
+      this.unauthorized();
+      this.removeLocalUser();
     }
     if (response.status === 404) {
       throw new Error('Can`t find user settings');
