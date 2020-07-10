@@ -3,6 +3,7 @@ import Router from '@/components/router/Router';
 import Header from './components/header/header';
 import HttpClient from './components/httpclient/HttpClient';
 import Authorization from './components/authorization/authorizationController';
+import AboutTeamView from './components/aboutTeam/aboutTeamView';
 
 require('./prototype.settings');
 
@@ -28,4 +29,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
   new Header().createEvent();
   authorization.create(http);
+  new AboutTeamView().init();
 });

@@ -1,6 +1,10 @@
 @import "./_background.sass";
 
 .about{
+  &__container{
+    text-align: center;
+    margin-bottom: 20px;
+  }
   &__subtitle{
     max-width: 1240px;
     margin: 0 auto;

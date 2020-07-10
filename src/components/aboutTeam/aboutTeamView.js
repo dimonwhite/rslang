@@ -28,7 +28,7 @@ export default class AboutTeamView {
     <section class="about__info">
       <div class="about__info__wrapper"></div>
     </section>
-    </div>
+    <a href="#/games" class="btn btn__exit">Выход</a>
     `;
     this.info = this.root.querySelector('.about__info__wrapper');
   }
