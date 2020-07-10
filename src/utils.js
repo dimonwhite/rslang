@@ -67,6 +67,13 @@ const randomInteger = (min, max) => {
   return Math.floor(rand);
 };
 
+const shuffleArray = (arr) => {
+  for (let i = 0; i < 3; i += 1) {
+    arr.sort(() => Math.random() - 0.5);
+  }
+  return arr;
+};
+
 export {
   createElement,
   createElementAttr,
@@ -76,4 +83,5 @@ export {
   getDiffFormatDate,
   getSvg,
   randomInteger,
+  shuffleArray,
 };
