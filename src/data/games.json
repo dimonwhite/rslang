@@ -56,20 +56,10 @@
     }
   },
   "sprint": {
-    "title": "SPRINT",
+    "title": "sprint",
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
-
-    "gameClass": "sprint",
-    "settings": {
-      "countWords": false,
-      "countWordsParams": {
-        "min": 5,
-        "step": 5,
-        "options": 3
-      },
-      "levels": true
-    }
+    "gameClass": "speakIt"
   },
   "filwords": {
     "title": "fillwords",
