@@ -2,7 +2,7 @@
   "savannah": {
     "title": "SAVANNAH",
     "desc": "savannah game",
-    "bgImage": "testbg.jpg",
+    "bgImage": "bg-savannah.png",
     "gameClass": "clear-main",
     "settings": {
       "countWords": true,

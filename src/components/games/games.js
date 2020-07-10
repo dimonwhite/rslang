@@ -178,8 +178,8 @@ export default class Games {
   }
 
   createLevels() {
-    const wrap = createElement({ tag: 'div', class: 'levels', id: 'levels' });
-    const levelsParent = createElement({ tag: 'div', class: 'levels__wrap' });
+    const wrap = createElement({ tag: 'div', class: 'levels' });
+    const levelsParent = createElement({ tag: 'div', class: 'levels__wrap', id: 'levels' });
     wrap.append(createElement({ tag: 'div', class: 'levels__title', content: 'Levels' }));
     wrap.append(levelsParent);
     for (let i = 0; i < this.countLevels; i += 1) {

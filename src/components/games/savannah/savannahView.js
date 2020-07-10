@@ -3,8 +3,8 @@ import { createElement } from '../../../utils';
 export default class SavannahView {
   constructor() {
     this.countHearts = 5;
-    this.SHIP_HIGHT = 35;
-    this.BG_HIGHT = 3500;
+    this.SHIP_HIGHT = 40;
+    this.BG_HIGHT = 3317;
     this.speed = 7;
     this.lang = 'EN';
   }
@@ -18,6 +18,7 @@ export default class SavannahView {
     this.savannah.append(this.createGame());
     this.main.append(this.savannah);
     this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
+    this.setSettings();
   }
 
   createGame() {
@@ -59,7 +60,6 @@ export default class SavannahView {
     const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
     this.createOptions('Страница:', pages, 'selectPage');
     this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__btn', content: 'Выученные слова' });
-    this.learnedWords.classList.add('active-learned');
     this.start.append(this.learnedWords);
   }
 
@@ -291,6 +291,7 @@ export default class SavannahView {
   }
 
   newGame() {
+    this.learnedWords.classList.remove('active-learned');
     document.getElementById('startScreen').classList.remove('hide');
     document.getElementById('gameOptions').classList.remove('hide');
     this.time.innerHTML = '3';
@@ -314,6 +315,26 @@ export default class SavannahView {
 
   selectLearnedWords() {
     this.learnedWords.classList.add('active-learned');
+    document.querySelector('input:checked').checked = false;
     return -1;
+  }
+
+  setSettings() {
+    if (this.settings.lvl === -1) {
+      this.learnedWords.classList.add('active-learned');
+      document.querySelector('input:checked').checked = false;
+    } else {
+      document.querySelectorAll('.radio__input')[this.settings.lvl].checked = true;
+    }
+    document.getElementById('selectCount').value = this.settings.words;
+    document.getElementById('selectPage').value = this.settings.page;
+    document.getElementById('selectSpeed').value = this.settings.speed;
+    document.getElementById('selectHearts').value = this.settings.hearts;
+    document.getElementById('selectLang').value = this.settings.lang;
+    if (this.settings.sound) {
+      document.getElementById('sound').classList.remove('sound-mute');
+    } else {
+      document.getElementById('sound').classList.add('sound-mute');
+    }
   }
 }
