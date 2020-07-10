@@ -15,6 +15,7 @@ export default class Router {
       statistics: StatisticsController,
     };
     this.nav = document.getElementById('nav');
+    this.main = document.querySelector('.main');
   }
 
   init() {
@@ -40,6 +41,7 @@ export default class Router {
         document.body.className = 'body';
       }
       document.body.removeAttribute('style');
+      this.main.removeAttribute('style');
       this.currentPage = new PageClass(this.http);
       this.currentPage.create(...this.urlArray);
       this.changeActiveLink();

@@ -22,7 +22,7 @@ export default class AudiocallView {
     <div class="btn__top stats">Статистика</div>
     <div class="btn__top user-words active">Слова пользователя</div>
     <div class="btn__top restart">Рестарт</div>
-    <div class="btn__top exit" href="#/">Выход</div>
+    <a class="btn__top exit" href="#/games">Выход</a>
     </div>
     <div class="info-wrapper">
       <div class="icon-container"></div>
