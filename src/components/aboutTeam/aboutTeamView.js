@@ -58,7 +58,7 @@ export default class AboutTeamView {
     });
   }
 
-  init() {
+  create() {
     this.renderMainLayout();
     this.appendCards();
   }
