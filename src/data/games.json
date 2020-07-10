@@ -1,7 +1,7 @@
 {
   "savannah": {
-    "title": "SAVANNAH",
-    "desc": "savannah game",
+    "title": "САВАННА",
+    "desc": "Вам предстоит космический полёт, для этого вам нужно выбирать верные переводы слов.",
     "bgImage": "bg-savannah.png",
     "gameClass": "clear-main",
     "settings": {

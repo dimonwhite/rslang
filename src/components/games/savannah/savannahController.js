@@ -5,7 +5,6 @@ import soundGO from '@/assets/sounds/game-over.mp3';
 import soundMist from '@/assets/sounds/mistake.mp3';
 import SavannahView from './savannahView';
 import SavannahModel from './savannahModel';
-// import HttpClient from '../../httpclient/HttpClient';
 
 export default class SavannahController {
   constructor(user, callResult) {
@@ -25,9 +24,10 @@ export default class SavannahController {
   }
 
   async init() {
-    // document.body.className = 'body';
+    this.view.initView();
     await this.addStatistics();
     this.view.renderHTML();
+    this.view.createControl();
     this.createEvent();
   }
 
@@ -159,7 +159,7 @@ export default class SavannahController {
     }
     if (this.view.top) this.view.top.remove();
     if (this.view.bottom) this.view.bottom.remove();
-    const DELAY_ENDING = 11114000;
+    const DELAY_ENDING = 4000;
     setTimeout(() => {
       this.view.endGame();
       this.callResult(this.model.words.slice(0, this.attempt));
@@ -205,9 +205,9 @@ export default class SavannahController {
 
   async change() {
     this.stat.settings.lvl = this.level;
-    this.stat.settings.level = undefined;
     this.model.newGame();
     this.view.newGame();
+    this.view.setLevel();
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
   }
 

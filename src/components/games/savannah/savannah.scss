@@ -149,6 +149,7 @@
         align-items: center;
         position: absolute;
         top: 50vh;
+        width: 90%;
 
         &-key {
             width: 50px;
@@ -162,10 +163,11 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            color: #dc143c;
-            text-shadow: 1px 1px 1px #000;
-            border: 1px solid gold;
+            color: green;
+            text-shadow: 1px 1px 1px black, -1px -1px 1px black, -1px 1px 1px black, 1px -1px 1px black;
+            border: 2px solid gold;
             text-align: center;
+            font-weight: bold;
             font-size: 42px;
             display: flex;
             justify-content: center;
@@ -175,6 +177,7 @@
             margin: 0 auto;
             font-size: 20px;
             color: white;
+            text-align: center;
         }
     }
 }
@@ -329,16 +332,9 @@
     background: #fff0f07d;
 }
 
-.clear-main {
-    margin-top: -30px;
-
-    .game__startScreen {
-        position: unset;
-    }
-}
-
 .active-learned {
-    background-color: rgb(135, 135, 245);
+    background-color: #6c55ad;
+    box-shadow: 0 0 6px 3px #fff2c3;
 }
 
 @media only screen and (max-width: 1150px) {
@@ -354,6 +350,9 @@
         min-width: 250px;
         min-height: 70px;
         padding: 0;
+    }
+    .savannah__game-question {
+        font-size: 44px;
     }
 }
 @media only screen and (max-width: 768px) {
@@ -419,5 +418,183 @@
     .savannah__game-question {
         font-size: 30px;
         margin-left: 120px;
+    }
+}
+
+.clear-main {
+    margin-top: 0px;
+    h2 {
+        margin-top: 40px;
+    }
+    .game__startScreen {
+        position: fixed;
+        min-height: 700px;
+    }
+    .game__startScreen-desc {
+        width: 90%;
+        height: 40px;
+    }
+    .levels__title {
+        position: absolute;
+        color: #ff6903;
+        left: 10px;
+        text-shadow: 1px 1px black;
+        top: 16px;
+        width: 100px;
+    }
+    .levels__wrap {
+        top: 75px;
+        position: absolute;
+        left: 10px;
+        width: 300px;
+    }
+    .game__select-fix {
+        position: absolute;
+        left: 140px;
+        top: 31px;
+        width: 300px;
+    }
+    .game__select-options-page {
+        width: 60px;
+        border-radius: 8px;
+        font-size: 20px;
+        padding-left: 5px;
+        background-color: #ff336d;
+        outline: 0;
+        margin-left: 10px;
+        color: gold;
+    }
+    .game__select {
+        margin-bottom: 10px;
+        width: 282px;
+        justify-content: space-between;
+
+        &-words {
+            width: 300px;
+        }
+        &-text {
+            color: #ff6903;
+        }
+        &-wrap {
+            position: absolute;
+            top: 130px;
+            left: 10px;
+        }
+        &-options {
+            height: 36px;
+        }
+    }
+    .show-game {
+        padding-top: 0px;
+    }
+}
+
+.select-width {
+    width: 100px !important;
+}
+
+.game__startScreen-fix {
+    background-size: unset !important;
+    z-index: 0 !important;
+}
+
+.show-game-fix {
+    padding-top: 0px !important;
+}
+.savannah-start__words {
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    outline: 0;
+    border: 2px solid #dba880;
+    position: absolute;
+    left: 133px;
+    top: -104px;
+    color: #ff6903;
+    font-size: 15px;
+    font-weight: bold;
+}
+.savannah__select-text {
+    font-size: 26px;
+    color: #ff6903;
+    font-weight: bold;
+    text-shadow: 1px 1px black;
+}
+.savannah__select-options {
+    width: 60px;
+    border-radius: 8px;
+    font-size: 20px;
+    padding-left: 5px;
+    background-color: #ff336d;
+    outline: 0;
+    margin-left: 10px;
+    color: gold;
+}
+.savannah__settings {
+    position: absolute;
+    right: 130px;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid crimson;
+    padding: 10px;
+    background-color: #00000021;
+    border-radius: 8px;
+}
+.savannah__wrap-level {
+    width: 300px;
+    height: 174px;
+    border: 1px solid crimson;
+    border-radius: 8px;
+    position: absolute;
+    left: 130px;
+    top: 10px;
+    background-color: #00000029;
+    z-index: -1;
+}
+
+@media only screen and (max-width: 1000px) {
+    .savannah__settings {
+        right: 10px;
+    }
+    .savannah__wrap-level {
+        left: 10px;
+    }
+}
+@media only screen and (max-width: 650px) {
+    .savannah__settings {
+        top: 200px;
+        right: auto;
+    }
+    .savannah__wrap-level {
+        left: auto;
+    }
+    .savannah__timer-text {
+        font-size: 16px;
+    }
+    .clear-main {
+        h2 {
+            margin-top: 290px;
+            margin-bottom: 10px;
+            font-size: 33px;
+        }
+        .game__startScreen-desc {
+            display: none;
+        }
+        .btn {
+            height: 45px;
+            font-size: 20px;
+            margin-bottom: 10px !important;
+        }
+    }
+}
+.hide-control {
+    h2,
+    .btn,
+    .levels__wrap,
+    .levels__title,
+    .game__startScreen-desc {
+        display: none;
     }
 }

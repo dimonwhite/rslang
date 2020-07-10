@@ -87,7 +87,8 @@ export default class SavannahModel {
     let choiceWords;
     if (this.lang === 'EN') {
       if (partsOfSpeech.includes(part)) {
-        choiceWords = choice.ru[part].find((item) => item[0][0] === this.gameWords[index][0][0]);
+        choiceWords = choice.ru[part].find((item) => item[0][0] === this.gameWords[index][0][0]
+          && item[0] !== this.gameWords[index][0]);
       } else {
         choiceWords = choice.ru.other;
       }

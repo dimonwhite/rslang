@@ -21,6 +21,21 @@ export default class SavannahView {
     this.setSettings();
   }
 
+  initView() {
+    document.body.className = 'body show-game show-game-fix hide-control';
+    this.startScreen = document.getElementById('startScreen');
+    this.startScreen.classList.add('game__startScreen-fix');
+  }
+
+  createControl() {
+    document.querySelector('.game__select-text').classList.add('savannah__select-text');
+    document.querySelector('.game__select-options').classList.add('savannah__select-options');
+    this.selectPage = document.getElementById('selectPage');
+    this.selectPage.classList.add('game__select-options-page');
+    document.getElementById('wrapPage').classList.add('game__select-wrap');
+    document.body.classList.remove('hide-control');
+  }
+
   createGame() {
     this.game = createElement({ tag: 'section', class: 'savannah__game' });
     const cancel = createElement({ tag: 'div', class: 'savannah__game-cancel', id: 'cancel' });
@@ -53,29 +68,37 @@ export default class SavannahView {
 
   createGameOptions() {
     this.start = document.getElementById('startScreen');
-    this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang');
-    this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed');
-    this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts');
+    this.gameSettings = createElement({ tag: 'div', class: 'savannah__settings' });
+    this.gameSettings.append(document.getElementById('gameOptions'));
+    this.gameSettings.append(this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang'));
+    this.gameSettings.append(this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed'));
+    this.gameSettings.append(this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts'));
+    this.start.append(this.gameSettings);
     const ALL_PAGES = 30;
     const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
-    this.createOptions('Страница:', pages, 'selectPage');
-    this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__btn', content: 'Выученные слова' });
-    this.start.append(this.learnedWords);
+    this.start.append(this.createOptions('Страница:', pages, 'selectPage', 'wrapPage'));
+    this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__words', content: 'Выученные слова' });
+    const wrap = createElement({ tag: 'div', class: 'savannah__wrap-level' });
+    wrap.append(document.getElementById('wrapPage'));
+    wrap.append(document.querySelector('.levels'));
+    this.wrap.append(this.learnedWords);
+    this.start.append(wrap);
   }
 
-  createOptions(content, options, id) {
-    const wrap = createElement({ tag: 'div', class: 'game__select' });
+  createOptions(content, options, id, idSelect) {
+    this.wrap = createElement({ tag: 'div', class: 'game__select', id: idSelect });
     const selectText = createElement({
-      tag: 'span', class: 'game__select-text', id: `text${id}`, content,
+      tag: 'span', class: 'savannah__select-text', id: `text${id}`, content,
     });
-    const select = createElement({ tag: 'select', class: 'game__select-options', id });
+    const select = createElement({ tag: 'select', class: 'savannah__select-options', id });
+    if (options.length === 3) select.classList.add('select-width');
     for (let i = 0; i < options.length; i += 1) {
       const option = createElement({ tag: 'option', class: 'game__select-options-item', content: options[i] });
       select.append(option);
     }
-    wrap.append(selectText);
-    wrap.append(select);
-    this.start.append(wrap);
+    this.wrap.append(selectText);
+    this.wrap.append(select);
+    return this.wrap;
   }
 
   createField() {
@@ -320,12 +343,7 @@ export default class SavannahView {
   }
 
   setSettings() {
-    if (this.settings.lvl === -1) {
-      this.learnedWords.classList.add('active-learned');
-      document.querySelector('input:checked').checked = false;
-    } else {
-      document.querySelectorAll('.radio__input')[this.settings.lvl].checked = true;
-    }
+    this.setLevel();
     document.getElementById('selectCount').value = this.settings.words;
     document.getElementById('selectPage').value = this.settings.page;
     document.getElementById('selectSpeed').value = this.settings.speed;
@@ -335,6 +353,16 @@ export default class SavannahView {
       document.getElementById('sound').classList.remove('sound-mute');
     } else {
       document.getElementById('sound').classList.add('sound-mute');
+    }
+  }
+
+  setLevel() {
+    if (this.settings.lvl === -1) {
+      this.learnedWords.classList.add('active-learned');
+      const radio = document.querySelector('input:checked');
+      if (radio) radio.checked = false;
+    } else {
+      document.querySelectorAll('.radio__input')[this.settings.lvl].checked = true;
     }
   }
 }
