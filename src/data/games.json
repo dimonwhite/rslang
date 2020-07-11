@@ -62,9 +62,12 @@
     "gameClass": "speakIt"
   },
   "filwords": {
-    "title": "fillwords",
+    "title": "FILLWORDS",
     "desc": "fillwords game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "fillwords"
+    "bgImage": "fillwordsbg.jpg",
+    "gameClass": "fillwords",
+    "settings": {
+      "levels": true
+    }
   }
 }

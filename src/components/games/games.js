@@ -1,6 +1,7 @@
 import gamesInfo from '@/data/games.json';
 import { blackGradient, urlGitHub } from '@/constants';
 import { createElement } from '@/utils';
+import FillwordsController from '@/components/games/fillwords/fillwordsController';
 import SavannahController from './savannah/savannahController';
 import PuzzleController from './puzzle/puzzleController';
 import AudiocallController from './audiocall/audiocallController';
@@ -17,6 +18,7 @@ export default class Games {
       audiocall: AudiocallController,
       speakit: SpeakitController,
       sprint: SprintController,
+      filwords: FillwordsController,
     };
     this.countLevels = 6;
     this.gamesInfo = gamesInfo;
