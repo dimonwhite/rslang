@@ -60,6 +60,9 @@ export default class SprintView {
     this.svgTimer.setAttribute('height', 150);
     this.svgTimer.innerHTML = '<circle class="circle" cx="80" cy="80" r="60"  />';
     this.SvgCircleBlock = createElement({ tag: 'div', class: 'game__sprint__time__block_svg' });
+    this.userBlock = createElement({ tag: 'div', class: 'game__sprint__user-words-block' });
+    this.userBlockButton = createElement({ tag: 'div', class: 'game__sprint__user-words-button', content: 'Мои слова' });
+    this.userNotification = createElement({ tag: 'p', class: 'game__sprint__user-words-notification' });
   }
 
   appendElements() {
@@ -68,12 +71,14 @@ export default class SprintView {
     this.svgTimer.append(this.svgCircle);
     this.SvgCircleBlock.append(this.svgTimer);
     this.timerBlock.append(this.SvgCircleBlock, this.timer);
+    this.userBlock.append(this.userBlockButton, this.userNotification);
     this.bonusItemsBlock.append(this.firstBonusItem,
       this.secondBonusItem, this.thirdBonusItem, this.fourBonusItem);
 
     this.indicationBlock.append(this.scoreBlock, this.currentBonus, this.timerBlock);
     this.wordsBlock.append(this.currentWord, this.currentTranslation);
     document.querySelector('.game__startScreen').append(this.createLevels());
+    document.querySelector('.game__startScreen').append(this.userBlock);
     this.game.append(
       this.indicationBlock, this.bonusItemsBlock,
       this.answerCheck, this.btnsBlock, this.arrowsBlock,

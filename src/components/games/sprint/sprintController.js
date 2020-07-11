@@ -13,21 +13,25 @@ export default class SprintController {
     this.answerCount = 0;
     this.score = 0;
     this.isCorrect = true;
-    this.seconds = 60;
+    this.seconds = 15;
     this.LoadTime = 5;
     this.bonusPlanet = 0;
     this.countWords = 0;
     this.trueArray = [];
     this.falseArray = [];
-    this.wordCount = 25;
+    this.wordCount = 15;
     this.hard = 0;
     this.options = 1;
     this.chekedTranslate = [];
+    this.wordControl = false;
   }
 
   init() {
+    this.chekUser();
     this.view.renderHTML();
     this.changeLvlv();
+    this.useMyWords();
+
     this.view.btnChoiceTrue.addEventListener('click', () => {
       this.checkBtnTrue();
     });
@@ -53,15 +57,44 @@ export default class SprintController {
     document.querySelectorAll('.radio').forEach((e) => {
       e.addEventListener('click', () => {
         this.hard = e.id.slice(5);
+        this.wordControl = false;
         return this.hard;
       });
-      console.log(e.id.slice(5));
+    });
+  }
+
+  async chekUser() {
+    this.trueArray = await this.model.getUserWords();
+    if (this.trueArray.length >= 100) {
+      this.wordControl = true;
+    }
+  }
+
+  useMyWords() {
+    document.querySelector('.game__sprint__user-words-button').addEventListener('click', () => {
+      if (this.trueArray.length >= 100) {
+        this.wordControl = true;
+        this.makerArray(this.hard, this.count);
+      } else {
+        this.hard = 0;
+        this.wordControl = false;
+        console.log('you dont have enough words');
+        this.makerArray(this.hard, this.wordCount);
+      }
     });
   }
 
   async makerArray(y, x) {
-    this.trueArray = await this.model.getWords(y, x);
+    if (this.wordControl) {
+      this.trueArray = await this.model.getUserWords();
+      this.makeWordField();
+      console.log(this.trueArray);
+      return this.trueArray;
+    }
+    this.trueArray = await this.model.getJustWords(y, x);
     this.makeWordField();
+    console.log(this.trueArray);
+    return this.trueArray;
   }
 
   static translateCheck(word, badTranslate) {
@@ -80,7 +113,6 @@ export default class SprintController {
         randomArray(SprintController.translateCheck(this.trueArray[this.time]
           .wordTranslate,
         this.model.gameFalseWords))[this.time]);
-      console.log(this.trueArray[this.time].wordTranslate);
       this.isCorrect = false;
       this.time += 1;
     }
@@ -191,13 +223,12 @@ export default class SprintController {
       this.score += 10;
       this.addBonusPlanet();
       this.view.getScore(this.score);
-      console.log(this.bonusPlanet);
     }
   }
 
   addMainTimer() {
     clearInterval(this.roundTime);
-    this.seconds = 60;
+    this.seconds = 15;
 
     this.roundTime = setInterval(() => {
       this.view.addTimer(this.seconds);
@@ -205,10 +236,9 @@ export default class SprintController {
       this.seconds -= 1;
       if (this.seconds === 0) {
         clearInterval(this.roundTime);
-        this.seconds = 60;
+        this.seconds = 15;
         this.view.addTimer('0');
-        console.log(this.seconds);
-        // this.openPopupResult(this.trueArray);
+        this.openPopupResult(this.trueArray);
       }
     }, 1000);
   }

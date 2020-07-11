@@ -171,11 +171,7 @@ export default class Games {
       </svg>
       <div class="text word">${objWord.word.word}</div>
       <div class="text">${objWord.word.transcription}</div>
-<<<<<<< HEAD
-      <div class="text">${objWord.word.wordTranslate}</div>
-=======
       <div class="text">${objWord.word.translation || objWord.word.wordTranslate}</div>
->>>>>>> develop
     `;
     block.append(listItem);
   }

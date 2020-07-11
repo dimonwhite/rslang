@@ -299,6 +299,7 @@ position: relative;
     }
 
 
+
     .btn {
       width: 5%;
       &.start {
@@ -331,6 +332,10 @@ position: relative;
 $radioBg: #FF0048;
 
 .levels {
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   &__title {
     color: #BF123D;
   }
@@ -478,3 +483,36 @@ $radioBg: #FF0048;
 
     padding-left: 3%;
   }
+
+  .main{
+    margin-top: 0px;
+  }
+
+
+  .game__sprint__user-words-block{
+    padding-top: 3%;
+    height: 17% !important;
+    width: 80% !important;
+    display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  }
+
+  .game__sprint__user-words-button{
+  width: 65% !important;
+  height: 50% !important;
+  border-radius: 12px !important;
+  background-color: #7B4C8F !important;
+  color: #FFCB29;
+  font-size: 22px;
+  border: 0.1rem solid #A586FF !important;
+  padding: 2%;
+}
+.game__sprint__user-words-notification{
+  width: 65% !important;
+  color: #FFCB29 !important;
+  font-size: 22px !important;
+  height: 50% !important;
+
+}

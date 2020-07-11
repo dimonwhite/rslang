@@ -22,17 +22,41 @@ export default class SprintModel {
     this.allStudyWords = [];
   }
 
-  async getWords(group, count) {
+  // async getWords(group, count) {
+  //   const words = await this.http.getAllUserWords();
+  //   const userWords = words.map((word) => word.optional);
+  //   if (userWords.length === 100) {
+  //     userWords.forEach((e) => {
+  //       this.gameWords.push(e);
+  //       this.gameFalseWords.push(e.wordTranslate);
+  //     });
+  //     console.log(userWords);
+  //     return userWords;
+  //   }
+  //   const data = await this.http.getWords({
+  //     group, page: 3, maxLength: 50, wordsPerPage: count,
+  //   });
+  //   data.forEach((e) => {
+  //     this.gameWords.push(e);
+  //     this.gameFalseWords.push(e.wordTranslate);
+  //   });
+  //   console.log(data);
+  //   return data;
+  // }
+
+  async getUserWords() {
     const words = await this.http.getAllUserWords();
     const userWords = words.map((word) => word.optional);
-    if (userWords.length === 100) {
-      userWords.forEach((e) => {
-        this.gameWords.push(e);
-        this.gameFalseWords.push(e.wordTranslate);
-      });
-      console.log(userWords);
-      return userWords;
-    }
+
+    userWords.forEach((e) => {
+      this.gameWords.push(e);
+      this.gameFalseWords.push(e.wordTranslate);
+    });
+    console.log(userWords);
+    return userWords;
+  }
+
+  async getJustWords(group, count) {
     const data = await this.http.getWords({
       group, page: 3, maxLength: 50, wordsPerPage: count,
     });
@@ -40,7 +64,6 @@ export default class SprintModel {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
     });
-    console.log(data);
     return data;
   }
 
