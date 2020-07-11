@@ -13,7 +13,7 @@ export default class Card {
     card.dataset.id = this.key;
     card.innerHTML = `
       <svg class="svg_icon">
-        <use xlink:href="sprite.svg#volume"></use>
+        <use xlink:href="sprite.svg#sound"></use>
       </svg>
       <div class="wordList__item-text">
           <div class="wordList__item-title">${word}</div>
