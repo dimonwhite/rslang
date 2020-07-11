@@ -25,7 +25,7 @@ export default class FillwordsController {
   addListeners() {
     this.moveBoardCallback = this.moveBoard.bind(this);
     this.view.boardWrap.addEventListener('mousedown', this.mouseDownBoard.bind(this));
-    this.view.boardWrap.addEventListener('mouseup', this.mouseUpBoard.bind(this));
+    document.addEventListener('mouseup', this.mouseUpBoard.bind(this));
     this.view.newGame.addEventListener('click', () => {
       this.change();
     });
@@ -41,21 +41,25 @@ export default class FillwordsController {
   }
 
   mouseDownBoard() {
+    this.isBoardMouseDown = true;
     this.resultMove = '';
     this.selectedLetters = [];
     this.view.boardWrap.addEventListener('mousemove', this.moveBoardCallback);
   }
 
   mouseUpBoard() {
-    this.view.boardWrap.removeEventListener('mousemove', this.moveBoardCallback);
-    if (this.isSuccessWord()) {
-      this.view.successSelected(this.selectedLetters);
-      this.score += 1;
-      this.scoreSuccess += 1;
-    } else {
-      this.view.cancelSelected(this.selectedLetters);
+    if (this.isBoardMouseDown) {
+      this.isBoardMouseDown = false;
+      this.view.boardWrap.removeEventListener('mousemove', this.moveBoardCallback);
+      if (this.isSuccessWord()) {
+        this.view.successSelected(this.selectedLetters);
+        this.score += 1;
+        this.scoreSuccess += 1;
+      } else {
+        this.view.cancelSelected(this.selectedLetters);
+      }
+      this.checkWin();
     }
-    this.checkWin();
   }
 
   checkWin(isCheckWin) {
@@ -165,9 +169,16 @@ export default class FillwordsController {
   win() {
     this.openPopupResult(this.words);
     this.view.addClassAllLetters();
+    this.model.successCount = this.scoreSuccess;
+    this.model.errorCount = this.score - this.scoreSuccess;
+    this.model.setUserStatistics();
   }
 
   getScore() {
     return this.scoreSuccess;
+  }
+
+  removeListeners() {
+    document.removeEventListener('mouseup', this.mouseUpBoard.bind(this));
   }
 }
