@@ -8,7 +8,7 @@ $red: #BF123D;
   }
 }
 
-.speakIt {
+.speakIt, .fillwords {
   position: relative;
   padding: 0 3rem;
 
@@ -20,6 +20,57 @@ $red: #BF123D;
   @include media(650px) {
     padding: 0 0.6rem;
   }
+  .topBlock {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 1.6rem;
+    @include media(1024px) {
+      flex-wrap: wrap;
+    }
+    @include media(650px) {
+      justify-content: flex-end;
+    }
+    .btn {
+      margin-right: 2rem;
+      display: inline-flex;
+      align-items: center;
+      @include media(680px) {
+        order: 1;
+
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 1rem;
+        width: 100%;
+        justify-content: center;
+      }
+      .svg_icon {
+        width: 2.2rem;
+        height: 2.2rem;
+        margin-right: 0.7rem;
+      }
+    }
+    .close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+
+      border-radius: 50%;
+      background-color: #740080;
+      .svg_icon {
+        width: 1.5rem;
+        height: 1.5rem;
+
+        fill: #F1BC19;
+      }
+    }
+  }
+}
+
+.speakIt {
   &.loaded {
     .loader {
       left: 0;
@@ -81,54 +132,6 @@ $red: #BF123D;
     border: 0;
     &:hover {
       background-color: darken($red, 10);
-    }
-  }
-  .topBlock {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    margin-bottom: 1.6rem;
-    @include media(1024px) {
-      flex-wrap: wrap;
-    }
-    @include media(650px) {
-      justify-content: flex-end;
-    }
-    .btn {
-      margin-right: 2rem;
-      display: inline-flex;
-      align-items: center;
-      @include media(680px) {
-        order: 1;
-
-        margin-left: 0;
-        margin-right: 0;
-        margin-top: 1rem;
-        width: 100%;
-        justify-content: center;
-      }
-      .svg_icon {
-        width: 2.2rem;
-        height: 2.2rem;
-        margin-right: 0.7rem;
-      }
-    }
-    .close {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 3rem;
-      height: 3rem;
-
-      border-radius: 50%;
-      background-color: #740080;
-      .svg_icon {
-        width: 1.5rem;
-        height: 1.5rem;
-
-        fill: #F1BC19;
-      }
     }
   }
   .score {
