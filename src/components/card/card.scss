@@ -41,7 +41,6 @@
     justify-content: space-between;
     align-items: center;
     font-family: Raleway, Roboto, serif;
-    position: relative;
     background-color: whitesmoke;
     background-image: url("/src/assets/img/bg-card.jpg");
     background-size: cover;
@@ -52,7 +51,8 @@
     background-size: cover;
     background-attachment: fixed;
     background-position-y: center;
-    height: 100vh;
+    min-height: 100vh;
+    margin-top: 30px;
 
     &__left,
     &__right {
@@ -85,6 +85,7 @@
         align-items: center;
         width: 80%;
         position: relative;
+        height: 100%;
     }
 
     &__play {
@@ -105,7 +106,7 @@
     }
 
     &__img {
-        background-image: url("/src/assets/img/default.jpg");
+        background-color: #8cc6e587;
         object-fit: cover;
         width: 270px;
         height: 270px;
@@ -161,19 +162,18 @@
     &__translation {
         display: flex;
         justify-content: space-around;
-        // font-family: Raleway;
         font-style: normal;
         font-weight: 800;
         font-size: 25.5799px;
         color: #64367f;
         height: auto;
-		min-height: 50px;
+        min-height: 50px;
         width: 250px;
         border-top-right-radius: 50px;
         border-top-left-radius: 50px;
         background-color: #deadf7cf;
         flex-direction: column;
-        justify-content: stretch;
+        // justify-content: stretch;
         align-items: center;
         span {
             text-align: center;
@@ -209,18 +209,19 @@
         padding: 5px;
         height: 40px;
         margin-top: 0;
+        margin-bottom: 40px;
 
         span {
             font-size: 30px;
-            // font-family: Raleway;
             font-style: normal;
             font-weight: bold;
             color: #70e1ff;
             text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+            margin-left: 10px;
+            margin-right: 10px;
         }
     }
     &__interval {
-        // display: none;
         visibility: hidden;
         margin-top: 10px;
         display: flex;
@@ -271,7 +272,7 @@
         background-color: #e1a1ff;
         position: absolute;
         top: 106px;
-        left: -25px;
+        left: -45px;
         background-image: url("/src/assets/img/remove.png");
         background-size: 90%;
         background-position: center;
@@ -285,7 +286,7 @@
         height: 45px;
         border-radius: 50%;
         position: absolute;
-        left: -25px;
+        left: -45px;
         top: 5px;
         background-image: url("/src/assets/img/difficult.png");
         background-size: 70%;
@@ -301,7 +302,6 @@
     &__show {
         display: flex;
         justify-content: space-around;
-        // font-family: Raleway;
         font-style: normal;
         font-weight: 800;
         font-size: 26px;
@@ -396,6 +396,7 @@
     }
     &-panel {
         display: flex;
+        margin-top: 10px;
     }
 }
 /*-------------------END CARD-----------------------*/
@@ -457,15 +458,14 @@ progress[value] {
     position: relative;
 }
 
-progress[value]::-webkit-progress-bar {
+.card__progress::-webkit-progress-bar {
     background-color: #45005ec2;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
     position: relative;
 }
 
-progress[value]::-webkit-progress-value {
-    // background: #43e5f7;
+.card__progress::-webkit-progress-value {
     background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.25), rgba(0, 0, 0, 0.25)),
         -webkit-linear-gradient(left, #43e5f7, #09c);
     border-radius: 8px;
@@ -473,7 +473,7 @@ progress[value]::-webkit-progress-value {
     position: relative;
 }
 
-progress[value]::-webkit-progress-value:before {
+.card__progress::-webkit-progress-value::before {
     content: "";
     position: absolute;
     width: 40px;
@@ -541,6 +541,10 @@ progress[value]::-webkit-progress-value:before {
     font-size: 0 !important;
 }
 
+.lock-img {
+    object-position: 300px;
+}
+
 .lock-elements {
     .card__answer {
         button {
@@ -569,117 +573,188 @@ progress[value]::-webkit-progress-value:before {
 }
 /*----------------END TOGGLE CLASSES-----------------*/
 
-// input[type="range"] {
-//     overflow: hidden;
-//     width: 600px;
-//     height: 28px;
-//     -webkit-appearance: none;
-//     background-color: #45005E;
-//     border-radius: 8px;
-//     outline: 0;
-// }
+@media only screen and (max-width: 1000px) {
+    .card__wrapper-help {
+        position: relative;
+    }
 
-// input[type="range"]::-webkit-slider-runnable-track {
-//     height: 40px;
-//     -webkit-appearance: none;
-//     color: #13bba4;
-//     margin-top: -1px;
-// }
+    .card__wrapper-meaning {
+        height: 270px;
+        justify-content: space-evenly;
+    }
 
-// input[type="range"]::-webkit-slider-thumb {
-//     width: 85px;
-//     border-radius: 50%;
-//     -webkit-appearance: none;
-//     height: 40px;
-//     background-image: url('/src/assets/img/progress.png');
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//     background-position: center;
-//     // background-color: #43e5f7;
-//     box-shadow: -600px 0 0 600px #43e5f7;
-// }
+    .card__wrapper-example {
+        width: 90%;
+        position: absolute;
+        bottom: 1px;
+        left: 7%;
+    }
+    .card__wrapper-text {
+        height: 400px;
+    }
+}
 
-// input[type="range"]::-moz-range-progress {
-//     background-color: #43e5f7;
-// }
-// input[type="range"]::-moz-range-track {
-//     background-color: #9a905d;
-// }
-// input[type="range"]::-ms-fill-lower {
-//     background-color: #43e5f7;
-// }
-// input[type="range"]::-ms-fill-upper {
-//     background-color: #9a905d;
-// }
+@media only screen and (max-width: 820px) {
+    .card {
+        justify-content: center;
 
-// $track-w: 12.5em;
-// $track-h: 1.25em;
-// $thumb-d: 1.5em;
-// $track-c: #45005E;
-// $filll-c: #43e5f7;
+        &__wrapper {
+            &-help {
+                position: relative;
+                flex-direction: column;
+                align-items: center;
+            }
+            &-meaning,
+            &-example {
+                width: 120%;
+                margin-left: -10%;
+                margin-top: 5px;
+                height: 110px;
+                position: static;
+            }
+            &-text {
+                width: 100%;
+                height: 230px;
+            }
+            &-image {
+                position: relative;
+                display: flex;
+                width: 240px;
+            }
+        }
+        &__left,
+        &__right {
+            right: 20px;
+            top: 260px;
+            position: absolute;
+        }
+        &__left {
+            left: 20px;
+        }
+        &__img {
+            width: 240px;
+            height: 240px;
+        }
+        &__range {
+            width: 120%;
+        }
+        &__range {
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 15px;
+        }
+    }
+}
 
-// @mixin track($fill: 0) {
-// 	box-sizing: border-box;
-// 	border: none;
-// 	width: $track-w; height: $track-h;
-// 	background: $track-c;
+@media only screen and (max-width: 600px) {
+    .card {
+        &__left,
+        &__right {
+            top: 245px;
+        }
+        p {
+            font-size: 11px !important;
+        }
+        &__img {
+            width: 200px;
+            height: 200px;
+        }
+        &__play {
+            width: 50px;
+            height: 50px;
+        }
+        &__input-item {
+            width: 93%;
+            height: 45px;
+            padding-left: 15px;
+            font-size: 27px;
+        }
+        &__translation {
+            font-size: 16px;
+            height: auto;
+            min-height: 40px;
+            width: 230px;
+            span {
+                line-height: 20px;
+                font-size: 18px;
+            }
+            :nth-child(2) {
+                font-size: 18px;
+                line-height: 24px;
+            }
+        }
+        &__show {
+            font-size: 23px;
+            height: 40px;
+            width: 230px;
+            margin-top: -5px;
+            line-height: 36px;
+        }
+        &_range {
+            margin-bottom: 10px;
+        }
+        &__interval {
+            margin-top: -20px;
+        }
+        &__input-correct {
+            left: 25px;
+            top: 4px;
+            font-size: 27px;
+        }
+        &__remove {
+            top: 83px;
+        }
+        &__interval {
+            margin-top: 0px;
+        }
+        &__wrapper {
+            &-text {
+                height: 210px;
+            }
+            &-image {
+                width: 200px;
+            }
+            &-meaning {
+                height: 95px;
+            }
+            &-example {
+                height: 95px;
+            }
+        }
+    }
+}
 
-// 	@if $fill == 1 {
-// 		.js & {
-// 			background: linear-gradient($filll-c, $filll-c)
-// 				0/ var(--sx) 100% no-repeat $track-c
-// 		}
-// 	}
-// }
-
-// @mixin fill() {
-// 	height: $track-h;
-// 	background: $filll-c
-// }
-
-// @mixin thumb() {
-// 	box-sizing: border-box;
-// 	border: none;
-// 	width: $thumb-d; height: $thumb-d;
-// 	border-radius: 50%;
-//     background-image: url('/src/assets/img/progress.png');
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//     background-position: center;
-// }
-
-// [type='range'] {
-// 	&, &::-webkit-slider-thumb {
-// 		-webkit-appearance: none;
-// 	}
-
-// 	--range: calc(var(--max) - var(--min));
-// 	--ratio: calc((var(--val) - var(--min))/var(--range));
-// 	--sx: calc(.5*#{$thumb-d} + var(--ratio)*(100% - #{$thumb-d}));
-// 	margin: 0;
-// 	padding: 0;
-// 	width: $track-w; height: $thumb-d;
-// 	background: transparent;
-// 	font: 1em/1 arial, sans-serif;
-
-// 	&::-webkit-slider-runnable-track {
-// 		@include track(1)
-// 	}
-// 	&::-moz-range-track { @include track }
-// 	&::-ms-track { @include track }
-
-// 	&::-moz-range-progress { @include fill }
-// 	&::-ms-fill-lower { @include fill }
-
-// 	&::-webkit-slider-thumb {
-// 		margin-top: .5*($track-h - $thumb-d);
-// 		@include thumb
-// 	}
-// 	&::-moz-range-thumb { @include thumb }
-// 	&::-ms-thumb {
-// 		margin-top: 0;
-// 		@include thumb
-// 	}
-
-// 	&::-ms-tooltip { display: none }
-// }
+@media only screen and (max-width: 400px) {
+    .card {
+        &__img {
+            width: 120px;
+            height: 120px;
+        }
+        &__wrapper-image {
+            width: 120px;
+        }
+        &__left,
+        &__right {
+            top: 210px;
+            min-width: 60px;
+            min-height: 80px;
+        }
+        &__remove {
+            top: 89px;
+            left: 1px;
+            left: 255px;
+        }
+        &__play {
+            width: 40px;
+            height: 40px;
+        }
+        &__difficult {
+            left: 0px;
+            top: 89px;
+        }
+        &__progress {
+            height: 22px;
+        }
+    }
+}

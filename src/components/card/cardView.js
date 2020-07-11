@@ -10,7 +10,7 @@ export default class CardView {
   }
 
   renderHTML() {
-    document.body.className = 'body show-main';
+    document.body.classList.add('show-main');
     this.setSettings();
     this.card.append(this.createCard());
     this.card.append(this.endTraining());
@@ -31,7 +31,7 @@ export default class CardView {
     wrapTranslation.append(this.transcriptionWord);
 
     const wrapRange = createElement({ tag: 'div', class: 'card__range' });
-    const range = createElement({ tag: 'progress', id: 'rangeWords' });
+    const range = createElement({ tag: 'progress', class: 'card__progress', id: 'rangeWords' });
     range.setAttribute('value', 0);
     wrapRange.append(this.firstNumber);
     wrapRange.append(range);
@@ -57,7 +57,6 @@ export default class CardView {
     const wrapPanel = createElement({ tag: 'div', class: 'card__wrapper-panel' });
     wrapPanel.append(...[wrapDict, wrapWords]);
     wrapCard.append(...[wrapRange, wrapHelp, this.interval, wrapPanel]);
-
     card.append(...[this.leftArrow, wrapCard, this.rightArrow]);
     this.input.focus();
     return card;
@@ -344,11 +343,9 @@ export default class CardView {
   }) {
     const hide = cardIndex === passedToday;
     if (this.settings.interval && (prev || !hide)) {
-      // this.interval.classList.add('show-flex');
       this.interval.classList.add('visibility');
       this.setCustomRating(word.customRating);
     } else {
-      // this.interval.classList.remove('show-flex');
       this.interval.classList.remove('visibility');
     }
     if (this.settings.removeWord) {
@@ -375,9 +372,9 @@ export default class CardView {
       this.cardShow.classList.add('hide');
     }
     if (this.settings.imgWord) {
-      this.cardImg.classList.remove('hide');
+      this.cardImg.classList.remove('lock-img');
     } else {
-      this.cardImg.classList.add('hide');
+      this.cardImg.classList.add('lock-img');
     }
     if (this.settings.meaningWord) {
       this.cardMeaning.classList.remove('hide-text');
@@ -390,14 +387,14 @@ export default class CardView {
       this.cardExample.classList.add('hide-text');
     }
     if (this.settings.transcription) {
-      this.transcriptionWord.classList.remove('hide-text');
+      this.transcriptionWord.classList.remove('hide');
     } else {
-      this.transcriptionWord.classList.add('hide-text');
+      this.transcriptionWord.classList.add('hide');
     }
     if (this.settings.translate) {
-      this.translationWord.classList.remove('hide-text');
+      this.translationWord.classList.remove('hide');
     } else {
-      this.translationWord.classList.add('hide-text');
+      this.translationWord.classList.add('hide');
     }
     if (this.settings.meaningWord) {
       this.cardMeaningTranslation.classList.remove('hide-text');
@@ -486,7 +483,6 @@ export default class CardView {
     this.cardRemove.classList.add('lock-element');
     this.cardDiff.classList.remove('lock-element');
     if (this.settings.interval) {
-      // this.interval.classList.add('show-flex');
       this.interval.classList.add('visibility');
       if (customRating) {
         this.setCustomRating(customRating);
@@ -636,7 +632,6 @@ export default class CardView {
     this.cardShow.classList.remove('lock-element');
     this.cardDiff.classList.add('lock-element');
     Array.from(this.interval.children).forEach((item) => item.classList.remove('custom-rating'));
-    // this.interval.classList.remove('show-flex');
     this.interval.classList.remove('visibility');
     this.cardMeaningTranslation.innerHTML = '';
     this.cardExampleTranslation.innerHTML = '';
