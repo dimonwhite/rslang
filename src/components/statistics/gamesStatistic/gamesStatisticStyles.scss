@@ -1,0 +1,202 @@
+.games-statistic {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 37px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.games {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 44%;
+    height: 22%;
+    padding: 2% 2% 2% 14%;
+    margin: 0 3% 0 0;
+    border: 5px solid #bc69ff;
+    border-radius: 68px;
+    background-color: #7a0dab;
+    text-transform: uppercase;
+    word-break: break-word;
+    cursor: pointer;
+}
+
+.games-savannah::before {
+    position: absolute;
+    left: 4%;
+    top: 8%;
+    content: " ";
+    width: 85px;
+    height: 85px;
+    background-image: url(/src/assets/icons/statistic/game-savanna-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.games-audiocall::before {
+    position: absolute;
+    left: 4%;
+    top: 8%;
+    content: " ";
+    width: 85px;
+    height: 85px;
+    background-image: url(/src/assets/icons/statistic/game-audiocall-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.games-sprint::before {
+    position: absolute;
+    left: 4%;
+    top: 8%;
+    content: " ";
+    width: 85px;
+    height: 85px;
+    background-image: url(/src/assets/icons/statistic/game-sprint-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.games-speakit[data-game="speakit"]::before {
+    position: absolute;
+    left: 2%;
+    top: 8%;
+    content: " ";
+    width: 118px;
+    height: 85px;
+    background-image: url(/src/assets/icons/statistic/game-speakit-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.games-puzzle::before {
+    position: absolute;
+    left: 4%;
+    top: 8%;
+    content: " ";
+    width: 85px;
+    height: 85px;
+    background-image: url(/src/assets/icons/statistic/game-englishpuzzle-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.games-own::before {
+    position: absolute;
+    left: 4%;
+    top: 8%;
+    content: " ";
+    width: 85px;
+    height: 85px;
+    background-image: url(/src/assets/icons/statistic/game-ourgame-icon.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.window-game-hide {
+    display: none;
+}
+
+.window-game-statistic {
+    position: absolute;
+    left: 24%;
+    top: 34%;
+    width: 45%;
+    border-radius: 48px;
+    background-color: #823a93;
+    z-index: 10;
+}
+
+.close-game-window {
+    position: relative;
+    top: -62px;
+    right: -92%;
+    width: 35px;
+    height: 35px;
+    background-image: url(/src/assets/icons/statistic/close.png);
+    background-size: 35px 35px;
+}
+.game-name {
+    margin: 2% 0 0 16%;
+    font-size: 51px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #f1aeff;
+}
+
+.game-logo {
+    width: 75px;
+    position: absolute;
+    top: 3%;
+    left: 4%;
+    filter: drop-shadow(0px 0px 11px #fff9e9);
+}
+
+.statistic-signatures {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 3% 2% 3%;
+    list-style: none;
+    font-size: 21px;
+    font-weight: 800;
+    color: #f0bdf4;
+}
+
+.signatures-item {
+    text-align: center;
+    margin: 0 0 0 7%;
+}
+
+.statistic-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+}
+
+.field-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 95%;
+    padding: 0% 1%;
+    margin: 0 0 2% 0;
+    border-radius: 60px;
+    background-color: #d493db;
+}
+
+.field-data {
+    font-size: 33px;
+    font-weight: 900;
+    color: #660066;
+}
+
+.field-right-answer {
+    font-size: 60px;
+    font-weight: 900;
+    color: #ccfc00;
+}
+
+.field-mistakes {
+    font-size: 60px;
+    font-weight: 900;
+    color: #e83100;
+}
+
+.field-points {
+    margin: 0 2% 0 0;
+    font-size: 60px;
+    font-weight: 900;
+    color: #823a93;
+}
