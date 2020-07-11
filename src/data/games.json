@@ -60,5 +60,11 @@
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
     "gameClass": "speakIt"
+  },
+  "filwords": {
+    "title": "fillwords",
+    "desc": "fillwords game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "fillwords"
   }
 }

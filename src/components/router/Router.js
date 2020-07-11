@@ -2,6 +2,7 @@ import Games from '../games/games';
 import DictionaryController from '../dictionary/dictionaryController';
 import CardController from '../card/cardController';
 import StatisticsController from '../statistics/statisticsController';
+import AboutTeamView from '../aboutTeam/aboutTeamView';
 
 export default class Router {
   constructor(http) {
@@ -13,6 +14,7 @@ export default class Router {
       games: Games,
       dictionary: DictionaryController,
       statistics: StatisticsController,
+      aboutteam: AboutTeamView,
     };
     this.nav = document.getElementById('nav');
     this.main = document.querySelector('.main');

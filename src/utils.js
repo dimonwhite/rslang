@@ -62,6 +62,8 @@ const getSvg = (id) => `
   </svg>
 `;
 
+const importAll = (r) => r.keys().map(r);
+
 const shuffleArray = (arr) => {
   for (let i = 0; i < 3; i += 1) {
     arr.sort(() => Math.random() - 0.5);
@@ -77,5 +79,6 @@ export {
   getDiffTime,
   getDiffFormatDate,
   getSvg,
+  importAll,
   shuffleArray,
 };
