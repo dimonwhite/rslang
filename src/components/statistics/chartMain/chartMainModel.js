@@ -11,7 +11,7 @@ export default class ChartMainModel {
   }
 
   baseSettingsCanvas() {
-    console.log(this.dataChart);
+    delete this.dataChart.length;
     this.determineHeightWidthCanvas = function () {
       const mainScreenSizes = {
         computer: 1000,
@@ -119,7 +119,6 @@ export default class ChartMainModel {
           - (this.convertedValues[i] / this.scaleCoefficient);
       }
     });
-    console.log(this.convertedValues);
     return this.convertedValues;
   }
 
@@ -147,9 +146,7 @@ export default class ChartMainModel {
       this.lineCoordinates.coordEndLine.y.push(
         this.convertedValues[i + 1],
       );
-      console.log(this.convertedValues[i]);
     }
-    console.log(this.lineCoordinates);
     return this.lineCoordinates;
   }
 

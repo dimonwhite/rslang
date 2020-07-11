@@ -1,2 +1,11 @@
 @import 
-    './todayProgress/todayProgressStyles.scss';
+    './todayProgress/todayProgressStyles.scss',
+    './gamesStatistic/gamesStatisticStyles.scss';
+
+
+.main-statistic-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 4% 2% 0;
+}    

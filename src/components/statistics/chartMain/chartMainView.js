@@ -2,7 +2,7 @@ import { createElement } from '../../../utils';
 
 export default class ChartMainView {
   constructor(indent) {
-    this.main = document.getElementById('main');
+    this.mainStatisticInfo = document.querySelector('.main-statistic-info');
     this.canvasMainChart = createElement({ tag: 'canvas', class: 'graphMain' });
     this.canvasMainChartContext = this.canvasMainChart.getContext('2d');
     this.mainIndent = indent;
@@ -14,7 +14,7 @@ export default class ChartMainView {
     this.setSettingsCanvas = function () {
       this.canvasMainChart.setAttribute('width', sizes.width);
       this.canvasMainChart.setAttribute('height', sizes.height);
-      this.main.append(this.canvasMainChart);
+      this.mainStatisticInfo.append(this.canvasMainChart);
     };
     return this.setSettingsCanvas();
   }
@@ -126,7 +126,6 @@ export default class ChartMainView {
         ],
       };
       const pointR = 7;
-      console.log(coordinates);
       this.canvasMainChartContext.beginPath();
       this.canvasMainChartContext.moveTo(
         coordinates.firstPoint[0],
