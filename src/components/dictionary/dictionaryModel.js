@@ -12,11 +12,28 @@ export default class DictionaryModel {
       remove: 'remove',
     };
     this.word = null;
+    this.settings = null;
+  }
+
+  async getSettings() {
+    const request = await this.http.getUserSettings()
+      .then((res) => {
+        this.settings = res;
+        return res;
+      })
+      .catch((error) => {
+        this.error = error;
+      });
+
+    return request;
   }
 
   async getDataWords() {
     const request = await this.http.getAllUserWords()
-      .then((res) => res)
+      .then((res) => {
+        this.dataWords = res;
+        return res;
+      })
       .catch((error) => {
         this.error = error;
       });
@@ -41,11 +58,21 @@ export default class DictionaryModel {
     return arrWords;
   }
 
-  getWord(id) {
-    const word = this.dataWords.find((item, index) => {
+  getWord(id, filter, strSearch) {
+    let arrWords = [...this.dataWords];
+
+    if (filter && filter !== this.state.all) {
+      arrWords = arrWords.filter((item) => item.optional.state === filter);
+    }
+
+    if (strSearch) {
+      arrWords = arrWords.filter((item) => item.optional.word.indexOf(strSearch) !== -1);
+    }
+
+    const word = arrWords.find((item, index) => {
       if (item.wordId === id) {
-        this.prev = this.dataWords[index - 1];
-        this.next = this.dataWords[index + 1];
+        this.prev = arrWords[index - 1];
+        this.next = arrWords[index + 1];
         return item;
       }
       return false;
@@ -54,9 +81,6 @@ export default class DictionaryModel {
     this.word = word;
     word.prev = this.prev ? this.prev.wordId : null;
     word.next = this.next ? this.next.wordId : null;
-
-    console.log(word.prev);
-    console.log(word.next);
 
     word.lastTimeText = this.getLastTimeText();
     word.nextTimeText = this.getNextTimeText();
@@ -76,12 +100,20 @@ export default class DictionaryModel {
   }
 
   getNextTimeText() {
-    const nextTime = getDiffFormatDate(
-      getDiffTime(
-        new Date(),
-        new Date(Number(this.word.optional.nextTime)),
-      ),
-    );
+    let nextTime = '';
+
+    if (new Date(Number(this.word.optional.nextTime)) < new Date()) {
+      nextTime = 'ближайшая игра';
+    } else {
+      nextTime = 'через ';
+
+      nextTime += getDiffFormatDate(
+        getDiffTime(
+          new Date(),
+          new Date(Number(this.word.optional.nextTime)),
+        ),
+      );
+    }
 
     return nextTime;
   }
@@ -89,7 +121,6 @@ export default class DictionaryModel {
   async updateState(state) {
     const word = this.dataWords.find((item) => item.wordId === this.word.wordId);
     word.optional.state = state;
-    console.log(word);
 
     const request = await this.http.updateUserWord({
       wordId: word.wordId,
@@ -97,6 +128,25 @@ export default class DictionaryModel {
       difficulty: word.difficulty,
     })
       .then((res) => res)
+      .catch((error) => {
+        this.error = error;
+      });
+
+    return request;
+  }
+
+  async updateSettings(id, value) {
+    const setting = this.settings;
+    setting.optional.dictSettings[id] = value;
+
+    const request = await this.http.createUserSettings({
+      wordsPerDay: 1,
+      optional: setting.optional,
+    })
+      .then((res) => {
+        this.settings = res;
+        return res;
+      })
       .catch((error) => {
         this.error = error;
       });

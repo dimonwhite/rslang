@@ -1,3 +1,5 @@
+
+
 .scroll-off {
     overflow: hidden;
 }
@@ -6,7 +8,7 @@
     width: 1155px;
     min-height: 50vh;
 
-    margin: auto;
+    margin: 70px auto 0;
 
     @include media(1440px) {
         width: 900px;
@@ -31,7 +33,7 @@
         align-items: center;
         justify-content: space-between;
 
-        margin: 70px 0 55px;
+        margin-bottom: 55px;
 
         @include media(1440px) {
             flex-direction: column;
@@ -115,6 +117,7 @@
         }
         &__item-icon {
             width: 35px;
+            height: 40px;
         }
     }
 
@@ -149,6 +152,21 @@
         &__left, &__right {
             display: flex;
             align-items: center;
+
+            @include media(425px) {
+                width: 100%;
+            }
+        }
+
+        &__left {
+            @include media(425px) {
+                justify-content: center;
+            }
+        }
+        &__right {
+            @include media(425px) {
+                justify-content: space-evenly;
+            }
         }
 
         &__sound {
@@ -217,7 +235,7 @@
         }
     }
 
-    .card {
+    .card-dictionary {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -234,15 +252,10 @@
             width: 700px;
             padding: 50px 20px 20px;
             border-radius: 50px;
-
-            &__example,
-            &__meaning {
-                margin-bottom: 5px;
-            }
         }
 
         @include media(1024px) {
-            width: 550px;
+            width: 600px;
         }
         @include media(768px) {
             width: calc(100% - 150px);
@@ -310,7 +323,7 @@
             overflow: auto;
 
             @include media(768px) {
-                max-height: 100%;
+                max-height: 80vh;
             }
         }
 
@@ -350,7 +363,7 @@
 
             margin-bottom: 35px;
 
-            @include media(1024px) {
+            @include media(768px) {
                 flex-direction: column-reverse;
             }
         }
@@ -358,7 +371,7 @@
         &__head-left {
             margin-right: 25px;
 
-            @include media(1024px) {
+            @include media(768px) {
                 margin-top: 15px;
                 margin-right: 0;
             }
@@ -415,7 +428,7 @@
             @include media(768px) {
                 margin-bottom: 10px;
 
-                font-size: 25px;
+                font-size: 30px;
             }
         }
         &__translation {
@@ -428,9 +441,6 @@
             @include media(1440px) {
                 font-size: 20px;
             }
-            @include media(768px) {
-                font-size: 18px;
-            }
         }
         &__transcription {
             font-weight: 500;
@@ -438,9 +448,6 @@
             color: #FFD657;
 
             @include media(1440px) {
-                font-size: 18px;
-            }
-            @include media(768px) {
                 font-size: 20px;
             }
         }
@@ -451,7 +458,8 @@
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
-            min-height: 250px;
+            min-height: auto;
+            padding: 20px 0;
             margin-bottom: 20px;
 
             font-weight: 600;
@@ -459,8 +467,6 @@
             color: #FFCFDB;
 
             @include media(1440px) {
-                min-height: auto;
-                padding: 20px 0;
                 font-size: 18px;
             }
 
@@ -484,45 +490,104 @@
             }
         }
 
+        &__example,
+        &__meaning {
+            margin-bottom: 5px;
+        }
+
         &__rating,
         &__repeat,
         &__last-time {
             margin-bottom: 5px;
         }
 
+        &__rating {
+            display: flex;
+
+            &-points {
+                display: flex;
+                align-items: center;
+                margin-left: 10px;
+            }
+            &-point {
+                width: 10px;
+                height: 10px;
+                margin-right: 5px;
+    
+                border-radius: 50%;
+                background: #000;
+                opacity: .25;
+
+                &_active {
+                    opacity: 1;
+                }
+            }
+
+            &-points[rating="5"] {
+                .card-dictionary__rating-point_active {
+                    background: #43d281;
+                }
+            }
+            &-points[rating="4"] {
+                .card-dictionary__rating-point_active {
+                    background: #338c99;
+                }
+            }
+            &-points[rating="3"] {
+                .card-dictionary__rating-point_active {
+                    background: #8bbac1;
+                }
+            }
+            &-points[rating="2"] {
+                .card-dictionary__rating-point_active {
+                    background: #bed7d7;
+                }
+            }
+            &-points[rating="1"] {
+                .card-dictionary__rating-point_active {
+                    background: #ff934d;
+                }
+            }
+        }
+        
+        
+
+        
+
+
         &__bot {
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
 
-            .card__state {
-                @include media(768px) {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
+        &__state {
+            @include media(768px) {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
 
-                    width: 100%;
-                }
+                width: 100%;
+            }
+        }
+
+        &__state-item {
+            width: 50px;
+            height: 60px;
+            margin-right: 25px;
+            opacity: .5;
+            cursor: pointer;
+            transition: .3s;
+
+            @include media(768px) {
+                width: 45px;
+                height: 45px;
+                margin-right: 0;
             }
 
-            .card__state-item {
-                width: 50px;
-                height: 60px;
-                margin-right: 25px;
-                opacity: .5;
-                cursor: pointer;
-                transition: .3s;
-
-                @include media(768px) {
-                    width: 45px;
-                    height: 45px;
-                    margin-right: 0;
-                }
-
-                &_active, 
-                &:hover {
-                    opacity: 1;
-                }
+            &_active, 
+            &:hover {
+                opacity: 1;
             }
         }
     }

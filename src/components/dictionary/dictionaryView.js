@@ -6,6 +6,7 @@ export default class DictionaryView {
     this.main = document.getElementById('main');
     this.audio = new Audio();
     this.card = null;
+    this.settingsBlock = document.getElementById('settings');
   }
 
   renderHTML() {
@@ -96,16 +97,10 @@ export default class DictionaryView {
     this.list.innerHTML = '';
   }
 
-  updateListItem(word, settings) {
-    const item = this.list.querySelector(`.card-list[data-id="${word.wordId}"]`);
-    const content = DictionaryView.contentListItem(word, settings);
-    item.innerHTML = content;
-  }
-
   static contentListItem(word, settings) {
     let content = '<div class="card-list__left">';
 
-    if (settings.sound) {
+    if (settings.dictSound) {
       content += `<div class="card-list__sound">
         <svg class="card-list__sound-icon" title="Прослушать">
           <use xlink:href="sprite.svg#dictionary-sound"></use>
@@ -120,7 +115,7 @@ export default class DictionaryView {
     </div>
     <div class="card-list__right">`;
 
-    if (settings.image) {
+    if (settings.dictImg) {
       content += `<div class="card-list__img" style="background: url(${urlGitHub}${word.optional.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>`;
     }
 
@@ -147,86 +142,39 @@ export default class DictionaryView {
   }
 
   createCard({ word, wordId, settings }) {
-    let contentHead = '<div class="card__head">';
-    if (settings.image) {
-      contentHead += `<div class="card__head-left">
-        <div class="card__img" style="background: url(${urlGitHub}${word.optional.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>
-      </div>`;
-    }
-    contentHead += '<div class="card__head-right">';
-    if (settings.sound) {
-      contentHead += `<div class="card__sound">
-        <svg class="card__sound-icon" title="Прослушать">
-          <use xlink:href="sprite.svg#dictionary-sound"></use>
-        </svg>
-      </div>`;
-    }
-    contentHead += `<div class="card__text">
-        <div class="card__word">${word.optional.word}</div>
-        <div class="card__translation">${word.optional.wordTranslate}</div>`;
-    if (settings.transcription) {
-      contentHead += `<div class="card__transcription">${word.optional.transcription}</div>`;
-    }
-    contentHead += `</div>
-      </div>
-    </div>`;
+    const contentHead = DictionaryView.createCardHead(word, settings);
+    const contentBody = DictionaryView.createCardBody(word, settings);
 
-    /*-------------------------------------------------*/
-    let contentBody = '';
-
-    if (settings.example || settings.meaning || settings.progress) {
-      contentBody += '<div class="card__body">';
-      if (settings.example) {
-        contentBody += `<div class="card__example">${word.optional.textExample}</div>`;
-      }
-      if (settings.meaning) {
-        contentBody += `<div class="card__meaning">${word.optional.textMeaning}</div>`;
-      }
-      if (settings.progress) {
-        contentBody += `<div class="card__progress">
-          <div class="card__rating">Прогресс изучения: ${word.optional.rating}</div>
-          <div class="card__repeat">Повторейний: ${word.optional.count}</div>
-          <div class="card__last-time">Давность: ${word.lastTimeText} назад</div>
-          <div class="card__next-time">Повтор: через ${word.nextTimeText}</div>
-        </div>`;
-      }
-      contentBody += '</div>';
-    }
-
-    /*-------------------------------------------------*/
-
-    const prev = `<div class="card__prev">
-      <svg class="card__prev-icon" title="Предыдущее слово">
+    const prev = `<div class="card-dictionary__prev">
+      <svg class="card-dictionary__prev-icon" title="Предыдущее слово">
         <use xlink:href="sprite.svg#dictionary-prev"></use>
       </svg>
     </div>`;
 
-    const next = `<div class="card__next">
-      <svg class="card__next-icon" title="Следующее слово">
+    const next = `<div class="card-dictionary__next">
+      <svg class="card-dictionary__next-icon" title="Следующее слово">
         <use xlink:href="sprite.svg#dictionary-next"></use>
       </svg>
     </div>`;
 
-    /*-------------------------------------------------*/
-
     const content = `
       ${word.prev ? prev : ''}
       ${word.next ? next : ''}
-      <div class="card__content-wrap">
-        <svg class="card__close close-icon">
+      <div class="card-dictionary__content-wrap">
+        <svg class="card-dictionary__close close-icon">
           <use xlink:href="sprite.svg#close"></use>
         </svg>
         ${contentHead}
         ${contentBody}
-        <div class="card__bot">
-          <div class="card__state">
-            <svg class="card__state-item card__study-icon" data-type="study" title="Изучемое слово">
+        <div class="card-dictionary__bot">
+          <div class="card-dictionary__state">
+            <svg class="card-dictionary__state-item card-dictionary__study-icon" data-type="study" title="Изучемое слово">
               <use xlink:href="sprite.svg#dictionary-filter-study"></use>
             </svg>
-            <svg class="card__state-item card__difficult-icon" data-type="difficult" title="Сложное слово">
+            <svg class="card-dictionary__state-item card-dictionary__difficult-icon" data-type="difficult" title="Сложное слово">
               <use xlink:href="sprite.svg#dictionary-filter-difficult"></use>
             </svg>
-            <svg class="card__state-item card__remove-icon" data-type="remove" title="Удаленное слово">
+            <svg class="card-dictionary__state-item card-dictionary__remove-icon" data-type="remove" title="Удаленное слово">
               <use xlink:href="sprite.svg#dictionary-filter-remove"></use>
             </svg>
           </div>
@@ -235,11 +183,128 @@ export default class DictionaryView {
     `;
 
     this.cardId = wordId;
-    this.card = createElement({ tag: 'div', class: 'card', content });
+    this.card = createElement({ tag: 'div', class: 'card-dictionary', content });
     this.card.setAttribute('data-id', wordId);
 
-    this.card.querySelector(`.card__${word.optional.state}-icon`).classList.add('card__state-item_active');
+    this.card.querySelector(`.card-dictionary__${word.optional.state}-icon`).classList.add('card-dictionary__state-item_active');
 
     this.dictionary.append(this.card);
+  }
+
+  static createCardHead(word, settings) {
+    let content = '<div class="card-dictionary__head">';
+    if (settings.dictImg) {
+      content += `<div class="card-dictionary__head-left">
+        <div class="card-dictionary__img" style="background: url(${urlGitHub}${word.optional.image.replace('files/', '')}) center center no-repeat;background-size: cover;"></div>
+      </div>`;
+    }
+    content += '<div class="card-dictionary__head-right">';
+    if (settings.dictSound) {
+      content += `<div class="card-dictionary__sound">
+        <svg class="card-dictionary__sound-icon" title="Прослушать">
+          <use xlink:href="sprite.svg#dictionary-sound"></use>
+        </svg>
+      </div>`;
+    }
+    content += `<div class="card-dictionary__text">
+        <div class="card-dictionary__word">${word.optional.word}</div>
+        <div class="card-dictionary__translation">${word.optional.wordTranslate}</div>`;
+    if (settings.dictTranscr) {
+      content += `<div class="card-dictionary__transcription">${word.optional.transcription}</div>`;
+    }
+    content += `</div>
+      </div>
+    </div>`;
+
+    return content;
+  }
+
+  static createCardBody(word, settings) {
+    let content = '';
+
+    if (settings.dictExample || settings.dictMeaning || settings.dictProgress) {
+      content += '<div class="card-dictionary__body">';
+      if (settings.dictExample) {
+        content += `<div class="card-dictionary__example">${word.optional.textExample}</div>`;
+      }
+      if (settings.dictMeaning) {
+        content += `<div class="card-dictionary__meaning">${word.optional.textMeaning}</div>`;
+      }
+      if (settings.dictProgress) {
+        const contentProgress = DictionaryView.createProgress(word.optional.rating);
+
+        content += `<div class="card-dictionary__progress">
+          <div class="card-dictionary__repeat">Повторейний: ${word.optional.count}</div>
+          <div class="card-dictionary__last-time">Давность: ${word.lastTimeText} назад</div>
+          <div class="card-dictionary__next-time">Повтор: ${word.nextTimeText}</div>
+          <div class="card-dictionary__rating">Прогресс изучения: ${contentProgress}</div>
+        </div>`;
+      }
+      content += '</div>';
+    }
+
+    return content;
+  }
+
+  static createProgress(rating) {
+    const countPoints = 5;
+
+    let content = `<div class="card-dictionary__rating-points" rating="${rating}">`;
+    for (let i = 0; i < countPoints; i += 1) {
+      if (i < rating) {
+        content += '<div class="card-dictionary__rating-point card-dictionary__rating-point_active"></div>';
+      } else {
+        content += '<div class="card-dictionary__rating-point"></div>';
+      }
+    }
+    content += '</div>';
+
+    return content;
+  }
+
+  createSettings(arr) {
+    const content = `<h2 class="settings__title">Настройки</h2>
+    <div class="setting-block">
+      <div class="setting-block__title">Настройки словаря</div>
+
+      <div class="setting-block__list">
+        <div class="setting-block__item">
+          <input type="checkbox" id="dictExample" class="settings__checkbox" />
+          <label for="dictExample">Пример</label>
+        </div>
+        <div class="setting-block__item">
+          <input type="checkbox" id="dictMeaning" class="settings__checkbox" />
+          <label for="dictMeaning">Значение</label>
+        </div>
+        <div class="setting-block__item">
+          <input type="checkbox" id="dictTranscr" class="settings__checkbox" />
+          <label for="dictTranscr">Транскрипция</label>
+        </div>
+        <div class="setting-block__item">
+          <input type="checkbox" id="dictSound" class="settings__checkbox" />
+          <label for="dictSound">Звучание</label>
+        </div>
+        <div class="setting-block__item">
+          <input type="checkbox" id="dictImg" class="settings__checkbox" />
+          <label for="dictImg">Картинка</label>
+        </div>
+        <div class="setting-block__item">
+          <input type="checkbox" id="dictProgress" class="settings__checkbox" />
+          <label for="dictProgress">Прогресс</label>
+        </div>
+      </div>
+    </div>`;
+
+    this.settingsBlock.innerHTML = content;
+
+    Object.keys(arr).map((key) => {
+      const value = arr[key];
+
+      if (value) {
+        document.getElementById(key).checked = true;
+      }
+
+      return value;
+    });
   }
 }

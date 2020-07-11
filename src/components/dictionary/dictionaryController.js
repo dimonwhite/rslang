@@ -9,24 +9,15 @@ export default class DictionaryController {
     this.strSearch = '';
     this.page = 0;
     this.isLoadFullData = false;
-    this.settings = {
-      image: true,
-      sound: true,
-      transcription: true,
-      example: true,
-      meaning: true,
-      progress: true,
-    };
   }
 
   async create() {
     const dataWords = await this.model.getDataWords();
-    console.log(dataWords);
+    const settings = await this.model.getSettings();
 
     this.view.renderHTML();
     if (dataWords && dataWords.length > 0) {
-      this.model.dataWords = dataWords;
-      console.log(this.model.dataWords);
+      this.view.createSettings(settings.optional.dictSettings);
 
       this.view.renderDictionary();
       this.listTopLimit = this.view.list.getBoundingClientRect().top;
@@ -54,8 +45,24 @@ export default class DictionaryController {
       this.clickList(e);
     });
 
+    this.view.settingsBlock.addEventListener('click', (e) => {
+      this.clickSetting(e);
+    });
+
     this.scroll = this.listenerScroll.bind(this);
     window.addEventListener('scroll', this.scroll);
+  }
+
+  async clickSetting(e) {
+    if (e.target.closest('.settings__checkbox')) {
+      const checkbox = e.target.closest('.settings__checkbox');
+
+      const updateSettings = await this.model.updateSettings(checkbox.id, checkbox.checked);
+
+      if (updateSettings) {
+        this.updateFirstList();
+      }
+    }
   }
 
   listenerScroll() {
@@ -70,16 +77,13 @@ export default class DictionaryController {
   }
 
   search(str) {
-    this.page = 0;
-    this.isLoadFullData = false;
     this.strSearch = str;
-    this.view.clearList();
-    this.createList(this.filter, this.strSearch);
+    this.updateFirstList();
   }
 
   clickList(e) {
     const card = e.target.closest('.card-list');
-    const word = this.model.getWord(card.dataset.id);
+    const word = this.model.getWord(card.dataset.id, this.filter, this.strSearch);
 
     if (e.target.closest('.card-list__sound')) {
       this.playAudio(word);
@@ -92,7 +96,7 @@ export default class DictionaryController {
 
   createCard(word, wordId) {
     this.view.createBackground();
-    this.view.createCard({ word, wordId, settings: this.settings });
+    this.view.createCard({ word, wordId, settings: this.model.settings.optional.dictSettings });
     this.initCard();
   }
 
@@ -109,8 +113,8 @@ export default class DictionaryController {
   }
 
   clickCard(e) {
-    if (e.target.closest('.card__sound-icon')) {
-      const word = this.model.getWord(this.view.card.dataset.id);
+    if (e.target.closest('.card-dictionary__sound-icon')) {
+      const word = this.model.getWord(this.view.card.dataset.id, this.filter, this.strSearch);
       this.playAudio(word);
       return;
     }
@@ -122,56 +126,55 @@ export default class DictionaryController {
       return;
     }
 
-    if (e.target.closest('.card__state')) {
+    if (e.target.closest('.card-dictionary__state')) {
       this.stateCard(e);
     }
 
-    if (e.target.closest('.card__prev-icon')) {
+    if (e.target.closest('.card-dictionary__prev-icon')) {
       this.createPrevCard();
     }
 
-    if (e.target.closest('.card__next-icon')) {
+    if (e.target.closest('.card-dictionary__next-icon')) {
       this.createNextCard();
     }
   }
 
   createPrevCard() {
-    const word = this.model.getWord(this.model.prev.wordId);
+    const word = this.model.getWord(this.model.prev.wordId, this.filter, this.strSearch);
     this.view.card.remove();
     this.view.createCard({
       word,
       wordId: word.wordId,
-      settings: this.settings,
+      settings: this.model.settings.optional.dictSettings,
     });
     this.initCard();
   }
 
   createNextCard() {
-    const word = this.model.getWord(this.model.next.wordId);
+    const word = this.model.getWord(this.model.next.wordId, this.filter, this.strSearch);
     this.view.card.remove();
     this.view.createCard({
       word,
       wordId: word.wordId,
-      settings: this.settings,
+      settings: this.model.settings.optional.dictSettings,
     });
     this.initCard();
   }
 
   async stateCard(e) {
-    const state = e.target.closest('.card__state-item');
-    const stateActive = this.view.card.querySelector('.card__state-item_active');
+    const state = e.target.closest('.card-dictionary__state-item');
+    const stateActive = this.view.card.querySelector('.card-dictionary__state-item_active');
     const stateType = state.dataset.type;
 
     const updateState = await this.model.updateState(stateType);
 
     if (updateState) {
       if (stateActive) {
-        stateActive.classList.remove('card__state-item_active');
+        stateActive.classList.remove('card-dictionary__state-item_active');
       }
-      state.classList.add('card__state-item_active');
+      state.classList.add('card-dictionary__state-item_active');
 
-      // обновление state
-      this.view.updateListItem(updateState, this.settings);
+      this.updateFirstList();
 
       await this.model.getDataWords();
     }
@@ -184,9 +187,7 @@ export default class DictionaryController {
       strSearch,
     });
     if (list) {
-      console.log(list);
-
-      this.view.createList(list, this.settings);
+      this.view.createList(list, this.model.settings.optional.dictSettings);
       this.listBottomLimit = this.listTopLimit + this.view.list.getBoundingClientRect().height;
       this.page += 1;
     } else {
@@ -201,8 +202,6 @@ export default class DictionaryController {
   }
 
   clickFilter(e) {
-    this.page = 0;
-    this.isLoadFullData = false;
     const filter = e.target.closest('.filters__item');
     if (filter) {
       const filterData = filter.dataset.filter;
@@ -213,12 +212,19 @@ export default class DictionaryController {
       filter.classList.add('filters__item_active');
 
       this.filter = filterData;
-      this.view.clearList();
-      this.createList(this.filter, this.strSearch);
+      this.updateFirstList();
     }
   }
 
   playAudio(word) {
     this.view.playAudio(word);
+  }
+
+  updateFirstList() {
+    this.page = 0;
+    this.isLoadFullData = false;
+
+    this.view.clearList();
+    this.createList(this.filter, this.strSearch);
   }
 }
