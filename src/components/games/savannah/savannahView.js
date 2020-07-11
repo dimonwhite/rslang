@@ -12,7 +12,6 @@ export default class SavannahView {
   renderHTML() {
     this.main = document.getElementById('main');
     document.getElementById('gameOptions').classList.add('show');
-    document.getElementById('closePopup').innerHTML = 'Close Game';
     this.createGameOptions();
     this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });
     this.savannah.append(this.createGame());
