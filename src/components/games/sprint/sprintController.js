@@ -239,7 +239,7 @@ export default class SprintController {
 
   addMainTimer() {
     clearInterval(this.roundTime);
-    this.seconds = 15;
+    this.seconds = 20;
     this.wordResult = [];
     this.roundTime = setInterval(() => {
       this.view.addTimer(this.seconds);
@@ -247,7 +247,7 @@ export default class SprintController {
       this.seconds -= 1;
       if (this.seconds === 0) {
         clearInterval(this.roundTime);
-        this.seconds = 15;
+        this.seconds = 20;
         this.view.addTimer('0');
         this.openPopupResult(this.wordResult);
         this.model.score = this.score;
