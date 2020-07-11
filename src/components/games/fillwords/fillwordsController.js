@@ -19,24 +19,70 @@ export default class FillwordsController {
     this.view.heigthBoard = this.heigthBoard;
     this.model.lengthBoard = this.lengthBoard;
     this.view.renderHtml();
-    const moveBoardCallback = this.moveBoard.bind(this);
-    this.view.boardWrap.addEventListener('mousedown', () => {
-      this.resultMove = '';
-      this.selectedLetters = [];
-      this.view.boardWrap.addEventListener('mousemove', moveBoardCallback);
+    this.addListeners();
+  }
+
+  addListeners() {
+    this.moveBoardCallback = this.moveBoard.bind(this);
+    this.view.boardWrap.addEventListener('mousedown', this.mouseDownBoard.bind(this));
+    this.view.boardWrap.addEventListener('mouseup', this.mouseUpBoard.bind(this));
+    this.view.newGame.addEventListener('click', () => {
+      this.change();
     });
-    this.view.boardWrap.addEventListener('mouseup', () => {
-      this.view.boardWrap.removeEventListener('mousemove', moveBoardCallback);
-      if (this.isSuccessWord()) {
-        this.view.successSelected(this.selectedLetters);
-        this.score += 1;
-      } else {
-        this.view.cancelSelected(this.selectedLetters);
-      }
-      if (this.score >= this.countWords) {
-        this.win();
+    this.view.btnResult.addEventListener('click', () => {
+      this.openPopupResult(this.words);
+    });
+    this.view.wordsList.addEventListener('click', this.clickWordsList.bind(this));
+    this.view.popupHint.addEventListener('click', (e) => {
+      if (!this.view.popupHintImg.contains(e.target)) {
+        this.view.popupHint.classList.remove('active');
       }
     });
+  }
+
+  mouseDownBoard() {
+    this.resultMove = '';
+    this.selectedLetters = [];
+    this.view.boardWrap.addEventListener('mousemove', this.moveBoardCallback);
+  }
+
+  mouseUpBoard() {
+    this.view.boardWrap.removeEventListener('mousemove', this.moveBoardCallback);
+    if (this.isSuccessWord()) {
+      this.view.successSelected(this.selectedLetters);
+      this.score += 1;
+      this.scoreSuccess += 1;
+    } else {
+      this.view.cancelSelected(this.selectedLetters);
+    }
+    this.checkWin();
+  }
+
+  checkWin(isCheckWin) {
+    if ((this.resultMove || isCheckWin) && this.score >= this.countWords) {
+      this.win();
+    }
+  }
+
+  clickWordsList(e) {
+    const btnDontKnow = e.target.closest('.wordsList__item--dontKnow');
+    const btnHint = e.target.closest('.wordsList__item--hint');
+    let indexWord;
+    if (btnDontKnow || btnHint) {
+      indexWord = [...this.view.wordsList.childNodes].indexOf(e.target.closest('.wordsList__item'));
+    }
+
+    if (btnDontKnow) {
+      this.view.markSquares(this.words[indexWord].squareLetters);
+      this.view.successWord(indexWord);
+      this.score += 1;
+      this.checkWin(true);
+      return;
+    }
+
+    if (btnHint) {
+      this.view.playAudio(this.words[indexWord]);
+    }
   }
 
   isSuccessWord() {
@@ -45,6 +91,7 @@ export default class FillwordsController {
       if (word.word.toUpperCase() === this.resultMove.toUpperCase()) {
         this.view.successWord(i);
         word.success = true;
+        this.view.playAudio(word);
         result = true;
       }
     });
@@ -52,14 +99,16 @@ export default class FillwordsController {
   }
 
   moveBoard(e) {
-    if (!e.target.classList.contains('active')) {
-      e.target.classList.add('active');
-      this.resultMove += e.target.textContent;
-      this.selectedLetters.push(e.target);
+    const square = e.target.closest('.board__square');
+    if (square && !square.classList.contains('active') && !square.classList.contains('success')) {
+      square.classList.add('active');
+      this.resultMove += square.textContent;
+      this.selectedLetters.push(square);
     }
   }
 
   change() {
+    this.model.level = this.level;
     this.createNewGame();
   }
 
@@ -69,6 +118,7 @@ export default class FillwordsController {
 
   async createNewGame() {
     this.score = 0;
+    this.scoreSuccess = 0;
     await this.createNewBoard();
     this.view.createWords(randomArray(this.words));
   }
@@ -89,18 +139,21 @@ export default class FillwordsController {
     this.words = await this.model.getWords();
     this.countWords = this.words.length;
     this.words.forEach((word, i) => {
+      word.squareLetters = [];
       const randomStart = Math.round(Math.random() * (this.lengthBoard - word.word.length));
-      this.fillBoardRow(randomStart, word.word, i);
+      this.fillBoardRow(randomStart, word, i);
     });
     this.board = this.board.flat();
     this.fillRandomLetter();
   }
 
-  fillBoardRow(start, word, i) {
+  fillBoardRow(start, wordObject, i) {
+    const { word } = wordObject;
     let ordinalLetter = 0;
     const newWord = !Math.round(Math.random()) ? word.split('').reverse().join('') : word;
     for (let j = start; ordinalLetter < newWord.length; j += 1) {
       this.board[i][j] = newWord[ordinalLetter];
+      wordObject.squareLetters.push(i * 10 + j);
       ordinalLetter += 1;
     }
   }
@@ -111,9 +164,10 @@ export default class FillwordsController {
 
   win() {
     this.openPopupResult(this.words);
+    this.view.addClassAllLetters();
   }
 
   getScore() {
-    return this.score;
+    return this.scoreSuccess;
   }
 }
