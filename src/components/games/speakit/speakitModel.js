@@ -2,31 +2,52 @@ import dataWords from '@/data/mock_StudyWords';
 import { randomArray } from '@/utils';
 
 export default class SpeakitModel {
-  constructor(user) {
-    this.user = user;
+  constructor(http) {
+    this.http = http;
     this.game = false;
     this.score = 0;
-    this.page = 0;
+    this.page = Math.round(Math.random() * 29);
     this.dataWords = dataWords;
     this.countWords = 10;
+    this.level = -1;
+    this.maxStatistics = 30;
   }
 
-  getWords() {
+  async getRandomWords() {
     randomArray(this.dataWords);
     let arrWords = [...this.dataWords];
     arrWords = arrWords.slice(0, this.countWords);
-    return new Promise((resolve) => resolve(arrWords));
+    return arrWords;
+  }
+
+  async getWords() {
+    this.dataWords = await this.http.getWords({
+      group: this.level, page: this.page, maxLength: 0, wordsPerPage: 0,
+    });
+  }
+
+  async getUserWords() {
+    this.userWords = await this.http.getAllUserWords();
+    this.userWordsLength = this.userWords.length;
+  }
+
+  mapUserWords() {
+    this.dataWords = this.userWords.map((word) => word.optional);
   }
 
   getWord(id) {
     return this.dataWords[id];
   }
 
-  stop() {
-    this.game = false;
+  dropScore() {
+    this.score = 0;
     this.dataWords.forEach((item) => {
       item.success = false;
     });
+  }
+
+  stop() {
+    this.game = false;
   }
 
   isSameWord(e) {
@@ -47,5 +68,22 @@ export default class SpeakitModel {
       return !success;
     });
     return success;
+  }
+
+  async setUserStatistics() {
+    const statistics = await this.http.getUserStatistics();
+    const statisticsGame = statistics.optional.speakit;
+    const statisticsGameKeys = Object.keys(statisticsGame);
+
+    if (statisticsGameKeys.length >= this.maxStatistics) {
+      statisticsGame[statisticsGameKeys[0]] = undefined;
+    }
+
+    statisticsGame[new Date().getTime()] = `${this.score}, 0`;
+
+    this.http.createUserStatistics({
+      learnedWords: statistics.learnedWords,
+      optional: statistics.optional,
+    });
   }
 }

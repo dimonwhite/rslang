@@ -1,8 +1,8 @@
 {
   "savannah": {
-    "title": "SAVANNAH",
-    "desc": "savannah game",
-    "bgImage": "testbg.jpg",
+    "title": "САВАННА",
+    "desc": "Вам предстоит космический полёт, для этого вам нужно выбирать верные переводы слов.",
+    "bgImage": "bg-savannah.png",
     "gameClass": "clear-main",
     "settings": {
       "countWords": true,
@@ -15,20 +15,34 @@
     }
   },
   "puzzle": {
-    "title": "puzzle",
-    "desc": "puzzle game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "title": "English puzzle",
+    "desc": "Перетаскивайте паззлы мышкой или просто кликайте по ним, чтобы собрать картинку и наслаждайтесь шедеврами мировой живописи!",
+    "bgImage": "puzzlebg.jpg",
+    "gameClass": "englishPuzzle",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": false
+    }
   },
   "audiocall": {
-    "title": "audiocall",
-    "desc": "audiocall game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "title": "Audiocall",
+    "desc": "Слушайте произношение слова и выбирайте из вариантов ответа используя мышь или клавиши 1-5",
+    "bgImage": "audiocallbg.png",
+    "gameClass": "audiocall",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {},
+      "levels": true
+    }
   },
   "speakit": {
     "title": "SPEAKIT",
-    "desc": "Click on the words to hear them sound.<br>Click on the button and speak the words into the microphone.",
+    "desc": "Нажмите на слова, чтобы услышать их звучание. <br> Нажмите на кнопку Старт и произносите слова в микрофон.",
     "bgImage": "speakitbg.jpg",
     "gameClass": "speakIt",
     "settings": {
@@ -46,5 +60,11 @@
     "desc": "sprint game",
     "bgImage": "testbg.jpg",
     "gameClass": "speakIt"
+  },
+  "filwords": {
+    "title": "fillwords",
+    "desc": "fillwords game",
+    "bgImage": "testbg.jpg",
+    "gameClass": "fillwords"
   }
 }
