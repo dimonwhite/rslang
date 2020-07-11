@@ -41,9 +41,11 @@ export default class CardView {
     const wrapImage = createElement({ tag: 'div', class: 'card__wrapper-image' });
     wrapImage.append(...[this.cardPlay, this.cardImg]);
     const wrapMean = createElement({ tag: 'div', class: 'card__wrapper-meaning' });
-    wrapMean.append(...[this.cardMeaning, this.cardMeaningTranslation]);
+    const mid = createElement({ tag: 'hr' });
+    wrapMean.append(...[this.cardMeaning, mid, this.cardMeaningTranslation]);
     const wrapExample = createElement({ tag: 'div', class: 'card__wrapper-example' });
-    wrapExample.append(...[this.cardExample, this.cardExampleTranslation]);
+    const hr = createElement({ tag: 'hr' });
+    wrapExample.append(...[this.cardExample, hr, this.cardExampleTranslation]);
     const wrapText = createElement({ tag: 'div', class: 'card__wrapper-text' });
     wrapText.append(...[wrapMean, wrapExample]);
     const wrapHelp = createElement({ tag: 'div', class: 'card__wrapper-help' });
@@ -70,19 +72,25 @@ export default class CardView {
     this.cardExampleTranslation = createElement({ tag: 'p', id: 'cardExampleTranslation' });
 
     this.interval = createElement({ tag: 'div', class: 'card__interval', id: 'intervalBtns' });
-    this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Again' });
-    this.cardHard = createElement({ tag: 'button', id: 'cardHard', content: 'Hard' });
-    this.cardNormal = createElement({ tag: 'button', id: 'cardNormal', content: 'Normal' });
-    this.cardEasy = createElement({ tag: 'button', id: 'cardEasy', content: 'Easy' });
+    this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Повтор' });
+    this.cardHard = createElement({ tag: 'button', id: 'cardHard', content: 'Сложно' });
+    this.cardNormal = createElement({ tag: 'button', id: 'cardNormal', content: 'Хорошо' });
+    this.cardEasy = createElement({ tag: 'button', id: 'cardEasy', content: 'Легко' });
     this.interval.append(this.cardAgain);
     this.interval.append(this.cardHard);
     this.interval.append(this.cardNormal);
     this.interval.append(this.cardEasy);
 
-    this.cardRemove = createElement({ tag: 'button', id: 'cardRemove', content: 'Remove' });
-    this.cardDiff = createElement({ tag: 'button', id: 'cardDifficult', content: 'Difficult' });
+    this.cardRemove = createElement({
+      tag: 'button', class: 'card__remove', id: 'cardRemove',
+    });
+    this.cardDiff = createElement({
+      tag: 'button', class: 'card__difficult', id: 'cardDifficult',
+    });
     this.cardDiff.classList.add('lock-element');
-    this.cardShow = createElement({ tag: 'button', id: 'cardShow', content: 'Show the answer' });
+    this.cardShow = createElement({
+      tag: 'button', class: 'card__show', id: 'cardShow', content: 'Показать слово',
+    });
 
     this.firstNumber = createElement({ tag: 'span', id: 'firstNumber' });
     this.secondNumber = createElement({ tag: 'span', id: 'secondNumber' });
@@ -336,10 +344,12 @@ export default class CardView {
   }) {
     const hide = cardIndex === passedToday;
     if (this.settings.interval && (prev || !hide)) {
-      this.interval.classList.add('show-flex');
+      // this.interval.classList.add('show-flex');
+      this.interval.classList.add('visibility');
       this.setCustomRating(word.customRating);
     } else {
-      this.interval.classList.remove('show-flex');
+      // this.interval.classList.remove('show-flex');
+      this.interval.classList.remove('visibility');
     }
     if (this.settings.removeWord) {
       this.cardRemove.classList.remove('hide');
@@ -476,7 +486,8 @@ export default class CardView {
     this.cardRemove.classList.add('lock-element');
     this.cardDiff.classList.remove('lock-element');
     if (this.settings.interval) {
-      this.interval.classList.add('show-flex');
+      // this.interval.classList.add('show-flex');
+      this.interval.classList.add('visibility');
       if (customRating) {
         this.setCustomRating(customRating);
       }
@@ -625,7 +636,8 @@ export default class CardView {
     this.cardShow.classList.remove('lock-element');
     this.cardDiff.classList.add('lock-element');
     Array.from(this.interval.children).forEach((item) => item.classList.remove('custom-rating'));
-    this.interval.classList.remove('show-flex');
+    // this.interval.classList.remove('show-flex');
+    this.interval.classList.remove('visibility');
     this.cardMeaningTranslation.innerHTML = '';
     this.cardExampleTranslation.innerHTML = '';
     this.cardMeaning.innerHTML = '';
