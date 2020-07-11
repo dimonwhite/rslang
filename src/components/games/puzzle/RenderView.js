@@ -43,7 +43,7 @@ export default class RenderView {
     this.root.innerHTML = `
       <div class="container">
         <div class="control-block">
-        <a class="btn btn__exit" href="#/">Выход</a>
+        <a class="btn btn__exit" href="#/games">Выход</a>
         <div class="btn__block">
           <button class="btn btn__icon btn__backImg"><img src=${backTip} class="tip"><span class="tooltiptext">Кликай для включения / выключения фона паззлов в следующем ряду</span></button>
           <button class="btn btn__icon btn__audio__tip"><img src=${soundTip} class="tip"><span class="tooltiptext">Кликай для включения / выключения аудиоподсказки в следующем ряду</span></button>

@@ -90,7 +90,9 @@ export default class RoundData {
   async makeUserSentence() {
     this.wordData = await this.client.getAllUserWords();
     if (this.wordData.length < 11) {
-      throw new Error('Not enough user words, try to change level');
+      this.isUserWords = false;
+      await this.makeSentences();
+      return;
     }
     this.wordData = this.wordData.sort(() => 0.5 - Math.random())
       .filter((data) => data.optional.textExample.split(' ').length < 11).slice(0, 10);

@@ -90,6 +90,7 @@ export default class PuzzleController {
   playAudioTip() {
     this.root.querySelector('.btn__audio').classList.add('playing');
     const audioSrc = this.roundData.sentences[this.currentRow].audio;
+
     if (this.audioTip) {
       this.audioTip.pause();
     }

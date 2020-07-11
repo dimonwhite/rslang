@@ -14,40 +14,50 @@ export default class AudiocallModel {
   }
 
   async formWordarray() {
-    if (!this.isUserWords) {
-      const randomPage = Math.floor(Math.random() * 60);
-
-      this.wordArray = await this.user.getWords({
-        group: this.level, page: randomPage, maxLength: 20, wordsPerPage: 10,
-      });
-
-      this.wordArray.forEach((el) => {
-        const optionWords = Object.values(book1)
-          .filter((item) => item.wordTranslate.startsWith(el.wordTranslate[0])
-          && item.wordTranslate !== el.wordTranslate);
-
-        el.optionWords = optionWords.slice(0, this.optionWordsNumber)
-          .map((word) => word.wordTranslate);
-        el.optionWords.push(el.wordTranslate);
-        el.optionWords = shuffleArray(el.optionWords);
-      });
+    if (this.isUserWords) {
+      await this.makeUserSentences();
     } else {
-      const words = await this.user.getAllUserWords();
-      this.wordArray = shuffleArray(words).slice(0, 10);
-      if (this.wordArray.length < 10) {
-        throw new Error('Not enough words, try to change level');
-      }
-      this.wordArray.forEach((el) => {
-        const optionWords = Object.values(book1)
-          .filter((item) => item.wordTranslate.startsWith(el.optional.wordTranslate[0])
+      await this.makeSentences();
+    }
+  }
+
+  async makeSentences() {
+    const randomPage = Math.floor(Math.random() * 60);
+
+    this.wordArray = await this.user.getWords({
+      group: this.level, page: randomPage, maxLength: 20, wordsPerPage: 10,
+    });
+
+    this.wordArray.forEach((el) => {
+      const optionWords = Object.values(book1)
+        .filter((item) => item.wordTranslate.startsWith(el.wordTranslate[0])
+        && item.wordTranslate !== el.wordTranslate);
+
+      el.optionWords = optionWords.slice(0, this.optionWordsNumber)
+        .map((word) => word.wordTranslate);
+      el.optionWords.push(el.wordTranslate);
+      el.optionWords = shuffleArray(el.optionWords);
+    });
+  }
+
+  async makeUserSentences() {
+    const words = await this.user.getAllUserWords();
+    this.wordArray = shuffleArray(words).slice(0, 10);
+    if (this.wordArray.length < 11) {
+      this.isUserWords = false;
+      await this.makeSentences();
+      return;
+    }
+    this.wordArray.forEach((el) => {
+      const optionWords = Object.values(book1)
+        .filter((item) => item.wordTranslate.startsWith(el.optional.wordTranslate[0])
           && item.wordTranslate !== el.optional.wordTranslate);
 
-        el.optional.optionWords = optionWords.slice(0, this.optionWordsNumber)
-          .map((word) => word.wordTranslate);
-        el.optional.optionWords.push(el.optional.wordTranslate);
-        el.optional.optionWords = shuffleArray(el.optional.optionWords);
-      });
-    }
+      el.optional.optionWords = optionWords.slice(0, this.optionWordsNumber)
+        .map((word) => word.wordTranslate);
+      el.optional.optionWords.push(el.optional.wordTranslate);
+      el.optional.optionWords = shuffleArray(el.optional.optionWords);
+    });
   }
 
   async getStats() {
