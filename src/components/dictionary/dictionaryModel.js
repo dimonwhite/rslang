@@ -77,7 +77,7 @@ export default class DictionaryModel {
       }
       return false;
     });
-    // (item, index) => item.wordId === id);
+
     this.word = word;
     word.prev = this.prev ? this.prev.wordId : null;
     word.next = this.next ? this.next.wordId : null;
