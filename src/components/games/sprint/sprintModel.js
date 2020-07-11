@@ -11,6 +11,8 @@ export default class SprintModel {
     this.dataWords = dataWords;
     this.countWords = 24;
     this.isCorrect = true;
+    this.trueWord = 0;
+    this.falseWord = 0;
     this.words = [];
     this.gameWords = [];
     this.gameFalseWords = [];
@@ -116,5 +118,23 @@ export default class SprintModel {
       this.words.forEach((item) => this.gameWords.push([item.word]));
     }
     await this.getPartsOfSpeech();
+  }
+
+  async setUserStatistics() {
+    const statistics = await this.http.getUserStatistics();
+    console.log(statistics);
+    const statisticsGame = statistics.optional.sprint;
+    const statisticsGameKeys = Object.keys(statisticsGame);
+
+    if (statisticsGameKeys.length >= this.maxStatistics) {
+      statisticsGame[statisticsGameKeys[0]] = undefined;
+    }
+
+    statisticsGame[new Date().getTime()] = `${this.trueWord}, ${this.falseWord}, ${this.score}`;
+
+    this.http.createUserStatistics({
+      learnedWords: statistics.learnedWords,
+      optional: statistics.optional,
+    });
   }
 }
