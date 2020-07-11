@@ -11,7 +11,7 @@ export default class DictionaryView {
 
   renderHTML() {
     this.main.innerHTML = '';
-    this.dictionary = createElement({ tag: 'div', class: 'dictionary' });
+    this.dictionary = createElement({ tag: 'div', class: 'dictionary-content' });
     this.main.append(this.dictionary);
   }
 
@@ -136,7 +136,7 @@ export default class DictionaryView {
   }
 
   createBackground() {
-    this.background = createElement({ tag: 'div', class: 'background' });
+    this.background = createElement({ tag: 'div', class: 'dictionary-background' });
     this.background.style.background = blackGradient;
     this.dictionary.append(this.background);
   }
@@ -222,26 +222,26 @@ export default class DictionaryView {
   static createCardBody(word, settings) {
     let content = '';
 
-    if (settings.dictExample || settings.dictMeaning || settings.dictProgress) {
-      content += '<div class="card-dictionary__body">';
-      if (settings.dictExample) {
-        content += `<div class="card-dictionary__example">${word.optional.textExample}</div>`;
-      }
-      if (settings.dictMeaning) {
-        content += `<div class="card-dictionary__meaning">${word.optional.textMeaning}</div>`;
-      }
-      if (settings.dictProgress) {
-        const contentProgress = DictionaryView.createProgress(word.optional.rating);
-
-        content += `<div class="card-dictionary__progress">
-          <div class="card-dictionary__repeat">Повторейний: ${word.optional.count}</div>
-          <div class="card-dictionary__last-time">Давность: ${word.lastTimeText} назад</div>
-          <div class="card-dictionary__next-time">Повтор: ${word.nextTimeText}</div>
-          <div class="card-dictionary__rating">Прогресс изучения: ${contentProgress}</div>
-        </div>`;
-      }
-      content += '</div>';
+    content += '<div class="card-dictionary__body">';
+    if (settings.dictExample) {
+      content += `<div class="card-dictionary__example">${word.optional.textExample}</div>`;
     }
+    if (settings.dictMeaning) {
+      content += `<div class="card-dictionary__meaning">${word.optional.textMeaning}</div>`;
+    }
+
+    content += `<div class="card-dictionary__progress">
+      <div class="card-dictionary__repeat">Повторейний: ${word.optional.count}</div>
+      <div class="card-dictionary__last-time">Давность: ${word.lastTimeText} назад</div>
+      <div class="card-dictionary__next-time">Повтор: ${word.nextTimeText}</div>`;
+
+    if (settings.dictProgress) {
+      const contentProgress = DictionaryView.createProgress(word.optional.rating);
+      content += `<div class="card-dictionary__rating">Прогресс изучения: ${contentProgress}</div>`;
+    }
+
+    content += `</div>
+    </div>`;
 
     return content;
   }

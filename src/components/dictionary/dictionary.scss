@@ -1,24 +1,28 @@
-
-
 .scroll-off {
     overflow: hidden;
 }
 
 .dictionary {
-    width: 1155px;
-    min-height: 50vh;
-
-    margin: 70px auto 0;
-
-    @include media(1440px) {
-        width: 900px;
+    .header__settings {
+        display: block;
     }
-    @include media(1024px) {
-        width: 700px;
-    }
-    @include media(768px) {
-        width: 100%;
-        padding: 0px 20px;
+
+    &-content {
+        width: 1155px;
+        min-height: 50vh;
+
+        margin: 70px auto 0;
+
+        @include media(1440px) {
+            width: 900px;
+        }
+        @include media(1024px) {
+            width: 700px;
+        }
+        @include media(768px) {
+            width: 100%;
+            padding: 0px 20px;
+        }
     }
 
     &__msg-empty{
@@ -592,7 +596,7 @@
         }
     }
 
-    .background {
+    .dictionary-background {
         position: fixed;
         top: 0;
         left: 0;

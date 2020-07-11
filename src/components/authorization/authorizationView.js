@@ -68,7 +68,7 @@ export default class AuthorizationView {
   }
 
   createBackground() {
-    this.background = createElement({ tag: 'div', class: 'background' });
+    this.background = createElement({ tag: 'div', class: 'auth-background' });
     this.background.style.background = blackGradient;
     this.main.append(this.background);
   }

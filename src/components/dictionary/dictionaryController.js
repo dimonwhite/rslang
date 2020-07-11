@@ -15,8 +15,10 @@ export default class DictionaryController {
     const dataWords = await this.model.getDataWords();
     const settings = await this.model.getSettings();
 
-    this.view.renderHTML();
     if (dataWords && dataWords.length > 0) {
+      document.body.classList.add('dictionary');
+
+      this.view.renderHTML();
       this.view.createSettings(settings.optional.dictSettings);
 
       this.view.renderDictionary();
