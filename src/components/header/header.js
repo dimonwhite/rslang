@@ -20,11 +20,22 @@ export default class Header {
       if (this.isClickOutside(e)) {
         this.closeNav();
       }
+      if (this.isClickOutsideSettings(e)) {
+        this.view.closeSettings();
+      }
+    });
+
+    this.view.settingsBtn.addEventListener('click', () => {
+      this.view.toggleShowSettings();
     });
   }
 
   isClickOutside(e) {
     return this.openedNav && !this.view.nav.contains(e.target) && !this.view.btn.contains(e.target);
+  }
+
+  isClickOutsideSettings(e) {
+    return !this.view.settings.contains(e.target) && !this.view.settingsBtn.contains(e.target);
   }
 
   clickNav(e) {

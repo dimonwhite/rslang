@@ -1,6 +1,6 @@
 /*--------------------SETTINGS-----------------------*/
 
-.settings {
+/*.settings {
     width: 100%;
     height: 200px;
     display: flex;
@@ -23,7 +23,7 @@
             display: flex;
         }
     }
-}
+}*/
 
 /*-------------------END SETTINGS----------------------*/
 
@@ -403,27 +403,38 @@
 
 .finished {
     display: none;
-    border: 3px solid gray;
-    width: 300px;
+    width: 415px;
+    height: 415px;
     margin: 0 auto;
     background-color: whitesmoke;
     flex-direction: column;
     align-items: stretch;
+    background-image: url("/src/assets/img/finished.png");
+    background-position: center;
+    background-size: 131%;
+    border-radius: 50%;
+    margin-top: 30px;
 
     &__message {
-        font-size: 26px;
+        font-size: 25px;
         text-align: center;
+        margin-top: 95px;
+        color: #724dd0;
+        text-shadow: 1px 1px 0 saddlebrown;
     }
     &__btn {
         font-size: 24px;
         width: 200px;
         height: 50px;
-        margin-top: 30px;
+        margin-top: 20px;
         margin-bottom: 30px;
         align-self: center;
-        border: 2px solid brown;
     }
     &__statistics {
+        width: 315px;
+        margin: 0 auto;
+        text-shadow: #1d2d2d 0 1px 0;
+        margin-top: 10px;
         div {
             display: flex;
             justify-content: space-between;
@@ -431,6 +442,8 @@
             margin-top: 5px;
             padding-left: 5px;
             padding-right: 5px;
+            width: 315px;
+            background-color: #00000045;
         }
         &-count {
             color: brown;
@@ -439,16 +452,16 @@
             color: green;
         }
         &-new {
-            color: orange;
+            color: #ef7506;
         }
         &-long {
-            color: goldenrod;
+            color: #f1c827;
         }
     }
 }
 
 /*------------------PROGRESS----------------------*/
-progress[value] {
+.card__progress {
     -webkit-appearance: none;
     appearance: none;
 
@@ -755,6 +768,35 @@ progress[value] {
         }
         &__progress {
             height: 22px;
+        }
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .finished {
+        width: 318px;
+        height: 318px;
+        &__btn {
+            margin-top: 10px;
+        }
+        &__message {
+            font-size: 25px;
+            text-align: center;
+            margin-top: 32px;
+            color: #724dd0;
+            text-shadow: 1px 1px 0 saddlebrown;
+        }
+        &__statistics {
+            width: 300px;
+            margin: 0 auto;
+            text-shadow: #1d2d2d 0 1px 0;
+            margin-top: 0px;
+
+            div {
+                font-size: 16px;
+                margin-top: 5px;
+                width: 300px;
+            }
         }
     }
 }

@@ -136,7 +136,7 @@ export default class CardView {
     wrapLong.append(longMes);
     wrapLong.append(long);
     const btn = createElement({
-      tag: 'button', class: 'finished__btn', id: 'addition', content: 'Учить ещё',
+      tag: 'button', class: 'finished__btn btn', id: 'addition', content: 'Учить ещё',
     });
     statistics.append(wrapCount);
     statistics.append(wrapCorrect);

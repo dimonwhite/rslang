@@ -1,14 +1,15 @@
+import { createElement } from '../../utils';
+
 export default class StatisticsView {
-  constructor() {
-    this.statistics = document.getElementById('tbody');
+  constructor(indent) {
+    this.main = document.getElementById('main');
+    this.mainStatisticInformation = createElement({ tag: 'div', class: 'main-statistic-info' });
+    this.progress = createElement({ tag: 'div', class: 'progress' });
+    this.mainIndent = indent;
   }
 
   renderHTML() {
-    this.statistics.innerHTML = '';
-    const row = document.createElement('tr');
-    const date = document.createElement('td');
-    date.innerHTML = 'statistics';
-    row.append(date);
-    this.statistics.append(row);
+    this.main.prepend(this.progress);
+    this.main.append(this.mainStatisticInformation);
   }
 }
