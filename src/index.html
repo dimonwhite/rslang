@@ -67,98 +67,16 @@
     <div class="header__user">
       <button class="header__user-login"></button>
     </div>
+    <div class="header__settings" id="settingsBtn">
+      <svg class="header__settings-icon">
+        <use xlink:href="sprite.svg#settings"></use>
+      </svg>
+    </div>
   </header>
   <main class="main" id="main"></main>
   <div class="popups">
     <section class="settings" id="settings">
-      <h2 class="settings__title">Settings</h2>
-      <div class="settings__cards">
-        <label for="maxWords">Maximum words</label>
-        <input type="number" id="maxWords" value="25" min="3" max="300" />
-        <label for="newWords">New words</label>
-        <input type="number" id="newWords" value="15" min="0" max="100" />
-        <input type="checkbox" id="numberLetters" checked />
-        <label for="numberLetters">Show the number of letters</label>
-        <div class="settings__buttons-item">
-          <h3>Information on the cards</h3>
-          <div>
-            <input type="checkbox" id="translate" checked />
-            <label for="translate">Translation of words</label>
-          </div>
-          <div>
-            <input type="checkbox" id="meaningWord" checked />
-            <label for="meaningWord">Meaning of the word</label>
-          </div>
-          <div>
-            <input type="checkbox" id="exampleWord" checked />
-            <label for="exampleWord">Example of words</label>
-          </div>
-          <br>
-          <div>
-            <input type="checkbox" id="transcription" checked />
-            <label for="transcription">Transcription</label>
-          </div>
-          <div>
-            <input type="checkbox" id="imgWord" checked />
-            <label for="imgWord">Images of words</label>
-          </div>
-        </div>
-      </div>
-      <div class="settings__buttons">
-        <div class="settings__buttons-item">
-          <div>
-            <input type="checkbox" id="showAnswer" checked />
-            <label for="showAnswer">Show answer</label>
-          </div>
-          <div>
-            <input type="checkbox" id="removeWord" checked />
-            <label for="removeWord">Remove word</label>
-          </div>
-          <div>
-            <input type="checkbox" id="difficultWord" checked />
-            <label for="difficultWord">Difficult word</label>
-          </div>
-        </div>
-        <div class="settings__buttons-item">
-          <div>
-            <h4>Making a list of words</h4>
-            <input type="radio" id="listAlternately" name="listType" />
-            <label for="radio_list1">Alternately</label>
-            <input type="radio" id="listNew" name="listType" checked="checked" />
-            <label for="radio_list2">Only new</label>
-            <input type="radio" id="listRepeat" name="listType" />
-            <label for="radio_list3">Only repetitions</label>
-          </div>
-          <div>
-            <input type="checkbox" id="interval" checked />
-            <label for="interval">Interval repetition</label>
-          </div>
-          <div>
-            <input type="checkbox" id="sound" />
-            <label for="sound">Turn on / off</label>
-          </div>
-          <div>
-            <input type="checkbox" id="nextCard" />
-            <label for="nextCard">Fast transition</label>
-          </div>
-          <div>
-            <div>
-              <input type="radio" id="langEn" name="lang" checked="checked" />
-              <label for="langEn">EN</label>
-            </div>
-            <div>
-              <input type="radio" id="langRu" name="lang" />
-              <label for="langRu">RU</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="settings__cards">
-        <select id="lang">
-          <option>EN</option>
-          <option>RU</option>
-        </select>
-      </div>
+      <h2 class="settings__title">Настройки</h2>
     </section>
   </div>
 </body>
