@@ -6,7 +6,15 @@ const defaultStatistics = {
   learnedWords: 0,
   optional: {
     savannah: {
-      length: 0,
+      settings: {
+        lvl: -1,
+        page: 1,
+        words: 10,
+        speed: 'easy',
+        hearts: 'easy',
+        sound: true,
+        lang: 'EN',
+      },
     },
     audiocall: {
       length: 0,
@@ -56,9 +64,6 @@ const defaultSettings = {
       difficultWord: true,
       exampleWord: true,
       imgWord: true,
-      listAlternately: true,
-      listNew: false,
-      listRepeat: false,
       maxWords: '24',
       newWords: '12',
       meaningWord: true,

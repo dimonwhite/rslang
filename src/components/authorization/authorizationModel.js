@@ -3,6 +3,15 @@ import { defaultStatistics, defaultSettings } from '@/constants';
 export default class AuthorizationModel {
   constructor(http) {
     this.http = http;
+
+    this.errorsText = {
+      'Error: Incorrect e-mail or password': 'Неверный email или пароль',
+      'Error: Couldn`t find any user with this email': 'Не удалось найти пользователя с этим email',
+      'Error: Can`t login user, network problems': 'Не удается войти, проблемы с сетью',
+      'Error: User with this e-mail exists': 'Пользователь с этим email существует',
+      'Error: Email or password fields has invalid value or empty': 'Поля email или пароля имеют недопустимое значение или пусты',
+      'Error: Can`t create user, network problems': 'Не удается создать пользователя, проблемы с сетью',
+    };
   }
 
   async checkAuthorized() {
@@ -21,7 +30,11 @@ export default class AuthorizationModel {
     const request = await this.http.createNewUser(data)
       .then((res) => res)
       .catch((error) => {
-        this.error = error;
+        if (this.errorsText[error]) {
+          this.error = this.errorsText[error];
+        } else {
+          this.error = error;
+        }
       });
 
     return request;
@@ -31,7 +44,11 @@ export default class AuthorizationModel {
     const request = await this.http.loginUser(data)
       .then((res) => res)
       .catch((error) => {
-        this.error = error;
+        if (this.errorsText[error]) {
+          this.error = this.errorsText[error];
+        } else {
+          this.error = error;
+        }
       });
 
     return request;

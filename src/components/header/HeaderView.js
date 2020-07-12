@@ -2,6 +2,8 @@ export default class HeaderView {
   constructor() {
     this.nav = document.getElementById('nav');
     this.btn = document.getElementById('headerBtn');
+    this.settingsBtn = document.getElementById('settingsBtn');
+    this.settings = document.getElementById('settings');
   }
 
   toggleShowNav() {
@@ -18,5 +20,13 @@ export default class HeaderView {
   toggleShowSubmenu(showBtn) {
     showBtn.classList.toggle('active');
     showBtn.nextElementSibling.toggle(600);
+  }
+
+  toggleShowSettings() {
+    this.settings.classList.toggle('settings-show');
+  }
+
+  closeSettings() {
+    this.settings.classList.remove('settings-show');
   }
 }

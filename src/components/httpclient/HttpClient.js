@@ -200,8 +200,7 @@ export default class HttpClient {
     if (response.status === 401) {
       this.unauthorized();
       this.removeLocalUser();
-    }
-    if (!response.ok) {
+    } else if (!response.ok) {
       throw new Error('Can`t get user words, network problems');
     }
     const content = await response.json();

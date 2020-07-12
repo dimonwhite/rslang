@@ -1,8 +1,8 @@
 {
   "savannah": {
-    "title": "SAVANNAH",
-    "desc": "savannah game",
-    "bgImage": "testbg.jpg",
+    "title": "САВАННА",
+    "desc": "Вам предстоит космический полёт, для этого вам нужно выбирать верные переводы слов.",
+    "bgImage": "bg-savannah.png",
     "gameClass": "clear-main",
     "settings": {
       "countWords": true,
@@ -62,9 +62,12 @@
     "gameClass": "speakIt"
   },
   "filwords": {
-    "title": "fillwords",
-    "desc": "fillwords game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "fillwords"
+    "title": "FILLWORDS",
+    "desc": "В этой игре вам нужно найти верный перевод слова на поле с буквами. <br> Все слова располагаются по горизонтале, но могут быть написаны в обратном порядке.",
+    "bgImage": "fillwordsbg.jpg",
+    "gameClass": "fillwords",
+    "settings": {
+      "levels": true
+    }
   }
 }
