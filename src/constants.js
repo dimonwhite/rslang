@@ -8,7 +8,7 @@ const defaultStatistics = {
     savannah: {
       settings: {
         lvl: -1,
-        page: '0',
+        page: 1,
         words: 10,
         speed: 'easy',
         hearts: 'easy',

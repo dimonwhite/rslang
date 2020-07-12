@@ -30,25 +30,29 @@ export default class CardController {
   }
 
   async create() {
-    this.settings = await this.user.getUserSettings();
-    this.view.settings = this.settings.optional.settings;
-    this.statistics = await this.user.getUserStatistics();
-    this.params = this.statistics.optional.todayTraining.params;
-    await this.getTodayStatStorage();
-    this.view.renderHTML();
-    if (this.model.listToday.length !== this.params.passedToday) {
-      [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
-        next: false,
-        numberWords: this.model.listToday.length,
-        passedTodaY: this.params.passedToday,
-        word: this.model.listToday[this.params.cardIndex],
-        cardIndeX: this.params.cardIndex,
-      });
-    } else {
-      this.view.inputTodayStatistics(this.params);
+    try {
+      this.settings = await this.user.getUserSettings();
+      this.view.settings = this.settings.optional.settings;
+      this.statistics = await this.user.getUserStatistics();
+      this.params = this.statistics.optional.todayTraining.params;
+      await this.getTodayStatStorage();
+      this.view.renderHTML();
+      if (this.model.listToday.length !== this.params.passedToday) {
+        [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
+          next: false,
+          numberWords: this.model.listToday.length,
+          passedTodaY: this.params.passedToday,
+          word: this.model.listToday[this.params.cardIndex],
+          cardIndeX: this.params.cardIndex,
+        });
+      } else {
+        this.view.inputTodayStatistics(this.params);
+      }
+      await this.setTodayStatStorage();
+      this.createEvent();
+    } catch (error) {
+      this.error = error;
     }
-    await this.setTodayStatStorage();
-    this.createEvent();
   }
 
   async getTodayStatStorage() {
