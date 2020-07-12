@@ -1,0 +1,44 @@
+.graphMain {
+    width: 37%;
+    height: 100%;
+}
+
+.data-signature {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.signature-item {
+    position: absolute;
+    display: block;
+    width: 51px;
+    height: 81px;
+    top: -57px;
+    left: -12px;
+}
+
+.signature-item:hover {
+    .signature-text {
+        display: inline;
+    }
+}
+
+.signature-text {
+    display: none;
+    position: relative;
+    font-size: 25px;
+    font-weight: 700;
+    padding: 5px;
+    border-radius: 78px;
+    background-color: #b781ff;
+    color: #64007d;
+    top: 29px;
+    transition: 0.2s;
+}
+
+@media screen and (max-width: 670px) {
+    .graphMain {
+        width: 100%;
+    }
+}

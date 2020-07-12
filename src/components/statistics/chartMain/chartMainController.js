@@ -16,5 +16,13 @@ export default class ChartMainController {
     this.chartMainView.drawSignaturesScale(this.chartMainModel.dataScale(), 'x');
     this.chartMainView.drawSignaturesScale(this.chartMainModel.dataScale(), 'y');
     this.chartMainView.drawMainChartLines(this.chartMainModel.dataScale());
+    this.createDataSignature();
+  }
+
+  createDataSignature() {
+    this.chartMainView.showSignaturesData({
+      quantityWord: Object.values(this.chartMainModel.dataChart),
+      ranges: this.chartMainModel.determinePointsRange(),
+    });
   }
 }
