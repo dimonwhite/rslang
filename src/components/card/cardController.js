@@ -30,11 +30,13 @@ export default class CardController {
   }
 
   async create() {
-    try {
-      this.settings = await this.user.getUserSettings();
-      this.view.settings = this.settings.optional.settings;
-      this.statistics = await this.user.getUserStatistics();
-      this.params = this.statistics.optional.todayTraining.params;
+    document.body.classList.add('show-main');
+    document.body.classList.add('top-gear');
+    this.settings = await this.user.getUserSettings();
+    this.view.settings = this.settings.optional.settings;
+    this.statistics = await this.user.getUserStatistics();
+    this.params = this.statistics.optional.todayTraining.params;
+    if (document.body.classList.contains('show-main')) {
       await this.getTodayStatStorage();
       this.view.renderHTML();
       if (this.model.listToday.length !== this.params.passedToday) {
@@ -50,8 +52,6 @@ export default class CardController {
       }
       await this.setTodayStatStorage();
       this.createEvent();
-    } catch (error) {
-      this.error = error;
     }
   }
 
@@ -83,7 +83,7 @@ export default class CardController {
   async setTodayStatStorage() {
     const { cardIndex } = this.params;
     this.params.cardIndex = this.params.passedToday;
-    this.params.length = (this.listToday) ? this.listToday.length : 0;
+    this.params.length = (this.model.listToday) ? this.model.listToday.length : 0;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
     this.params.cardIndex = cardIndex;
   }
@@ -208,7 +208,7 @@ export default class CardController {
         word, isNew: true, customRating, state,
       });
     }
-    await this.model.putListPage(word);
+    await this.model.putListToday();
     if (this.unlock) this.view.lockElements(false);
   }
 
@@ -352,7 +352,7 @@ export default class CardController {
         this.next = true;
         this.view.next = true;
       } else {
-        await this.model.putListPage(word);
+        await this.model.putListToday();
       }
     }
     this.params.currentMistake = false;
@@ -383,7 +383,7 @@ export default class CardController {
       this.view.incorrectWord(answer, word.wordTranslate);
     }
     await this.setTodayStatStorage();
-    await this.model.putListPage(word);
+    await this.model.putListToday();
   }
 
   playWord(isClick) {
@@ -514,7 +514,7 @@ export default class CardController {
         this.view.setCustomRating('clear');
         await this.model.updateAllStudyWords({ word, isUpdate: true, customRating: 'clear' });
       }
-      await this.model.putListPage(word);
+      await this.model.putListToday();
       if (this.unlock) this.view.lockElements(false);
     }
   }
@@ -534,6 +534,11 @@ export default class CardController {
         });
         this.params.passedToday = 0;
         this.params.cardIndex = 0;
+        this.params.consecutive = 0;
+        this.params.newConsecutive = 0;
+        this.params.newWordsToday = 0;
+        this.currentMistake = false;
+        this.params.correctAnswer = 0;
         this.view.clearCard();
         const len = this.model.listToday.length;
         const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[+0];

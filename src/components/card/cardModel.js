@@ -34,14 +34,13 @@ export default class CardModel {
     } else if (userWords.length === 0) {
       const difficulty = 'today';
       const ID_LENGTH = 24;
-      const promises = [];
       for (let i = 0; i < WORDS_START_WITH; i += 1) {
         const wordId = String(i).repeat(ID_LENGTH);
         const wordData = {};
         wordData.listToday = 'empty';
-        promises.push(this.user.createUserWord({ wordData, wordId, difficulty }));
+        // eslint-disable-next-line no-await-in-loop
+        await this.user.createUserWord({ wordData, wordId, difficulty });
       }
-      await Promise.all(promises);
     }
   }
 
@@ -50,6 +49,11 @@ export default class CardModel {
     const maxWords = +settings.maxWords;
     let settingsNewWords = +settings.newWords;
     const learnedWords = this.allStudyWords.length;
+    this.allStudyWords[0].nextTime = new Date().getTime();
+    this.allStudyWords[1].nextTime = new Date().getTime();
+    this.allStudyWords[2].nextTime = new Date().getTime();
+    this.allStudyWords[3].nextTime = new Date().getTime();
+    this.allStudyWords[4].nextTime = new Date().getTime();
     const ALL_WORDS = 3600;
     if (learnedWords + maxWords > ALL_WORDS) settingsNewWords = ALL_WORDS - learnedWords;
     const group = Math.floor(learnedWords / maxWordsPerPage);
@@ -132,6 +136,7 @@ export default class CardModel {
   async getListToday(numberListPages) {
     const ID_LENGTH = 24;
     const promises = [];
+    this.listToday = [];
     for (let i = 0; i < numberListPages; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);
       promises.push(this.user.getUserWordById(wordId));
