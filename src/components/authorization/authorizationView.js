@@ -1,4 +1,4 @@
-import { createElement, getSvg } from '@/utils';
+import { createElement } from '@/utils';
 import { blackGradient } from '@/constants';
 
 export default class AuthorizationView {
@@ -9,41 +9,60 @@ export default class AuthorizationView {
   }
 
   renderPopUp() {
-    this.popUp.innerHTML = getSvg('close');
+    /* this.popUp.innerHTML = `<svg class="svg_icon pop-up__close">
+      <use xlink:href="sprite.svg#close"></use>
+    </svg>`; */
 
     this.formWrap = createElement({ tag: 'div', class: 'form-wrap' });
     this.popUp.append(this.formWrap);
 
     this.main.append(this.popUp);
 
+    this.error = createElement({ tag: 'div', class: 'pop-up__error' });
+    this.main.append(this.error);
+
     this.createBackground();
   }
 
   createSignIn() {
-    this.popTitle = createElement({ tag: 'p', class: 'pop-up__title', content: 'Войти' });
+    if (this.popUp.classList.contains('sing-up')) {
+      this.popUp.classList.remove('sing-up');
+    }
+    this.popUp.classList.add('sing-in');
 
-    this.createForm();
+    this.createForm('Войти');
 
-    this.formBtn = createElement({ tag: 'div', class: 'form-auth__link', content: 'Регистрация' });
+    this.formBtn = createElement({ tag: 'div', class: 'form-wrap__link', content: 'Регистрация' });
 
-    this.formWrap.append(this.popTitle);
+    this.formWrap.innerHTML = `<svg class="svg_icon form-wrap__auth-user">
+      <use xlink:href="sprite.svg#auth-user"></use>
+    </svg>`;
+
     this.formWrap.append(this.form);
     this.formWrap.append(this.formBtn);
   }
 
   createSignUp() {
-    this.popTitle = createElement({ tag: 'p', class: 'pop-up__title', content: 'Регистрация' });
+    if (this.popUp.classList.contains('sing-in')) {
+      this.popUp.classList.remove('sing-in');
+    }
+    this.popUp.classList.add('sing-up');
 
-    this.createForm();
+    this.createForm('Регистрация');
 
-    this.formBtn = createElement({ tag: 'div', class: 'form-auth__link', content: 'Войти' });
+    this.hiText = createElement({ tag: 'div', class: 'form-wrap__hiText', content: 'Привет, создай свой профиль' });
+    this.formBtn = createElement({ tag: 'div', class: 'form-wrap__link', content: 'Войти' });
 
-    this.formWrap.append(this.popTitle);
+    this.formWrap.innerHTML = `<svg class="svg_icon form-wrap__auth-user">
+      <use xlink:href="sprite.svg#auth-user"></use>
+    </svg>`;
+
+    this.formWrap.append(this.hiText);
     this.formWrap.append(this.form);
     this.formWrap.append(this.formBtn);
   }
 
-  createForm() {
+  createForm(submitValue) {
     this.form = createElement({ tag: 'form', class: 'form-auth' });
     this.form.setAttribute('enctype', 'text/plain');
     this.form.setAttribute('method', 'POST');
@@ -51,16 +70,16 @@ export default class AuthorizationView {
     this.formLogin = createElement({ tag: 'input', class: 'form-auth__input form-auth__login' });
     this.formLogin.setAttribute('type', 'text');
     this.formLogin.setAttribute('name', 'login');
-    this.formLogin.setAttribute('placeholder', 'Login');
+    this.formLogin.setAttribute('placeholder', 'Имя пользователя');
 
     this.formPassword = createElement({ tag: 'input', class: 'form-auth__input form-auth__password' });
     this.formPassword.setAttribute('type', 'password');
     this.formPassword.setAttribute('name', 'password');
-    this.formPassword.setAttribute('placeholder', 'Password');
+    this.formPassword.setAttribute('placeholder', 'Пароль');
 
     this.formSubmit = createElement({ tag: 'input', class: 'form-auth__submit' });
     this.formSubmit.setAttribute('type', 'submit');
-    this.formSubmit.setAttribute('value', 'Отправить');
+    this.formSubmit.setAttribute('value', submitValue);
 
     this.form.append(this.formLogin);
     this.form.append(this.formPassword);
@@ -91,8 +110,7 @@ export default class AuthorizationView {
     this.btnLogin.innerHTML = 'logout';
   }
 
-  showError(error) {
-    this.error = createElement({ tag: 'div', class: 'form-auth__error', content: error });
-    this.formWrap.append(this.error);
+  createError(error) {
+    this.error.innerHTML = `<div class="pop-up__error-text">${error}</div>`;
   }
 }
