@@ -20,7 +20,7 @@ export default class AudiocallView {
     this.game.innerHTML = `
     <div class="restart-wrapper">
     <div class="btn__top stats">Статистика</div>
-    <div class="btn__top user-words active">Слова пользователя</div>
+    <div class="btn__top user-words">Слова пользователя</div>
     <div class="btn__top restart">Рестарт</div>
     <a class="btn__top exit" href="#/games">Выход</a>
     </div>
@@ -55,6 +55,14 @@ export default class AudiocallView {
       }
       this.wordWrapper.append(wordBlock);
     });
+  }
+
+  btnUserWordsDecorate(isUserWords) {
+    if (isUserWords) {
+      this.btnuserWords.classList.add('active');
+    } else {
+      this.btnuserWords.classList.remove('active');
+    }
   }
 
   renderSoundIcon() {

@@ -1,4 +1,4 @@
-import { createElement } from '@/utils';
+import { createElement } from '../../../utils';
 
 export default class TodayProgressView {
   constructor() {
@@ -9,6 +9,7 @@ export default class TodayProgressView {
 
   create(max, currentValue) {
     this.createProgressBar(max, currentValue);
+    document.body.classList.add('statistic-page');
   }
 
   createProgressBar(max, currentValue) {

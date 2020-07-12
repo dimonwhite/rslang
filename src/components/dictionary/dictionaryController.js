@@ -12,21 +12,24 @@ export default class DictionaryController {
   }
 
   async create() {
+    document.body.classList.add('dictionary');
+
     const dataWords = await this.model.getDataWords();
     const settings = await this.model.getSettings();
 
-    if (dataWords && dataWords.length > 0) {
-      document.body.classList.add('dictionary');
-
+    if (document.body.classList.contains('dictionary')) {
       this.view.renderHTML();
-      this.view.createSettings(settings.optional.dictSettings);
 
-      this.view.renderDictionary();
-      this.listTopLimit = this.view.list.getBoundingClientRect().top;
-      this.createList();
-      this.init();
-    } else {
-      this.view.showEmptyMsg();
+      if (dataWords && this.model.dataWords.length > 0) {
+        this.view.createSettings(settings.optional.dictSettings);
+
+        this.view.renderDictionary();
+        this.listTopLimit = this.view.list.getBoundingClientRect().top;
+        this.createList();
+        this.init();
+      } else {
+        this.view.showEmptyMsg();
+      }
     }
   }
 

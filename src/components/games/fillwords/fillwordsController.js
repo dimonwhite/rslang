@@ -8,24 +8,27 @@ export default class FillwordsController {
     this.openPopupResult = openPopupResult;
     this.view = new FillwordsView();
     this.model = new FillwordsModel(http);
-    this.level = 0;
+    this.level = -1;
     this.lengthBoard = 10;
     this.heigthBoard = 10;
   }
 
   init() {
-    this.createBoard();
     this.view.lengthBoard = this.lengthBoard;
     this.view.heigthBoard = this.heigthBoard;
     this.model.lengthBoard = this.lengthBoard;
     this.view.renderHtml();
     this.addListeners();
+    this.createBoard();
   }
 
   addListeners() {
     this.moveBoardCallback = this.moveBoard.bind(this);
     this.view.boardWrap.addEventListener('mousedown', this.mouseDownBoard.bind(this));
+    this.view.boardWrap.addEventListener('touchstart', this.mouseDownBoard.bind(this));
     document.addEventListener('mouseup', this.mouseUpBoard.bind(this));
+    document.addEventListener('touchend', this.mouseUpBoard.bind(this));
+    document.addEventListener('touchcancel', this.mouseUpBoard.bind(this));
     this.view.newGame.addEventListener('click', () => {
       this.change();
     });
@@ -38,6 +41,10 @@ export default class FillwordsController {
         this.view.popupHint.classList.remove('active');
       }
     });
+    this.view.btnUserWords.addEventListener('click', () => {
+      this.level = -1;
+      this.change();
+    });
   }
 
   mouseDownBoard() {
@@ -45,12 +52,14 @@ export default class FillwordsController {
     this.resultMove = '';
     this.selectedLetters = [];
     this.view.boardWrap.addEventListener('mousemove', this.moveBoardCallback);
+    this.view.boardWrap.addEventListener('touchmove', this.moveBoardCallback);
   }
 
   mouseUpBoard() {
     if (this.isBoardMouseDown) {
       this.isBoardMouseDown = false;
       this.view.boardWrap.removeEventListener('mousemove', this.moveBoardCallback);
+      this.view.boardWrap.removeEventListener('touchmove', this.moveBoardCallback);
       if (this.isSuccessWord()) {
         this.view.successSelected(this.selectedLetters);
         this.score += 1;
@@ -77,7 +86,8 @@ export default class FillwordsController {
     }
 
     if (btnDontKnow) {
-      this.view.markSquares(this.words[indexWord].squareLetters);
+      const currentWord = this.words[indexWord];
+      this.view.markSquares(currentWord.squareLetters);
       this.view.successWord(indexWord);
       this.score += 1;
       this.checkWin(true);
@@ -103,7 +113,14 @@ export default class FillwordsController {
   }
 
   moveBoard(e) {
-    const square = e.target.closest('.board__square');
+    let square;
+    if (e.touches) {
+      const myLocation = e.touches.item(0);
+      const realTarget = document.elementFromPoint(myLocation.clientX, myLocation.clientY);
+      square = realTarget.closest('.board__square');
+    } else {
+      square = e.target.closest('.board__square');
+    }
     if (square && !square.classList.contains('active') && !square.classList.contains('success')) {
       square.classList.add('active');
       this.resultMove += square.textContent;
@@ -140,7 +157,7 @@ export default class FillwordsController {
   }
 
   async fillBoard() {
-    this.words = await this.model.getWords();
+    this.words = await this.getWords();
     this.countWords = this.words.length;
     this.words.forEach((word, i) => {
       word.squareLetters = [];
@@ -149,6 +166,26 @@ export default class FillwordsController {
     });
     this.board = this.board.flat();
     this.fillRandomLetter();
+  }
+
+  async getWords() {
+    this.view.showPreloader();
+    let words = [];
+    if (this.level < 0) {
+      words = await this.model.getUserWords();
+      this.view.activateBtnUserWords();
+    }
+    if (this.level < 0 && !words.length) {
+      this.level = 0;
+      this.model.level = this.level;
+      this.view.activateLevel(this.level);
+    }
+    if (!words.length) {
+      this.view.deactivateBtnUserWords();
+      words = await this.model.getWords();
+    }
+    this.view.hidePreloader();
+    return words;
   }
 
   fillBoardRow(start, wordObject, i) {
@@ -180,5 +217,7 @@ export default class FillwordsController {
 
   removeListeners() {
     document.removeEventListener('mouseup', this.mouseUpBoard.bind(this));
+    document.removeEventListener('touchend', this.mouseUpBoard.bind(this));
+    document.removeEventListener('touchcancel', this.mouseUpBoard.bind(this));
   }
 }

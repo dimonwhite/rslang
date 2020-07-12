@@ -90,11 +90,12 @@ export default class PuzzleController {
   playAudioTip() {
     this.root.querySelector('.btn__audio').classList.add('playing');
     const audioSrc = this.roundData.sentences[this.currentRow].audio;
+
     if (this.audioTip) {
       this.audioTip.pause();
     }
     this.audioTip = new Audio(audioSrc);
-    this.audioTip.play();
+    this.audioTip.play().catch(() => this.audioTip.currentTime);
 
     this.audioTip.onended = () => {
       if (this.root.querySelector('.btn__audio')) {

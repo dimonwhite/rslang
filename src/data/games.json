@@ -63,7 +63,7 @@
   },
   "filwords": {
     "title": "FILLWORDS",
-    "desc": "fillwords game",
+    "desc": "В этой игре вам нужно найти верный перевод слова на поле с буквами. <br> Все слова располагаются по горизонтале, но могут быть написаны в обратном порядке.",
     "bgImage": "fillwordsbg.jpg",
     "gameClass": "fillwords",
     "settings": {
