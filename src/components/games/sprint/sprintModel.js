@@ -9,8 +9,6 @@ export default class SprintModel {
     this.page = 0;
     this.index = 0;
     this.dataWords = dataWords;
-    this.countWords = 24;
-    this.isCorrect = true;
     this.trueWord = 0;
     this.falseWord = 0;
     this.words = [];
@@ -19,7 +17,7 @@ export default class SprintModel {
     this.maxHeart = 5;
     this.countWords = 10;
     this.level = 0;
-    this.page = 1;
+    this.page = Math.round(Math.random() * 5);
     this.lang = 'EN';
     this.maxStatistics = 30;
     this.allStudyWords = [];
@@ -27,24 +25,24 @@ export default class SprintModel {
 
   async getUserWords() {
     const words = await this.http.getAllUserWords();
-    const userWords = words.map((word) => word.optional);
-
+    let userWords = words.splice(10);
+    userWords = userWords.map((word) => word.optional);
     userWords.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
     });
-    return userWords;
+    return this.gameWords;
   }
 
   async getJustWords(group, count) {
     const data = await this.http.getWords({
-      group, page: 3, maxLength: 50, wordsPerPage: count,
+      group, page: this.page, maxLength: 50, wordsPerPage: count,
     });
     data.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
     });
-    return data;
+    return this.gameWords;
   }
 
   getWord(id) {

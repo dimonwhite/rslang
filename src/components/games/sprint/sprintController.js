@@ -31,7 +31,7 @@ export default class SprintController {
 
   init() {
     this.model.setUserStatistics();
-    this.chekUser();
+    this.checkUser();
     this.view.renderHTML();
     this.changeLvlv();
     this.useMyWords();
@@ -44,16 +44,10 @@ export default class SprintController {
       this.checkBtnFalse();
     });
 
-    document.addEventListener('keydown', (event) => {
-      if (event.code === 'ArrowLeft') {
-        this.checkBtnTrue();
-      }
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.code === 'ArrowRight') {
-        this.checkBtnFalse();
-      }
+    this.keyDownCallBack = this.keyPressArr.bind(this);
+    document.addEventListener('keydown', this.keyDownCallBack);
+    document.addEventListener('click', () => {
+      clearInterval(this.roundTime);
     });
   }
 
@@ -66,6 +60,16 @@ export default class SprintController {
     });
   }
 
+  keyPressArr(event) {
+    if (event.code === 'ArrowLeft') {
+      this.checkBtnTrue();
+      return;
+    }
+    if (event.code === 'ArrowRight') {
+      this.checkBtnFalse();
+    }
+  }
+
   changeLvlv() {
     document.querySelectorAll('.radio').forEach((e) => {
       e.addEventListener('click', () => {
@@ -76,16 +80,16 @@ export default class SprintController {
     });
   }
 
-  async chekUser() {
+  async checkUser() {
     this.trueArray = await this.model.getUserWords();
-    if (this.trueArray.length >= 100) {
+    if (this.trueArray.length >= 90) {
       this.wordControl = true;
     }
   }
 
   useMyWords() {
     document.querySelector('.game__sprint__user-words-button').addEventListener('click', () => {
-      if (this.trueArray.length >= 100) {
+      if (this.trueArray.length >= 90) {
         this.wordControl = true;
         this.makerArray(this.hard, this.count);
       } else {
@@ -253,7 +257,7 @@ export default class SprintController {
 
   addMainTimer() {
     clearInterval(this.roundTime);
-    this.seconds = 20;
+    this.seconds = 60;
     this.wordResult = [];
     this.roundTime = setInterval(() => {
       this.view.addTimer(this.seconds);
@@ -262,7 +266,7 @@ export default class SprintController {
       this.playLustSecond();
       if (this.seconds === -1) {
         clearInterval(this.roundTime);
-        this.seconds = 20;
+        this.seconds = 60;
         this.view.addTimer(' ');
         this.view.removeButton();
         this.openPopupResult(this.wordResult);
@@ -384,5 +388,9 @@ export default class SprintController {
 
   getScore() {
     return this.trueWord;
+  }
+
+  removeListeners() {
+    document.removeEventListener('keydown', this.keyDownCallBack);
   }
 }
