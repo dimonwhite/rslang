@@ -11,8 +11,6 @@ export default class CardView {
   }
 
   renderHTML() {
-    document.body.classList.add('show-main');
-    document.body.classList.add('top-gear');
     this.createSettings();
     this.setSettings();
     this.card.append(this.createCard());
@@ -464,10 +462,10 @@ export default class CardView {
 
   setDataInInput(word, numberLetters, hide) {
     if (numberLetters && !hide) {
-      if (this.settings.langEn) {
+      if (this.settings.langEn && word.word) {
         this.input.setAttribute('maxlength', word.word.length);
         this.incorrectWord('', '*'.repeat(word.word.length));
-      } else {
+      } else if (word.wordTranslate) {
         this.input.setAttribute('maxlength', word.wordTranslate.length);
         this.incorrectWord('', '*'.repeat(word.wordTranslate.length));
       }
