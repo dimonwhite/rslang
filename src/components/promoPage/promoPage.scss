@@ -37,6 +37,22 @@
       font-size: 1.3rem;
     }
   }
+  &__desc {
+    position: relative;
+    z-index: 1;
+
+    margin-bottom: 2rem;
+    width: 60%;
+
+    font-size: 1rem;
+    color: #FCA9FB;
+    @include media(1024px) {
+      width: 100%;
+    }
+    @include media(600px) {
+      font-size: 0.8rem;
+    }
+  }
   &__planet {
     position: absolute;
     top: 4rem;
@@ -49,10 +65,10 @@
     z-index: 1;
 
     width: 50%;
-    margin-bottom: 18rem;
+    margin-bottom: 3rem;
     @include media(1024px) {
       width: 100%;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
   }
   &__vantages {
