@@ -1,6 +1,16 @@
+.game-wrap {
+    position: fixed;
+    width: 100%;
+    height: 100% !important;
+    top: 0;
+    left: 0;
+    z-index: 7;
+}
+
 .games-statistic {
     position: relative;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     font-size: 37px;
     font-weight: 800;
@@ -13,9 +23,9 @@
     justify-content: flex-start;
     align-items: center;
     width: 44%;
-    height: 22%;
-    padding: 2% 2% 2% 14%;
-    margin: 0 3% 0 0;
+    height: 120px;
+    padding: 2% 4% 2% 18%;
+    margin: 0 3% 4% 0;
     border: 5px solid #bc69ff;
     border-radius: 68px;
     background-color: #7a0dab;
@@ -31,7 +41,7 @@
     content: " ";
     width: 85px;
     height: 85px;
-    background-image: url(/src/assets/icons/statistic/game-savanna-icon.png);
+    background-image: url(../assets/icons/statistic/game-savanna-icon.png);
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(0px 0px 11px #fff9e9);
@@ -44,7 +54,7 @@
     content: " ";
     width: 85px;
     height: 85px;
-    background-image: url(/src/assets/icons/statistic/game-audiocall-icon.png);
+    background-image: url(../assets/icons/statistic/game-audiocall-icon.png);
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(0px 0px 11px #fff9e9);
@@ -57,7 +67,7 @@
     content: " ";
     width: 85px;
     height: 85px;
-    background-image: url(/src/assets/icons/statistic/game-sprint-icon.png);
+    background-image: url(../assets/icons/statistic/game-sprint-icon.png);
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(0px 0px 11px #fff9e9);
@@ -70,7 +80,7 @@
     content: " ";
     width: 118px;
     height: 85px;
-    background-image: url(/src/assets/icons/statistic/game-speakit-icon.png);
+    background-image: url(../assets/icons/statistic/game-speakit-icon.png);
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(0px 0px 11px #fff9e9);
@@ -83,7 +93,7 @@
     content: " ";
     width: 85px;
     height: 85px;
-    background-image: url(/src/assets/icons/statistic/game-englishpuzzle-icon.png);
+    background-image: url(../assets/icons/statistic/game-englishpuzzle-icon.png);
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(0px 0px 11px #fff9e9);
@@ -96,7 +106,7 @@
     content: " ";
     width: 85px;
     height: 85px;
-    background-image: url(/src/assets/icons/statistic/game-ourgame-icon.png);
+    background-image: url(../assets/icons/statistic/game-ourgame-icon.png);
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(0px 0px 11px #fff9e9);
@@ -108,12 +118,13 @@
 
 .window-game-statistic {
     position: absolute;
-    left: 24%;
-    top: 34%;
+    left: 50%;
+    top: 50%;
     width: 45%;
     border-radius: 48px;
     background-color: #823a93;
     z-index: 10;
+    transform: translate(-50%, -50%);
 }
 
 .close-game-window {
@@ -122,7 +133,7 @@
     right: -92%;
     width: 35px;
     height: 35px;
-    background-image: url(/src/assets/icons/statistic/close.png);
+    background-image: url(../assets/icons/statistic/close.png);
     background-size: 35px 35px;
 }
 .game-name {
@@ -199,4 +210,197 @@
     font-size: 60px;
     font-weight: 900;
     color: #823a93;
+}
+
+@media screen and (max-width: 1850px) {
+    .games-statistic {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 1380px) {
+    .games-statistic {
+        font-size: 25px;
+    }
+    .game-name {
+        font-size: 30px;
+    }
+    .game-logo {
+        width: 55px;
+    }
+    .statistic-signatures {
+        font-size: 16px;
+    }
+    .field-data {
+        font-size: 20px;
+    }
+    .field-right-answer {
+        font-size: 35px;
+    }
+    .field-mistakes {
+        font-size: 35px;
+    }
+    .field-points {
+        font-size: 35px;
+    }
+    .close-game-window {
+        top: -36px;
+        right: -87%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .games {
+        height: 90px;
+    }
+    .games-statistic {
+        font-size: 20px;
+    }
+    .games-savannah::before {
+        left: 4%;
+        top: 16%;
+        width: 55px;
+        height: 55px;
+    }
+    .games-audiocall::before {
+        left: 4%;
+        top: 16%;
+        width: 55px;
+        height: 55px;
+    }
+    .games-sprint::before {
+        left: 4%;
+        top: 16%;
+        width: 55px;
+        height: 55px;
+    }
+    .games-speakit[data-game="speakit"]::before {
+        left: 4%;
+        top: 16%;
+        width: 76px;
+        height: 76px;
+    }
+    .games-puzzle::before {
+        left: 4%;
+        top: 16%;
+        width: 55px;
+        height: 55px;
+    }
+    .games-own::before {
+        left: 4%;
+        top: 16%;
+        width: 67px;
+        height: 67px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .games {
+        padding: 2% 4% 2% 20%;
+    }
+    .games-statistic {
+        font-size: 16px;
+    }
+    .statistic-signatures {
+        font-size: 12px;
+    }
+    .window-game-statistic {
+        width: auto;
+    }
+    .game-name {
+        margin: 2% 0 0 24%;
+    }
+    .signatures-item {
+        margin: 0 0 0 0%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .games {
+        padding: 2% 4% 2% 20%;
+    }
+    .games-statistic {
+        font-size: 16px;
+    }
+    .window-game-statistic {
+        padding: 1%;
+    }
+    .game-logo {
+        top: 5%;
+        left: 7%;
+    }
+}
+
+@media screen and (max-width: 630px) {
+    .statistic-signatures {
+        font-size: 10px;
+    }
+    .game-name {
+        font-size: 20px;
+    }
+    .close-game-window {
+        top: -28px;
+        width: 15px;
+        height: 15px;
+        background-size: 15px 15px;
+    }
+    .field-data {
+        font-size: 14px;
+    }
+    .field-right-answer {
+        font-size: 20px;
+    }
+    .field-mistakes {
+        font-size: 20px;
+    }
+    .field-points {
+        font-size: 20px;
+    }
+    .game-logo {
+        width: 30px;
+        top: 5%;
+        left: 8%;
+    }
+    .window-game-statistic {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 70%;
+        border-radius: 27px;
+    }
+}
+
+@media screen and (max-width: 385px) {
+    .games-savannah::before {
+        width: 32px;
+        height: 55px;
+    }
+    .games-audiocall::before {
+        width: 32px;
+        height: 55px;
+    }
+    .games-sprint::before {
+        width: 32px;
+        height: 55px;
+    }
+    .games-speakit[data-game="speakit"]::before {
+        width: 47px;
+        height: 76px;
+    }
+    .games-puzzle::before {
+        width: 32px;
+        height: 55px;
+    }
+    .games-own::before {
+        width: 47px;
+        height: 67px;
+    }
+    .games-statistic {
+        font-size: 14px;
+    }
+    .games {
+        padding: 2% 4% 2% 16%;
+        height: 60px;
+        border: 3px solid #bc69ff;
+    }
 }

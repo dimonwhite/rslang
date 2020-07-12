@@ -4,6 +4,7 @@ export default class ChartMainView {
   constructor(indent) {
     this.mainStatisticInfo = document.querySelector('.main-statistic-info');
     this.canvasMainChart = createElement({ tag: 'canvas', class: 'graphMain' });
+    this.dataSignature = createElement({ tag: 'p', class: 'data-signature signature-data-hide' });
     this.canvasMainChartContext = this.canvasMainChart.getContext('2d');
     this.mainIndent = indent;
   }
@@ -142,5 +143,17 @@ export default class ChartMainView {
         coordinates.firstPoint[1], pointR, 0, 2 * Math.PI);
       this.canvasMainChartContext.fill();
     }
+  }
+
+  showSignaturesData(obj) {
+    this.mainStatisticInfo.append(this.dataSignature);
+    let content = '';
+    for (let i = 0; i < obj.ranges.length; i += 1) {
+      content += `<p class="signature-item" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">
+        <span class="signature-text" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">${obj.quantityWord[i]}</span>
+      </p>`;
+    }
+    console.log(this.canvasMainChart.getBoundingClientRect().x);
+    this.dataSignature.innerHTML = `${content}`;
   }
 }

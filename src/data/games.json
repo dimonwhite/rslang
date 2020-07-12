@@ -56,10 +56,19 @@
     }
   },
   "sprint": {
-    "title": "sprint",
-    "desc": "sprint game",
-    "bgImage": "testbg.jpg",
-    "gameClass": "speakIt"
+    "title": "Спринт",
+    "desc": "Ваша задача указать, совпадают ли слово и перевод",
+    "bgImage": "sprintBg.jpg",
+    "gameClass": "sprint",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": false
+    }
   },
   "filwords": {
     "title": "FILLWORDS",
@@ -70,4 +79,5 @@
       "levels": true
     }
   }
+
 }
