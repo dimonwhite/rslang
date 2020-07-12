@@ -89,8 +89,8 @@ export default class RoundData {
 
   async makeUserSentence() {
     this.wordData = await this.client.getAllUserWords();
-    this.wordData.splice(10);
-    if (this.wordData.length < 11) {
+    this.wordData = this.wordData.splice(10);
+    if (this.wordData.length < 10) {
       this.isUserWords = false;
       await this.makeSentences();
       return;
