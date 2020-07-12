@@ -46,7 +46,7 @@ export default class SprintController {
 
     this.keyDownCallBack = this.keyPressArr.bind(this);
     document.addEventListener('keydown', this.keyDownCallBack);
-    document.addEventListener('click', () => {
+    this.view.close.addEventListener('click', () => {
       clearInterval(this.roundTime);
     });
   }
@@ -392,5 +392,7 @@ export default class SprintController {
 
   removeListeners() {
     document.removeEventListener('keydown', this.keyDownCallBack);
+    clearInterval(this.LoadTime);
+    clearInterval(this.roundTime);
   }
 }
