@@ -4,6 +4,7 @@ export default class GamesStatisticView {
   constructor() {
     this.mainStatisticInfo = document.querySelector('.main-statistic-info');
     this.gamesStatistic = createElement({ tag: 'div', class: 'games-statistic' });
+    this.gamestatisticClose = createElement({ tag: 'div', class: 'game-wrap window-game-hide' });
     this.windowGameStatistic = createElement({ tag: 'div', class: 'window-game-statistic' });
     this.gamesNamesRu = [
       'Саванна',
@@ -25,6 +26,7 @@ export default class GamesStatisticView {
 
   createGamesButtons(quantityGames) {
     this.mainStatisticInfo.append(this.gamesStatistic);
+    this.mainStatisticInfo.append(this.gamestatisticClose);
     let content = '';
     for (let i = 0; i < Object.keys(quantityGames).length; i += 1) {
       content += `
@@ -34,7 +36,7 @@ export default class GamesStatisticView {
   }
 
   createStatisticWindow(statisticGame, gameName) {
-    this.mainStatisticInfo.append(this.windowGameStatistic);
+    this.gamestatisticClose.append(this.windowGameStatistic);
     let dataForContnent = '';
     for (let i = 0; i < statisticGame.length; i += 1) {
       dataForContnent += `

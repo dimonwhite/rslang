@@ -94,7 +94,10 @@ export default class ChartMainModel {
       this.arrayDataWord.push(Math.round(this.decrease * i));
     }
     this.arrayDataWord.reverse();
-    this.datesWords = Object.keys(obj);
+    this.datesWords = Object.keys(obj).map((element, i, arr) => {
+      arr[i] = arr[i].slice(0, 5);
+      return arr[i];
+    });
 
     return {
       x: this.datesWords,
@@ -150,6 +153,26 @@ export default class ChartMainModel {
     return this.lineCoordinates;
   }
 
+  determinePointsRange() {
+    this.pointsRangeCoordinates = [];
+    const range = 20;
+    for (let i = 0; i < this.scaleWordsValues().length; i += 1) {
+      const xStart = (i * this.scaleIndentX) + this.mainIndent - range;
+      const xEnd = (i * this.scaleIndentX) + this.mainIndent + range;
+      const yStart = (i === 0) ? (this.convertedValues[i])
+        : ((i * this.convertedValues[i]) - range);
+      const yEnd = yStart + range;
+      const pointRange = {
+        xStart,
+        xEnd,
+        yStart,
+        yEnd,
+      };
+      this.pointsRangeCoordinates.push(pointRange);
+    }
+    return this.pointsRangeCoordinates;
+  }
+
   dataScale() {
     const mainScaleElements = {
       getMaxActiveDay: this.getMaxActiveDay(this.dataChart),
@@ -160,6 +183,7 @@ export default class ChartMainModel {
       scaleCoefficient: this.determineScaleCoefficient(),
       convertedValues: this.scaleWordsValues(),
       coordinatesPoints: this.determineLineCoordinates(),
+      pointRange: this.determinePointsRange(),
     };
     return mainScaleElements;
   }
