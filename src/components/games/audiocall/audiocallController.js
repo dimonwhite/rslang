@@ -67,6 +67,7 @@ export default class AudiocallController {
   keypressHandler(e) {
     const eventKeys = [1, 2, 3, 4, 5];
     if (+e.key === this.view.rightWord.index && this.model.isStepGoing) {
+      this.model.score += 1;
       this.endStep(true);
     } else if
     (+e.key !== this.view.rightWord.index && eventKeys.includes(+e.key) && this.model.isStepGoing) {

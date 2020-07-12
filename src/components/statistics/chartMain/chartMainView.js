@@ -153,7 +153,6 @@ export default class ChartMainView {
         <span class="signature-text" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">${obj.quantityWord[i]}</span>
       </p>`;
     }
-    console.log(this.canvasMainChart.getBoundingClientRect().x);
     this.dataSignature.innerHTML = `${content}`;
   }
 }

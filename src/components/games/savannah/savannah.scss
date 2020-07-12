@@ -10,7 +10,7 @@
         justify-content: space-between;
         height: 100vh;
         position: relative;
-        background-image: url("/src/assets/img/bg-savannah.png");
+        background-image: url("../assets/img/bg-savannah.png");
         background-position-y: 4817px;
         height: 100vh;
         transition: background-position-y 1s;
@@ -26,7 +26,7 @@
             &-img {
                 width: 40px;
                 height: 40px;
-                background-image: url("/src/assets/img/heart.png");
+                background-image: url("../assets/img/heart.png");
                 background-repeat: no-repeat;
                 background-size: 28px;
             }
@@ -83,7 +83,7 @@
             width: 45px;
             height: 45px;
             bottom: 10px;
-            background-image: url("/src/assets/img/ship.png");
+            background-image: url("../assets/img/ship.png");
             background-repeat: no-repeat;
             background-size: cover;
             position: absolute;
@@ -102,7 +102,7 @@
         }
         &-cancel {
             background: none;
-            background-image: url("/src/assets/img/cancel.png");
+            background-image: url("../assets/img/cancel.png");
             background-repeat: no-repeat;
             background-position: 10px center;
             background-size: 29px;
@@ -122,7 +122,7 @@
         }
         &-sound {
             background: none;
-            background-image: url("/src/assets/img/sound.png");
+            background-image: url("../assets/img/sound.png");
             background-position: center;
             background-size: 0px;
             background-color: #b44dbe8c;
@@ -155,7 +155,7 @@
             width: 50px;
             height: 50px;
             background: none;
-            background-image: url("/src/assets/img/keyboard.png");
+            background-image: url("../assets/img/keyboard.png");
             background-repeat: no-repeat;
             background-size: 48px;
         }

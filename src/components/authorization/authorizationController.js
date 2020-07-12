@@ -10,7 +10,7 @@ export default class AuthorizationController {
       signUp: 'signUp',
     };
     this.activeForm = this.formType.signIn;
-    this.defaulPage = '#/games';
+    this.defaulPage = '#/promo';
 
     this.showPopUpListener = this.showPopUp.bind(this);
     this.clickPopUpListener = this.clickPopUp.bind(this);
@@ -143,6 +143,8 @@ export default class AuthorizationController {
         return;
       }
 
+      await this.model.createWords();
+
       this.view.btnLogin.removeEventListener('click', this.showPopUpListener);
       this.view.popUp.removeEventListener('click', this.clickPopUpListener);
 
@@ -153,12 +155,6 @@ export default class AuthorizationController {
   }
 
   clickPopUp(e) {
-    /* if (e.target.closest('.pop-up__close')) {
-      this.view.popUp.remove();
-      this.view.background.remove();
-      this.view.clearForm();
-    } */
-
     if (e.target.closest('.form-wrap__link')) {
       this.toggleForm();
     }
@@ -192,7 +188,6 @@ export default class AuthorizationController {
 
   removeError() {
     this.view.error.classList.remove('pop-up__error_active');
-    // this.view.error.remove();
   }
 
   isClickOutside() {

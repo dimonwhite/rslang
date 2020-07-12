@@ -44,6 +44,8 @@ body {
   background-color: #191919;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%), url("../assets/img/main-page-background.jpg");
 
+  user-select: none;
+
   @include media(768px) {
     padding-top: 5rem;
   }

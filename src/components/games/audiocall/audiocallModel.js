@@ -41,9 +41,10 @@ export default class AudiocallModel {
   }
 
   async makeUserSentences() {
-    const words = await this.user.getAllUserWords();
-    this.wordArray = shuffleArray(words).slice(10, 20);
-    if (this.wordArray.length < 11) {
+    let words = await this.user.getAllUserWords();
+    words = words.splice(10);
+    this.wordArray = shuffleArray(words).slice(0, 10);
+    if (this.wordArray.length < 10) {
       this.isUserWords = false;
       await this.makeSentences();
       return;

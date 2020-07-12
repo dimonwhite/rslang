@@ -1,39 +1,26 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
 
 $teal: #009688;
-.couple__item{
+.couple__item {
   margin: 0 auto;
 }
 
-.fix__padding{
-  padding: 0;
-  padding-top: 0px;
-}
-
-.show-game{
-  padding-top: 0px !important;
-
+.fix__padding {
+  padding: 0 !important;
 }
 
 .game__sprint {
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0;
+  margin: 0 auto;
+  max-width: 1020px;
+  min-width: 320px;
+  background-size: contain;
 
-
-   // width: 60%;
-  //  height: 450px;
-    margin: 0 auto;
-    max-width: 1020px;
-    min-width: 320px;
-   // border-radius: 30px;
-   // background-image: url(/src/assets/img/main-page-background.jpg);
-    background-size: contain;
-
-  &__main-field{
+  &__main-field {
     display: flex;
     justify-content: space-around;
     width: 85%;
@@ -48,15 +35,12 @@ $teal: #009688;
   }
 
 
-
-
-  &__time__block{
+  &__time__block {
     display: flex;
     align-items: center;
     justify-content: center;
 
     width: 30%;
-    //height: 200px;
     @media (min-width: 320px) and (max-width: 600px) {
       margin-right: 42px;
       width: 80%;
@@ -65,7 +49,7 @@ $teal: #009688;
 
   }
 
-  &__time__count{
+  &__time__count {
     font-style: normal;
     font-weight: bold;
     font-size: 71.2425px;
@@ -80,7 +64,7 @@ $teal: #009688;
   }
 
 
-  &__score{
+  &__score {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,25 +76,24 @@ $teal: #009688;
     font-weight: bold;
     font-size: 2rem;
 
-color: #FCDA00;
-@media (min-width: 600px) and (max-width: 825px) {
-  font-size: 1.3rem;
-}
+    color: #FCDA00;
+    @media (min-width: 600px) and (max-width: 825px) {
+      font-size: 1.3rem;
+    }
 
-@media (min-width: 320px) and (max-width: 600px) {
-  font-size: 1.4rem;
-  width: 80%;
-}
+    @media (min-width: 320px) and (max-width: 600px) {
+      font-size: 1.4rem;
+      width: 80%;
+    }
   }
 
 
-  &__bonus__star{
+  &__bonus__star {
     display: flex;
     align-items: center;
     justify-content: space-around;
 
     width: 30%;
-    //height: 200px;
     font-size: 26px;
     font-weight: 500;
     @media (min-width: 320px) and (max-width: 600px) {
@@ -118,7 +101,7 @@ color: #FCDA00;
     }
   }
 
-  &__bonus__area__1,  &__bonus__area__2,  &__bonus__area__3{
+  &__bonus__area__1, &__bonus__area__2, &__bonus__area__3 {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -128,34 +111,36 @@ color: #FCDA00;
 
     @media (min-width: 320px) and (max-width: 800px) {
       width: 50px;
-    height: 50px;
+      height: 50px;
     }
 
   }
-  &__true__check__item{
+
+  &__true__check__item {
     width: 40px;
     @media (min-width: 320px) and (max-width: 800px) {
       width: 20px;
-    height: 20px;
+      height: 20px;
     }
   }
 
-  &__bonus__area__1{
+  &__bonus__area__1 {
     background: #E1FF8F;
     border: 6px solid #BEE64B;
   }
-  &__bonus__area__2{
+
+  &__bonus__area__2 {
     background: #FF70B0;
     border: 6px solid #B5507D;
     margin-bottom: 40px;
   }
 
-  &__bonus__area__3{
+  &__bonus__area__3 {
     background: #9F80BF;
     border: 6px solid #B172ED;
   }
 
-  &__bonus__area__count{
+  &__bonus__area__count {
 
     height: 300px;
     width: 80%;
@@ -171,25 +156,29 @@ color: #FCDA00;
     }
   }
 
-  &__bonus__item__planet__icon1, &__bonus__item__planet__icon2, &__bonus__item__planet__icon3, &__bonus__item__planet__icon4{
-width: 100%;
-height: 100%;
+  &__bonus__item__planet__icon1, &__bonus__item__planet__icon2, &__bonus__item__planet__icon3, &__bonus__item__planet__icon4 {
+    width: 100%;
+    height: 100%;
   }
-  &__bonus__item1{
+
+  &__bonus__item1 {
     width: 15%;
   }
-  &__bonus__item2{
+
+  &__bonus__item2 {
     width: 35%;
   }
-  &__bonus__item3{
+
+  &__bonus__item3 {
     width: 25%;
   }
-  &__bonus__item4{
+
+  &__bonus__item4 {
     width: 25%;
   }
 
 
-  &__checkAnswer__area{
+  &__checkAnswer__area {
     height: 150px;
     width: 50%;
     margin-bottom: 1%;
@@ -212,12 +201,12 @@ height: 100%;
       width: 80%;
       font-size: 0.4rem;
       height: 50px;
-         }
+    }
 
 
   }
 
-  &__play-content{
+  &__play-content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,36 +226,38 @@ height: 100%;
     }
 
   }
+
   .btn-circle-true, .btn-circle-false {
     color: #A741AB;
     border-radius: 25px;
     background: #E1FF8F;
-border: 5px solid #610D89;
-min-width: 180px;
-position: relative;
-text-align: center;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
+    border: 5px solid #610D89;
+    min-width: 180px;
+    position: relative;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 
-@media (min-width: 320px) and (max-width: 600px) {
-  flex-direction: column;
-  width: 80%;
-  min-width: 204px;
-  text-align: center;
-  font-size: 0.8rem;
-  height: 40px;
-}
+    @media (min-width: 320px) and (max-width: 600px) {
+      flex-direction: column;
+      width: 80%;
+      min-width: 204px;
+      text-align: center;
+      font-size: 0.8rem;
+      height: 40px;
+    }
 
-@media (min-width: 600px) and (max-width: 825px) {
-  min-width: 110px;
-  text-align: center;
-  font-size: 1rem;
-}
+    @media (min-width: 600px) and (max-width: 825px) {
+      min-width: 110px;
+      text-align: center;
+      font-size: 1rem;
+    }
 
   }
-  .btn-circle-true{
+
+  .btn-circle-true {
     left: 2%;
 
     @media (min-width: 320px) and (max-width: 600px) {
@@ -274,23 +265,21 @@ cursor: pointer;
     }
 
 
-@media (min-width: 600px) and (max-width: 875px) {
-  min-width: 110px;
-  text-align: center;
-  font-size: 1rem;
+    @media (min-width: 600px) and (max-width: 875px) {
+      min-width: 110px;
+      text-align: center;
+      font-size: 1rem;
 
-}
+    }
 
-@media (min-width: 875px) and (max-width: 1020px) {
-  text-align: center;
-  font-size: 1rem;
-}
+    @media (min-width: 875px) and (max-width: 1020px) {
+      text-align: center;
+      font-size: 1rem;
+    }
   }
 
 
-
-
-  .btn-circle-false{
+  .btn-circle-false {
     right: 2%;
 
     @media (min-width: 320px) and (max-width: 600px) {
@@ -298,27 +287,26 @@ cursor: pointer;
     }
 
 
-@media (min-width: 600px) and (max-width: 875px) {
-  min-width: 110px;
-  text-align: center;
-  font-size: 1rem;
-  padding-left: 10px;
-}
+    @media (min-width: 600px) and (max-width: 875px) {
+      min-width: 110px;
+      text-align: center;
+      font-size: 1rem;
+      padding-left: 10px;
+    }
 
-@media (min-width: 875px) and (max-width: 1020px) {
-  min-width: 180px;
-  text-align: center;
-  font-size: 1rem;
-}
+    @media (min-width: 875px) and (max-width: 1020px) {
+      min-width: 180px;
+      text-align: center;
+      font-size: 1rem;
+    }
 
-@media (min-width: 1020px) {
-  min-width: 180px;
-  text-align: center;
-  padding-left: 10px;
-}
+    @media (min-width: 1020px) {
+      min-width: 180px;
+      text-align: center;
+      padding-left: 10px;
+    }
 
   }
-
 
 
   &__word, &__translation {
@@ -330,7 +318,6 @@ cursor: pointer;
     font-weight: 500;
     text-align: center;
     text-transform: uppercase;
-
 
 
     @media (min-width: 600px) and (max-width: 875px) {
@@ -353,9 +340,9 @@ cursor: pointer;
     }
 
 
-
     .btn {
       width: 5%;
+
       &.start {
         width: 60%;
       }
@@ -368,35 +355,32 @@ cursor: pointer;
       display: block;
     }
   }
-  &__bonus__star{
+
+  &__bonus__star {
     display: flex;
     font-size: 24px;
     font-weight: 500;
   }
 
 }
-.arrowChoice{
-  font-size: 50px;
-}
-
-.game__startScreen{
-  background-image: url(/src/assets/img/Sprint/main-page-background.jpg);
-}
 
 $radioBg: #FF0048;
 
 .levels {
   display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
   &__title {
     color: #BF123D;
   }
+
   .radio {
     &__decor {
       background-color: $radioBg;
     }
+
     @for $i from 2 through 6 {
       $radioBg: lighten($radioBg, 5);
       &:nth-last-child(#{$i}) {
@@ -409,14 +393,12 @@ $radioBg: #FF0048;
 }
 
 
-
-.game__sprint__preloader{
+.game__sprint__preloader {
   width: 100%;
   height: 100%;
   position: fixed;
 
-
-  background-image: url(/src/assets/img/speakitbg.jpg);
+  background-image: url(../assets/img/speakitbg.jpg);
   background-size: cover;
   border-radius: 30px;
 
@@ -426,137 +408,184 @@ $radioBg: #FF0048;
   visibility: visible;
 
 
-.game__sprint__loader{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 110px;
-  height: 110px;
+  .game__sprint__loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 110px;
+    height: 110px;
 
 
-  border: 15px solid white;
-  border-radius: 50% ;
-  border-top-color: blue;
+    border: 15px solid white;
+    border-radius: 50%;
+    border-top-color: blue;
 
 
-  transform: translate(-50%,-50%);
-  animation: 1s spin infinite linear;
-
-}
-}
-
-.hide__loader{
-  opacity: 0;
-  visibility: hidden;
+    transform: translate(-50%, -50%);
+    animation: 1s spin infinite linear;
+  }
 }
 
-.game__sprint__loader__count{
+
+
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes circletimer {
+  0% {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 500;
+  }
+  100% {
+    stroke-dashoffset: -500;
+    stroke-dasharray: 500;
+  }
+}
+
+.timer_svg {
+  background-color: transparent;
+  transform: rotate(-90deg);
+
+  .circle {
+    stroke: #FF0071;
+    stroke-width: 15;
+    fill: transparent;
+  }
+
+  &.timer_svg .circle {
+
+    stroke-dashoffset: 500;
+    stroke-dasharray: 500;
+  }
+}
+
+.start_timer {
+  animation: 80s circletimer linear;
+}
+
+.game__sprint__time__block_svg {
   position: relative;
-  left: 49%;
-  top: 47%;
-
-  margin-left: -12px;
-  margin-top: -23px;
-
-  z-index: 4;
-  font-size: 70px;
-  font-weight: 400;
-  color: lightgrey;
-
+  z-index: 1;
+  margin-right: -114px;
+  margin-top: 20px;
   @media (min-width: 320px) and (max-width: 600px) {
-    margin-left: -19px;
-    margin-top: -31px;
-  }
-  @media (min-width: 1020px) {
-    margin-left: -3px;
-    margin-top: -23px;
+    margin-right: -112px
   }
 
 }
 
-@keyframes spin{
-  from{
-    transform: translate(-50%,-50%) rotate(0deg);
-  }
-  to{
-    transform: translate(-50%,-50%)rotate(360deg);
-  }
+
+.true_choice {
+  background-color: yellow;
+}
+
+.false_choice {
+  background-color: #FF0071;;
+}
+
+.main.sprint {
+  margin-top: 0;
+
+  .hide__loader {
+    opacity: 0;
+    visibility: hidden;
   }
 
-  @keyframes circletimer {
-    0% {
-      stroke-dashoffset: 0;
-      stroke-dasharray: 500;
-    }
-    100% {
-      stroke-dashoffset: -500;
-      stroke-dasharray: 500;
-    }
-  }
-  .timer_svg {
-    background-color: transparent;
-    transform: rotate(-90deg);
-    .circle {
-      stroke: #FF0071;
-      stroke-width: 15;
-      fill: transparent;
-    }
-    &.timer_svg .circle {
-
-      stroke-dashoffset: 500;
-      stroke-dasharray: 500;
-    }
+  .arrowChoice {
+    font-size: 50px;
   }
 
-  .start_timer{
-    animation: 80s circletimer linear;
+  .game__startScreen {
+    background-image: url(../assets/img/Sprint/main-page-background.jpg);
   }
-  .game__sprint__time__block_svg{
+
+  .game__sprint__loader__count {
     position: relative;
-    z-index: 1;
-    margin-right: -114px;
-    margin-top: 20px;
+    left: 49%;
+    top: 47%;
+
+    margin-left: -12px;
+    margin-top: -23px;
+
+    z-index: 4;
+    font-size: 70px;
+    font-weight: 400;
+    color: lightgrey;
+
     @media (min-width: 320px) and (max-width: 600px) {
-      margin-right: -112px
+      margin-left: -19px;
+      margin-top: -31px;
+    }
+    @media (min-width: 1020px) {
+      margin-left: -3px;
+      margin-top: -23px;
     }
 
   }
 
-
-
-  .true_choice{
-    background-color: yellow;
-  }
-  .false_choice{
-    background-color:  #FF0071;;
-  }
-  .small-text{
+  .small-text {
     font-size: 0.4rem;
   }
 
-  .game__sprint__btns{
+  .game__sprint__btns {
 
     padding-left: 3%;
   }
 
-  .main{
-    margin-top: 0px;
+  .close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+
+    border-radius: 50%;
+    background-color: #740080;
+
+    @include media(600px) {
+      right: 0.5rem;
+      top: 0.5rem;
+
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .svg_icon {
+      width: 1.5rem;
+      height: 1.5rem;
+
+      fill: #F1BC19;
+    }
   }
 
+  .remove {
+    display: none;
+  }
+}
 
-  .game__sprint__user-words-block{
-    padding-top: 3%;
-    height: 17% !important;
-    width: 80% !important;
-    display: flex !important;
+
+.game__sprint__user-words-block {
+  padding-top: 3%;
+  height: 17% !important;
+  width: 80% !important;
+  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-direction: column !important;
-  }
+}
 
-  .game__sprint__user-words-button{
-    display: flex;
-    width: 180px;
+.game__sprint__user-words-button {
+  display: flex;
+  width: 180px;
   height: 45px;
   border-radius: 12px !important;
   background-color: #7B4C8F !important;
@@ -588,34 +617,12 @@ $radioBg: #FF0048;
   text-decoration: none;
   border: 0.1rem solid #FFCB29 !important;
 }
-.game__sprint__user-words-notification{
+
+.game__sprint__user-words-notification {
   width: 65% !important;
 
   font-size: 0.8rem;
   color: #FFCB29;
   height: 60px;
 
-}
-.close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  position: absolute;
-  right: 0;
-  top: 0;
-
-  border-radius: 50%;
-  background-color: #740080;
-  .svg_icon {
-    width: 1.5rem;
-    height: 1.5rem;
-
-    fill: #F1BC19;
-  }
-}
-
-.remove {
-  display: none;
 }

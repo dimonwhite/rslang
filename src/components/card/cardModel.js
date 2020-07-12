@@ -49,11 +49,6 @@ export default class CardModel {
     const maxWords = +settings.maxWords;
     let settingsNewWords = +settings.newWords;
     const learnedWords = this.allStudyWords.length;
-    this.allStudyWords[0].nextTime = new Date().getTime();
-    this.allStudyWords[1].nextTime = new Date().getTime();
-    this.allStudyWords[2].nextTime = new Date().getTime();
-    this.allStudyWords[3].nextTime = new Date().getTime();
-    this.allStudyWords[4].nextTime = new Date().getTime();
     const ALL_WORDS = 3600;
     if (learnedWords + maxWords > ALL_WORDS) settingsNewWords = ALL_WORDS - learnedWords;
     const group = Math.floor(learnedWords / maxWordsPerPage);

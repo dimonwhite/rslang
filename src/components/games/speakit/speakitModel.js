@@ -28,6 +28,7 @@ export default class SpeakitModel {
 
   async getUserWords() {
     this.userWords = await this.http.getAllUserWords();
+    this.userWords = this.userWords.splice(10);
     this.userWordsLength = this.userWords.length;
   }
 
