@@ -172,6 +172,7 @@ export default class AudiocallController {
     await this.model.formWordarray();
     this.view.preloader.remove();
     this.view.wordWrapper.innerHTML = '';
+    this.view.btnUserWordsDecorate(this.model.isUserWords);
     this.startStep();
   }
 

@@ -31,6 +31,7 @@ export default class AuthorizationController {
   }
 
   authorized() {
+    this.view.error.remove();
     this.view.popUp.remove();
     this.view.background.remove();
     this.view.clearForm();
@@ -152,13 +153,13 @@ export default class AuthorizationController {
   }
 
   clickPopUp(e) {
-    if (e.target.closest('.svg_icon')) {
+    /* if (e.target.closest('.pop-up__close')) {
       this.view.popUp.remove();
       this.view.background.remove();
       this.view.clearForm();
-    }
+    } */
 
-    if (e.target.closest('.form-auth__link')) {
+    if (e.target.closest('.form-wrap__link')) {
       this.toggleForm();
     }
   }
@@ -184,15 +185,18 @@ export default class AuthorizationController {
   }
 
   showError() {
-    this.view.showError(this.model.error);
+    this.view.createError(this.model.error);
+    this.view.error.classList.add('pop-up__error_active');
     this.model.error = undefined;
   }
 
   removeError() {
-    this.view.error.remove();
+    this.view.error.classList.remove('pop-up__error_active');
+    // this.view.error.remove();
   }
 
   isClickOutside() {
+    this.view.error.remove();
     this.view.popUp.remove();
     this.view.background.remove();
     this.view.clearForm();
