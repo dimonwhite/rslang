@@ -24,15 +24,11 @@ export default class SavannahController {
   }
 
   async init() {
-    try {
-      this.view.initView();
-      await this.addStatistics();
-      this.view.renderHTML();
-      this.view.createControl();
-      this.createEvent();
-    } catch (error) {
-      this.error = error;
-    }
+    this.view.initView();
+    await this.addStatistics();
+    this.view.renderHTML();
+    this.view.createControl();
+    this.createEvent();
   }
 
   async createEvent() {

@@ -15,7 +15,7 @@
     background-color: whitesmoke;
     background-image: url("/src/assets/img/bg-card.jpg");
     background-size: cover;
-    border-radius: 2.8rem 2.8rem 0 0;
+    // border-radius: 2.8rem 2.8rem 0 0;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -56,6 +56,7 @@
         width: 80%;
         position: relative;
         height: 100%;
+        margin-top: 70px;
     }
 
     &__play {
@@ -139,17 +140,17 @@
         height: auto;
         min-height: 50px;
         width: 250px;
-        border-top-right-radius: 50px;
-        border-top-left-radius: 50px;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px;
         background-color: #deadf7cf;
         flex-direction: column;
-        // justify-content: stretch;
         align-items: center;
         span {
             text-align: center;
             line-height: 20px;
             width: auto;
             font-size: 22px;
+            width: 240px;
         }
         :nth-child(2) {
             font-size: 22px;
@@ -277,8 +278,8 @@
         font-size: 26px;
         height: 50px;
         width: 250px;
-        border-bottom-right-radius: 50px;
-        border-bottom-left-radius: 50px;
+        border-bottom-right-radius: 30px;
+        border-bottom-left-radius: 30px;
         line-height: 44px;
         background-color: #8d1eb5a8;
         color: #f6caff;
@@ -517,7 +518,11 @@
 
 .custom-rating {
     background-color: brown !important;
-    color: whitesmoke !important;;
+    color: whitesmoke !important;
+}
+
+.show-main {
+    padding: 0;
 }
 
 .hide-text {
@@ -555,6 +560,18 @@
     }
 }
 /*----------------END TOGGLE CLASSES-----------------*/
+
+@media only screen and (max-width: 1025px) {
+    .card__wrapper {
+        margin-top: 80px;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .card__wrapper {
+        margin-top: 100px;
+    }
+}
 
 @media only screen and (max-width: 1000px) {
     .card__wrapper-help {
@@ -634,7 +651,7 @@
     .card {
         &__left,
         &__right {
-            top: 245px;
+            top: 235px;
         }
         p {
             font-size: 11px !important;
@@ -719,7 +736,7 @@
         }
         &__left,
         &__right {
-            top: 210px;
+            // top: 210px;
             min-width: 60px;
             min-height: 80px;
         }
@@ -742,6 +759,12 @@
     }
 }
 
+@media only screen and (max-width: 400px) {
+    .card__left,
+    .card__right {
+        top: 200px;
+    }
+}
 @media only screen and (max-width: 420px) {
     .finished {
         width: 318px;
@@ -777,12 +800,12 @@
 }
 .settings-card {
     width: 500px !important;
+    overflow: hidden !important;
+    padding: 10px 20px !important;
+    padding-left: 40px;
     label {
         margin-bottom: 5px;
         font-size: 16px !important;
-    }
-    .setting-block__title {
-        height: 20px;
     }
     .settings__checkbox {
         height: 20px;
@@ -792,9 +815,18 @@
     }
     .setting-block__title {
         font-size: 20px !important;
+        height: 20px;
     }
     .settings__title {
         font-size: 24px !important;
+        margin-bottom: 0 !important;
+        padding-left: 30px;
+    }
+    .settings {
+        overflow: hidden;
+    }
+    input {
+        cursor: pointer;
     }
 }
 .setting-block__list-card {
@@ -864,7 +896,7 @@
     margin: 0;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 625px) {
     .settings-card .setting-block__title {
         font-size: 14px !important;
         margin-bottom: 0 !important;
@@ -878,6 +910,7 @@
     }
     .settings-card .settings__title {
         font-size: 20px !important;
+        padding-left: 20px;
     }
     .settings-card .setting-block__title {
         font-size: 14px !important;
@@ -901,14 +934,9 @@
         height: 20px;
     }
     .setting-block {
-        width: 300px;
+        width: 220px;
     }
     .settings {
         border-radius: 3rem 0 0 3rem !important;
-    }
-}
-@media only screen and (max-width: 380px) {
-    .setting-block {
-        margin-left: -30px;
     }
 }
