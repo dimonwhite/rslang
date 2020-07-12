@@ -34,8 +34,8 @@ export default class CardController {
     this.view.settings = this.settings.optional.settings;
     this.statistics = await this.user.getUserStatistics();
     this.params = this.statistics.optional.todayTraining.params;
-    this.view.renderHTML();
     await this.getTodayStatStorage();
+    this.view.renderHTML();
     if (this.model.listToday.length !== this.params.passedToday) {
       [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
         next: false,
@@ -69,6 +69,7 @@ export default class CardController {
         wordsRepeatToday: this.params.wordsRepeatToday,
         numberListPages: this.params.numberListPages,
       });
+      await this.model.putListToday();
     } else {
       await this.model.getAllUserWords();
       await this.model.getListToday(this.params.numberListPages);
@@ -86,7 +87,7 @@ export default class CardController {
   createEvent() {
     document.getElementById('addition').addEventListener('click', this.eventAddition.bind(this));
     this.view.leftArrow.addEventListener('click', this.moveToLeft.bind(this));
-    this.view.cardPlay.addEventListener('click', this.playWord.bind(this));
+    this.view.cardPlay.addEventListener('click', this.playWord.bind(this, true));
     this.view.input.addEventListener('input', this.inputSymbols.bind(this));
     document.body.addEventListener('keydown', (e) => { if (e.code === 'Enter') this.eventRight(); });
     this.view.rightArrow.addEventListener('click', this.eventRight.bind(this));
@@ -306,7 +307,7 @@ export default class CardController {
       await this.updateWord({
         word, prev, show, isNotNew,
       });
-      await this.checkMistakeFactor(word);
+      await this.checkMistakeFactor(word, show);
       if (!this.view.settings.sound) this.moveNexCard();
       if (!prev) await this.setTodayStatStorage();
     }
@@ -329,7 +330,7 @@ export default class CardController {
     }
   }
 
-  async checkMistakeFactor(word) {
+  async checkMistakeFactor(word, show) {
     if (!this.params.currentMistake) {
       word.isPassed = true;
       this.params.passedToday = this.view.changeRange(
@@ -341,12 +342,14 @@ export default class CardController {
       this.cut = true;
     }
 
-    if (this.params.currentMistake) {
-      await this.model.putListToday();
-      this.next = true;
-      this.view.next = true;
-    } else {
-      await this.model.putListPage(word);
+    if (!show) {
+      if (this.params.currentMistake) {
+        await this.model.putListToday();
+        this.next = true;
+        this.view.next = true;
+      } else {
+        await this.model.putListPage(word);
+      }
     }
     this.params.currentMistake = false;
   }
@@ -379,11 +382,15 @@ export default class CardController {
     await this.model.putListPage(word);
   }
 
-  playWord() {
-    this.unlock = false;
-    this.view.lockElements(false);
-    this.view.lockArrows(true);
-    const word = this.model.listToday[this.params.cardIndex];
+  playWord(isClick) {
+    if (!isClick) {
+      this.unlock = false;
+      this.view.lockElements(false);
+      this.view.lockArrows(true);
+    }
+    const lastWord = this.model.listToday[this.model.listToday.length - 1];
+    const currentWord = this.model.listToday[this.params.cardIndex];
+    const word = (this.cut) ? lastWord : currentWord;
     const playWord = new Audio();
     playWord.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
     const playMeaning = new Audio();
@@ -474,6 +481,8 @@ export default class CardController {
       this.params.correctAnswer -= 1;
       this.params.newConsecutive = 0;
       this.params.incorrectAnswer += 1;
+      this.next = true;
+      this.view.again = true;
       await this.setTodayStatStorage();
       await this.model.putListToday();
       if (!this.view.settings.nextCard) {

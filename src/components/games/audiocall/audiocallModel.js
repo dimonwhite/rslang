@@ -1,5 +1,5 @@
+import { shuffleArray } from '@/utils';
 import book1 from '../../../data/book1';
-import { shuffleArray } from '../../../utils';
 
 export default class AudiocallModel {
   constructor(user) {

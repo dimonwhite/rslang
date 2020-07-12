@@ -11,7 +11,7 @@ export default class SavannahView {
 
   renderHTML() {
     this.main = document.getElementById('main');
-    // this.main.classList.add('clear-main');
+    // if ()
     document.getElementById('gameOptions').classList.add('show');
     this.createGameOptions();
     this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });

@@ -7,10 +7,13 @@ export default class CardView {
     this.next = false;
     this.again = false;
     this.settings = null;
+    this.settingsBlock = document.getElementById('settings');
   }
 
   renderHTML() {
     document.body.classList.add('show-main');
+    document.body.classList.add('top-gear');
+    this.createSettings();
     this.setSettings();
     this.card.append(this.createCard());
     this.card.append(this.endTraining());
@@ -163,7 +166,6 @@ export default class CardView {
     const newW = (this.settings) ? this.settings.newWords : false;
     const maxW = (this.settings) ? this.settings.maxWords : false;
     this.settings = {};
-    this.getCheckRadio('listType');
     this.getCheckRadio('lang');
     const checkBoxes = document.querySelectorAll('[type=checkbox]');
     Array.from(checkBoxes).forEach((item) => {
@@ -649,5 +651,106 @@ export default class CardView {
     this.input.classList.remove('correct-color');
     this.input.value = '';
     this.input.focus();
+  }
+
+  createSettings() {
+    this.settingsBlock.classList.add('settings-card');
+    const content = `<h2 class="settings__title">Настройки</h2>
+    <div class="setting-block">
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <label for="maxWords" id="lab1" class="setting-block__label">Всего слов:</label>
+          <input type="number" id="maxWords" value="25" min="3" max="100"  class="settings__raido-card"/>
+        </div>
+        <div class="setting-block__item-card">
+          <label for="newWords" id="lab2" class="setting-block__label">Новые слова:</label>
+          <input type="number" id="newWords" value="15" min="0" max="100" class="settings__raido-card"/>
+        </div>
+      </div>
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <input type="radio" id="langEn" name="lang" checked="checked"  class="settings__checkbox"/>
+          <label for="langEn">Английские слова</label>
+        </div>
+        <div class="setting-block__item-card">
+          <input type="radio" id="langRu" name="lang" class="settings__checkbox"/>
+          <label for="langRu">Русские слова</label>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Настройка карточек</div>
+
+      <div class="setting-block__list-card">
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="translate" checked  class="settings__checkbox"/>
+            <label for="translate">Перевод слова</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="meaningWord" checked class="settings__checkbox"/>
+            <label for="meaningWord">Значение слова</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="exampleWord" checked class="settings__checkbox" />
+            <label for="exampleWord">Пример</label>
+          </div>
+          </div>
+          <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="transcription" class="settings__checkbox" checked />
+            <label for="transcription">Транскрипция</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="imgWord" class="settings__checkbox" checked />
+            <label for="imgWord">Картинка</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Режим</div>
+      <div class="setting-block__list-card">
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="interval" class="settings__checkbox" checked />
+            <label for="interval">Интервальное повторение</label>
+          </div>
+        </div>
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="sound" checked class="settings__checkbox" />
+            <label for="sound">Воспроизведение звука</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="nextCard" checked class="settings__checkbox" />
+            <label for="nextCard">Быстрый переход</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Дополнительные подсказки</div>
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="numberLetters" class="settings__checkbox" checked />
+          <label for="numberLetters">Показать количество букв</label>
+        </div>
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="showAnswer" class="settings__checkbox" checked />
+          <label for="showAnswer">Показать слово</label>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Добавление в словарь</div>
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="difficultWord" class="settings__checkbox" checked />
+          <label for="difficultWord">Сложное слово</label>
+        </div>
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="removeWord" class="settings__checkbox" checked />
+          <label for="removeWord">Удалить слово</label>
+        </div>
+      </div>
+    </div>`;
+    this.settingsBlock.innerHTML = content;
   }
 }

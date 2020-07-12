@@ -1,32 +1,3 @@
-/*--------------------SETTINGS-----------------------*/
-
-/*.settings {
-    width: 100%;
-    height: 200px;
-    display: flex;
-    // display: none;
-    background-color: #f3f3f3;
-    border-top: 2px solid #7d7777;
-
-    &__title {
-        width: 150px;
-        text-align: center;
-    }
-    &__cards {
-        &-item {
-            display: flex;
-            flex-direction: column;
-        }
-    }
-    &__buttons {
-        &-item {
-            display: flex;
-        }
-    }
-}*/
-
-/*-------------------END SETTINGS----------------------*/
-
 .main {
     min-height: 60vh;
 }
@@ -52,7 +23,6 @@
     background-attachment: fixed;
     background-position-y: center;
     min-height: 100vh;
-    margin-top: 30px;
 
     &__left,
     &__right {
@@ -546,8 +516,8 @@
 }
 
 .custom-rating {
-    background-color: brown;
-    color: whitesmoke;
+    background-color: brown !important;
+    color: whitesmoke !important;;
 }
 
 .hide-text {
@@ -798,5 +768,147 @@
                 width: 300px;
             }
         }
+    }
+}
+.top-gear {
+    .header__settings {
+        display: block;
+    }
+}
+.settings-card {
+    width: 500px !important;
+    label {
+        margin-bottom: 5px;
+        font-size: 16px !important;
+    }
+    .setting-block__title {
+        height: 20px;
+    }
+    .settings__checkbox {
+        height: 20px;
+    }
+    .setting-block__title:before {
+        margin-bottom: 5px;
+    }
+    .setting-block__title {
+        font-size: 20px !important;
+    }
+    .settings__title {
+        font-size: 24px !important;
+    }
+}
+.setting-block__list-card {
+    display: flex;
+}
+.settings-card .setting-block__title:before {
+    margin-bottom: 0px !important;
+    height: 30px !important;
+}
+.settings-card .settings__checkbox {
+    min-width: 25px;
+    min-height: 25px;
+    height: 25px;
+    width: 25px;
+}
+.settings__checkbox:checked {
+    background-size: 100% !important;
+    background-position: 0px 3px !important;
+}
+.setting-block__item-card {
+    display: flex;
+
+    input[type="radio"]:checked {
+        background: url("/src/assets/img/radio.png") center center no-repeat, #6c55ad;
+        background-position: 0px 0px !important;
+        background-size: 100% !important;
+    }
+}
+
+.setting-block__list-card {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 6px 0;
+}
+.setting-block__list-card {
+    #lab1,
+    #lab2 {
+        font-family: Raleway;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 24px !important;
+        line-height: 28px;
+        margin-right: 5px;
+        color: #f1bc19;
+    }
+}
+.settings__raido-card {
+    width: 60px;
+    background: #4d228c;
+    border: 3px solid #d9a9ff;
+    font-size: 25px;
+    padding-left: 5px;
+    height: 33px;
+    outline: 0;
+    font-weight: 800;
+    color: #f9f5ff;
+    border-radius: 8px;
+    padding-bottom: 2px;
+}
+
+.settings__raido-card::-webkit-inner-spin-button,
+.settings__raido-card::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+@media only screen and (max-width: 500px) {
+    .settings-card .setting-block__title {
+        font-size: 14px !important;
+        margin-bottom: 0 !important;
+    }
+    .setting-block__list-card {
+        flex-direction: column;
+    }
+    .setting-block__item-card {
+        display: flex;
+        justify-content: space-between;
+    }
+    .settings-card .settings__title {
+        font-size: 20px !important;
+    }
+    .settings-card .setting-block__title {
+        font-size: 14px !important;
+        margin-bottom: 0 !important;
+    }
+    .settings-card .setting-block__title:before {
+        margin-bottom: 0px !important;
+        height: 21px !important;
+    }
+    .settings-card .settings__checkbox {
+        min-width: 20px;
+        min-height: 20px;
+        height: 20px;
+        width: 20px;
+    }
+    .settings-card label {
+        margin-bottom: 5px;
+        font-size: 11px !important;
+    }
+    .settings-card .setting-block__title {
+        height: 20px;
+    }
+    .setting-block {
+        width: 300px;
+    }
+    .settings {
+        border-radius: 3rem 0 0 3rem !important;
+    }
+}
+@media only screen and (max-width: 380px) {
+    .setting-block {
+        margin-left: -30px;
     }
 }

@@ -58,12 +58,12 @@ export default class CardModel {
     const maxLength = 99;
     let allWords = [];
     if (group === groupNext) {
-      const wordsPerPage = (learnedWords % maxWordsPerPage) + settingsNewWords + 1;
+      const wordsPerPage = (learnedWords % maxWordsPerPage) + settingsNewWords;
       allWords = await this.user.getWords({
         group, page, maxLength, wordsPerPage,
       });
     } else {
-      const wordsPerPage = (learnedWords + settingsNewWords + 1) % maxWordsPerPage;
+      const wordsPerPage = (learnedWords + settingsNewWords) % maxWordsPerPage;
       const firstChunk = await this.user.getWords({
         group, page, maxLength, wordsPerPage: maxWordsPerPage,
       });
@@ -73,7 +73,7 @@ export default class CardModel {
       allWords = [...firstChunk, ...secondChunk];
     }
     this.maxForToday = maxWords - settingsNewWords;
-    this.newWords = allWords.slice((learnedWords + 1) % maxWordsPerPage);
+    this.newWords = allWords.slice(learnedWords % maxWordsPerPage);
   }
 
   async createListToday() {
