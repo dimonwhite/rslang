@@ -52,6 +52,8 @@
 
     &-desc {
       margin-bottom: 1.5rem;
+      padding: 0 1rem;
+
       font-size: 1.2rem;
       text-shadow: 0 0 5px #000;
       @include media(1400px) {

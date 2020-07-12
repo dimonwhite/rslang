@@ -31,7 +31,7 @@ export default class DictionaryModel {
   async getDataWords() {
     const request = await this.http.getAllUserWords()
       .then((res) => {
-        this.dataWords = res;
+        this.dataWords = res.splice(10);
         return res;
       })
       .catch((error) => {

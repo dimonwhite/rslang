@@ -1,6 +1,7 @@
 import dmitriyb from '../assets/img/aboutTeam/dmitriyb.png';
 import mihailc from '../assets/img/aboutTeam/mihailc.png';
 import timurk from '../assets/img/aboutTeam/timurk.jpg';
+import sergeyi from '../assets/img/aboutTeam/sergeyi.jpg';
 
 const personal = [
   {
@@ -23,6 +24,13 @@ const personal = [
     cv: 'Открываю новые смыслы, закрываю двери, когда все уходят',
     fund: 'Мини-игры "Audiocall" и "English puzzle", страница "О команде", HTTP-client',
     photo: timurk,
+  },
+  {
+    name: 'Ивков Сергей',
+    position: 'Пилот',
+    cv: 'Держу курс до Альфа Центавра',
+    fund: 'Мини-игра "Savannah", структура приложения, "Карточка" (гланвная страница)',
+    photo: sergeyi,
   },
 ];
 

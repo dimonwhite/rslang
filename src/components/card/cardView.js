@@ -7,10 +7,13 @@ export default class CardView {
     this.next = false;
     this.again = false;
     this.settings = null;
+    this.settingsBlock = document.getElementById('settings');
   }
 
   renderHTML() {
     document.body.classList.add('show-main');
+    document.body.classList.add('top-gear');
+    this.createSettings();
     this.setSettings();
     this.card.append(this.createCard());
     this.card.append(this.endTraining());
@@ -30,23 +33,33 @@ export default class CardView {
     wrapTranslation.append(this.translationWord);
     wrapTranslation.append(this.transcriptionWord);
 
-    const answer = createElement({ tag: 'div', class: 'card__answer' });
-    answer.append(this.cardRemove);
-    answer.append(this.cardDiff);
-    answer.append(this.cardShow);
-
     const wrapRange = createElement({ tag: 'div', class: 'card__range' });
-    const range = createElement({ tag: 'progress', id: 'rangeWords' });
+    const range = createElement({ tag: 'progress', class: 'card__progress', id: 'rangeWords' });
     range.setAttribute('value', 0);
     wrapRange.append(this.firstNumber);
     wrapRange.append(range);
     wrapRange.append(this.secondNumber);
     const wrapCard = createElement({ tag: 'div', class: 'card__wrapper' });
 
-    wrapCard.append(...[this.cardPlay, this.cardImg, this.cardMeaning,
-      this.cardMeaningTranslation, this.cardExample, this.cardExampleTranslation,
-      input, wrapTranslation, answer, this.interval, wrapRange]);
-
+    const wrapImage = createElement({ tag: 'div', class: 'card__wrapper-image' });
+    wrapImage.append(...[this.cardPlay, this.cardImg]);
+    const wrapMean = createElement({ tag: 'div', class: 'card__wrapper-meaning' });
+    const mid = createElement({ tag: 'hr' });
+    wrapMean.append(...[this.cardMeaning, mid, this.cardMeaningTranslation]);
+    const wrapExample = createElement({ tag: 'div', class: 'card__wrapper-example' });
+    const hr = createElement({ tag: 'hr' });
+    wrapExample.append(...[this.cardExample, hr, this.cardExampleTranslation]);
+    const wrapText = createElement({ tag: 'div', class: 'card__wrapper-text' });
+    wrapText.append(...[wrapMean, wrapExample]);
+    const wrapHelp = createElement({ tag: 'div', class: 'card__wrapper-help' });
+    wrapHelp.append(...[wrapImage, wrapText]);
+    const wrapWords = createElement({ tag: 'div', class: 'card__wrapper-words' });
+    wrapWords.append(...[wrapTranslation, input, this.cardShow]);
+    const wrapDict = createElement({ tag: 'div', class: 'card__wrapper-dict' });
+    wrapDict.append(...[this.cardDiff, this.cardRemove]);
+    const wrapPanel = createElement({ tag: 'div', class: 'card__wrapper-panel' });
+    wrapPanel.append(...[wrapDict, wrapWords]);
+    wrapCard.append(...[wrapRange, wrapHelp, this.interval, wrapPanel]);
     card.append(...[this.leftArrow, wrapCard, this.rightArrow]);
     this.input.focus();
     return card;
@@ -61,19 +74,25 @@ export default class CardView {
     this.cardExampleTranslation = createElement({ tag: 'p', id: 'cardExampleTranslation' });
 
     this.interval = createElement({ tag: 'div', class: 'card__interval', id: 'intervalBtns' });
-    this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Again' });
-    this.cardHard = createElement({ tag: 'button', id: 'cardHard', content: 'Hard' });
-    this.cardNormal = createElement({ tag: 'button', id: 'cardNormal', content: 'Normal' });
-    this.cardEasy = createElement({ tag: 'button', id: 'cardEasy', content: 'Easy' });
+    this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Повтор' });
+    this.cardHard = createElement({ tag: 'button', id: 'cardHard', content: 'Сложно' });
+    this.cardNormal = createElement({ tag: 'button', id: 'cardNormal', content: 'Хорошо' });
+    this.cardEasy = createElement({ tag: 'button', id: 'cardEasy', content: 'Легко' });
     this.interval.append(this.cardAgain);
     this.interval.append(this.cardHard);
     this.interval.append(this.cardNormal);
     this.interval.append(this.cardEasy);
 
-    this.cardRemove = createElement({ tag: 'button', id: 'cardRemove', content: 'Remove' });
-    this.cardDiff = createElement({ tag: 'button', id: 'cardDifficult', content: 'Difficult' });
+    this.cardRemove = createElement({
+      tag: 'button', class: 'card__remove', id: 'cardRemove',
+    });
+    this.cardDiff = createElement({
+      tag: 'button', class: 'card__difficult', id: 'cardDifficult',
+    });
     this.cardDiff.classList.add('lock-element');
-    this.cardShow = createElement({ tag: 'button', id: 'cardShow', content: 'Show the answer' });
+    this.cardShow = createElement({
+      tag: 'button', class: 'card__show', id: 'cardShow', content: 'Показать слово',
+    });
 
     this.firstNumber = createElement({ tag: 'span', id: 'firstNumber' });
     this.secondNumber = createElement({ tag: 'span', id: 'secondNumber' });
@@ -120,7 +139,7 @@ export default class CardView {
     wrapLong.append(longMes);
     wrapLong.append(long);
     const btn = createElement({
-      tag: 'button', class: 'finished__btn', id: 'addition', content: 'Учить ещё',
+      tag: 'button', class: 'finished__btn btn', id: 'addition', content: 'Учить ещё',
     });
     statistics.append(wrapCount);
     statistics.append(wrapCorrect);
@@ -147,7 +166,6 @@ export default class CardView {
     const newW = (this.settings) ? this.settings.newWords : false;
     const maxW = (this.settings) ? this.settings.maxWords : false;
     this.settings = {};
-    this.getCheckRadio('listType');
     this.getCheckRadio('lang');
     const checkBoxes = document.querySelectorAll('[type=checkbox]');
     Array.from(checkBoxes).forEach((item) => {
@@ -327,10 +345,10 @@ export default class CardView {
   }) {
     const hide = cardIndex === passedToday;
     if (this.settings.interval && (prev || !hide)) {
-      this.interval.classList.add('show-flex');
+      this.interval.classList.add('visibility');
       this.setCustomRating(word.customRating);
     } else {
-      this.interval.classList.remove('show-flex');
+      this.interval.classList.remove('visibility');
     }
     if (this.settings.removeWord) {
       this.cardRemove.classList.remove('hide');
@@ -356,9 +374,9 @@ export default class CardView {
       this.cardShow.classList.add('hide');
     }
     if (this.settings.imgWord) {
-      this.cardImg.classList.remove('hide');
+      this.cardImg.classList.remove('lock-img');
     } else {
-      this.cardImg.classList.add('hide');
+      this.cardImg.classList.add('lock-img');
     }
     if (this.settings.meaningWord) {
       this.cardMeaning.classList.remove('hide-text');
@@ -371,14 +389,14 @@ export default class CardView {
       this.cardExample.classList.add('hide-text');
     }
     if (this.settings.transcription) {
-      this.transcriptionWord.classList.remove('hide-text');
+      this.transcriptionWord.classList.remove('hide');
     } else {
-      this.transcriptionWord.classList.add('hide-text');
+      this.transcriptionWord.classList.add('hide');
     }
     if (this.settings.translate) {
-      this.translationWord.classList.remove('hide-text');
+      this.translationWord.classList.remove('hide');
     } else {
-      this.translationWord.classList.add('hide-text');
+      this.translationWord.classList.add('hide');
     }
     if (this.settings.meaningWord) {
       this.cardMeaningTranslation.classList.remove('hide-text');
@@ -467,7 +485,7 @@ export default class CardView {
     this.cardRemove.classList.add('lock-element');
     this.cardDiff.classList.remove('lock-element');
     if (this.settings.interval) {
-      this.interval.classList.add('show-flex');
+      this.interval.classList.add('visibility');
       if (customRating) {
         this.setCustomRating(customRating);
       }
@@ -616,7 +634,7 @@ export default class CardView {
     this.cardShow.classList.remove('lock-element');
     this.cardDiff.classList.add('lock-element');
     Array.from(this.interval.children).forEach((item) => item.classList.remove('custom-rating'));
-    this.interval.classList.remove('show-flex');
+    this.interval.classList.remove('visibility');
     this.cardMeaningTranslation.innerHTML = '';
     this.cardExampleTranslation.innerHTML = '';
     this.cardMeaning.innerHTML = '';
@@ -633,5 +651,106 @@ export default class CardView {
     this.input.classList.remove('correct-color');
     this.input.value = '';
     this.input.focus();
+  }
+
+  createSettings() {
+    this.settingsBlock.classList.add('settings-card');
+    const content = `<h2 class="settings__title">Настройки</h2>
+    <div class="setting-block">
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <label for="maxWords" id="lab1" class="setting-block__label">Всего слов:</label>
+          <input type="number" id="maxWords" value="25" min="3" max="100"  class="settings__raido-card"/>
+        </div>
+        <div class="setting-block__item-card">
+          <label for="newWords" id="lab2" class="setting-block__label">Новые слова:</label>
+          <input type="number" id="newWords" value="15" min="0" max="100" class="settings__raido-card"/>
+        </div>
+      </div>
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <input type="radio" id="langEn" name="lang" checked="checked"  class="settings__checkbox"/>
+          <label for="langEn">Английские слова</label>
+        </div>
+        <div class="setting-block__item-card">
+          <input type="radio" id="langRu" name="lang" class="settings__checkbox"/>
+          <label for="langRu">Русские слова</label>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Настройка карточек</div>
+
+      <div class="setting-block__list-card">
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="translate" checked  class="settings__checkbox"/>
+            <label for="translate">Перевод слова</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="meaningWord" checked class="settings__checkbox"/>
+            <label for="meaningWord">Значение слова</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="exampleWord" checked class="settings__checkbox" />
+            <label for="exampleWord">Пример</label>
+          </div>
+          </div>
+          <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="transcription" class="settings__checkbox" checked />
+            <label for="transcription">Транскрипция</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="imgWord" class="settings__checkbox" checked />
+            <label for="imgWord">Картинка</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Режим</div>
+      <div class="setting-block__list-card">
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="interval" class="settings__checkbox" checked />
+            <label for="interval">Интервальное повторение</label>
+          </div>
+        </div>
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="sound" checked class="settings__checkbox" />
+            <label for="sound">Воспроизведение звука</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="nextCard" checked class="settings__checkbox" />
+            <label for="nextCard">Быстрый переход</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Дополнительные подсказки</div>
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="numberLetters" class="settings__checkbox" checked />
+          <label for="numberLetters">Показать количество букв</label>
+        </div>
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="showAnswer" class="settings__checkbox" checked />
+          <label for="showAnswer">Показать слово</label>
+        </div>
+      </div>
+
+      <div class="setting-block__title">Добавление в словарь</div>
+      <div class="setting-block__list-card">
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="difficultWord" class="settings__checkbox" checked />
+          <label for="difficultWord">Сложное слово</label>
+        </div>
+        <div class="setting-block__item-card">
+          <input type="checkbox" id="removeWord" class="settings__checkbox" checked />
+          <label for="removeWord">Удалить слово</label>
+        </div>
+      </div>
+    </div>`;
+    this.settingsBlock.innerHTML = content;
   }
 }
