@@ -3,8 +3,6 @@
     right: 0;
     top: 0;
 
-    /*display: flex;*/
-    /* align-items: center; */
     width: 39rem;
     height: 100%;
     max-width: 100%;
@@ -14,7 +12,7 @@
     opacity: 0.88;
     border-radius: 4rem 0 0 4rem;
     z-index: 10;
-    
+
     transform: translateX(100%);
     transition: transform 0.6s;
 
@@ -88,7 +86,7 @@
             margin-bottom: 1rem;
         }
     }
-    
+
     &__checkbox {
         position: relative;
         width:  32px;
@@ -119,8 +117,7 @@
             }
         }
         &:checked {
-            /*background: url(/src/assets/img/checkbox.svg) center center no-repeat, #6C55AD;*/
-            background: url("data:image/svg+xml,%3Csvg width='27' height='21' viewBox='0 0 27 21' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 3.30005L24 1.30005C23.5 0.800049 22.7 0.800049 22.1 1.30005L10.8 12.6001C10.6 12.8001 10.2 12.8001 10 12.6001L5 7.60007C4.5 7.10007 3.69998 7.10007 3.09998 7.60007L1.09998 9.60007C0.599976 10.1001 0.599976 10.9001 1.09998 11.5001L7.40002 17.8L9.40002 19.8C9.90002 20.3 10.7 20.3 11.3 19.8L13.3 17.8L25.9 5.20007C26.6 4.60007 26.6 3.80005 26 3.30005Z' fill='%23F1BC19'/%3E%3C/svg%3E") center center no-repeat, #6C55AD;;
+            background: url("data:image/svg+xml,%3Csvg width='27' height='21' viewBox='0 0 27 21' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 3.30005L24 1.30005C23.5 0.800049 22.7 0.800049 22.1 1.30005L10.8 12.6001C10.6 12.8001 10.2 12.8001 10 12.6001L5 7.60007C4.5 7.10007 3.69998 7.10007 3.09998 7.60007L1.09998 9.60007C0.599976 10.1001 0.599976 10.9001 1.09998 11.5001L7.40002 17.8L9.40002 19.8C9.90002 20.3 10.7 20.3 11.3 19.8L13.3 17.8L25.9 5.20007C26.6 4.60007 26.6 3.80005 26 3.30005Z' fill='%23F1BC19'/%3E%3C/svg%3E") center center no-repeat, #6C55AD;
 
             @include media(768px) {
                 background-size: 20px;

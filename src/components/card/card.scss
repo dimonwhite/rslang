@@ -13,9 +13,8 @@
     align-items: center;
     font-family: Raleway, Roboto, serif;
     background-color: whitesmoke;
-    background-image: url("/src/assets/img/bg-card.jpg");
+    background-image: url("../assets/img/bg-card.jpg");
     background-size: cover;
-    // border-radius: 2.8rem 2.8rem 0 0;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -35,11 +34,11 @@
         outline: none;
     }
     &__left {
-        background-image: url("/src/assets/img/arrow-left.png");
+        background-image: url("../assets/img/arrow-left.png");
         background-position: left -11px top 0px;
     }
     &__right {
-        background-image: url("/src/assets/img/arrow-right.png");
+        background-image: url("../assets/img/arrow-right.png");
         background-position: left -14px top 0px;
     }
     &__left:hover,
@@ -65,7 +64,7 @@
         width: 70px;
         height: 70px;
         position: absolute;
-        background-image: url("/src/assets/img/voice.png");
+        background-image: url("../assets/img/voice.png");
         background-repeat: no-repeat;
         background-size: cover;
         left: 0;
@@ -244,7 +243,7 @@
         position: absolute;
         top: 106px;
         left: -45px;
-        background-image: url("/src/assets/img/remove.png");
+        background-image: url("../assets/img/remove.png");
         background-size: 90%;
         background-position: center;
         background-size: 60%;
@@ -259,7 +258,7 @@
         position: absolute;
         left: -45px;
         top: 5px;
-        background-image: url("/src/assets/img/difficult.png");
+        background-image: url("../assets/img/difficult.png");
         background-size: 70%;
         background-position: 9px 6px;
         background-repeat: no-repeat;
@@ -380,11 +379,12 @@
     background-color: whitesmoke;
     flex-direction: column;
     align-items: stretch;
-    background-image: url("/src/assets/img/finished.png");
+    background-image: url("../assets/img/finished.png");
     background-position: center;
     background-size: 131%;
     border-radius: 50%;
-    margin-top: 30px;
+    margin-top: 7rem;
+
 
     &__message {
         font-size: 25px;
@@ -850,7 +850,7 @@
     display: flex;
 
     input[type="radio"]:checked {
-        background: url("/src/assets/img/radio.png") center center no-repeat, #6c55ad;
+        background: url("../assets/img/radio.png") center center no-repeat, #6c55ad;
         background-position: 0px 0px !important;
         background-size: 100% !important;
     }
