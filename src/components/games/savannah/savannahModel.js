@@ -11,10 +11,12 @@ export default class SavannahModel {
     this.page = 1;
     this.lang = 'EN';
     this.allStudyWords = [];
+    this.own = true;
   }
 
   async createWords() {
     const SENTENCE = 99;
+    this.own = true;
     const userWords = await this.user.getAllUserWords();
     const WORDS_START_WITH = 10;
     this.time = new Date().getTime();
@@ -24,8 +26,13 @@ export default class SavannahModel {
     } else {
       const HANDICAP = 10;
       const countWords = this.countWords + HANDICAP;
+      let level = 0;
+      if (this.level >= 0) {
+        level = this.level;
+        this.own = false;
+      }
       const words = await this.user.getWords({
-        group: this.level, page: this.page - 1, maxLength: SENTENCE, wordsPerPage: countWords,
+        group: level, page: this.page, maxLength: SENTENCE, wordsPerPage: countWords,
       });
       this.random(words);
     }
@@ -33,7 +40,8 @@ export default class SavannahModel {
 
   random(words) {
     const unique = [];
-    for (let i = 0; i < this.countWords + this.maxHeart; i += 1) {
+    const length = this.countWords + this.maxHeart;
+    for (let i = 0; i < length && length < words.length; i += 1) {
       const rand = Math.floor(Math.random() * (words.length + 1));
       if (words[rand] && words[rand].wordTranslate) {
         if (unique.includes(rand)) {

@@ -1,4 +1,4 @@
-import { createElement } from '../../../utils';
+import { createElement } from '@/utils';
 import sound from '../../../assets/img/sound-audiocall.svg';
 import arrow from '../../../assets/img/arrow-audiocall.svg';
 import { urlGitHub } from '../../../constants';

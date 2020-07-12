@@ -24,11 +24,15 @@ export default class SavannahController {
   }
 
   async init() {
-    this.view.initView();
-    await this.addStatistics();
-    this.view.renderHTML();
-    this.view.createControl();
-    this.createEvent();
+    try {
+      this.view.initView();
+      await this.addStatistics();
+      this.view.renderHTML();
+      this.view.createControl();
+      this.createEvent();
+    } catch (error) {
+      this.error = error;
+    }
   }
 
   async createEvent() {
@@ -126,7 +130,9 @@ export default class SavannahController {
       this.attempt += 1;
       this.view.top.addEventListener('animationend', this.checkEndGame.bind(this));
       this.view.bottom.addEventListener('animationend', this.checkEndGame.bind(this));
-      if (this.level === -1 && copyWord) await this.changeWordStatistics(copyWord);
+      if (this.level === -1 && copyWord && this.view.model) {
+        await this.changeWordStatistics(copyWord);
+      }
       await this.changeStatistics();
     }
   }
@@ -147,7 +153,7 @@ export default class SavannahController {
       this.view.top.remove();
       this.startNextRound();
     }
-    if (this.level === -1 && word.id) await this.changeWordStatistics(word);
+    if (this.level === -1 && word.id && this.model.own) await this.changeWordStatistics(word);
     await this.changeStatistics();
   }
 

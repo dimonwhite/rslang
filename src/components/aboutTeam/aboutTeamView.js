@@ -1,4 +1,4 @@
-import { createElement } from '../../utils';
+import { createElement } from '@/utils';
 import starShip from '../../assets/img/aboutTeam/starship.png';
 import helmet from '../../assets/img/aboutTeam/helmet.png';
 import personal from '../../data/personal';
