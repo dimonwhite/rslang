@@ -155,17 +155,5 @@ export default class ChartMainView {
     }
     console.log(this.canvasMainChart.getBoundingClientRect().x);
     this.dataSignature.innerHTML = `${content}`;
-    // for (let i = 0; i < obj.quantityWord.length; i += 1) {
-    //   if (obj.mouseXCanvas >= obj.ranges[i].xStart && obj.mouseXCanvas <= obj.ranges[i].xEnd) {
-    //     if (obj.mouseYCanvas >= obj.ranges[i].yStart && obj.mouseYCanvas <= obj.ranges[i].yEnd) {
-    //       this.dataSignature.textContent = obj.quantityWord[i];
-    //       this.dataSignature.style = `
-    // transform: translate(${obj.mouseXWindow}px, ${obj.mouseYWindow}px)`;
-    //       this.dataSignature.classList.remove('signature-data-hide');
-    //       console.log(obj.mouseXCanvas, obj.mouseYCanvas,
-    //         obj.ranges[i].xStart, obj.ranges[i].xEnd, obj.quantityWord[i], obj.mouseYWindow);
-    //     }
-    //   }
-    // }
   }
 }
