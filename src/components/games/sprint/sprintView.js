@@ -121,8 +121,9 @@ export default class SprintView {
   getPreloader() {
     this.preloader.append(this.loadCounter, this.loader);
     this.game.append(this.preloader);
-    setTimeout(() => {
+    this.IntervalLoaderHide = setTimeout(() => {
       if (!this.preloader.classList.contains('hide__loader')) {
+        clearInterval(this.IntervalLoaderHide);
         this.preloader.classList.add('hide__loader');
         this.startCircleTimer();
       }
@@ -149,8 +150,8 @@ export default class SprintView {
     this.scoreBlock.textContent = `Очки: ${score}`;
   }
 
-  addNotificationWord() {
-    this.userNotification.innerHTML = 'В вашем наборе еще  не хватает слов! Выберите сложность и нажмите начать!';
+  addNotificationWord(text) {
+    this.userNotification.innerHTML = `${text}`;
     setTimeout(() => {
       this.userNotification.innerHTML = ' ';
     }, 3000);
@@ -195,14 +196,14 @@ export default class SprintView {
         this.answerCheck.textContent = 'Серия правильных ответов! Бонус: +20 очков! Планета открыта!';
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-        }, 900);
+        }, 2000);
         break;
       default:
         this.answerCheck.style.color = 'yellow';
         this.answerCheck.textContent = 'Верно: +10 очков!';
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-        }, 700);
+        }, 2000);
         break;
     }
   }
@@ -214,28 +215,28 @@ export default class SprintView {
         this.answerCheck.textContent = 'Ошибка!';
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-        }, 700);
+        }, 2000);
         break;
       case 2:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка! Серия прервана!';
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-        }, 700);
+        }, 2000);
         break;
       case 3:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка! Серия прервана!';
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-        }, 700);
+        }, 2000);
         break;
       default:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка!';
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-        }, 700);
+        }, 2000);
         break;
     }
   }
@@ -245,7 +246,7 @@ export default class SprintView {
     this.answerCheck.textContent = 'Верно: +10 очков!';
     setTimeout(() => {
       this.answerCheck.innerHTML = ' ';
-    }, 500);
+    }, 2000);
   }
 
   addFalse() {
@@ -253,7 +254,7 @@ export default class SprintView {
     this.answerCheck.textContent = 'Ошибка! Серия прервана!';
     setTimeout(() => {
       this.answerCheck.innerHTML = ' ';
-    }, 700);
+    }, 2000);
   }
 
   addTrueBonusTittle() {

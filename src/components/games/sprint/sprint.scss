@@ -245,6 +245,9 @@ border: 5px solid #610D89;
 min-width: 180px;
 position: relative;
 text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
 cursor: pointer;
 
 @media (min-width: 320px) and (max-width: 600px) {

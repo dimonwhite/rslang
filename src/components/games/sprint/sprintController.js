@@ -92,8 +92,9 @@ export default class SprintController {
       if (this.trueArray.length >= 90) {
         this.wordControl = true;
         this.makerArray(this.hard, this.count);
+        this.view.addNotificationWord('Вы выбрали свои слова для изучения!');
       } else {
-        this.view.addNotificationWord();
+        this.view.addNotificationWord('В вашем наборе еще не хватает слов! Выберите сложность и нажмите начать!');
         this.hard = 0;
         this.wordControl = false;
 
@@ -282,13 +283,13 @@ export default class SprintController {
   }
 
   addLoadTimer() {
-    const LoadTime = setInterval(() => {
+    this.IntervalLoadTime = setInterval(() => {
       this.view.getLoaderTime(this.LoadTime);
       this.LoadTime -= 1;
       if (this.LoadTime === -1) {
         this.addMainTimer();
 
-        clearInterval(LoadTime);
+        clearInterval(this.IntervalLoadTime);
         this.LoadTime = 5;
       }
     }, 1000);
@@ -392,7 +393,10 @@ export default class SprintController {
 
   removeListeners() {
     document.removeEventListener('keydown', this.keyDownCallBack);
-    clearInterval(this.LoadTime);
+    clearInterval(this.IntervalLoadTime);
     clearInterval(this.roundTime);
+    clearInterval(this.view.IntervalLoaderHide);
+    this.view.audio.pause();
+    this.view.audioLust.pause();
   }
 }
