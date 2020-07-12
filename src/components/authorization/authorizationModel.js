@@ -74,6 +74,19 @@ export default class AuthorizationModel {
     return request;
   }
 
+  async createWords() {
+    const promises = [];
+    const difficulty = 'today';
+    const ID_LENGTH = 24;
+    for (let i = 0; i < 10; i += 1) {
+      const wordId = String(i).repeat(ID_LENGTH);
+      const wordData = {};
+      wordData.listToday = 'empty';
+      promises.push(this.http.createUserWord({ wordData, wordId, difficulty }));
+    }
+    await Promise.all(promises);
+  }
+
   removeLocalUser() {
     this.http.removeLocalUser();
   }
