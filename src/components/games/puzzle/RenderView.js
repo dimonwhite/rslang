@@ -1,10 +1,10 @@
+import { createElement } from '@/utils';
 import { modifySentence, shuffleSentence } from './RoundData/modifySentence';
 import volumeImg from '../../../assets/img/volume.svg';
 import soundTip from '../../../assets/img/puzzle/speaker.svg';
 import backTip from '../../../assets/img/puzzle/photo.svg';
 import textTip from '../../../assets/img/puzzle/text.svg';
 import playTip from '../../../assets/img/puzzle/sound.svg';
-import { createElement } from '../../../utils';
 
 export default class RenderView {
   constructor(root, data, containerWidth, containerHeight) {

@@ -8,7 +8,7 @@ const defaultStatistics = {
     savannah: {
       settings: {
         lvl: -1,
-        page: '0',
+        page: 1,
         words: 10,
         speed: 'easy',
         hearts: 'easy',
@@ -64,9 +64,6 @@ const defaultSettings = {
       difficultWord: true,
       exampleWord: true,
       imgWord: true,
-      listAlternately: true,
-      listNew: false,
-      listRepeat: false,
       maxWords: '24',
       newWords: '12',
       meaningWord: true,

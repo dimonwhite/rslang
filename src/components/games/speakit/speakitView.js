@@ -2,7 +2,7 @@ import Choices from 'choices.js';
 import emptyImg from '@/assets/img/blank.jpg';
 import Card from '@/components/games/speakit/Card';
 import { urlGitHub } from '@/constants';
-import { createElement, getSvg } from '../../../utils';
+import { createElement, getSvg } from '@/utils';
 
 export default class SpeakitView {
   constructor() {
