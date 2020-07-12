@@ -1,3 +1,4 @@
+import PromoPageView from '@/components/promoPage/PromoPageView';
 import Games from '../games/games';
 import DictionaryController from '../dictionary/dictionaryController';
 import CardController from '../card/cardController';
@@ -15,6 +16,7 @@ export default class Router {
       dictionary: DictionaryController,
       statistics: StatisticsController,
       aboutteam: AboutTeamView,
+      promo: PromoPageView,
     };
     this.nav = document.getElementById('nav');
     this.main = document.querySelector('.main');

@@ -1,0 +1,122 @@
+.promoPage {
+  background-position: top center;
+  .main {
+    position: relative;
+    overflow: hidden;
+
+    flex: 1 0 auto;
+    padding: 5rem 2rem 1.5rem;
+    @include media(1024px) {
+      padding: 3rem 1.5rem 1.5rem;
+    }
+    @include media(600px) {
+      padding: 3rem 0.6rem 1.5rem;
+    }
+  }
+
+  &__title {
+    position: relative;
+    z-index: 1;
+
+    margin-bottom: 2rem;
+
+    font-size: 3rem;
+    font-weight: 600;
+    color: #fff;
+    .upper {
+      text-transform: uppercase;
+      color: #CF0045;
+    }
+    @include media(1024px) {
+      max-width: 80%;
+      margin-bottom: 1.5rem;
+
+      font-size: 1.6rem;
+    }
+    @include media(600px) {
+      font-size: 1.3rem;
+    }
+  }
+  &__planet {
+    position: absolute;
+    top: 4rem;
+    right: -8%;
+
+    width: 50%;
+  }
+  &__video {
+    position: relative;
+    z-index: 1;
+
+    width: 50%;
+    margin-bottom: 18rem;
+    @include media(1024px) {
+      width: 100%;
+      margin-bottom: 3rem;
+    }
+  }
+  &__vantages {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    @include media(1024px) {
+      justify-content: center;
+    }
+    &__item {
+      display: flex;
+      width: 32%;
+      margin-bottom: 3rem;
+      &:nth-child(2) {
+        position: relative;
+        top: 3rem;
+        margin-bottom: 0;
+        @include media(1024px) {
+          top: 0;
+          margin-bottom: 1.5rem;
+        }
+      }
+      @include media(1024px) {
+        margin-bottom: 1.5rem;
+        margin-right: 4%;
+        width: 48%;
+        &:nth-child(2n), &:last-child {
+          margin-right: 0;
+        }
+      }
+      @include media(600px) {
+        width: 100%;
+        margin-right: 0;
+      }
+      .svg_icon {
+        flex: 0 0 auto;
+        width: 4rem;
+        height: 4rem;
+        margin-right: 2rem;
+        @include media(1024px) {
+          width: 2rem;
+          height: 2rem;
+          margin-right: 1rem;
+        }
+      }
+      &--title {
+        margin-bottom: 1rem;
+
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #FFC400;
+        @include media(1024px) {
+          font-size: 1.2rem;
+        }
+      }
+      &--desc {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #FCA9FB;
+        @include media(1024px) {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
