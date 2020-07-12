@@ -1,0 +1,83 @@
+{
+  "savannah": {
+    "title": "Savannah",
+    "desc": "Вам предстоит увлекательное путешествие, выбирая верные переводы слов.",
+    "bgImage": "bg-savannah.png",
+    "gameClass": "clear-main",
+    "settings": {
+      "countWords": true,
+      "countWordsParams": {
+        "min": 10,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
+  },
+  "puzzle": {
+    "title": "English puzzle",
+    "desc": "Перетаскивайте паззлы мышкой или просто кликайте по ним, чтобы собрать картинку и наслаждайтесь шедеврами мировой живописи!",
+    "bgImage": "puzzlebg.jpg",
+    "gameClass": "englishPuzzle",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": false
+    }
+  },
+  "audiocall": {
+    "title": "Audiocall",
+    "desc": "Слушайте произношение слова и выбирайте из вариантов ответа используя мышь или клавиши 1-5",
+    "bgImage": "audiocallbg.png",
+    "gameClass": "audiocall",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {},
+      "levels": true
+    }
+  },
+  "speakit": {
+    "title": "SPEAKIT",
+    "desc": "Нажмите на слова, чтобы услышать их звучание. <br> Нажмите на кнопку Старт и произносите слова в микрофон.",
+    "bgImage": "speakitbg.jpg",
+    "gameClass": "speakIt",
+    "settings": {
+      "countWords": true,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": true
+    }
+  },
+  "sprint": {
+    "title": "Спринт",
+    "desc": "Ваша задача указать, совпадают ли слово и перевод",
+    "bgImage": "sprintBg.jpg",
+    "gameClass": "sprint",
+    "settings": {
+      "countWords": false,
+      "countWordsParams": {
+        "min": 5,
+        "step": 5,
+        "options": 3
+      },
+      "levels": false
+    }
+  },
+  "filwords": {
+    "title": "FILLWORDS",
+    "desc": "В этой игре вам нужно найти верный перевод слова на поле с буквами. <br> Все слова располагаются по горизонтали, но могут быть написаны в обратном порядке.",
+    "bgImage": "fillwordsbg.jpg",
+    "gameClass": "fillwords",
+    "settings": {
+      "levels": true
+    }
+  }
+
+}

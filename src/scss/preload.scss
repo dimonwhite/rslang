@@ -1,0 +1,88 @@
+.planet {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+
+  display: none;
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  margin: -150px;
+
+  border-radius: 50%;
+  box-shadow: 0 0 60px -20px rgba(255, 189, 3, 0.72), -14px -15px 40px -10px rgba(255, 238, 191, 0.23);
+  .mask {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    box-shadow: inset -10px -10px 40px #251303, inset 10px 10px 30px -10px rgba(255, 204, 159, 0.6);
+    border-radius: 50%;
+  }
+  .background {
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    background: url(../assets/img/mars.webp) repeat-x;
+    border-radius: 50%;
+  }
+  .clouds {
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    background: url(../assets/img/clouds.png) repeat-x;
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+  .wrap {
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+  }
+}
+
+@keyframes translateBackground {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: -600px;
+  }
+}
+
+@keyframes rotatePlanet {
+  0% {
+    transform: rotateZ(0);
+  }
+  100% {
+    transform: rotateZ(-360deg);
+  }
+}
+
+
+.show-preload {
+  background: url(../assets/img/space.webp) repeat;
+  .header, .main {
+    display: none;
+  }
+  .planet {
+    display: block;
+    .clouds {
+      animation: translateBackground 30s infinite linear;
+    }
+    .wrap {
+      animation: rotatePlanet 150s infinite linear;
+    }
+    .background {
+      animation: translateBackground 40s infinite linear;
+    }
+  }
+}

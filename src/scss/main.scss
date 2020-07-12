@@ -1,0 +1,27 @@
+@import "~normalize.css";
+@import "~choices.js/public/assets/styles/choices.css";
+@import "settings/keyframes";
+@import "settings/mixins";
+@import "settings/settings";
+@import "settings/variables";
+@import "settings/basicElements";
+@import "../components/header/header";
+@import "../components/authorization/authorization";
+@import "../components/statistics/statistics";
+@import "../components/dictionary/dictionary";
+@import "../components/card/card";
+@import "../components/games/savannah/savannah";
+@import "../components/games/speakit/speakit";
+@import "../components/games/audiocall/audiocall";
+@import "../components/games/sprint/sprint";
+@import "../components/games/puzzle/puzzle";
+@import "../components/games/fillwords/fillwords";
+@import "../components/games/games";
+@import "../components/aboutTeam/aboutTeam";
+@import "../components/promoPage/promoPage";
+@import "./preload";
+@import "./footer";
+@import "./settings";
+@import "./popups";
+@import "../components/games/gamesPage/gamesPage";
+
