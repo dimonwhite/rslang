@@ -142,6 +142,8 @@ export default class AuthorizationController {
         return;
       }
 
+      await this.model.createWords();
+
       this.view.btnLogin.removeEventListener('click', this.showPopUpListener);
       this.view.popUp.removeEventListener('click', this.clickPopUpListener);
 

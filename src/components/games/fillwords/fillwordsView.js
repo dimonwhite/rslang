@@ -8,6 +8,7 @@ export default class FillwordsView {
   }
 
   renderHtml() {
+    this.levelsWrap = document.querySelector('.levels__wrap');
     this.createElements();
     this.appendElements();
   }
@@ -20,6 +21,7 @@ export default class FillwordsView {
     this.createTopBlockElements();
     this.createBoard();
     this.createHintImg();
+    this.createPreloader();
   }
 
   createTopBlockElements() {
@@ -49,10 +51,28 @@ export default class FillwordsView {
     this.popupHint.append(this.popupHintImg);
   }
 
+  createPreloader() {
+    this.preloaderWrap = createElement({
+      tag: 'div', class: 'preloader', content: `
+        <div class="preloader__letter">F</div>
+        <div class="preloader__letter">I</div>
+        <div class="preloader__letter">L</div>
+        <div class="preloader__letter">L</div>
+        <div class="preloader__letter">W</div>
+        <div class="preloader__letter">O</div>
+        <div class="preloader__letter">R</div>
+        <div class="preloader__letter">D</div>
+        <div class="preloader__letter">S</div>
+      `,
+    });
+  }
+
   appendElements() {
     this.bottomBlock.append(this.btnResult);
     this.gameBlock.append(this.wordsList, this.boardWrap);
-    this.main.append(this.topBlock, this.gameBlock, this.bottomBlock, this.popupHint);
+    this.main.append(
+      this.topBlock, this.gameBlock, this.bottomBlock, this.popupHint, this.preloaderWrap,
+    );
   }
 
   fillBoard(letters) {
@@ -118,5 +138,32 @@ export default class FillwordsView {
     this.boardWrap.childNodes.forEach((letter) => {
       letter.classList.add('active');
     });
+  }
+
+  activateBtnUserWords() {
+    this.btnUserWords.classList.add('active');
+    const checkedLevel = this.levelsWrap.querySelector('.radio__input:checked');
+    if (checkedLevel) {
+      checkedLevel.checked = false;
+    }
+  }
+
+  deactivateBtnUserWords() {
+    this.btnUserWords.classList.remove('active');
+  }
+
+  activateLevel(level) {
+    const checkedLevel = this.levelsWrap.querySelector(`.radio__input[value="${level}"]`);
+    if (checkedLevel) {
+      checkedLevel.checked = true;
+    }
+  }
+
+  showPreloader() {
+    this.preloaderWrap.classList.add('active');
+  }
+
+  hidePreloader() {
+    this.preloaderWrap.classList.remove('active');
   }
 }
