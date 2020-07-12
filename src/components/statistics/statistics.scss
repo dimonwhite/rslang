@@ -1,4 +1,5 @@
 @import 
+    './chartMain/chartMainStyles.scss',
     './todayProgress/todayProgressStyles.scss',
     './gamesStatistic/gamesStatisticStyles.scss';
 
@@ -8,4 +9,11 @@
     flex-direction: row;
     justify-content: space-between;
     margin: 4% 2% 0;
-}    
+}
+
+@media screen and (max-width: 670px) {
+    .main-statistic-info {
+        flex-direction: column;
+        align-items: center;
+    }
+}

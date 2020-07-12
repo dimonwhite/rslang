@@ -27,12 +27,12 @@
     <nav class="nav" id="nav">
       <ul class="nav__list">
         <li class="nav__list-item">
-          <a href="/#/" class="nav__list-link">Главная</a>
+          <a href="/#/" class="nav__list-link hideUnauth">Главная</a>
         </li>
         <li class="nav__list-item">
           <a href="/#/games" class="nav__list-link">Игры</a>
-          <span class="nav__list-open"></span>
-          <ul class="nav__list-children">
+          <span class="nav__list-open hideUnauth"></span>
+          <ul class="nav__list-children hideUnauth">
             <li class="nav__list-item">
               <a href="/#/games/savannah" class="nav__list-link">Savannah</a>
             </li>
@@ -53,11 +53,14 @@
             </li>
           </ul>
         </li>
-        <li class="nav__list-item">
+        <li class="nav__list-item hideUnauth">
           <a href="/#/dictionary" class="nav__list-link">Словарь</a>
         </li>
-        <li class="nav__list-item">
+        <li class="nav__list-item hideUnauth">
           <a href="/#/statistics" class="nav__list-link">Статистика</a>
+        </li>
+        <li class="nav__list-item">
+          <a href="/#/promo" class="nav__list-link">Промо</a>
         </li>
         <li class="nav__list-item">
           <a href="/#/aboutteam" class="nav__list-link">О команде</a>
