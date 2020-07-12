@@ -21,30 +21,9 @@ export default class SprintModel {
     this.level = 0;
     this.page = 1;
     this.lang = 'EN';
+    this.maxStatistics = 30;
     this.allStudyWords = [];
   }
-
-  // async getWords(group, count) {
-  //   const words = await this.http.getAllUserWords();
-  //   const userWords = words.map((word) => word.optional);
-  //   if (userWords.length === 100) {
-  //     userWords.forEach((e) => {
-  //       this.gameWords.push(e);
-  //       this.gameFalseWords.push(e.wordTranslate);
-  //     });
-  //     console.log(userWords);
-  //     return userWords;
-  //   }
-  //   const data = await this.http.getWords({
-  //     group, page: 3, maxLength: 50, wordsPerPage: count,
-  //   });
-  //   data.forEach((e) => {
-  //     this.gameWords.push(e);
-  //     this.gameFalseWords.push(e.wordTranslate);
-  //   });
-  //   console.log(data);
-  //   return data;
-  // }
 
   async getUserWords() {
     const words = await this.http.getAllUserWords();
@@ -54,7 +33,6 @@ export default class SprintModel {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
     });
-    console.log(userWords);
     return userWords;
   }
 
@@ -122,7 +100,6 @@ export default class SprintModel {
 
   async setUserStatistics() {
     const statistics = await this.http.getUserStatistics();
-    console.log(statistics);
     const statisticsGame = statistics.optional.sprint;
     const statisticsGameKeys = Object.keys(statisticsGame);
 

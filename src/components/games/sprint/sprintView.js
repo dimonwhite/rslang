@@ -1,11 +1,12 @@
-import { urlGitHub } from '@/constants';
-import { createElement } from '../../../utils';
+import { createElement, getSvg } from '../../../utils';
 
 export default class SprintView {
   constructor() {
     this.main = document.getElementById('main');
-    this.countLevels = 5;
+    this.countLevels = 6;
     this.addTime = 60;
+    this.audio = new Audio();
+    this.audioLust = new Audio();
   }
 
   renderHTML() {
@@ -63,6 +64,8 @@ export default class SprintView {
     this.userBlock = createElement({ tag: 'div', class: 'game__sprint__user-words-block' });
     this.userBlockButton = createElement({ tag: 'div', class: 'game__sprint__user-words-button', content: 'Мои слова' });
     this.userNotification = createElement({ tag: 'p', class: 'game__sprint__user-words-notification' });
+    this.close = createElement({ tag: 'a', class: 'close', content: getSvg('close') });
+    this.close.setAttribute('href', '/#/games');
   }
 
   appendElements() {
@@ -75,7 +78,8 @@ export default class SprintView {
     this.bonusItemsBlock.append(this.firstBonusItem,
       this.secondBonusItem, this.thirdBonusItem, this.fourBonusItem);
 
-    this.indicationBlock.append(this.scoreBlock, this.currentBonus, this.timerBlock);
+    this.indicationBlock.append(this.scoreBlock, this.close,
+      this.currentBonus, this.timerBlock);
     this.wordsBlock.append(this.currentWord, this.currentTranslation);
     document.querySelector('.game__startScreen').append(this.createLevels());
     document.querySelector('.game__startScreen').append(this.userBlock);
@@ -120,6 +124,7 @@ export default class SprintView {
     setTimeout(() => {
       if (!this.preloader.classList.contains('hide__loader')) {
         this.preloader.classList.add('hide__loader');
+        this.startCircleTimer();
       }
     }, 6000);
   }
@@ -144,12 +149,26 @@ export default class SprintView {
     this.scoreBlock.textContent = `Очки: ${score}`;
   }
 
+  addNotificationWord() {
+    this.userNotification.innerHTML = 'В вашем наборе еще  не хватает слов! Выберите сложность и нажмите начать!';
+    setTimeout(() => {
+      this.userNotification.innerHTML = ' ';
+    }, 3000);
+  }
+
   addTimer(howSecond) {
     this.timer.innerHTML = `${howSecond}`;
   }
 
   startCircleTimer() {
     document.querySelector('.circle').classList.add('start_timer');
+    return this.timer;
+  }
+
+  restartCircleTimer() {
+    if (document.querySelector('.circle').classList.contains('start_timer')) {
+      document.querySelector('.circle').classList.remove('start_timer');
+    }
     return this.timer;
   }
 
@@ -174,10 +193,8 @@ export default class SprintView {
       case 3:
         this.answerCheck.style.color = 'yellow';
         this.answerCheck.textContent = 'Серия правильных ответов! Бонус: +20 очков! Планета открыта!';
-        this.answerCheck.classList.add('small-text');
         setTimeout(() => {
           this.answerCheck.innerHTML = ' ';
-          this.answerCheck.classList.remove('small-text');
         }, 900);
         break;
       default:
@@ -255,6 +272,15 @@ export default class SprintView {
     });
   }
 
+  clearPlanet() {
+    const bonusPlanet = this.bonusItemsBlock.childNodes;
+    bonusPlanet.forEach((e) => {
+      while (e.firstChild) {
+        e.removeChild(e.firstChild);
+      }
+    });
+  }
+
   changeBackgroundTrue() {
     this.wordsBlock.classList.add('true_choice');
     setTimeout(() => {
@@ -269,9 +295,14 @@ export default class SprintView {
     }, 300);
   }
 
-  playAudio(word) {
-    this.audio.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
-    this.audio.play();
+  playAudio(sound) {
+    this.audio.src = `/src/assets/sounds/sprint/${sound}.mp3`;
+    this.audio.play().catch(() => this.audio.currentTime);
+  }
+
+  playLustSecond() {
+    this.audioLust.src = '/src/assets/sounds/sprint/lustsecond.mp3';
+    this.audioLust.play();
   }
 
   dropScore() {
@@ -293,20 +324,13 @@ export default class SprintView {
     this.gameWord.textContent = e.results[i][0].transcript;
   }
 
-  successCard(word, id) {
-    const card = this.wordList.querySelector(`.wordList__item[data-id="${id}"]`);
-    card.classList.add('active');
-    this.scoreBlock.append(SprintView.createStar());
-    this.editInfo(word);
-    this.gameWord.textContent = word.word;
+  removeButton() {
+    this.btnChoiceTrue.classList.add('remove');
+    this.btnChoiceFalse.classList.add('remove');
   }
 
-  static createStar() {
-    const svg = `
-      <svg class="svg_icon">
-        <use xlink:href="sprite.svg#star"></use>
-      </svg>
-    `;
-    return createElement({ tag: 'div', class: 'star', content: svg });
+  addButton() {
+    this.btnChoiceTrue.classList.remove('remove');
+    this.btnChoiceFalse.classList.remove('remove');
   }
 }
