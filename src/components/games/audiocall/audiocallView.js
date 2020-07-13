@@ -65,6 +65,15 @@ export default class AudiocallView {
     }
   }
 
+  levelUserWordsDecorate(isUserWords) {
+    const levelsRadio = document.querySelector('.levels');
+    if (isUserWords) {
+      this.displayElement(levelsRadio, 'none');
+    } else {
+      this.displayElement(levelsRadio, 'block');
+    }
+  }
+
   renderSoundIcon() {
     this.iconContainer.innerHTML = '';
     this.iconContainer.style.background = 'none';

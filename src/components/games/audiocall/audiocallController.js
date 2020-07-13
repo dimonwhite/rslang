@@ -32,9 +32,7 @@ export default class AudiocallController {
     }
 
     if (e.target.closest('.btn__next')) {
-      this.view.slideAway();
-      setTimeout(this.proceedStep.bind(this), 400);
-      this.view.displayElement(this.view.btnNext, 'none');
+      this.continueHandler();
     }
 
     if (e.target.closest('.btn__idk')) {
@@ -69,8 +67,9 @@ export default class AudiocallController {
     if (+e.key === this.view.rightWord.index && this.model.isStepGoing) {
       this.model.score += 1;
       this.endStep(true);
-    } else if
-    (+e.key !== this.view.rightWord.index && eventKeys.includes(+e.key) && this.model.isStepGoing) {
+    }
+    if (+e.key !== this.view.rightWord.index
+      && eventKeys.includes(+e.key) && this.model.isStepGoing) {
       this.endStep(false);
       this.view.wordWrapper.querySelectorAll('.word').forEach((el) => {
         if (el.innerText.slice(0, 1) === e.key) {
@@ -78,6 +77,16 @@ export default class AudiocallController {
           this.view.appendanswerIcon(wrong, el);
         }
       });
+    }
+
+    if (e.code === 'Space' && this.model.isStepGoing) {
+      e.preventDefault();
+      this.idkTip();
+    }
+
+    if (e.code === 'Enter' && this.model.isContinueAble) {
+      e.preventDefault();
+      this.continueHandler();
     }
   }
 
@@ -98,7 +107,7 @@ export default class AudiocallController {
     return this.model.wordArray[this.model.step].optional;
   }
 
-  startStep() {
+  async startStep() {
     if (this.model.step < this.model.wordArray.length) {
       this.model.isStepGoing = true;
 
@@ -108,7 +117,7 @@ export default class AudiocallController {
       this.view.playAudio(this.isModelUserWords());
       this.view.renderStepWords(this.isModelUserWords());
     } else {
-      this.endRound();
+      await this.endRound();
     }
   }
 
@@ -117,6 +126,7 @@ export default class AudiocallController {
       await this.updateWord(this.model.wordArray[this.model.step]);
     }
     this.model.isStepGoing = false;
+    this.model.isContinueAble = true;
     this.view.rightWord.classList.add('right');
     this.view.appendanswerIcon(right, this.view.rightWord);
     this.isModelUserWords().success = isRight;
@@ -132,11 +142,18 @@ export default class AudiocallController {
     this.view.appendanswerIcon(idk, this.view.rightWord);
   }
 
+  continueHandler() {
+    this.view.slideAway();
+    this.model.isContinueAble = false;
+    setTimeout(this.proceedStep.bind(this), 400);
+    this.view.displayElement(this.view.btnNext, 'none');
+  }
+
   async proceedStep() {
     this.model.step += 1;
     this.view.wordWrapper.innerHTML = '';
     this.view.changeBackground();
-    this.startStep();
+    await this.startStep();
   }
 
   async showStats() {
@@ -147,6 +164,8 @@ export default class AudiocallController {
   resetGame() {
     this.model.score = 0;
     this.model.step = 0;
+    this.model.isStepGoing = false;
+    this.model.isContinueAble = false;
     this.view.displayElement(this.view.btnNext, 'none');
     this.view.wordWrapper.innerHTML = '';
     this.view.wordDescription.innerHTML = '';
@@ -174,6 +193,7 @@ export default class AudiocallController {
     this.view.preloader.remove();
     this.view.wordWrapper.innerHTML = '';
     this.view.btnUserWordsDecorate(this.model.isUserWords);
+    this.view.levelUserWordsDecorate(this.model.isUserWords);
     this.startStep();
   }
 
@@ -190,11 +210,11 @@ export default class AudiocallController {
     this.resetGame();
   }
 
-  change() {
-    this.model.isUserWords = false;
+  async change() {
+    this.view.main.querySelector('.resultPopup__btns button.btn:nth-child(2)').blur();
     this.view.btnuserWords.classList.remove('active');
     this.model.level = this.level;
-    this.startRound();
+    await this.startRound();
   }
 
   getScore() {
