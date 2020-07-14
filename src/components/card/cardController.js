@@ -27,6 +27,7 @@ export default class CardController {
     this.cut = false;
     this.removeWords = 0;
     this.unlock = true;
+    this.getDate();
   }
 
   async create() {
@@ -83,6 +84,7 @@ export default class CardController {
   async setTodayStatStorage() {
     const { cardIndex } = this.params;
     this.params.cardIndex = this.params.passedToday;
+    this.statistics.optional.allUserWords = this.model.allStudyWords.filter((item) => item.state !== 'remove').length;
     this.params.length = (this.model.listToday) ? this.model.listToday.length : 0;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
     this.params.cardIndex = cardIndex;
@@ -93,7 +95,7 @@ export default class CardController {
     this.view.leftArrow.addEventListener('click', this.moveToLeft.bind(this));
     this.view.cardPlay.addEventListener('click', this.playWord.bind(this, true));
     this.view.input.addEventListener('input', this.inputSymbols.bind(this));
-    document.body.addEventListener('keydown', (e) => { if (e.code === 'Enter') this.eventRight(); });
+    document.body.onkeydown = (e) => { if (e.code === 'Enter') this.eventRight(); };
     this.view.rightArrow.addEventListener('click', this.eventRight.bind(this));
     this.view.cardRemove.addEventListener('click', this.eventRemove.bind(this));
     this.view.cardDiff.addEventListener('click', this.eventBookmark.bind(this));
@@ -151,19 +153,23 @@ export default class CardController {
       let state = 'remove';
       if (removeWord.state === state) state = 'study';
 
-      let isNew = false;
       if (this.model.allStudyWords.find((item) => item.word === removeWord.word)) {
-        if (!removeWord.isPassed) isNew = true;
         await this.model.updateAllStudyWords({ word: removeWord, isUpdate: true, state });
       } else {
-        isNew = true;
+        removeWord.firstDate = this.today;
         await this.model.updateAllStudyWords({ word: removeWord, isNew: true, state });
       }
-      if (isNew) {
-        this.removeWord();
-      } else {
+      if (removeWord.isPassed) {
+        if (state === 'remove') {
+          this.statistics.optional.statisticsChart[removeWord.firstDate] -= 1;
+        } else {
+          this.statistics.optional.statisticsChart[removeWord.firstDate] += 1;
+        }
         this.view.setInDictionary(state, this.currentMistake);
+      } else {
+        this.removeWord();
       }
+
       await this.setTodayStatStorage();
       await this.model.putListToday();
       this.view.lockElements(false);
@@ -173,7 +179,7 @@ export default class CardController {
   removeWord() {
     this.params.currentMistake = false;
     this.model.listToday.splice(this.params.cardIndex, 1);
-    if (this.params.passedToday === this.model.listToday.length) {
+    if (this.params.passedToday >= this.model.listToday.length) {
       this.params.generatedListToday = false;
       this.view.inputTodayStatistics(this.params);
       this.model.clearListToday();
@@ -204,10 +210,14 @@ export default class CardController {
         word, isUpdate: true, customRating, state,
       });
     } else {
+      this.params.newWordsToday += 1;
+      word.firstDate = this.today;
+      this.addChartStatistics();
       await this.model.updateAllStudyWords({
         word, isNew: true, customRating, state,
       });
     }
+    await this.setTodayStatStorage();
     await this.model.putListToday();
     if (this.unlock) this.view.lockElements(false);
   }
@@ -328,6 +338,7 @@ export default class CardController {
     } else if (!prev) {
       this.params.newWordsToday += 1;
       this.addChartStatistics();
+      word.firstDate = this.today;
       await this.model.updateAllStudyWords({
         word, isNew: true, isCount: true, mistake, customRating: false, state: 'study',
       });
@@ -346,16 +357,13 @@ export default class CardController {
       this.cut = true;
     }
 
-    if (!show) {
-      if (this.params.currentMistake) {
-        await this.model.putListToday();
-        this.next = true;
-        this.view.next = true;
-      } else {
-        await this.model.putListToday();
-      }
+    if (this.params.currentMistake && !show) {
+      this.next = true;
+      this.view.next = true;
     }
+
     this.params.currentMistake = false;
+    await this.model.putListToday();
   }
 
   async mistakeAnswer({
@@ -371,6 +379,7 @@ export default class CardController {
       });
     } else {
       this.params.newWordsToday += 1;
+      word.firstDate = this.today;
       this.addChartStatistics();
       await this.model.updateAllStudyWords({
         word, isNew: true, isCount: true, mistake: true, state: 'study',
@@ -563,18 +572,21 @@ export default class CardController {
 
   addChartStatistics() {
     const days = this.statistics.optional.statisticsChart;
-    let today = new Date();
+    const find = Object.keys(days).find((item) => item === this.today);
+    if (find) {
+      days[this.today] = +days[this.today] + 1;
+    } else {
+      days[this.today] = 1;
+      days.length = +days.length + 1;
+    }
+  }
+
+  getDate() {
+    const today = new Date();
     let day = today.getDate();
     let month = today.getMonth() + 1;
     if (day < 10) day = `0${day}`;
     if (month < 10) month = `0${month}`;
-    today = `${day}-${month}-${today.getFullYear()}`;
-    const find = Object.keys(days).find((item) => item === today);
-    if (find) {
-      days[today] = +days[today] + 1;
-    } else {
-      days[today] = 1;
-      days.length = +days.length + 1;
-    }
+    this.today = `${day}-${month}-${today.getFullYear()}`;
   }
 }

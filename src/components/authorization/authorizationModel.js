@@ -75,16 +75,16 @@ export default class AuthorizationModel {
   }
 
   async createWords() {
-    const promises = [];
+    const WORDS_START_WITH = 10;
     const difficulty = 'today';
     const ID_LENGTH = 24;
-    for (let i = 0; i < 10; i += 1) {
+    for (let i = 0; i < WORDS_START_WITH; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);
       const wordData = {};
       wordData.listToday = 'empty';
-      promises.push(this.http.createUserWord({ wordData, wordId, difficulty }));
+      // eslint-disable-next-line no-await-in-loop
+      await this.http.createUserWord({ wordData, wordId, difficulty });
     }
-    await Promise.all(promises);
   }
 
   removeLocalUser() {

@@ -31,17 +31,18 @@ export default class CardModel {
     if (userWords.length > WORDS_START_WITH) {
       this.allStudyWords = userWords.slice(WORDS_START_WITH).map((item) => item.optional);
       this.allStudyWords.sort((a, b) => a.nextTime - b.nextTime);
-    } else if (userWords.length === 0) {
-      const difficulty = 'today';
-      const ID_LENGTH = 24;
-      for (let i = 0; i < WORDS_START_WITH; i += 1) {
-        const wordId = String(i).repeat(ID_LENGTH);
-        const wordData = {};
-        wordData.listToday = 'empty';
-        // eslint-disable-next-line no-await-in-loop
-        await this.user.createUserWord({ wordData, wordId, difficulty });
-      }
     }
+    // else if (userWords.length === 0) {
+    //   const difficulty = 'today';
+    //   const ID_LENGTH = 24;
+    //   for (let i = 0; i < WORDS_START_WITH; i += 1) {
+    //     const wordId = String(i).repeat(ID_LENGTH);
+    //     const wordData = {};
+    //     wordData.listToday = 'empty';
+    //     // eslint-disable-next-line no-await-in-loop
+    //     await this.user.createUserWord({ wordData, wordId, difficulty });
+    //   }
+    // }
   }
 
   async createNewWords(settings) {
@@ -212,7 +213,10 @@ export default class CardModel {
       update.customRating = customRating;
     }
     if (isCount) this.changeWordStat({ update, mistake });
+    const { isNew, isPassed } = word;
     Object.keys(update).forEach((key) => { word[key] = update[key]; });
+    word.isNew = isNew;
+    word.isPassed = isPassed;
     await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
   }
 

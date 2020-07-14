@@ -385,7 +385,6 @@
     border-radius: 50%;
     margin-top: 7rem;
 
-
     &__message {
         font-size: 25px;
         text-align: center;
@@ -507,9 +506,13 @@
 .lock-element {
     background-color: #6b5e5eeb !important;
     color: #b3a797 !important;
+    border: 3px solid #594f4f;
+    box-shadow: 5px 5px 5px black;
+    cursor: not-allowed;
 }
 .lock-arrow {
     background-color: #6b5e5eeb !important;
+    cursor: not-allowed;
 }
 
 .checked-element {
@@ -519,6 +522,7 @@
 .custom-rating {
     background-color: brown !important;
     color: whitesmoke !important;
+    border: 3px solid brown !important;
 }
 
 .show-main {
@@ -536,26 +540,42 @@
 .lock-elements {
     .card__answer {
         button {
-            pointer-events: none;
-            background-color: rgb(190, 190, 190);
+            background-color: #6b5e5eeb !important;
+            color: #b3a797 !important;
+            border: 3px solid #594f4f;
+            box-shadow: 5px 5px 5px black;
+            cursor: not-allowed;
         }
+    }
+    .card__remove,
+    .card__difficult {
+        background-color: #6b5e5eeb !important;
+        color: #b3a797 !important;
+        border: 3px solid #594f4f;
+        box-shadow: 5px 5px 5px black;
+        cursor: not-allowed;
     }
     .card__interval {
         button {
-            pointer-events: none;
-            background-color: rgb(190, 190, 190);
+            background-color: #6b5e5eeb !important;
+            color: #b3a797 !important;
+            border: 3px solid #594f4f;
+            box-shadow: 5px 5px 5px black;
+            cursor: not-allowed;
         }
     }
     .card__left {
         button {
             pointer-events: none;
             background-color: rgb(190, 190, 190);
+            cursor: not-allowed;
         }
     }
     .card__right {
         button {
             pointer-events: none;
             background-color: rgb(190, 190, 190);
+            cursor: not-allowed;
         }
     }
 }
