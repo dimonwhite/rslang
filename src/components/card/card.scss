@@ -385,7 +385,6 @@
     border-radius: 50%;
     margin-top: 7rem;
 
-
     &__message {
         font-size: 25px;
         text-align: center;
@@ -465,22 +464,22 @@
     background-color: red;
 }
 
-// ::-webkit-scrollbar-track {
-//     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-//     background-color: gray;
-//     border-radius: 3px;
-// }
+.card::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: gray;
+    border-radius: 3px;
+}
 
-// ::-webkit-scrollbar {
-//     width: 15px;
-//     border-radius: 3px;
-// }
+.card::-webkit-scrollbar {
+    width: 15px;
+    border-radius: 3px;
+}
 
-// ::-webkit-scrollbar-thumb {
-//     background-color: #09c;
-//     border: 2px solid #257db1;
-//     border-radius: 3px;
-// }
+.card::-webkit-scrollbar-thumb {
+    background-color: #09c;
+    border: 2px solid #257db1;
+    border-radius: 3px;
+}
 /*------------------END PROGRESS----------------------*/
 
 /*------------------TOGGLE CLASSES-------------------*/
@@ -507,18 +506,17 @@
 .lock-element {
     background-color: #6b5e5eeb !important;
     color: #b3a797 !important;
+    border: 3px solid #594f4f;
+    box-shadow: 5px 5px 5px black;
+    cursor: not-allowed;
 }
 .lock-arrow {
     background-color: #6b5e5eeb !important;
+    cursor: not-allowed;
 }
 
 .checked-element {
     background-color: rgb(189, 230, 189);
-}
-
-.custom-rating {
-    background-color: brown !important;
-    color: whitesmoke !important;
 }
 
 .show-main {
@@ -536,28 +534,50 @@
 .lock-elements {
     .card__answer {
         button {
-            pointer-events: none;
-            background-color: rgb(190, 190, 190);
+            background-color: #6b5e5eeb !important;
+            color: #b3a797 !important;
+            border: 3px solid #594f4f;
+            box-shadow: 5px 5px 5px black;
+            cursor: not-allowed;
         }
+    }
+    .card__remove,
+    .card__difficult {
+        background-color: #6b5e5eeb !important;
+        color: #b3a797 !important;
+        border: 3px solid #594f4f;
+        box-shadow: 5px 5px 5px black;
+        cursor: not-allowed;
     }
     .card__interval {
         button {
-            pointer-events: none;
-            background-color: rgb(190, 190, 190);
+            background-color: #6b5e5eeb !important;
+            color: #b3a797 !important;
+            border: 3px solid #594f4f;
+            box-shadow: 5px 5px 5px black;
+            cursor: not-allowed;
         }
     }
     .card__left {
         button {
             pointer-events: none;
             background-color: rgb(190, 190, 190);
+            cursor: not-allowed;
         }
     }
     .card__right {
         button {
             pointer-events: none;
             background-color: rgb(190, 190, 190);
+            cursor: not-allowed;
         }
     }
+}
+
+.custom-rating {
+    background-color: brown !important;
+    color: whitesmoke !important;
+    border: 3px solid brown !important;
 }
 /*----------------END TOGGLE CLASSES-----------------*/
 
@@ -800,35 +820,53 @@
 }
 .settings-card {
     width: 500px !important;
-    overflow: hidden !important;
+    overflow-x: hidden !important;
     padding: 10px 20px !important;
     padding-left: 40px;
     label {
         margin-bottom: 5px;
         font-size: 16px !important;
     }
-    .settings__checkbox {
-        height: 20px;
-    }
-    .setting-block__title:before {
-        margin-bottom: 5px;
-    }
-    .setting-block__title {
-        font-size: 20px !important;
-        height: 20px;
-    }
-    .settings__title {
-        font-size: 24px !important;
-        margin-bottom: 0 !important;
-        padding-left: 30px;
+    .setting-block {
+        margin-left: 10px;
+        &__title:before {
+            margin-bottom: 5px;
+        }
+        &__title {
+            font-size: 20px !important;
+            height: 20px;
+        }
     }
     .settings {
-        overflow: hidden;
+        &__title {
+            font-size: 24px !important;
+            margin-bottom: 0 !important;
+            padding-left: 30px;
+        }
+        &__checkbox {
+            height: 20px;
+        }
     }
     input {
         cursor: pointer;
     }
 }
+
+.settings-card::-webkit-scrollbar-thumb {
+    background-color: #621e84;
+    border: 2px solid #412361;
+    border-radius: 3px;
+}
+.settings-card::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #a29ba987;
+    border-radius: 3px;
+}
+.settings-card::-webkit-scrollbar {
+    width: 12px;
+    border-radius: 3px;
+}
+
 .setting-block__list-card {
     display: flex;
 }

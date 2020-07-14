@@ -72,8 +72,8 @@ export default class CardView {
     this.cardExampleTranslation = createElement({ tag: 'p', id: 'cardExampleTranslation' });
 
     this.interval = createElement({ tag: 'div', class: 'card__interval', id: 'intervalBtns' });
-    this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Повтор' });
-    this.cardHard = createElement({ tag: 'button', id: 'cardHard', content: 'Сложно' });
+    this.cardAgain = createElement({ tag: 'button', id: 'cardAgain', content: 'Снова' });
+    this.cardHard = createElement({ tag: 'button', id: 'cardHard', content: 'Трудно' });
     this.cardNormal = createElement({ tag: 'button', id: 'cardNormal', content: 'Хорошо' });
     this.cardEasy = createElement({ tag: 'button', id: 'cardEasy', content: 'Легко' });
     this.interval.append(this.cardAgain);
@@ -87,7 +87,6 @@ export default class CardView {
     this.cardDiff = createElement({
       tag: 'button', class: 'card__difficult', id: 'cardDifficult',
     });
-    this.cardDiff.classList.add('lock-element');
     this.cardShow = createElement({
       tag: 'button', class: 'card__show', id: 'cardShow', content: 'Показать слово',
     });
@@ -103,8 +102,10 @@ export default class CardView {
 
   endTraining() {
     this.message = createElement({ tag: 'section', class: 'finished', id: 'message' });
-    const title = createElement({ tag: 'h3', class: 'finished__message', content: 'План на сегодня выполнен!' });
-    const statistics = createElement({ tag: 'div', class: 'finished__statistics' });
+    const title = createElement({
+      tag: 'h3', class: 'finished__message', content: 'План на сегодня выполнен!', id: 'endTitle',
+    });
+    const statistics = createElement({ tag: 'div', class: 'finished__statistics', id: 'cardStatistics' });
     const wrapCount = createElement({ tag: 'div' });
     const countMes = createElement({
       tag: 'span', class: 'finished__statistics-count', id: 'statCountMes', content: 'Карточек завершено:',
@@ -151,20 +152,25 @@ export default class CardView {
 
   getCheckRadio(name) {
     const elements = document.getElementsByName(name);
+    let change = false;
     for (let i = 0; i < elements.length; i += 1) {
       if (elements[i].checked) {
-        this.settings[elements[i].id] = true;
+        if (this.settings[elements[i].id] !== true) {
+          this.settings[elements[i].id] = true;
+          change = true;
+        }
       } else {
         this.settings[elements[i].id] = false;
       }
     }
+    return change;
   }
 
   getSettings() {
     const newW = (this.settings) ? this.settings.newWords : false;
     const maxW = (this.settings) ? this.settings.maxWords : false;
-    this.settings = {};
     this.getCheckRadio('lang');
+    const changeList = this.getCheckRadio('category');
     const checkBoxes = document.querySelectorAll('[type=checkbox]');
     Array.from(checkBoxes).forEach((item) => {
       this.settings[item.id] = item.checked;
@@ -172,7 +178,8 @@ export default class CardView {
     this.settings.newWords = document.getElementById('newWords').value;
     this.settings.maxWords = document.getElementById('maxWords').value;
     this.checkValidSettings();
-    if (newW && maxW && (newW !== this.settings.newWords || maxW !== this.settings.maxWords)) {
+    const changeNumberWords = newW !== this.settings.newWords || maxW !== this.settings.maxWords;
+    if ((newW && maxW && changeNumberWords) || changeList) {
       return true;
     }
     return false;
@@ -396,12 +403,12 @@ export default class CardView {
     } else {
       this.translationWord.classList.add('hide');
     }
-    if (this.settings.meaningWord) {
+    if (this.settings.meaningWordTransl && this.settings.meaningWord) {
       this.cardMeaningTranslation.classList.remove('hide-text');
     } else {
       this.cardMeaningTranslation.classList.add('hide-text');
     }
-    if (this.settings.exampleWord) {
+    if (this.settings.exampleWordTransl && this.settings.exampleWord) {
       this.cardExampleTranslation.classList.remove('hide-text');
     } else {
       this.cardExampleTranslation.classList.add('hide-text');
@@ -480,9 +487,10 @@ export default class CardView {
     this.input.setAttribute('readonly', 'readonly');
     this.input.classList.add('correct-color');
     this.cardShow.classList.add('lock-element');
-    this.cardRemove.classList.add('lock-element');
     this.cardDiff.classList.remove('lock-element');
-    if (this.settings.interval) {
+    const isSound = this.settings.meaningWord || this.settings.exampleWord;
+    const isFastAndSound = this.settings.nextCard && isSound;
+    if (this.settings.interval && (!this.settings.nextCard || isFastAndSound)) {
       this.interval.classList.add('visibility');
       if (customRating) {
         this.setCustomRating(customRating);
@@ -503,17 +511,26 @@ export default class CardView {
   }
 
   inputTodayStatistics({
-    passedToday, incorrectAnswer, correctAnswer, newWordsToday, consecutive,
+    passedToday, incorrectAnswer, correctAnswer, newWordsToday, consecutive, isEmpty,
   }) {
-    document.getElementById('card').classList.add('hide');
-    this.message.classList.add('show-flex');
-    document.getElementById('statCount').innerHTML = passedToday;
-    if (incorrectAnswer + correctAnswer > 0) {
-      document.getElementById('statCorrect')
-        .innerHTML = `${Math.floor((correctAnswer / (incorrectAnswer + correctAnswer)) * 100)}%`;
+    if (isEmpty) {
+      document.getElementById('card').classList.add('hide');
+      this.message.classList.add('show-flex');
+      document.getElementById('cardStatistics').classList.add('hide');
+      document.getElementById('endTitle').innerHTML = 'В этой категории нет слов!';
+    } else {
+      document.getElementById('card').classList.add('hide');
+      this.message.classList.add('show-flex');
+      document.getElementById('endTitle').innerHTML = 'План на сегодня выполнен!';
+      document.getElementById('cardStatistics').classList.remove('hide');
+      document.getElementById('statCount').innerHTML = passedToday;
+      if (incorrectAnswer + correctAnswer > 0) {
+        document.getElementById('statCorrect')
+          .innerHTML = `${Math.floor((correctAnswer / (incorrectAnswer + correctAnswer)) * 100)}%`;
+      }
+      document.getElementById('statNewWords').innerHTML = newWordsToday;
+      document.getElementById('statLong').innerHTML = consecutive;
     }
-    document.getElementById('statNewWords').innerHTML = newWordsToday;
-    document.getElementById('statLong').innerHTML = consecutive;
   }
 
   incorrectWord(answer, word) {
@@ -630,7 +647,6 @@ export default class CardView {
   clearCard() {
     this.cardRemove.classList.remove('lock-element');
     this.cardShow.classList.remove('lock-element');
-    this.cardDiff.classList.add('lock-element');
     Array.from(this.interval.children).forEach((item) => item.classList.remove('custom-rating'));
     this.interval.classList.remove('visibility');
     this.cardMeaningTranslation.innerHTML = '';
@@ -675,25 +691,57 @@ export default class CardView {
           <label for="langRu">Русские слова</label>
         </div>
       </div>
+      <div class="setting-block__title">Категории слов</div>
+
+      <div class="setting-block__list-card">
+        <div>
+          <div class="setting-block__item-card">
+            <input type="radio" name="category" id="allDifficult" class="settings__checkbox"/>
+            <label for="allDifficult">Все сложные</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="radio" name="category" id="allTodayWords" checked class="settings__checkbox" />
+            <label for="allTodayWords">Повторение и новые</label>
+          </div>
+        </div>
+        <div>
+          <div class="setting-block__item-card">
+            <input type="radio" name="category" id="onlyNew" class="settings__checkbox"/>
+            <label for="onlyNew">Только новые</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="radio" name="category" id="onlyRepeat" class="settings__checkbox" />
+            <label for="onlyRepeat">Только повторение</label>
+          </div>
+        </div>
+      </div>
 
       <div class="setting-block__title">Настройка карточек</div>
 
       <div class="setting-block__list-card">
         <div>
           <div class="setting-block__item-card">
-            <input type="checkbox" id="translate" checked  class="settings__checkbox"/>
-            <label for="translate">Перевод слова</label>
-          </div>
-          <div class="setting-block__item-card">
             <input type="checkbox" id="meaningWord" checked class="settings__checkbox"/>
             <label for="meaningWord">Значение слова</label>
           </div>
           <div class="setting-block__item-card">
             <input type="checkbox" id="exampleWord" checked class="settings__checkbox" />
-            <label for="exampleWord">Пример</label>
+            <label for="exampleWord">Пример слова</label>
           </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="translate" checked  class="settings__checkbox"/>
+            <label for="translate">Перевод слова</label>
           </div>
-          <div>
+        </div>
+        <div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="meaningWordTransl" checked class="settings__checkbox"/>
+            <label for="meaningWordTransl">Перевод значения</label>
+          </div>
+          <div class="setting-block__item-card">
+            <input type="checkbox" id="exampleWordTransl" checked class="settings__checkbox" />
+            <label for="exampleWordTransl">Перевод примера</label>
+          </div>
           <div class="setting-block__item-card">
             <input type="checkbox" id="transcription" class="settings__checkbox" checked />
             <label for="transcription">Транскрипция</label>

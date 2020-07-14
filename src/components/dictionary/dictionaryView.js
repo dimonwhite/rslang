@@ -11,6 +11,7 @@ export default class DictionaryView {
 
   renderHTML() {
     this.main.innerHTML = '';
+    this.settingsBlock.classList.remove('settings-card');
     this.dictionary = createElement({ tag: 'div', class: 'dictionary-content' });
     this.main.append(this.dictionary);
   }
