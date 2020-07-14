@@ -7,12 +7,12 @@ export default class GamesStatisticView {
     this.gamestatisticClose = createElement({ tag: 'div', class: 'game-wrap window-game-hide' });
     this.windowGameStatistic = createElement({ tag: 'div', class: 'window-game-statistic' });
     this.gamesNamesRu = [
-      'Саванна',
-      'Аудиовызов',
-      'Спринт',
+      'Savannah',
+      'Audiocall',
+      'Sprint',
       'Speak it',
-      'English puzzle',
-      'Филворды',
+      'English Puzzle',
+      'Fillword',
     ];
     this.iconsGamesUrl = {
       Саванна: '/src/assets/icons/statistic/game-savanna-icon.png',
