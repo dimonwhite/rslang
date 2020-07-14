@@ -50,6 +50,9 @@
     }
   }
 
+  img[src="sprite.svg#idk-usage"] {
+    z-index: 5;
+  }
   .info-wrapper{
     margin-top: 15px;
   }
@@ -238,7 +241,7 @@
       height: 40px;
       padding: 0;
       padding-left: 10px;
-      font-size: 21px;
+      font-size: 18px;
       line-height: 32px;
     }
     .answer-icon{

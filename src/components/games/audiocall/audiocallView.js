@@ -152,7 +152,7 @@ export default class AudiocallView {
   }
 
   getBackColor() {
-    const randomColor = () => Math.floor(Math.random() * 255);
+    const randomColor = () => Math.floor(Math.random() * 55);
     this.backColor = {
       r: randomColor(),
       g: randomColor(),
@@ -165,9 +165,9 @@ export default class AudiocallView {
   }
 
   changeBackground() {
-    this.backColor.r -= 10;
-    this.backColor.g -= 20;
-    this.backColor.b -= 30;
+    this.backColor.r += 5;
+    this.backColor.g += 10;
+    this.backColor.b += 20;
     this.setBackground();
   }
 

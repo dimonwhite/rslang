@@ -92,12 +92,12 @@ export default class AudiocallController {
 
   addListeners() {
     this.view.game.addEventListener('click', this.clickHandler);
-    window.document.addEventListener('keypress', this.keypressHandler);
+    window.addEventListener('keydown', this.keypressHandler);
   }
 
   removeListeners() {
     this.view.game.removeEventListener('click', this.clickHandler);
-    window.document.removeEventListener('keypress', this.keypressHandler);
+    window.removeEventListener('keydown', this.keypressHandler);
   }
 
   isModelUserWords() {
