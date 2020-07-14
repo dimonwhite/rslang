@@ -95,7 +95,8 @@ export default class CardController {
     this.view.leftArrow.addEventListener('click', this.moveToLeft.bind(this));
     this.view.cardPlay.addEventListener('click', this.playWord.bind(this, true));
     this.view.input.addEventListener('input', this.inputSymbols.bind(this));
-    document.body.onkeydown = (e) => { if (e.code === 'Enter') this.eventRight(); };
+    this.listener = (e) => { if (e.code === 'Enter') this.eventRight(); };
+    window.addEventListener('keydown', this.listener);
     this.view.rightArrow.addEventListener('click', this.eventRight.bind(this));
     this.view.cardRemove.addEventListener('click', this.eventRemove.bind(this));
     this.view.cardDiff.addEventListener('click', this.eventBookmark.bind(this));
@@ -557,44 +558,56 @@ export default class CardController {
 
   async setSettings(e) {
     if (e.target.tagName === 'INPUT') {
-      if (this.view.getSettings()) {
-        [
-          this.params.generatedListToday,
-          this.params.numberWordsForToday,
-          this.params.numberListPages,
-        ] = await this.model.createList({
-          settings: this.view.settings,
-          generatedListToday: false,
-          wordsRepeatToday: this.params.wordsRepeatToday,
-          numberListPages: this.numberListPages,
-        });
-        this.params.passedToday = 0;
-        this.params.cardIndex = 0;
-        this.params.consecutive = 0;
-        this.params.newConsecutive = 0;
-        this.params.newWordsToday = 0;
-        this.currentMistake = false;
-        this.params.correctAnswer = 0;
-        this.view.clearCard();
+      const emptyList = await this.createNewList();
+
+      if (!emptyList) {
         const len = this.model.listToday.length;
-        const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[+0];
-        this.view.setWordInCard({
-          next: false, numberWords: len, passedTodaY: 0, word, cardIndeX: 0,
+        const index = this.params.cardIndex;
+        const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[index];
+
+        this.settings.optional.settings = this.view.settings;
+        await this.user.createUserSettings({ learnedWords: 0, optional: this.settings.optional });
+        this.view.setSettingsInCard({
+          word, cardIndex: index, passedToday: this.params.passedToday, change: true,
         });
-        await this.setTodayStatStorage();
-        await this.model.putListToday();
       }
-
-      const len = this.model.listToday.length;
-      const index = this.params.cardIndex;
-      const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[index];
-
-      this.settings.optional.settings = this.view.settings;
-      await this.user.createUserSettings({ learnedWords: 0, optional: this.settings.optional });
-      this.view.setSettingsInCard({
-        word, cardIndex: index, passedToday: this.params.passedToday, change: true,
-      });
     }
+  }
+
+  async createNewList() {
+    if (this.view.getSettings()) {
+      [
+        this.params.generatedListToday,
+        this.params.numberWordsForToday,
+        this.params.numberListPages,
+      ] = await this.model.createList({
+        settings: this.view.settings,
+        generatedListToday: false,
+        wordsRepeatToday: this.params.wordsRepeatToday,
+        numberListPages: this.numberListPages,
+      });
+      this.params.passedToday = 0;
+      this.params.cardIndex = 0;
+      this.params.consecutive = 0;
+      this.params.newConsecutive = 0;
+      this.params.newWordsToday = 0;
+      this.currentMistake = false;
+      this.params.correctAnswer = 0;
+      if (this.model.listToday.length === 0) {
+        this.params.generatedListToday = false;
+        this.view.inputTodayStatistics({ ...this.params, isEmpty: true });
+        return true;
+      }
+      this.view.clearCard();
+      const len = this.model.listToday.length;
+      const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[+0];
+      this.view.setWordInCard({
+        next: false, numberWords: len, passedTodaY: 0, word, cardIndeX: 0,
+      });
+      await this.setTodayStatStorage();
+      await this.model.putListToday();
+    }
+    return false;
   }
 
   addChartStatistics() {
@@ -615,5 +628,9 @@ export default class CardController {
     if (day < 10) day = `0${day}`;
     if (month < 10) month = `0${month}`;
     this.today = `${day}-${month}-${today.getFullYear()}`;
+  }
+
+  removeListeners() {
+    window.removeEventListener('keydown', this.listener);
   }
 }

@@ -3,6 +3,7 @@ export default class CardModel {
     this.user = user;
     this.data = [];
     this.listToday = [];
+    this.fullListToday = [];
     this.allStudyWords = [];
     this.defaultRating = 1;
     this.WORDS_PER_PAGE = 10;
@@ -18,8 +19,9 @@ export default class CardModel {
       await this.createNewWords(settings);
       this.listToday = [];
       const wordsForToday = await this.createListToday();
-
-      const newNumberListPages = Math.ceil(this.listToday.length / this.WORDS_PER_PAGE);
+      this.fullListToday = this.listToday;
+      this.setListToday(settings);
+      const newNumberListPages = Math.ceil(this.fullListToday.length / this.WORDS_PER_PAGE);
       return [true, wordsForToday, newNumberListPages];
     }
     return [generatedListToday, wordsRepeatToday, numberListPages];
@@ -32,17 +34,6 @@ export default class CardModel {
       this.allStudyWords = userWords.slice(WORDS_START_WITH).map((item) => item.optional);
       this.allStudyWords.sort((a, b) => a.nextTime - b.nextTime);
     }
-    // else if (userWords.length === 0) {
-    //   const difficulty = 'today';
-    //   const ID_LENGTH = 24;
-    //   for (let i = 0; i < WORDS_START_WITH; i += 1) {
-    //     const wordId = String(i).repeat(ID_LENGTH);
-    //     const wordData = {};
-    //     wordData.listToday = 'empty';
-    //     // eslint-disable-next-line no-await-in-loop
-    //     await this.user.createUserWord({ wordData, wordId, difficulty });
-    //   }
-    // }
   }
 
   async createNewWords(settings) {
@@ -108,10 +99,26 @@ export default class CardModel {
     return wordsStudyForToday.length;
   }
 
+  setListToday(settings) {
+    if (settings.allDifficult) {
+      this.listToday = this.allStudyWords.filter((word) => word.state === 'difficult');
+      this.fullListToday = this.listToday;
+    } else if (settings.onlyNew) {
+      this.listToday = this.fullListToday.filter((word) => word.isNew);
+    } else if (settings.onlyRepeat) {
+      this.listToday = this.fullListToday.filter((word) => !word.isNew);
+    } else if (settings.allTodayWords) {
+      this.listToday = [
+        ...this.fullListToday.filter((word) => word.isPassed),
+        ...this.fullListToday.filter((word) => !word.isPassed),
+      ];
+    }
+  }
+
   async putListToday() {
     const difficulty = 'today';
     const ID_LENGTH = 24;
-    const numberListPages = Math.ceil(this.listToday.length / this.WORDS_PER_PAGE);
+    const numberListPages = Math.ceil(this.fullListToday.length / this.WORDS_PER_PAGE);
     const promises = [];
     for (let i = 0; i < numberListPages; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);

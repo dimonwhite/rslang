@@ -76,6 +76,10 @@ const defaultSettings = {
       translate: true,
       meaningWordTransl: true,
       exampleWordTransl: true,
+      onlyRepeat: false,
+      onlyNew: false,
+      allDifficult: false,
+      allTodayWords: true,
     },
     dictSettings: {
       dictExample: true,
