@@ -404,33 +404,60 @@ export default class CardController {
     const lastWord = this.model.listToday[this.model.listToday.length - 1];
     const currentWord = this.model.listToday[this.params.cardIndex];
     const word = (this.cut) ? lastWord : currentWord;
-    const playWord = new Audio();
-    playWord.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
-    const playMeaning = new Audio();
-    playMeaning.src = `${urlGitHub}${word.audioMeaning.replace('files/', '')}`;
-    const playExample = new Audio();
-    playExample.src = `${urlGitHub}${word.audioExample.replace('files/', '')}`;
-    playWord.play();
-    playWord.onended = () => {
-      if (this.view.settings.meaningWord) {
-        playMeaning.play();
-      } else if (this.view.settings.exampleWord) {
-        playExample.play();
-      } else this.moveNexCard();
-    };
-    playMeaning.onended = () => {
-      if (this.view.settings.exampleWord) {
-        playExample.play();
-      } else this.moveNexCard();
-    };
-    playExample.onended = () => this.moveNexCard();
+    let playWord = null;
+    let playMeaning = null;
+    let playExample = null;
+    if (this.view.settings.translate) {
+      playWord = new Audio();
+      playWord.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
+    }
+    if (this.view.settings.meaningWord) {
+      playMeaning = new Audio();
+      playMeaning.src = `${urlGitHub}${word.audioMeaning.replace('files/', '')}`;
+    }
+    if (this.view.settings.exampleWord) {
+      playExample = new Audio();
+      playExample.src = `${urlGitHub}${word.audioExample.replace('files/', '')}`;
+    }
+    this.play({
+      isClick, playWord, playMeaning, playExample,
+    });
   }
 
-  moveNexCard() {
-    if (this.view.settings.nextCard) {
+  play({
+    isClick, playWord, playMeaning, playExample,
+  }) {
+    if (playWord) {
+      playWord.play();
+      playWord.onended = () => this.playSentences({ playMeaning, playExample, isClick });
+    } else {
+      this.playSentences({ playMeaning, playExample, isClick });
+    }
+
+    if (playMeaning) {
+      playMeaning.onended = () => {
+        if (playExample) {
+          playExample.play();
+        } else this.moveNexCard(isClick);
+      };
+    }
+    if (playExample) playExample.onended = () => this.moveNexCard(isClick);
+  }
+
+  playSentences({ playMeaning, playExample, isClick }) {
+    if (playMeaning) {
+      playMeaning.play();
+    } else if (playExample) {
+      playExample.play();
+    } else this.moveNexCard(isClick);
+  }
+
+  moveNexCard(isClick) {
+    if (!isClick) {
       this.view.lockElements();
+      this.view.lockArrows(false);
       this.unlock = true;
-      this.eventRight(true);
+      if (this.view.settings.nextCard) this.eventRight(true);
     }
   }
 

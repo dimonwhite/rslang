@@ -395,12 +395,12 @@ export default class CardView {
     } else {
       this.translationWord.classList.add('hide');
     }
-    if (this.settings.meaningWordTransl) {
+    if (this.settings.meaningWordTransl && this.settings.meaningWord) {
       this.cardMeaningTranslation.classList.remove('hide-text');
     } else {
       this.cardMeaningTranslation.classList.add('hide-text');
     }
-    if (this.settings.exampleWordTransl) {
+    if (this.settings.exampleWordTransl && this.settings.exampleWord) {
       this.cardExampleTranslation.classList.remove('hide-text');
     } else {
       this.cardExampleTranslation.classList.add('hide-text');
