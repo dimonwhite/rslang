@@ -69,11 +69,11 @@
 }
 .progress-slider[type="range"] {
     -webkit-appearance: none;
+    position: relative;
     width: 100%;
     position: absolute;
     z-index: 5;
-    top: -12px;
-    right: 11%;
+    top: -17px;
 }
 .progress-slider[type="range"]:focus {
     outline: none;
@@ -92,6 +92,7 @@
     height: 55px;
     width: 125px;
     background-image: url("../assets/icons/statistic/polzunok.png");
+    background-repeat: no-repeat;
     background-size: contain;
     background-repeat: no-repeat;
     border: none;
@@ -106,12 +107,12 @@
 }
 
 .progress-line::-webkit-progress-bar {
-    background: -webkit-linear-gradient(left, rgb(255, 29, 37) 1%, rgb(241, 188, 0) 100%);
+    background: #bc7bef;
     border-radius: 76px;
 }
 
 .progress-line::-webkit-progress-value {
-    background: #bc7bef;
+    background: -webkit-linear-gradient(left, rgb(255, 29, 37) 1%, rgb(241, 188, 0) 100%);;
     border-radius: 76px;
 }
 
