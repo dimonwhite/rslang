@@ -12,7 +12,7 @@ export default class TodayProgressView {
     document.body.classList.add('statistic-page');
   }
 
-  createProgressBar(max, currentValue, commonQuantityWords) {
+  createProgressBar(max, currentValue, allWords) {
     this.progress.innerHTML = `<h2 class="progress-title">Ваш прогресс на сегодня</h2>
     <div class='progress-bar'>
       <p class='progress-learned-words'>${currentValue} <span>слов</span></p>
@@ -22,7 +22,6 @@ export default class TodayProgressView {
       </div>
       <p class='progress-all-words'><span>из</span> ${max}</p>
     </div>
-    <div class='common-quantity-words'>Вы уже знаете <span>${commonQuantityWords}</span>!</div>
-    `;
+    <div class='common-quantity-words'>Вы уже знаете <span>${allWords}</span> слов!</div>`;
   }
 }
