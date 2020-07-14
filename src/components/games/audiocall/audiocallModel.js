@@ -10,6 +10,7 @@ export default class AudiocallModel {
     this.optionWordsNumber = 4;
     this.step = 0;
     this.isStepGoing = false;
+    this.isContinueAble = false;
     this.score = 0;
   }
 
