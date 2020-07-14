@@ -3,10 +3,14 @@ Element.prototype.show = function show(time = 0) {
   this.style.display = 'block';
   this.style.height = `${this.scrollHeight}px`;
   this.style.opacity = '1';
+  setTimeout(() => {
+    this.style.height = 'auto';
+  }, time);
   return this;
 };
 
 Element.prototype.hide = function hide(time = 0) {
+  this.style.height = `${this.scrollHeight}px`;
   this.style.cssText = `display: block; overflow: hidden; height: ${`${this.scrollHeight}px`}; opacity: 1; transition: all ${time}ms;`;
   this.style.height = '0px';
   this.style.opacity = '0';

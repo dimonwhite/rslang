@@ -64,12 +64,12 @@ export default class AudiocallController {
 
   keypressHandler(e) {
     const eventKeys = [1, 2, 3, 4, 5];
-    if (+e.key === this.view.rightWord.index && this.model.isStepGoing) {
+    if (this.model.isStepGoing && +e.key === this.view.rightWord.index) {
       this.model.score += 1;
       this.endStep(true);
     }
-    if (+e.key !== this.view.rightWord.index
-      && eventKeys.includes(+e.key) && this.model.isStepGoing) {
+    if (this.model.isStepGoing && +e.key !== this.view.rightWord.index
+      && eventKeys.includes(+e.key)) {
       this.endStep(false);
       this.view.wordWrapper.querySelectorAll('.word').forEach((el) => {
         if (el.innerText.slice(0, 1) === e.key) {
@@ -79,12 +79,12 @@ export default class AudiocallController {
       });
     }
 
-    if (e.code === 'Space' && this.model.isStepGoing) {
+    if (this.model.isStepGoing && e.code === 'Space') {
       e.preventDefault();
       this.idkTip();
     }
 
-    if (e.code === 'Enter' && this.model.isContinueAble) {
+    if (this.model.isContinueAble && e.code === 'Enter') {
       e.preventDefault();
       this.continueHandler();
     }

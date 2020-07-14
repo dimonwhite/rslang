@@ -264,6 +264,10 @@ export default class DictionaryView {
   }
 
   createSettings(arr) {
+    if (this.settingsBlock.classList.contains('settings-card')) {
+      this.settingsBlock.classList.remove('settings-card');
+    }
+
     const content = `<h2 class="settings__title">Настройки</h2>
     <div class="setting-block">
       <div class="setting-block__title">Настройки словаря</div>
