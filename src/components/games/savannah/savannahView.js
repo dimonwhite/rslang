@@ -3,8 +3,7 @@ import { createElement } from '@/utils';
 export default class SavannahView {
   constructor() {
     this.countHearts = 5;
-    this.SHIP_HIGHT = 40;
-    this.BG_HIGHT = 3317;
+    this.SHIP_HIGHT = 60;
     this.speed = 7;
     this.lang = 'EN';
   }
@@ -19,7 +18,6 @@ export default class SavannahView {
     this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });
     this.savannah.append(this.createGame());
     this.main.append(this.savannah);
-    this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
     this.setSettings();
   }
 
@@ -244,11 +242,10 @@ export default class SavannahView {
   }
 
   moveBackground(delta) {
-    const bg = +this.startBg.replace('px', '');
-    this.game.style.backgroundPositionY = `${bg + Math.floor(this.BG_HIGHT * delta)}px`;
+    this.game.style.backgroundPosition = `0% ${100 - delta}%`;
     setTimeout(() => {
-      this.ship.style.height = `${Math.floor(this.SHIP_HIGHT * (delta + 1))}px`;
-      this.ship.style.width = `${Math.floor(this.SHIP_HIGHT * (delta + 1))}px`;
+      this.ship.style.height = `${Math.floor(this.SHIP_HIGHT * ((delta / 100) + 1))}px`;
+      this.ship.style.width = `${Math.floor(this.SHIP_HIGHT * ((delta / 100) + 1))}px`;
     }, 2000);
   }
 
@@ -322,7 +319,7 @@ export default class SavannahView {
     this.time.innerHTML = '3';
     this.ship.style.height = `${this.SHIP_HIGHT}px`;
     this.ship.style.width = `${this.SHIP_HIGHT}px`;
-    this.game.style.backgroundPositionY = this.startBg;
+    this.game.style.backgroundPosition = '0% 100%';
     Array.from(this.hearts.children).forEach((item) => {
       item.classList.remove('heart-empty');
     });

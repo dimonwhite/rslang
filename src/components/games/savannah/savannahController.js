@@ -35,7 +35,8 @@ export default class SavannahController {
     this.view.options.addEventListener('click', this.getAnswer.bind(this));
     this.view.learnedWords.addEventListener('click', this.selectWords.bind(this));
     document.getElementById('startGame').addEventListener('click', this.getStart.bind(this));
-    document.body.addEventListener('keydown', this.setEventsKeyboard.bind(this));
+    this.listener = this.setEventsKeyboard.bind(this);
+    window.addEventListener('keydown', this.listener);
     document.getElementById('cancel').addEventListener('click', this.cancel.bind(this));
     document.getElementById('closePopup').addEventListener('click', this.cancel.bind(this));
     document.getElementById('selectHearts').addEventListener('change', this.getHearts.bind(this));
@@ -111,7 +112,7 @@ export default class SavannahController {
         this.view.setAnswer('correct', target);
         this.getAudio('correctly');
         this.correctly += 1;
-        const delta = (this.correctly / this.count);
+        const delta = Math.floor(100 / this.count) * this.correctly;
         this.view.getCorrectlyAnswer(delta);
         this.model.words[this.attempt].success = true;
       } else {
@@ -126,7 +127,7 @@ export default class SavannahController {
       this.attempt += 1;
       this.view.top.addEventListener('animationend', this.checkEndGame.bind(this));
       this.view.bottom.addEventListener('animationend', this.checkEndGame.bind(this));
-      if (this.level === -1 && copyWord && this.view.model) {
+      if (this.level === -1 && copyWord && this.model.own) {
         await this.changeWordStatistics(copyWord);
       }
       await this.changeStatistics();
@@ -274,13 +275,17 @@ export default class SavannahController {
   }
 
   async changeStatistics() {
-    this.stat[this.timeCurGame] = `${this.correctly},${this.attempt}`;
+    this.stat[this.timeCurGame] = `${this.correctly},${this.attempt - this.correctly}`;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
   }
 
   async changeWordStatistics(word) {
     word.nextTime = new Date().getTime();
     await this.user.updateUserWord({ wordData: word, wordId: word.id, difficulty: 'string' });
+  }
+
+  removeListeners() {
+    window.removeEventListener('keydown', this.listener);
   }
 
   getAudio(stateGame) {
