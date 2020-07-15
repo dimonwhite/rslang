@@ -19,6 +19,7 @@ export default class Router {
       promo: PromoPageView,
     };
     this.nav = document.getElementById('nav');
+    this.btnNav = document.getElementById('headerBtn');
     this.main = document.querySelector('.main');
   }
 
@@ -33,6 +34,8 @@ export default class Router {
   }
 
   changePage() {
+    this.btnNav.classList.remove('header__btn-active');
+    this.nav.classList.remove('nav-show');
     this.parseHash();
     const PageClass = this.pages[this.urlArray.shift()];
     if (PageClass) {

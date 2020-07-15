@@ -24,6 +24,8 @@ export default class SprintModel {
   }
 
   async getUserWords() {
+    this.gameWords = [];
+    this.gameFalseWords = [];
     const words = await this.http.getAllUserWords();
     let userWords = words.splice(10);
     userWords = userWords.map((word) => word.optional);
@@ -35,6 +37,8 @@ export default class SprintModel {
   }
 
   async getJustWords(group, count) {
+    this.gameWords = [];
+    this.gameFalseWords = [];
     const data = await this.http.getWords({
       group, page: this.page, maxLength: 50, wordsPerPage: count,
     });

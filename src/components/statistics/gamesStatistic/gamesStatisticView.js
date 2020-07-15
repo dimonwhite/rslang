@@ -56,7 +56,6 @@ export default class GamesStatisticView {
         </li>
       `;
     }
-    console.log(gameName);
     this.windowGameStatistic.innerHTML = `
     <img class="game-logo" src=${this.iconsGamesUrl[gameName]}></img>
     <h3 class="game-name">${gameName}</h3>

@@ -1,3 +1,14 @@
+import checkTrueImg from '@/assets/img/Sprint/Check-True.png';
+import planetImg1 from '@/assets/img/Sprint/Planet1.png';
+import planetImg2 from '@/assets/img/Sprint/Planet2.png';
+import planetImg3 from '@/assets/img/Sprint/Planet3.png';
+import planetImg4 from '@/assets/img/Sprint/Planet4.png';
+import correctAudio from '@/assets/sounds/sprint/correct.mp3';
+import errorAudio from '@/assets/sounds/sprint/error.mp3';
+import successAudio from '@/assets/sounds/sprint/success.mp3';
+import endgameAudio from '@/assets/sounds/sprint/endgame.mp3';
+import loaderAudio from '@/assets/sounds/sprint/loader.mp3';
+import lustsecond from '@/assets/sounds/sprint/lustsecond.mp3';
 import { createElement, getSvg } from '../../../utils';
 
 export default class SprintView {
@@ -7,18 +18,27 @@ export default class SprintView {
     this.addTime = 60;
     this.audio = new Audio();
     this.audioLust = new Audio();
+    this.planetImgs = {
+      planet1: planetImg1,
+      planet2: planetImg2,
+      planet3: planetImg3,
+      planet4: planetImg4,
+    };
+    this.audioList = {
+      correct: correctAudio,
+      error: errorAudio,
+      success: successAudio,
+      endgame: endgameAudio,
+      loader: loaderAudio,
+    };
   }
 
   renderHTML() {
     SprintView.noPadding();
     this.createElements();
     this.appendElements();
-    // this.addCircleBar();
 
-    // SprintView.addBackgroundImage();
     this.main.append(this.game);
-    // this.findOptions();
-    // SprintView.makeCircle();
   }
 
   createElements() {
@@ -178,33 +198,26 @@ export default class SprintView {
   }
 
   static getBonus(i) {
-    const check = '<img src="/src/assets/img/sprint/Check-True.png" class="game__sprint__true__check__item" alt="True">';
+    const check = `<img src="${checkTrueImg}" class="game__sprint__true__check__item" alt="True">`;
 
     document.querySelector(`.game__sprint__bonus__area__${i}`).insertAdjacentHTML('beforeend', check);
   }
 
-  static getBonusPlanet(i) {
-    const planet = `<img src="/src/assets/img/Sprint/Planet${i}.png" class="game__sprint__bonus__item__planet__icon${i}" alt="True">`;
+  getBonusPlanet(i) {
+    const planet = `<img src="${this.planetImgs[`planet${i}`]}" class="game__sprint__bonus__item__planet__icon${i}" alt="True">`;
 
     document.querySelector(`.game__sprint__bonus__item${i}`).insertAdjacentHTML('beforeend', planet);
   }
 
-  addTextDescription(i) {
-    switch (i) {
-      case 3:
-        this.answerCheck.style.color = 'yellow';
-        this.answerCheck.textContent = 'Серия правильных ответов! Бонус: +20 очков! Планета открыта!';
-        setTimeout(() => {
-          this.answerCheck.innerHTML = ' ';
-        }, 2000);
-        break;
-      default:
-        this.answerCheck.style.color = 'yellow';
-        this.answerCheck.textContent = 'Верно: +10 очков!';
-        setTimeout(() => {
-          this.answerCheck.innerHTML = ' ';
-        }, 2000);
-        break;
+  addTextDescription(i, multiply) {
+    if (i === 4) {
+      this.answerCheck.style.color = 'yellow';
+      this.answerCheck.textContent = `Серия правильных ответов! Бонус: умножение очков на ${multiply}! Планета открыта!`;
+      this.removeTextAnswerCheck();
+    } else {
+      this.answerCheck.style.color = 'yellow';
+      this.answerCheck.textContent = `Верно: +${10 * multiply} очков!`;
+      this.removeTextAnswerCheck();
     }
   }
 
@@ -213,30 +226,22 @@ export default class SprintView {
       case 1:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка!';
-        setTimeout(() => {
-          this.answerCheck.innerHTML = ' ';
-        }, 2000);
+        this.removeTextAnswerCheck();
         break;
       case 2:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка! Серия прервана!';
-        setTimeout(() => {
-          this.answerCheck.innerHTML = ' ';
-        }, 2000);
+        this.removeTextAnswerCheck();
         break;
       case 3:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка! Серия прервана!';
-        setTimeout(() => {
-          this.answerCheck.innerHTML = ' ';
-        }, 2000);
+        this.removeTextAnswerCheck();
         break;
       default:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка!';
-        setTimeout(() => {
-          this.answerCheck.innerHTML = ' ';
-        }, 2000);
+        this.removeTextAnswerCheck();
         break;
     }
   }
@@ -244,24 +249,28 @@ export default class SprintView {
   addTrue() {
     this.answerCheck.style.color = 'yellow';
     this.answerCheck.textContent = 'Верно: +10 очков!';
-    setTimeout(() => {
-      this.answerCheck.innerHTML = ' ';
-    }, 2000);
+    this.removeTextAnswerCheck();
   }
 
   addFalse() {
     this.answerCheck.style.color = 'red';
     this.answerCheck.textContent = 'Ошибка! Серия прервана!';
-    setTimeout(() => {
-      this.answerCheck.innerHTML = ' ';
-    }, 2000);
+    this.removeTextAnswerCheck();
   }
 
-  addTrueBonusTittle() {
-    this.answerCheck.textContent = 'Серия правильных ответов! Бонус: +20 очков и новая планета!';
-    setTimeout(() => {
+  addTrueBonusTittle(multiply) {
+    this.answerCheck.textContent = `Серия правильных ответов! Бонус: умножение очков на ${multiply}! Планета открыта!`;
+    this.removeTextAnswerCheck();
+  }
+
+  removeTextAnswerCheck() {
+    if (this.answerCheckTimer) {
+      clearTimeout(this.answerCheckTimer);
+    }
+
+    this.answerCheckTimer = setTimeout(() => {
       this.answerCheck.innerHTML = ' ';
-    }, 500);
+    }, 2000);
   }
 
   clearBonus() {
@@ -297,12 +306,12 @@ export default class SprintView {
   }
 
   playAudio(sound) {
-    this.audio.src = `/src/assets/sounds/sprint/${sound}.mp3`;
+    this.audio.src = this.audioList[sound];
     this.audio.play().catch(() => this.audio.currentTime);
   }
 
   playLustSecond() {
-    this.audioLust.src = '/src/assets/sounds/sprint/lustsecond.mp3';
+    this.audioLust.src = lustsecond;
     this.audioLust.play();
   }
 
