@@ -15,33 +15,39 @@ export default class SavannahModel {
   }
 
   async createWords() {
-    const SENTENCE = 99;
     this.own = true;
-    const userWords = await this.user.getAllUserWords();
+    const filterWords = await this.user.getAllUserWords();
     const WORDS_START_WITH = 10;
+    let levelWords = true;
     this.time = new Date().getTime();
-    if (userWords.length > WORDS_START_WITH + 100 && this.level === -1) {
-      this.allStudyWords = userWords.slice(WORDS_START_WITH).map((item) => item.optional);
-      this.random(this.allStudyWords);
-    } else {
-      const HANDICAP = 10;
-      const countWords = this.countWords + HANDICAP;
-      let level = 0;
-      if (this.level >= 0) {
-        level = this.level;
-        this.own = false;
+    const MIN_WORDS = this.countWords + this.maxHeart;
+    if (filterWords.length > WORDS_START_WITH && this.level === -1) {
+      this.allStudyWords = filterWords.slice(WORDS_START_WITH).map((item) => item.optional);
+      this.allStudyWords = this.allStudyWords.filter((word) => word.state !== 'remove');
+      if (this.allStudyWords.length >= MIN_WORDS) {
+        this.random(this.allStudyWords);
+        levelWords = false;
       }
-      const words = await this.user.getWords({
-        group: level, page: this.page, maxLength: SENTENCE, wordsPerPage: countWords,
-      });
-      this.random(words);
     }
+    if (levelWords) await this.getLevelsWords();
+  }
+
+  async getLevelsWords() {
+    const HANDICAP = 10;
+    const SENTENCE = 99;
+    const countWords = this.countWords + HANDICAP;
+    this.own = false;
+    if (this.level < 0) this.level = 0;
+    const words = await this.user.getWords({
+      group: this.level, page: this.page, maxLength: SENTENCE, wordsPerPage: countWords,
+    });
+    this.random(words);
   }
 
   random(words) {
     const unique = [];
     const length = this.countWords + this.maxHeart;
-    for (let i = 0; i < length && length < words.length; i += 1) {
+    for (let i = 0; i < length && length <= words.length; i += 1) {
       const rand = Math.floor(Math.random() * (words.length + 1));
       if (words[rand] && words[rand].wordTranslate) {
         if (unique.includes(rand)) {
