@@ -136,18 +136,20 @@ export default class CardModel {
     return resultObj;
   }
 
-  async getListToday(numberListPages) {
+  async getListToday(numberListPages, settings) {
     const ID_LENGTH = 24;
     const promises = [];
     this.listToday = [];
+    this.fullListToday = [];
     for (let i = 0; i < numberListPages; i += 1) {
       const wordId = String(i).repeat(ID_LENGTH);
       promises.push(this.user.getUserWordById(wordId));
     }
     const pages = await Promise.all(promises);
     pages.forEach((page) => {
-      this.listToday = [...this.listToday, ...Object.values(page.optional)];
+      this.fullListToday = [...this.fullListToday, ...Object.values(page.optional)];
     });
+    this.setListToday(settings);
   }
 
   async putListPage(word) {

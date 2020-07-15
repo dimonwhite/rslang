@@ -4,6 +4,15 @@
 
 /*---------------------CARD-----------------------*/
 
+@keyframes fly {
+    0% {
+        transform: translateX(0px);
+    }
+    100% {
+        transform: translateX(1000px);
+    }
+}
+
 .card {
     width: 100%;
     margin: 0 auto;
@@ -428,6 +437,7 @@
     }
 }
 
+
 /*------------------PROGRESS----------------------*/
 .card__progress {
     -webkit-appearance: none;
@@ -575,7 +585,7 @@
 .custom-rating {
     background-color: brown !important;
     color: whitesmoke !important;
-    border: 3px solid brown !important;
+    border: 3px solid brown;
 }
 /*----------------END TOGGLE CLASSES-----------------*/
 
@@ -743,6 +753,37 @@
     }
 }
 
+.card__preloader {
+    left: 10vw;
+    top: 40%;
+    position: absolute;
+    transform: rotate(90deg);
+    width: 10vw;
+    height: 10vw;
+    background-image: url("/src/assets/img/ship.png");
+    background-size: cover;
+    animation: timing 5s infinite;
+}
+
+@keyframes timing {
+  0% {
+    transform: rotate(90deg);
+  }
+  45% {
+    left: 80vw; // calc(100% - 110px);
+    transform: rotate(90deg);
+  }
+  50% {
+    transform: rotate(270deg);
+  }
+  95% {
+    transform: rotate(270deg);
+  }
+  100% {
+    transform: rotate(90deg);
+  }
+}
+
 @media only screen and (max-width: 400px) {
     .card {
         &__img {
@@ -754,7 +795,6 @@
         }
         &__left,
         &__right {
-            // top: 210px;
             min-width: 60px;
             min-height: 80px;
         }

@@ -18,16 +18,24 @@
     left: -12px;
 }
 
-.signature-item:hover {
-    .signature-text {
-        display: inline;
-    }
+.signature-date {
+    display: none;
+    position: relative;
+    top: 36px;
+    width: 150px;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 5%;
+    border-radius: 50px;
+    color: #64007d;
+    background-color: #b780ff;
 }
+
 
 .signature-text {
     display: none;
     position: relative;
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 700;
     padding: 5px;
     border-radius: 78px;
@@ -36,6 +44,16 @@
     top: 29px;
     transition: 0.2s;
 }
+
+.signature-item:hover {
+    .signature-text {
+        display: inline;
+    }
+    .signature-date {
+        display: block;
+    }
+}
+
 
 @media screen and (max-width: 670px) {
     .graphMain {
