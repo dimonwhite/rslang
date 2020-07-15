@@ -356,7 +356,11 @@ export default class SprintController {
     this.view.getPreloader();
     this.addLoadTimer();
     this.game = true;
-    setTimeout(() => {
+    this.playLoaderAudio();
+  }
+
+  playLoaderAudio() {
+    this.loaderAudioTimeout = setTimeout(() => {
       this.view.playAudio('loader');
     }, 1000);
   }
@@ -399,9 +403,7 @@ export default class SprintController {
     this.view.clearPlanet();
     this.view.addButton();
     this.game = true;
-    setTimeout(() => {
-      this.view.playAudio('loader');
-    }, 1000);
+    this.playLoaderAudio();
     this.view.clearBonus();
     this.makeWordField();
     this.view.restartCircleTimer();
@@ -446,5 +448,6 @@ export default class SprintController {
     clearInterval(this.view.IntervalLoaderHide);
     this.view.audio.pause();
     this.view.audioLust.pause();
+    clearTimeout(this.loaderAudioTimeout);
   }
 }
