@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { urlGitHub } from '@/constants';
 import CardView from './cardView';
 import CardModel from './cardModel';
@@ -130,7 +131,8 @@ export default class CardController {
     this.view.cardHard.addEventListener('click', this.setInterval.bind(this, 'cardHard', 0));
     this.view.cardNormal.addEventListener('click', this.setInterval.bind(this, 'cardNormal', 1));
     this.view.cardEasy.addEventListener('click', this.setInterval.bind(this, 'cardEasy', 2));
-    this.view.settingsBlock.addEventListener('change', this.setSettings.bind(this));
+    this.listenerSettigs = this.setSettings.bind(this);
+    this.view.settingsBlock.addEventListener('change', this.listenerSettigs);
     const idChecks = ['translate', 'meaningWord', 'exampleWord'];
     idChecks.forEach((item) => {
       document.getElementById(item).addEventListener('click', () => {
@@ -188,12 +190,8 @@ export default class CardController {
       if (removeWord.isPassed) {
         if (state === 'remove') {
           this.statistics.optional.statisticsChart[removeWord.firstDate] -= 1;
-          // if (removeWord.firstDate === this.today && this.params.newWordsToday > 0) {
-          //   this.params.newWordsToday -= 1;
-          // }
         } else {
           this.statistics.optional.statisticsChart[removeWord.firstDate] += 1;
-          // if (removeWord.firstDate === this.today) this.params.newWordsToday += 1;
         }
         this.view.setInDictionary(state, this.params.currentMistake);
       } else if (state === 'remove') {
@@ -619,11 +617,25 @@ export default class CardController {
         const index = this.params.cardIndex;
         const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[index];
 
-        this.settings.optional.settings = this.view.settings;
-        await this.user.createUserSettings({ learnedWords: 0, optional: this.settings.optional });
-        this.view.setSettingsInCard({
-          word, cardIndex: index, passedToday: this.params.passedToday, change: true,
-        });
+        if (word) {
+          const dict = [
+            'dictExample',
+            'dictMeaning',
+            'dictTranscr',
+            'dictSound',
+            'dictImg',
+            'dictProgress',
+          ];
+          Object.keys(this.settings.optional.dictSettings).map((key) => {
+            if (!dict.includes(key)) {
+              this.settings.optional.dictSettings[key] = undefined;
+            }
+          });
+          await this.user.createUserSettings({ learnedWords: 0, optional: this.settings.optional });
+          this.view.setSettingsInCard({
+            word, cardIndex: index, passedToday: this.params.passedToday, change: true,
+          });
+        }
       }
     }
   }
@@ -687,5 +699,6 @@ export default class CardController {
 
   removeListeners() {
     window.removeEventListener('keydown', this.listener);
+    this.view.settingsBlock.removeEventListener('change', this.listenerSettigs);
   }
 }

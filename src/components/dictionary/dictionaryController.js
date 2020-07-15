@@ -50,9 +50,10 @@ export default class DictionaryController {
       this.clickList(e);
     });
 
-    this.view.settingsBlock.addEventListener('click', (e) => {
+    this.listener = (e) => {
       this.clickSetting(e);
-    });
+    };
+    this.view.settingsBlock.addEventListener('click', this.listener);
 
     this.scroll = this.listenerScroll.bind(this);
     window.addEventListener('scroll', this.scroll);
@@ -79,6 +80,7 @@ export default class DictionaryController {
 
   removeListeners() {
     window.removeEventListener('scroll', this.scroll);
+    this.view.settingsBlock.removeEventListener('click', this.listener);
   }
 
   search(str) {
