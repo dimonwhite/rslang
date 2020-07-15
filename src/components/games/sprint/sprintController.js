@@ -28,6 +28,7 @@ export default class SprintController {
     this.chekedTranslate = [];
     this.wordControl = false;
     this.multiply = 1;
+    this.timeoutBtn = false;
   }
 
   init() {
@@ -37,13 +38,13 @@ export default class SprintController {
     this.useMyWords();
 
     this.view.btnChoiceTrue.addEventListener('click', () => {
-      if (this.game) {
+      if (this.game && !this.timeoutBtn) {
         this.checkBtnTrue();
       }
     });
 
     this.view.btnChoiceFalse.addEventListener('click', () => {
-      if (this.game) {
+      if (this.game && !this.timeoutBtn) {
         this.checkBtnFalse();
       }
     });
@@ -65,11 +66,11 @@ export default class SprintController {
   }
 
   keyPressArr(event) {
-    if (event.code === 'ArrowLeft' && this.game) {
+    if (event.code === 'ArrowLeft' && this.game && !this.timeoutBtn) {
       this.checkBtnTrue();
       return;
     }
-    if (event.code === 'ArrowRight' && this.game) {
+    if (event.code === 'ArrowRight' && this.game && !this.timeoutBtn) {
       this.checkBtnFalse();
     }
   }
@@ -143,7 +144,17 @@ export default class SprintController {
     }
   }
 
+  createTimeoutBtn() {
+    this.timeoutBtn = true;
+    this.view.addDefaultClassBtns();
+    setTimeout(() => {
+      this.timeoutBtn = false;
+      this.view.removeDefaultClassBtns();
+    }, 700);
+  }
+
   checkBtnTrue() {
+    this.createTimeoutBtn();
     if (this.isCorrect) {
       this.answerCount += 1;
       this.bonusCounter();
@@ -179,6 +190,7 @@ export default class SprintController {
   }
 
   checkBtnFalse() {
+    this.createTimeoutBtn();
     if (!this.isCorrect) {
       this.answerCount += 1;
       this.bonusCounter();
@@ -267,14 +279,18 @@ export default class SprintController {
     if (this.answerCount === 4 && this.multiply < 16) {
       this.multiply *= 2;
       this.view.addTrueBonusTittle(this.multiply);
-      setTimeout(() => {
-        this.view.clearBonus();
-      }, 300);
       this.bonusPlanet += 1;
-      this.answerCount = 0;
       this.view.playAudio('success');
       this.addBonusPlanet();
       this.view.getScore(this.score);
+    }
+    if (this.answerCount === 4 && this.multiply < 16) {
+      setTimeout(() => {
+        this.view.clearBonus();
+      }, 300);
+    }
+    if (this.answerCount === 4 && this.multiply < 16) {
+      this.answerCount = 0;
     }
   }
 

@@ -223,6 +223,7 @@ export default class SprintView {
 
   addTextDescriptionFalse(i) {
     switch (i) {
+      case 0:
       case 1:
         this.answerCheck.style.color = 'red';
         this.answerCheck.textContent = 'Ошибка!';
@@ -240,7 +241,7 @@ export default class SprintView {
         break;
       default:
         this.answerCheck.style.color = 'red';
-        this.answerCheck.textContent = 'Ошибка!';
+        this.answerCheck.textContent = 'Ошибка! Серия прервана!';
         this.removeTextAnswerCheck();
         break;
     }
@@ -342,5 +343,15 @@ export default class SprintView {
   addButton() {
     this.btnChoiceTrue.classList.remove('remove');
     this.btnChoiceFalse.classList.remove('remove');
+  }
+
+  addDefaultClassBtns() {
+    this.btnChoiceFalse.classList.add('default');
+    this.btnChoiceTrue.classList.add('default');
+  }
+
+  removeDefaultClassBtns() {
+    this.btnChoiceFalse.classList.remove('default');
+    this.btnChoiceTrue.classList.remove('default');
   }
 }
