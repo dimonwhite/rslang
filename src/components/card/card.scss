@@ -195,7 +195,6 @@
             font-style: normal;
             font-weight: bold;
             color: #70e1ff;
-            text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
             margin-left: 10px;
             margin-right: 10px;
         }
@@ -213,7 +212,6 @@
             font-size: 16px;
             background-color: #2c42da69;
             color: white;
-            text-shadow: 1px 1px black, -1px 1px black, 1px -1px black, -1px -1px black;
             border-radius: 8px;
             font-weight: 600;
         }
@@ -381,25 +379,19 @@
 /*-------------------END CARD-----------------------*/
 
 .finished {
-    display: none;
-    width: 415px;
-    height: 415px;
+    width: 420px;
     margin: 0 auto;
-    background-color: whitesmoke;
+    background-color: #6f00a8a6;
     flex-direction: column;
-    align-items: stretch;
-    background-image: url("../assets/img/finished.png");
-    background-position: center;
-    background-size: 131%;
-    border-radius: 50%;
+    align-items: center;
     margin-top: 7rem;
+    border-radius: 30px;
 
     &__message {
         font-size: 25px;
         text-align: center;
-        margin-top: 95px;
-        color: #724dd0;
-        text-shadow: 1px 1px 0 saddlebrown;
+        margin-top: 50px;
+        color: #ffc800;
     }
     &__btn {
         font-size: 24px;
@@ -410,31 +402,37 @@
         align-self: center;
     }
     &__statistics {
-        width: 315px;
+        width: 100%;
         margin: 0 auto;
-        text-shadow: #1d2d2d 0 1px 0;
         margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         div {
             display: flex;
             justify-content: space-between;
             font-size: 20px;
-            margin-top: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-            width: 315px;
-            background-color: #00000045;
+            margin-top: 8px;
+            padding: 7px 15px;
+            border-radius: 50px;
+            width: 90%;
+            background-color: #fea9ffcc;
         }
         &-count {
-            color: brown;
+            color: #ff2f00;
+            font-weight: 800;
         }
         &-correct {
-            color: green;
+            color: #ccff00;
+            font-weight: 800;
         }
         &-new {
-            color: #ef7506;
+            color: #ffe000;
+            font-weight: 800;
         }
         &-long {
-            color: #f1c827;
+            color: #6e00ff;
+            font-weight: 800;
         }
     }
 }
@@ -836,13 +834,11 @@
             font-size: 25px;
             text-align: center;
             margin-top: 32px;
-            color: #724dd0;
-            text-shadow: 1px 1px 0 saddlebrown;
+            color: #623acb;
         }
         &__statistics {
             width: 300px;
             margin: 0 auto;
-            text-shadow: #1d2d2d 0 1px 0;
             margin-top: 0px;
 
             div {
