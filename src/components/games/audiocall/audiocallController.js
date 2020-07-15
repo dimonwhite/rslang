@@ -190,11 +190,13 @@ export default class AudiocallController {
     }
     this.view.renderPreloader();
     await this.model.formWordarray();
-    this.view.preloader.remove();
-    this.view.wordWrapper.innerHTML = '';
-    this.view.btnUserWordsDecorate(this.model.isUserWords);
-    this.view.levelUserWordsDecorate(this.model.isUserWords);
-    this.startStep();
+    if (document.querySelector('.main').classList.contains('audiocall')) {
+      this.view.preloader.remove();
+      this.view.wordWrapper.innerHTML = '';
+      this.view.btnUserWordsDecorate(this.model.isUserWords);
+      this.view.levelUserWordsDecorate(this.model.isUserWords);
+      this.startStep();
+    }
   }
 
   async endRound() {

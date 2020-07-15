@@ -182,6 +182,8 @@ export default class SpeakitController {
 
   removeListeners() {
     this.model.game = false;
-    this.recognition.stop();
+    if (this.recognition) {
+      this.recognition.stop();
+    }
   }
 }

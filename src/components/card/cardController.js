@@ -33,7 +33,11 @@ export default class CardController {
   async create() {
     document.getElementById('main').append(this.view.preloader());
     document.body.classList.add('show-main');
-    this.settings = await this.user.getUserSettings();
+    try {
+      this.settings = await this.user.getUserSettings();
+    } catch (e) {
+      return;
+    }
     this.view.settings = this.settings.optional.settings;
     this.statistics = await this.user.getUserStatistics();
     this.params = this.statistics.optional.todayTraining.params;

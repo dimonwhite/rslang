@@ -184,11 +184,11 @@
     .progress-line {
         height: 20px;
     }
-    .progress-slider[type="range"]::-webkit-slider-thumb {
+    .progress-slider[type="range"]::-webkit-slider-thumb, .progress-fire:before {
         height: 55px;
         width: 80px;
     }
-    .progress-slider[type="range"] {
+    .progress-slider[type="range"], .progress-fire:before {
         top: -7px;
     }
 }
@@ -218,10 +218,10 @@
     .progress-line {
         height: 13px;
     }
-    .progress-slider[type="range"] {
+    .progress-slider[type="range"], .progress-fire:before {
         top: -7px;
     }
-    .progress-slider[type="range"]::-webkit-slider-thumb {
+    .progress-slider[type="range"]::-webkit-slider-thumb, .progress-fire:before {
         width: 60px;
     }
 }

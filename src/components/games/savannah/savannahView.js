@@ -146,7 +146,7 @@ export default class SavannahView {
   }
 
   getStartRound() {
-    if (this.coundown) this.countdown.classList.add('hide');
+    if (this.countdown) this.countdown.classList.add('hide');
     if (this.field) this.field.classList.add('show-flex');
   }
 
