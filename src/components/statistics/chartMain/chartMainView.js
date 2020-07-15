@@ -15,7 +15,9 @@ export default class ChartMainView {
     this.setSettingsCanvas = function () {
       this.canvasMainChart.setAttribute('width', sizes.width);
       this.canvasMainChart.setAttribute('height', sizes.height);
-      this.mainStatisticInfo.append(this.canvasMainChart);
+      if (this.mainStatisticInfo) {
+        this.mainStatisticInfo.append(this.canvasMainChart);
+      }
     };
     return this.setSettingsCanvas();
   }
@@ -146,14 +148,16 @@ export default class ChartMainView {
   }
 
   showSignaturesData(obj) {
-    this.mainStatisticInfo.append(this.dataSignature);
-    let content = '';
-    for (let i = 0; i < obj.ranges.length; i += 1) {
-      content += `<p class="signature-item" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">
+    if (this.mainStatisticInfo) {
+      this.mainStatisticInfo.append(this.dataSignature);
+      let content = '';
+      for (let i = 0; i < obj.ranges.length; i += 1) {
+        content += `<p class="signature-item" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">
         <span class="signature-text" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">${obj.quantityWord[i]}</span>
         <span class="signature-date">слов ${obj.dates[i]}</span>
-      </p>`;
+        </p>`;
+      }
+      this.dataSignature.innerHTML = `${content}`;
     }
-    this.dataSignature.innerHTML = `${content}`;
   }
 }

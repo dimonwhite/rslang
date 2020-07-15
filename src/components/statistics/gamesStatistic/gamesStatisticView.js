@@ -1,3 +1,9 @@
+import savannahImg from '@/assets/icons/statistic/game-savanna-icon.png';
+import audiocallImg from '@/assets/icons/statistic/game-audiocall-icon.png';
+import sprintImg from '@/assets/icons/statistic/game-sprint-icon.png';
+import speakitImg from '@/assets/icons/statistic/game-speakit-icon.png';
+import englishPuzzleImg from '@/assets/icons/statistic/game-englishpuzzle-icon.png';
+import ourgamePuzzleImg from '@/assets/icons/statistic/game-ourgame-icon.png';
 import { createElement } from '../../../utils';
 
 export default class GamesStatisticView {
@@ -10,29 +16,31 @@ export default class GamesStatisticView {
       'Savannah',
       'Audiocall',
       'Sprint',
-      'Speak it',
+      'SpeakIt',
       'English Puzzle',
-      'Fillword',
+      'Fillwords',
     ];
     this.iconsGamesUrl = {
-      Саванна: '/src/assets/icons/statistic/game-savanna-icon.png',
-      Аудиовызов: '/src/assets/icons/statistic/game-audiocall-icon.png',
-      Спринт: '/src/assets/icons/statistic/game-sprint-icon.png',
-      'Speak it': '/src/assets/icons/statistic/game-speakit-icon.png',
-      'English puzzle': '/src/assets/icons/statistic/game-englishpuzzle-icon.png',
-      Филворды: '/src/assets/icons/statistic/game-ourgame-icon.png',
+      Savannah: savannahImg,
+      Audiocall: audiocallImg,
+      Sprint: sprintImg,
+      SpeakIt: speakitImg,
+      'English Puzzle': englishPuzzleImg,
+      Fillwords: ourgamePuzzleImg,
     };
   }
 
   createGamesButtons(quantityGames) {
-    this.mainStatisticInfo.append(this.gamesStatistic);
-    this.mainStatisticInfo.append(this.gamestatisticClose);
-    let content = '';
-    for (let i = 0; i < Object.keys(quantityGames).length; i += 1) {
-      content += `
-      <div class="games games-${Object.keys(quantityGames)[i]}" data-game="${Object.keys(quantityGames)[i]}">${this.gamesNamesRu[i]}</div>`;
+    if (this.mainStatisticInfo) {
+      this.mainStatisticInfo.append(this.gamesStatistic);
+      this.mainStatisticInfo.append(this.gamestatisticClose);
+      let content = '';
+      for (let i = 0; i < Object.keys(quantityGames).length; i += 1) {
+        content += `
+        <div class="games games-${Object.keys(quantityGames)[i]}" data-game="${Object.keys(quantityGames)[i]}">${this.gamesNamesRu[i]}</div>`;
+      }
+      this.gamesStatistic.innerHTML = content;
     }
-    this.gamesStatistic.innerHTML = content;
   }
 
   createStatisticWindow(statisticGame, gameName) {
@@ -48,6 +56,7 @@ export default class GamesStatisticView {
         </li>
       `;
     }
+    console.log(gameName);
     this.windowGameStatistic.innerHTML = `
     <img class="game-logo" src=${this.iconsGamesUrl[gameName]}></img>
     <h3 class="game-name">${gameName}</h3>
