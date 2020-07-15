@@ -11,16 +11,16 @@ export default class GamesStatisticView {
       'Audiocall',
       'Sprint',
       'Speak it',
-      'English Puzzle',
+      'English puzzle',
       'Fillword',
     ];
     this.iconsGamesUrl = {
-      Саванна: '/src/assets/icons/statistic/game-savanna-icon.png',
-      Аудиовызов: '/src/assets/icons/statistic/game-audiocall-icon.png',
-      Спринт: '/src/assets/icons/statistic/game-sprint-icon.png',
+      Savannah: '/src/assets/icons/statistic/game-savanna-icon.png',
+      Audiocall: '/src/assets/icons/statistic/game-audiocall-icon.png',
+      Sprint: '/src/assets/icons/statistic/game-sprint-icon.png',
       'Speak it': '/src/assets/icons/statistic/game-speakit-icon.png',
       'English puzzle': '/src/assets/icons/statistic/game-englishpuzzle-icon.png',
-      Филворды: '/src/assets/icons/statistic/game-ourgame-icon.png',
+      Fillword: '/src/assets/icons/statistic/game-ourgame-icon.png',
     };
   }
 
