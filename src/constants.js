@@ -34,6 +34,7 @@ const defaultStatistics = {
     statisticsChart: {
       length: 0,
     },
+    allUserWords: 0,
     todayTraining: {
       lastDate: 2062020,
       params: {
@@ -73,6 +74,14 @@ const defaultSettings = {
       sound: false,
       transcription: true,
       translate: true,
+      interval: true,
+      meaningWordTransl: true,
+      exampleWordTransl: true,
+      nextCard: false,
+      onlyRepeat: false,
+      onlyNew: false,
+      allDifficult: false,
+      allTodayWords: true,
     },
     dictSettings: {
       dictExample: true,

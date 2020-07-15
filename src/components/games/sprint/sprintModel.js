@@ -17,16 +17,18 @@ export default class SprintModel {
     this.maxHeart = 5;
     this.countWords = 10;
     this.level = 0;
-    this.page = Math.round(Math.random() * 5);
     this.lang = 'EN';
     this.maxStatistics = 30;
     this.allStudyWords = [];
   }
 
   async getUserWords() {
+    this.gameWords = [];
+    this.gameFalseWords = [];
     const words = await this.http.getAllUserWords();
     let userWords = words.splice(10);
     userWords = userWords.map((word) => word.optional);
+    userWords = randomArray(userWords);
     userWords.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);
@@ -35,9 +37,13 @@ export default class SprintModel {
   }
 
   async getJustWords(group, count) {
-    const data = await this.http.getWords({
+    this.page = Math.round(Math.random() * 5);
+    this.gameWords = [];
+    this.gameFalseWords = [];
+    let data = await this.http.getWords({
       group, page: this.page, maxLength: 50, wordsPerPage: count,
     });
+    data = randomArray(data);
     data.forEach((e) => {
       this.gameWords.push(e);
       this.gameFalseWords.push(e.wordTranslate);

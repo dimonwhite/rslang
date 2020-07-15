@@ -29,12 +29,15 @@ export default class GamesStatisticController {
   }
 
   closeGameStatistic() {
-    document.querySelector('.main-statistic-info').addEventListener('click', (event) => {
-      if (event.target.className === 'close-game-window') {
-        this.gamesStatisticView.windowGameStatistic.toggle('window-game-hide');
-        this.gamesStatisticView.gamestatisticClose.toggle('window-game-hide');
-      }
-    });
+    const statisticInfo = document.querySelector('.main-statistic-info');
+    if (statisticInfo) {
+      statisticInfo.addEventListener('click', (event) => {
+        if (event.target.className === 'close-game-window') {
+          this.gamesStatisticView.windowGameStatistic.toggle('window-game-hide');
+          this.gamesStatisticView.gamestatisticClose.toggle('window-game-hide');
+        }
+      });
+    }
     this.gamesStatisticView.gamestatisticClose.addEventListener('click', () => {
       this.gamesStatisticView.windowGameStatistic.toggle('window-game-hide');
       this.gamesStatisticView.gamestatisticClose.toggle('window-game-hide');

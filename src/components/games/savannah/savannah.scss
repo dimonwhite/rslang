@@ -1,7 +1,8 @@
 .savannah {
     display: none;
-    overflow: hidden;
+    overflow: auto;
     user-select: none;
+    transition: 1s;
 
     &__game {
         display: none;
@@ -11,10 +12,9 @@
         height: 100vh;
         position: relative;
         background-image: url("../assets/img/bg-savannah.png");
-        background-position-y: 4817px;
-        height: 100vh;
-        transition: background-position-y 1s;
         overflow: hidden;
+        background-position: 0% 100%;
+        transition: 1s;
 
         &-heart {
             display: flex;
@@ -24,8 +24,8 @@
             padding: 10px;
 
             &-img {
-                width: 40px;
-                height: 40px;
+                width: 50px;
+                height: 50px;
                 background-image: url("../assets/img/heart.png");
                 background-repeat: no-repeat;
                 background-size: 28px;
@@ -47,11 +47,12 @@
             color: white;
             font-size: 35px;
             transform: translateY(0);
-            font-family: Raleway;
+            font-family: Raleway, Roboto, serif;
             font-style: normal;
             font-weight: 900;
             font-size: 60px;
             color: #f2f2f2;
+            border-radius: 50px;
         }
         &-answer {
             text-align: center;
@@ -80,8 +81,8 @@
             border: 6px solid white;
         }
         &-ship {
-            width: 45px;
-            height: 45px;
+            width: 60px;
+            height: 60px;
             bottom: 10px;
             background-image: url("../assets/img/ship.png");
             background-repeat: no-repeat;
@@ -212,18 +213,38 @@
 
 @keyframes ship-top {
     0% {
+        border-radius: 3px;
+    }
+    60% {
+        transform: translateY(85vh);
+        height: 45px;
+        box-shadow: 0 0 0 2em hsla(0, 0%, 100%, 0), inset -4em 0 0 0 #ef8f6e1c, inset 4em 0 0 0 #ef8f6e1c;
+        border: 5px solid #ef8f6e;
+        border-radius: 50px;
     }
     100% {
         transform: translateY(85vh);
-        border: 3px solid white;
+        border: 0;
+        border-radius: 50px;
+        box-shadow: 0 0 0 0 #ef8f6e;
     }
 }
 @keyframes ship-bottom {
     0% {
+        border-radius: 3px;
+    }
+    60% {
+        transform: translateY(5vh);
+        box-shadow: 0 0 0 2em hsla(0, 0%, 100%, 0), inset -4em 0 0 0 #ef8f6e1c, inset 4em 0 0 0 #ef8f6e1c;
+        border: 5px solid #ef8f6e;
+        border-radius: 50px;
+        height: 45px;
     }
     100% {
         transform: translateY(5vh);
-        border: 3px solid white;
+        border: 0;
+        border-radius: 50px;
+        box-shadow: 0 0 0 0 #ef8f6e;
     }
 }
 
@@ -232,7 +253,8 @@
     }
     100% {
         transform: translateY(-20vh);
-        border: 3px solid crimson;
+        border: 5px solid crimson;
+        height: 50px;
     }
 }
 
@@ -241,7 +263,8 @@
     }
     100% {
         transform: translateY(-120vh);
-        border: 3px solid crimson;
+        border: 5px solid crimson;
+        height: 50px;
     }
 }
 
@@ -267,7 +290,7 @@
     height: 25px;
     width: 0px;
     border: 3px solid white;
-    border-radius: 15px;
+    border-radius: 50px;
     animation: ship-top 2s linear 1 forwards;
 }
 .move-to-ship-bottom {
@@ -431,8 +454,8 @@
         min-height: 700px;
     }
     .game__startScreen-desc {
-        width: 90%;
-        height: 40px;
+        height: 65px;
+        font-size: 26px;
     }
     .levels__title {
         position: absolute;
@@ -559,6 +582,12 @@
 }
 
 @media only screen and (max-width: 1000px) {
+    .clear-main {
+        .game__startScreen-desc {
+            height: 70px;
+            font-size: 24px;
+        }
+    }
     .savannah__settings {
         right: 10px;
     }
@@ -579,17 +608,29 @@
     }
     .clear-main {
         h2 {
-            margin-top: 290px;
+            margin-top: 340px;
             margin-bottom: 10px;
             font-size: 33px;
         }
         .game__startScreen-desc {
-            display: none;
+            font-size: 15px;
+            height: 55px;
         }
         .btn {
             height: 45px;
             font-size: 20px;
             margin-bottom: 10px !important;
+        }
+    }
+}
+
+@media only screen and (max-width: 361px) {
+    .clear-main {
+        h2 {
+            margin-top: 270px;
+        }
+        .game__startScreen-desc {
+            display: none;
         }
     }
 }

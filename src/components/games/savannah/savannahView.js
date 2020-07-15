@@ -3,8 +3,7 @@ import { createElement } from '@/utils';
 export default class SavannahView {
   constructor() {
     this.countHearts = 5;
-    this.SHIP_HIGHT = 40;
-    this.BG_HIGHT = 3317;
+    this.SHIP_HIGHT = 60;
     this.speed = 7;
     this.lang = 'EN';
   }
@@ -19,7 +18,6 @@ export default class SavannahView {
     this.savannah = createElement({ tag: 'section', class: 'savannah', id: 'savannah' });
     this.savannah.append(this.createGame());
     this.main.append(this.savannah);
-    this.startBg = window.getComputedStyle(this.game, null).getPropertyValue('background-position-y');
     this.setSettings();
   }
 
@@ -70,21 +68,23 @@ export default class SavannahView {
 
   createGameOptions() {
     this.start = document.getElementById('startScreen');
-    this.gameSettings = createElement({ tag: 'div', class: 'savannah__settings' });
-    this.gameSettings.append(document.getElementById('gameOptions'));
-    this.gameSettings.append(this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang'));
-    this.gameSettings.append(this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed'));
-    this.gameSettings.append(this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts'));
-    this.start.append(this.gameSettings);
-    const ALL_PAGES = 30;
-    const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
-    this.start.append(this.createOptions('Страница:', pages, 'selectPage', 'wrapPage'));
-    this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__words', content: 'Выученные слова' });
-    const wrap = createElement({ tag: 'div', class: 'savannah__wrap-level' });
-    wrap.append(document.getElementById('wrapPage'));
-    wrap.append(document.querySelector('.levels'));
-    this.wrap.append(this.learnedWords);
-    this.start.append(wrap);
+    if (this.start) {
+      this.gameSettings = createElement({ tag: 'div', class: 'savannah__settings' });
+      this.gameSettings.append(document.getElementById('gameOptions'));
+      this.gameSettings.append(this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang'));
+      this.gameSettings.append(this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed'));
+      this.gameSettings.append(this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts'));
+      this.start.append(this.gameSettings);
+      const ALL_PAGES = 30;
+      const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
+      this.start.append(this.createOptions('Страница:', pages, 'selectPage', 'wrapPage'));
+      this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__words', content: 'Выученные слова' });
+      const wrap = createElement({ tag: 'div', class: 'savannah__wrap-level' });
+      wrap.append(document.getElementById('wrapPage'));
+      wrap.append(document.querySelector('.levels'));
+      this.wrap.append(this.learnedWords);
+      this.start.append(wrap);
+    }
   }
 
   createOptions(content, options, id, idSelect) {
@@ -137,16 +137,17 @@ export default class SavannahView {
   }
 
   getStart() {
-    this.savannah.classList.add('show');
-    document.getElementById('gameOptions').classList.add('hide');
-    this.game.classList.add('show-flex');
+    if (this.savannah) this.savannah.classList.add('show');
+    const options = document.getElementById('gameOptions');
+    if (options) options.classList.add('hide');
+    if (this.game) this.game.classList.add('show-flex');
     setTimeout(() => { this.time.innerHTML = 2; }, 1000);
     setTimeout(() => { this.time.innerHTML = 1; }, 2000);
   }
 
   getStartRound() {
-    this.countdown.classList.add('hide');
-    this.field.classList.add('show-flex');
+    if (this.countdown) this.countdown.classList.add('hide');
+    if (this.field) this.field.classList.add('show-flex');
   }
 
   startNextRound({ gameWords, attempt, words }) {
@@ -244,11 +245,10 @@ export default class SavannahView {
   }
 
   moveBackground(delta) {
-    const bg = +this.startBg.replace('px', '');
-    this.game.style.backgroundPositionY = `${bg + Math.floor(this.BG_HIGHT * delta)}px`;
+    this.game.style.backgroundPosition = `0% ${100 - delta}%`;
     setTimeout(() => {
-      this.ship.style.height = `${Math.floor(this.SHIP_HIGHT * (delta + 1))}px`;
-      this.ship.style.width = `${Math.floor(this.SHIP_HIGHT * (delta + 1))}px`;
+      this.ship.style.height = `${Math.floor(this.SHIP_HIGHT * ((delta / 100) + 1))}px`;
+      this.ship.style.width = `${Math.floor(this.SHIP_HIGHT * ((delta / 100) + 1))}px`;
     }, 2000);
   }
 
@@ -322,7 +322,7 @@ export default class SavannahView {
     this.time.innerHTML = '3';
     this.ship.style.height = `${this.SHIP_HIGHT}px`;
     this.ship.style.width = `${this.SHIP_HIGHT}px`;
-    this.game.style.backgroundPositionY = this.startBg;
+    this.game.style.backgroundPosition = '0% 100%';
     Array.from(this.hearts.children).forEach((item) => {
       item.classList.remove('heart-empty');
     });

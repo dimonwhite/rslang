@@ -179,4 +179,11 @@ export default class SpeakitController {
   getScore() {
     return this.model.score;
   }
+
+  removeListeners() {
+    this.model.game = false;
+    if (this.recognition) {
+      this.recognition.stop();
+    }
+  }
 }

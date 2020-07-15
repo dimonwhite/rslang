@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { urlGitHub } from '@/constants';
 import CardView from './cardView';
 import CardModel from './cardModel';
@@ -27,31 +28,56 @@ export default class CardController {
     this.cut = false;
     this.removeWords = 0;
     this.unlock = true;
+    this.getDate();
   }
 
   async create() {
+    document.getElementById('main').append(this.view.preloader());
     document.body.classList.add('show-main');
-    document.body.classList.add('top-gear');
-    this.settings = await this.user.getUserSettings();
+    try {
+      this.settings = await this.user.getUserSettings();
+    } catch (e) {
+      return;
+    }
     this.view.settings = this.settings.optional.settings;
     this.statistics = await this.user.getUserStatistics();
     this.params = this.statistics.optional.todayTraining.params;
     if (document.body.classList.contains('show-main')) {
       await this.getTodayStatStorage();
-      this.view.renderHTML();
-      if (this.model.listToday.length !== this.params.passedToday) {
-        [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
-          next: false,
-          numberWords: this.model.listToday.length,
-          passedTodaY: this.params.passedToday,
-          word: this.model.listToday[this.params.cardIndex],
-          cardIndeX: this.params.cardIndex,
-        });
-      } else {
-        this.view.inputTodayStatistics(this.params);
+      if (document.body.classList.contains('show-main')) {
+        if (this.view.ship) this.view.ship.remove();
+        this.view.renderHTML();
+        document.body.classList.add('top-gear');
+        const isNotEmpty = this.model.listToday.length > 0;
+        if (isNotEmpty && this.model.listToday.length > this.params.passedToday) {
+          [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
+            next: false,
+            numberWords: this.model.listToday.length,
+            passedTodaY: this.params.passedToday,
+            word: this.model.listToday[this.params.cardIndex],
+            cardIndeX: this.params.cardIndex,
+          });
+        } else {
+          this.params.generatedListToday = false;
+          this.view.inputTodayStatistics(this.params);
+          this.model.clearListToday();
+        }
+        this.removeView();
+        await this.setTodayStatStorage();
+        if (document.body.classList.contains('show-main')) {
+          this.createEvent();
+        } else {
+          this.removeView();
+        }
       }
-      await this.setTodayStatStorage();
-      this.createEvent();
+    }
+  }
+
+  removeView() {
+    if (!document.body.classList.contains('show-main')) {
+      if (this.view.ship) this.view.ship.remove();
+      if (this.view.message) this.view.message.remove();
+      if (this.view.cardView) this.view.cardView.remove();
     }
   }
 
@@ -76,24 +102,26 @@ export default class CardController {
       await this.model.putListToday();
     } else {
       await this.model.getAllUserWords();
-      await this.model.getListToday(this.params.numberListPages);
+      await this.model.getListToday(this.params.numberListPages, this.view.settings);
     }
   }
 
   async setTodayStatStorage() {
     const { cardIndex } = this.params;
     this.params.cardIndex = this.params.passedToday;
+    this.statistics.optional.allUserWords = this.model.allStudyWords.filter((item) => item.state !== 'remove').length;
     this.params.length = (this.model.listToday) ? this.model.listToday.length : 0;
     await this.user.createUserStatistics({ learnedWords: 0, optional: this.statistics.optional });
     this.params.cardIndex = cardIndex;
   }
 
   createEvent() {
-    document.getElementById('addition').addEventListener('click', this.eventAddition.bind(this));
+    this.view.addition.addEventListener('click', this.eventAddition.bind(this));
     this.view.leftArrow.addEventListener('click', this.moveToLeft.bind(this));
     this.view.cardPlay.addEventListener('click', this.playWord.bind(this, true));
     this.view.input.addEventListener('input', this.inputSymbols.bind(this));
-    document.body.addEventListener('keydown', (e) => { if (e.code === 'Enter') this.eventRight(); });
+    this.listener = (e) => { if (e.code === 'Enter') this.eventRight(); };
+    window.addEventListener('keydown', this.listener);
     this.view.rightArrow.addEventListener('click', this.eventRight.bind(this));
     this.view.cardRemove.addEventListener('click', this.eventRemove.bind(this));
     this.view.cardDiff.addEventListener('click', this.eventBookmark.bind(this));
@@ -103,7 +131,8 @@ export default class CardController {
     this.view.cardHard.addEventListener('click', this.setInterval.bind(this, 'cardHard', 0));
     this.view.cardNormal.addEventListener('click', this.setInterval.bind(this, 'cardNormal', 1));
     this.view.cardEasy.addEventListener('click', this.setInterval.bind(this, 'cardEasy', 2));
-    document.getElementById('settings').addEventListener('change', this.setSettings.bind(this));
+    this.listenerSettigs = this.setSettings.bind(this);
+    this.view.settingsBlock.addEventListener('change', this.listenerSettigs);
     const idChecks = ['translate', 'meaningWord', 'exampleWord'];
     idChecks.forEach((item) => {
       document.getElementById(item).addEventListener('click', () => {
@@ -120,7 +149,7 @@ export default class CardController {
     const setNextWord = this.params.cardIndex + 1 === (this.params.passedToday + Number(this.next));
     if (this.view.rightArrow.classList.contains('go-next') && setNextWord) {
       this.view.clearCard();
-      if (this.params.passedToday === this.model.listToday.length) {
+      if (this.params.passedToday >= this.model.listToday.length) {
         this.params.generatedListToday = false;
         this.view.inputTodayStatistics(this.params);
         this.model.clearListToday();
@@ -147,23 +176,28 @@ export default class CardController {
   async eventRemove() {
     if (!this.view.isLock() && this.model.listToday.length > 0) {
       this.view.lockElements(true);
-      const removeWord = this.model.listToday[this.params.cardIndex];
+      const lastWord = this.model.listToday[this.model.listToday.length - 1];
+      const removeWord = (this.cut) ? lastWord : this.model.listToday[this.params.cardIndex];
       let state = 'remove';
       if (removeWord.state === state) state = 'study';
 
-      let isNew = false;
       if (this.model.allStudyWords.find((item) => item.word === removeWord.word)) {
-        if (!removeWord.isPassed) isNew = true;
         await this.model.updateAllStudyWords({ word: removeWord, isUpdate: true, state });
       } else {
-        isNew = true;
+        removeWord.firstDate = this.today;
         await this.model.updateAllStudyWords({ word: removeWord, isNew: true, state });
       }
-      if (isNew) {
+      if (removeWord.isPassed) {
+        if (state === 'remove') {
+          this.statistics.optional.statisticsChart[removeWord.firstDate] -= 1;
+        } else {
+          this.statistics.optional.statisticsChart[removeWord.firstDate] += 1;
+        }
+        this.view.setInDictionary(state, this.params.currentMistake);
+      } else if (state === 'remove') {
         this.removeWord();
-      } else {
-        this.view.setInDictionary(state, this.currentMistake);
       }
+
       await this.setTodayStatStorage();
       await this.model.putListToday();
       this.view.lockElements(false);
@@ -171,9 +205,19 @@ export default class CardController {
   }
 
   removeWord() {
+    if (this.params.newWordsToday > 0) this.params.newWordsToday -= 1;
     this.params.currentMistake = false;
-    this.model.listToday.splice(this.params.cardIndex, 1);
-    if (this.params.passedToday === this.model.listToday.length) {
+    let word;
+    if (this.cut) {
+      word = this.model.listToday.splice(this.model.listToday.length - 1, 1)[+0];
+      this.view.clearCard();
+      this.next = false;
+      this.cut = false;
+    } else {
+      word = this.model.listToday.splice(this.params.cardIndex, 1)[+0];
+    }
+    this.model.spliceFullList(word);
+    if (this.params.passedToday >= this.model.listToday.length) {
       this.params.generatedListToday = false;
       this.view.inputTodayStatistics(this.params);
       this.model.clearListToday();
@@ -196,7 +240,7 @@ export default class CardController {
     let state = 'difficult';
     if (word.state === state) state = 'study';
 
-    this.view.setInDictionary(state, this.currentMistake);
+    this.view.setInDictionary(state, this.params.currentMistake);
     const { customRating } = word;
     const compare = word.word.toLowerCase();
     if (this.model.allStudyWords.find((item) => item.word.toLowerCase() === compare)) {
@@ -204,10 +248,14 @@ export default class CardController {
         word, isUpdate: true, customRating, state,
       });
     } else {
+      this.params.newWordsToday += 1;
+      word.firstDate = this.today;
+      this.addChartStatistics();
       await this.model.updateAllStudyWords({
         word, isNew: true, customRating, state,
       });
     }
+    await this.setTodayStatStorage();
     await this.model.putListToday();
     if (this.unlock) this.view.lockElements(false);
   }
@@ -217,6 +265,7 @@ export default class CardController {
       if (this.unlock) this.view.lockElements(true);
       this.view.cardAgain.classList.add('lock-element');
       const cutWord = this.model.listToday.splice(this.params.cardIndex, 1)[0];
+      this.model.spliceFullList(cutWord, true);
       cutWord.isPassed = false;
       cutWord.timeToday = new Date().getTime();
       this.model.listToday.push(cutWord);
@@ -312,8 +361,8 @@ export default class CardController {
         word, prev, show, isNotNew,
       });
       await this.checkMistakeFactor(word, show);
-      if (!this.view.settings.sound) this.moveNexCard();
       if (!prev) await this.setTodayStatStorage();
+      if (!this.view.settings.sound && !show) this.moveNexCard();
     }
   }
 
@@ -328,6 +377,7 @@ export default class CardController {
     } else if (!prev) {
       this.params.newWordsToday += 1;
       this.addChartStatistics();
+      word.firstDate = this.today;
       await this.model.updateAllStudyWords({
         word, isNew: true, isCount: true, mistake, customRating: false, state: 'study',
       });
@@ -343,19 +393,17 @@ export default class CardController {
     } else if (this.model.listToday.length !== this.params.cardIndex + 1) {
       const cutWord = this.model.listToday.splice(this.params.cardIndex, 1)[0];
       this.model.listToday.push(cutWord);
+      this.model.spliceFullList(cutWord, true);
       this.cut = true;
     }
 
-    if (!show) {
-      if (this.params.currentMistake) {
-        await this.model.putListToday();
-        this.next = true;
-        this.view.next = true;
-      } else {
-        await this.model.putListToday();
-      }
+    if (this.params.currentMistake && !show) {
+      this.next = true;
+      this.view.next = true;
     }
+
     this.params.currentMistake = false;
+    await this.model.putListToday();
   }
 
   async mistakeAnswer({
@@ -371,6 +419,7 @@ export default class CardController {
       });
     } else {
       this.params.newWordsToday += 1;
+      word.firstDate = this.today;
       this.addChartStatistics();
       await this.model.updateAllStudyWords({
         word, isNew: true, isCount: true, mistake: true, state: 'study',
@@ -395,39 +444,72 @@ export default class CardController {
     const lastWord = this.model.listToday[this.model.listToday.length - 1];
     const currentWord = this.model.listToday[this.params.cardIndex];
     const word = (this.cut) ? lastWord : currentWord;
-    const playWord = new Audio();
-    playWord.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
-    const playMeaning = new Audio();
-    playMeaning.src = `${urlGitHub}${word.audioMeaning.replace('files/', '')}`;
-    const playExample = new Audio();
-    playExample.src = `${urlGitHub}${word.audioExample.replace('files/', '')}`;
-    playWord.play();
-    playWord.onended = () => {
-      if (this.view.settings.meaningWord) {
-        playMeaning.play();
-      } else if (this.view.settings.exampleWord) {
-        playExample.play();
-      } else this.moveNexCard();
-    };
-    playMeaning.onended = () => {
-      if (this.view.settings.exampleWord) {
-        playExample.play();
-      } else this.moveNexCard();
-    };
-    playExample.onended = () => this.moveNexCard();
+    let playWord = null;
+    let playMeaning = null;
+    let playExample = null;
+    if (this.view.settings.translate) {
+      playWord = new Audio();
+      playWord.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
+    }
+    if (this.view.settings.meaningWord) {
+      playMeaning = new Audio();
+      playMeaning.src = `${urlGitHub}${word.audioMeaning.replace('files/', '')}`;
+    }
+    if (this.view.settings.exampleWord) {
+      playExample = new Audio();
+      playExample.src = `${urlGitHub}${word.audioExample.replace('files/', '')}`;
+    }
+    this.play({
+      isClick, playWord, playMeaning, playExample,
+    });
   }
 
-  moveNexCard() {
-    if (this.view.settings.nextCard) {
-      this.view.lockElements();
-      this.unlock = true;
-      this.eventRight(true);
+  play({
+    isClick, playWord, playMeaning, playExample,
+  }) {
+    if (playWord) {
+      playWord.play();
+      playWord.onended = () => this.playSentences({ playMeaning, playExample, isClick });
+    } else {
+      this.playSentences({ playMeaning, playExample, isClick });
+    }
+
+    if (playMeaning) {
+      playMeaning.onended = () => {
+        if (playExample) {
+          playExample.play();
+        } else this.moveNexCard(isClick);
+      };
+    }
+    if (playExample) playExample.onended = () => this.moveNexCard(isClick);
+  }
+
+  playSentences({ playMeaning, playExample, isClick }) {
+    if (playMeaning) {
+      playMeaning.play();
+    } else if (playExample) {
+      playExample.play();
+    } else this.moveNexCard(isClick);
+  }
+
+  moveNexCard(isClick) {
+    if (!isClick) {
+      if (this.view.settings.nextCard) {
+        setTimeout(() => {
+          this.view.lockElements();
+          this.view.lockArrows(false);
+          this.unlock = true;
+          this.eventRight(true);
+        }, 100);
+      } else {
+        this.view.lockElements();
+        this.view.lockArrows(false);
+        this.unlock = true;
+      }
     }
   }
 
   async eventAddition() {
-    this.view.nextCard();
-    this.view.clearCard();
     Object.keys(this.params).forEach((key) => { this.params[key] = 0; });
     this.model.clearListToday();
     [
@@ -438,14 +520,19 @@ export default class CardController {
       settings: this.view.settings,
       generatedListToday: false,
       wordsRepeatToday: this.params.wordsRepeatToday,
-      numberListPages: this.numberListPages,
+      numberListPages: this.params.numberListPages,
     });
     const len = this.model.listToday.length;
-    this.view.setWordInCard({
-      next: false, numberWords: len, passedTodaY: 0, word: this.model.listToday[0], cardIndeX: 0,
-    });
-    await this.setTodayStatStorage();
-    await this.model.putListToday();
+    if (len > 0) {
+      this.view.nextCard();
+      this.view.clearCard();
+      this.view.cardImg.classList.add('lock-img');
+      this.view.setWordInCard({
+        next: false, numberWords: len, passedTodaY: 0, word: this.model.listToday[0], cardIndeX: 0,
+      });
+      await this.setTodayStatStorage();
+      await this.model.putListToday();
+    }
   }
 
   async moveToLeft() {
@@ -489,7 +576,9 @@ export default class CardController {
       this.view.again = true;
       await this.setTodayStatStorage();
       await this.model.putListToday();
-      if (!this.view.settings.nextCard) {
+      if (this.view.settings.nextCard) {
+        this.moveNexCard();
+      } else {
         this.view.lockElements(false);
       }
     }
@@ -521,60 +610,95 @@ export default class CardController {
 
   async setSettings(e) {
     if (e.target.tagName === 'INPUT') {
-      if (this.view.getSettings()) {
-        [
-          this.params.generatedListToday,
-          this.params.numberWordsForToday,
-          this.params.numberListPages,
-        ] = await this.model.createList({
-          settings: this.view.settings,
-          generatedListToday: false,
-          wordsRepeatToday: this.params.wordsRepeatToday,
-          numberListPages: this.numberListPages,
-        });
-        this.params.passedToday = 0;
-        this.params.cardIndex = 0;
-        this.params.consecutive = 0;
-        this.params.newConsecutive = 0;
-        this.params.newWordsToday = 0;
-        this.currentMistake = false;
-        this.params.correctAnswer = 0;
-        this.view.clearCard();
+      const emptyList = await this.createNewList();
+
+      if (!emptyList) {
         const len = this.model.listToday.length;
-        const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[+0];
-        this.view.setWordInCard({
-          next: false, numberWords: len, passedTodaY: 0, word, cardIndeX: 0,
-        });
-        await this.setTodayStatStorage();
-        await this.model.putListToday();
+        const index = this.params.cardIndex;
+        const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[index];
+
+        if (word) {
+          const dict = [
+            'dictExample',
+            'dictMeaning',
+            'dictTranscr',
+            'dictSound',
+            'dictImg',
+            'dictProgress',
+          ];
+          Object.keys(this.settings.optional.dictSettings).map((key) => {
+            if (!dict.includes(key)) {
+              this.settings.optional.dictSettings[key] = undefined;
+            }
+          });
+          await this.user.createUserSettings({ learnedWords: 0, optional: this.settings.optional });
+          this.view.setSettingsInCard({
+            word, cardIndex: index, passedToday: this.params.passedToday, change: true,
+          });
+        }
       }
-
-      const len = this.model.listToday.length;
-      const index = this.params.cardIndex;
-      const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[index];
-
-      this.settings.optional.settings = this.view.settings;
-      await this.user.createUserSettings({ learnedWords: 0, optional: this.settings.optional });
-      this.view.setSettingsInCard({
-        word, cardIndex: index, passedToday: this.params.passedToday, change: true,
-      });
     }
+  }
+
+  async createNewList() {
+    if (this.view.getSettings()) {
+      [
+        this.params.generatedListToday,
+        this.params.numberWordsForToday,
+        this.params.numberListPages,
+      ] = await this.model.createList({
+        settings: this.view.settings,
+        generatedListToday: false,
+        wordsRepeatToday: this.params.wordsRepeatToday,
+        numberListPages: this.params.numberListPages,
+      });
+      this.params.passedToday = 0;
+      this.params.cardIndex = 0;
+      this.params.consecutive = 0;
+      this.params.newConsecutive = 0;
+      this.params.newWordsToday = 0;
+      this.params.currentMistake = false;
+      this.params.correctAnswer = 0;
+      if (this.model.listToday.length === 0) {
+        this.params.generatedListToday = false;
+        this.view.inputTodayStatistics({ ...this.params, isEmpty: true });
+        this.model.clearListToday();
+        return true;
+      }
+      this.view.clearCard();
+      const len = this.model.listToday.length;
+      const word = (this.cut) ? this.model.listToday[len - 1] : this.model.listToday[+0];
+      this.view.setWordInCard({
+        next: false, numberWords: len, passedTodaY: 0, word, cardIndeX: 0,
+      });
+      await this.setTodayStatStorage();
+      await this.model.putListToday();
+    }
+    return false;
   }
 
   addChartStatistics() {
     const days = this.statistics.optional.statisticsChart;
-    let today = new Date();
+    const find = Object.keys(days).find((item) => item === this.today);
+    if (find) {
+      days[this.today] = +days[this.today] + 1;
+    } else {
+      days[this.today] = 1;
+      days.length = +days.length + 1;
+    }
+  }
+
+  getDate() {
+    const today = new Date();
     let day = today.getDate();
     let month = today.getMonth() + 1;
     if (day < 10) day = `0${day}`;
     if (month < 10) month = `0${month}`;
-    today = `${day}-${month}-${today.getFullYear()}`;
-    const find = Object.keys(days).find((item) => item === today);
-    if (find) {
-      days[today] = +days[today] + 1;
-    } else {
-      days[today] = 1;
-      days.length = +days.length + 1;
-    }
+    this.today = `${day}-${month}-${today.getFullYear()}`;
+  }
+
+  removeListeners() {
+    window.removeEventListener('keydown', this.listener);
+    this.view.settingsBlock.removeEventListener('change', this.listenerSettigs);
   }
 }

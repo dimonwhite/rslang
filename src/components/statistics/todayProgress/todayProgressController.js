@@ -9,6 +9,7 @@ export default class TodayProgressController {
 
   init() {
     this.todayProgressView.create(this.todayProgressModel.totalWord,
-      this.todayProgressModel.learnedToday);
+      this.todayProgressModel.learnedToday,
+      this.todayProgressModel.commonQuantityWords);
   }
 }

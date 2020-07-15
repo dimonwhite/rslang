@@ -406,11 +406,11 @@ export default class HttpClient {
       this.unauthorized();
       this.removeLocalUser();
     }
-    if (response.status === 404) {
-      throw new Error('Can`t find user settings');
-    }
     if (!response.ok) {
       throw new Error('Can`t get user settings, network problems');
+    }
+    if (response.status === 404) {
+      throw new Error('Can`t find user settings');
     }
     const content = await response.json();
 

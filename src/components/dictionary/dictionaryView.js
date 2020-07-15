@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { urlGitHub, blackGradient } from '@/constants';
 import { createElement } from '@/utils';
 
@@ -11,6 +12,8 @@ export default class DictionaryView {
 
   renderHTML() {
     this.main.innerHTML = '';
+    this.settingsBlock.innerHTML = '';
+    this.settingsBlock.classList.remove('settings-card');
     this.dictionary = createElement({ tag: 'div', class: 'dictionary-content' });
     this.main.append(this.dictionary);
   }
@@ -263,6 +266,10 @@ export default class DictionaryView {
   }
 
   createSettings(arr) {
+    if (this.settingsBlock.classList.contains('settings-card')) {
+      this.settingsBlock.classList.remove('settings-card');
+    }
+
     const content = `<h2 class="settings__title">Настройки</h2>
     <div class="setting-block">
       <div class="setting-block__title">Настройки словаря</div>
@@ -296,15 +303,25 @@ export default class DictionaryView {
     </div>`;
 
     this.settingsBlock.innerHTML = content;
-
+    const dict = [
+      'dictExample',
+      'dictMeaning',
+      'dictTranscr',
+      'dictSound',
+      'dictImg',
+      'dictProgress',
+    ];
+    // eslint-disable-next-line consistent-return
     Object.keys(arr).map((key) => {
-      const value = arr[key];
+      if (dict.includes(key)) {
+        const value = arr[key];
 
-      if (value) {
-        document.getElementById(key).checked = true;
+        if (value) {
+          document.getElementById(key).checked = true;
+        }
+
+        return value;
       }
-
-      return value;
     });
   }
 }

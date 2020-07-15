@@ -6,10 +6,17 @@ export default class StatisticsView {
     this.mainStatisticInformation = createElement({ tag: 'div', class: 'main-statistic-info' });
     this.progress = createElement({ tag: 'div', class: 'progress' });
     this.mainIndent = indent;
+    this.body = document.body;
   }
 
   renderHTML() {
-    this.main.prepend(this.progress);
-    this.main.append(this.mainStatisticInformation);
+    if (document.body.classList.contains('statistic-page')) {
+      this.main.prepend(this.progress);
+      this.main.append(this.mainStatisticInformation);
+    }
+  }
+
+  addClassBody() {
+    this.body.classList.add('statistic-page');
   }
 }

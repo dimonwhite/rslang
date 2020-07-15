@@ -92,7 +92,7 @@ export default class SpeakitView {
 
   playAudio(word) {
     this.audio.src = `${urlGitHub}${word.audio.replace('files/', '')}`;
-    this.audio.play();
+    this.audio.play().catch(() => this.audio.currentTime);
   }
 
   dropScore() {
@@ -107,14 +107,14 @@ export default class SpeakitView {
 
   stop() {
     this.startBtn.classList.remove('active');
-    this.startBtn.innerText = 'Start';
+    this.startBtn.innerText = 'Старт';
     this.game.classList.remove('active');
     this.main.classList.remove('speakItStart');
   }
 
   start() {
     this.startBtn.classList.add('active');
-    this.startBtn.innerText = 'Stop';
+    this.startBtn.innerText = 'Стоп';
     this.game.classList.add('active');
     this.main.classList.add('speakItStart');
   }

@@ -27,21 +27,26 @@ export default class SprintController {
     this.options = 1;
     this.chekedTranslate = [];
     this.wordControl = false;
+    this.multiply = 1;
+    this.timeoutBtn = false;
   }
 
   init() {
-    this.model.setUserStatistics();
     this.checkUser();
     this.view.renderHTML();
     this.changeLvlv();
     this.useMyWords();
 
     this.view.btnChoiceTrue.addEventListener('click', () => {
-      this.checkBtnTrue();
+      if (this.game && !this.timeoutBtn) {
+        this.checkBtnTrue();
+      }
     });
 
     this.view.btnChoiceFalse.addEventListener('click', () => {
-      this.checkBtnFalse();
+      if (this.game && !this.timeoutBtn) {
+        this.checkBtnFalse();
+      }
     });
 
     this.keyDownCallBack = this.keyPressArr.bind(this);
@@ -61,11 +66,11 @@ export default class SprintController {
   }
 
   keyPressArr(event) {
-    if (event.code === 'ArrowLeft') {
+    if (event.code === 'ArrowLeft' && this.game && !this.timeoutBtn) {
       this.checkBtnTrue();
       return;
     }
-    if (event.code === 'ArrowRight') {
+    if (event.code === 'ArrowRight' && this.game && !this.timeoutBtn) {
       this.checkBtnFalse();
     }
   }
@@ -82,25 +87,31 @@ export default class SprintController {
 
   async checkUser() {
     this.trueArray = await this.model.getUserWords();
-    if (this.trueArray.length >= 90) {
+    if (this.trueArray.length >= 100) {
       this.wordControl = true;
     }
   }
 
   useMyWords() {
     document.querySelector('.game__sprint__user-words-button').addEventListener('click', () => {
-      if (this.trueArray.length >= 90) {
-        this.wordControl = true;
-        this.makerArray(this.hard, this.count);
-        this.view.addNotificationWord('Вы выбрали свои слова для изучения!');
-      } else {
-        this.view.addNotificationWord('В вашем наборе еще не хватает слов! Выберите сложность и нажмите начать!');
-        this.hard = 0;
-        this.wordControl = false;
-
-        this.makerArray(this.hard, this.wordCount);
-      }
+      this.clickBtnUserWords();
     });
+  }
+
+  async clickBtnUserWords() {
+    await this.checkUser();
+    if (this.trueArray.length >= 100) {
+      this.wordControl = true;
+      this.makerArray(this.hard, this.count);
+      this.view.addNotificationWord('Вы выбрали свои слова для изучения!');
+    } else {
+      this.view.addNotificationWord('В вашем наборе еще не хватает слов! Выберите сложность и нажмите начать!');
+      const currentLevel = document.querySelector('.levels__wrap .radio__input:checked');
+      this.hard = currentLevel.value;
+      this.wordControl = false;
+
+      this.makerArray(this.hard, this.wordCount);
+    }
   }
 
   async makerArray(y, x) {
@@ -133,21 +144,31 @@ export default class SprintController {
     }
   }
 
+  createTimeoutBtn() {
+    this.timeoutBtn = true;
+    this.view.addDefaultClassBtns();
+    setTimeout(() => {
+      this.timeoutBtn = false;
+      this.view.removeDefaultClassBtns();
+    }, 700);
+  }
+
   checkBtnTrue() {
+    this.createTimeoutBtn();
     if (this.isCorrect) {
+      this.answerCount += 1;
+      this.bonusCounter();
       this.view.playAudio('correct');
       this.trueArray[this.time].success = true;
       this.wordResult.push(this.trueArray[this.time]);
-      this.score += 10;
+      this.score += 10 * this.multiply;
       this.countWords += 1;
       this.trueWord += 1;
       this.view.getScore(this.score);
-      this.answerCount += 1;
-      this.view.addTextDescription(this.answerCount);
+      this.view.addTextDescription(this.answerCount, this.multiply);
       this.addChekedBonus();
       this.bonusScore(this.bonusCount);
       this.view.changeBackgroundTrue();
-      this.bonusCounter();
       this.time += 1;
       this.makeWordField();
     } else {
@@ -162,24 +183,28 @@ export default class SprintController {
       this.view.changeBackgroundFalse();
       this.time += 1;
       this.makeWordField();
+      this.removePlanets();
+      this.bonusPlanet = 0;
+      this.multiply = 1;
     }
   }
 
   checkBtnFalse() {
+    this.createTimeoutBtn();
     if (!this.isCorrect) {
+      this.answerCount += 1;
+      this.bonusCounter();
       this.view.playAudio('correct');
       this.trueArray[this.time].success = true;
       this.wordResult.push(this.trueArray[this.time]);
       this.countWords += 1;
-      this.answerCount += 1;
       this.trueWord += 1;
-      this.score += 10;
+      this.score += 10 * this.multiply;
       this.view.getScore(this.score);
       this.bonusScore(this.bonusCount);
-      this.view.addTextDescription(this.answerCount);
+      this.view.addTextDescription(this.answerCount, this.multiply);
       this.addChekedBonus();
       this.view.changeBackgroundTrue();
-      this.bonusCounter();
       this.time += 1;
       this.makeWordField();
     } else {
@@ -194,7 +219,16 @@ export default class SprintController {
       this.bonusScore(this.bonusCount);
       this.time += 1;
       this.makeWordField();
+      this.removePlanets();
+      this.bonusPlanet = 0;
+      this.multiply = 1;
     }
+  }
+
+  removePlanets() {
+    this.view.bonusItemsBlock.childNodes.forEach((item) => {
+      item.innerHTML = '';
+    });
   }
 
   bonusScore(bonus) {
@@ -224,16 +258,16 @@ export default class SprintController {
   addBonusPlanet() {
     switch (this.bonusPlanet) {
       case 1:
-        SprintView.getBonusPlanet('1');
+        this.view.getBonusPlanet('1');
         break;
       case 2:
-        SprintView.getBonusPlanet('2');
+        this.view.getBonusPlanet('2');
         break;
       case 3:
-        SprintView.getBonusPlanet('3');
+        this.view.getBonusPlanet('3');
         break;
       case 4:
-        SprintView.getBonusPlanet('4');
+        this.view.getBonusPlanet('4');
         break;
 
       default:
@@ -242,17 +276,21 @@ export default class SprintController {
   }
 
   bonusCounter() {
-    if (this.answerCount === 3) {
-      this.view.addTrueBonusTittle();
-      setTimeout(() => {
-        this.view.clearBonus();
-      }, 300);
+    if (this.answerCount === 4 && this.multiply < 16) {
+      this.multiply *= 2;
+      this.view.addTrueBonusTittle(this.multiply);
       this.bonusPlanet += 1;
-      this.answerCount = 0;
-      this.score += 10;
       this.view.playAudio('success');
       this.addBonusPlanet();
       this.view.getScore(this.score);
+    }
+    if (this.answerCount === 4 && this.multiply < 16) {
+      setTimeout(() => {
+        this.view.clearBonus();
+      }, 300);
+    }
+    if (this.answerCount === 4 && this.multiply < 16) {
+      this.answerCount = 0;
     }
   }
 
@@ -262,7 +300,6 @@ export default class SprintController {
     this.wordResult = [];
     this.roundTime = setInterval(() => {
       this.view.addTimer(this.seconds);
-      // this.view.startCircleTimer();
       this.seconds -= 1;
       this.playLustSecond();
       if (this.seconds === -1) {
@@ -277,6 +314,7 @@ export default class SprintController {
         this.model.falseWord = this.falseWord;
         this.model.setUserStatistics();
         this.view.playAudio('endgame');
+        this.game = false;
         this.view.clearBonus();
       }
     }, 1000);
@@ -317,7 +355,12 @@ export default class SprintController {
     this.makerArray(this.hard, this.wordCount);
     this.view.getPreloader();
     this.addLoadTimer();
-    setTimeout(() => {
+    this.game = true;
+    this.playLoaderAudio();
+  }
+
+  playLoaderAudio() {
+    this.loaderAudioTimeout = setTimeout(() => {
       this.view.playAudio('loader');
     }, 1000);
   }
@@ -348,12 +391,19 @@ export default class SprintController {
   }
 
   change() {
+    this.time = 0;
+    this.trueWord = 0;
+    this.falseWord = 0;
+    this.bonusPlanet = 0;
+    this.countWords = 0;
+    this.answerCount = 0;
+    this.score = 0;
+    this.multiply = 1;
     this.view.dropScore();
     this.view.clearPlanet();
     this.view.addButton();
-    setTimeout(() => {
-      this.view.playAudio('loader');
-    }, 1000);
+    this.game = true;
+    this.playLoaderAudio();
     this.view.clearBonus();
     this.makeWordField();
     this.view.restartCircleTimer();
@@ -398,5 +448,6 @@ export default class SprintController {
     clearInterval(this.view.IntervalLoaderHide);
     this.view.audio.pause();
     this.view.audioLust.pause();
+    clearTimeout(this.loaderAudioTimeout);
   }
 }

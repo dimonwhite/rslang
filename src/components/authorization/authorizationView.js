@@ -107,7 +107,7 @@ export default class AuthorizationView {
   }
 
   createLogoutBtn() {
-    this.btnLogin.innerHTML = 'logout';
+    this.btnLogin.innerHTML = 'Выйти';
   }
 
   createError(error) {

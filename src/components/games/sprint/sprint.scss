@@ -239,6 +239,9 @@ $teal: #009688;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    &.default {
+      cursor: not-allowed;
+    }
 
     @media (min-width: 320px) and (max-width: 600px) {
       flex-direction: column;
