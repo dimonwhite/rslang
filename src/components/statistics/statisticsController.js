@@ -17,6 +17,7 @@ export default class StatisticsController {
   }
 
   async create() {
+    this.statisticsView.addClassBody();
     this.statisticInfo = await this.statisticsModel.getStatistic();
     this.runComponents(this.statisticInfo);
   }

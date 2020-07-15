@@ -26,9 +26,11 @@ export default class SavannahController {
   async init() {
     this.view.initView();
     await this.addStatistics();
-    this.view.renderHTML();
-    this.view.createControl();
-    this.createEvent();
+    if (document.body.classList.contains('show-game-fix')) {
+      this.view.renderHTML();
+      this.view.createControl();
+      this.createEvent();
+    }
   }
 
   async createEvent() {

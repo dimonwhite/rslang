@@ -167,8 +167,11 @@ export default class PuzzleController {
   async startRound() {
     this.renderView.renderPreloader();
     await this.roundData.formSentenceData();
-    this.renderView.init();
-    this.makeRow();
+
+    if (document.querySelector('.main').classList.contains('englishPuzzle')) {
+      this.renderView.init();
+      this.makeRow();
+    }
   }
 
   async finishRound() {

@@ -62,7 +62,6 @@
 }
 
 .progress-learned-words {
-    display: flex;
     align-items: center;
     font-size: 72px;
     font-weight: 800;
@@ -74,7 +73,6 @@
 }
 
 .progress-all-words {
-    display: flex;
     align-items: center;
     font-size: 72px;
     font-weight: 800;
@@ -104,6 +102,24 @@
     color: transparent;
 }
 
+.progress-fire {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  &:before {
+    content: '';
+    position: absolute;
+    right: -27px;
+    top: -16px;
+    height: 54px;
+    width: 125px;
+    background-image: url("../assets/icons/statistic/polzunok.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+
 .progress-slider[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     height: 55px;
@@ -111,7 +127,6 @@
     background-image: url("../assets/icons/statistic/polzunok.png");
     background-repeat: no-repeat;
     background-size: contain;
-    background-repeat: no-repeat;
     border: none;
 }
 
@@ -169,11 +184,11 @@
     .progress-line {
         height: 20px;
     }
-    .progress-slider[type="range"]::-webkit-slider-thumb {
+    .progress-slider[type="range"]::-webkit-slider-thumb, .progress-fire:before {
         height: 55px;
         width: 80px;
     }
-    .progress-slider[type="range"] {
+    .progress-slider[type="range"], .progress-fire:before {
         top: -7px;
     }
 }
@@ -203,10 +218,10 @@
     .progress-line {
         height: 13px;
     }
-    .progress-slider[type="range"] {
+    .progress-slider[type="range"], .progress-fire:before {
         top: -7px;
     }
-    .progress-slider[type="range"]::-webkit-slider-thumb {
+    .progress-slider[type="range"]::-webkit-slider-thumb, .progress-fire:before {
         width: 60px;
     }
 }
@@ -226,7 +241,8 @@
         flex-direction: column;
     }
     .progress-all-words {
-        flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
     .progress-learned-words {
         font-size: 20px;

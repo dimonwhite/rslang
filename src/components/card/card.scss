@@ -761,7 +761,7 @@
     transform: rotate(90deg);
     width: 10vw;
     height: 10vw;
-    background-image: url("/src/assets/img/ship.png");
+    background-image: url("../assets/img/ship.png");
     background-size: cover;
     animation: timing 5s infinite;
 }
@@ -846,6 +846,7 @@
                 font-size: 16px;
                 margin-top: 5px;
                 width: 300px;
+                max-width: 90%;
             }
         }
     }
