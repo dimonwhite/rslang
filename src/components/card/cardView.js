@@ -23,6 +23,7 @@ export default class CardView {
     const input = createElement({ tag: 'div', class: 'card__input', id: 'cardInput' });
     this.input = createElement({ tag: 'input', class: 'card__input-item', id: 'inputWord' });
     this.input.setAttribute('type', 'text');
+    this.input.setAttribute('autocomplete', 'off');
     this.cardCorrect = createElement({ tag: 'span', class: 'card__input-correct', id: 'cardCorrect' });
     input.append(this.input);
     input.append(this.cardCorrect);
@@ -361,13 +362,13 @@ export default class CardView {
     }
     if (this.settings.removeWord) {
       this.cardRemove.classList.remove('hide');
-      this.setInDictionary(word.state, mistake);
+      if (word) this.setInDictionary(word.state, mistake);
     } else {
       this.cardRemove.classList.add('hide');
     }
     if (this.settings.difficultWord) {
       this.cardDiff.classList.remove('hide');
-      this.setInDictionary(word.state, mistake);
+      if (word) this.setInDictionary(word.state, mistake);
     } else {
       this.cardDiff.classList.add('hide');
     }
@@ -472,7 +473,7 @@ export default class CardView {
   }
 
   setDataInInput(word, numberLetters, hide) {
-    if (numberLetters && !hide) {
+    if (numberLetters && !hide && word) {
       if (this.settings.langEn && word.word) {
         this.input.setAttribute('maxlength', word.word.length);
         this.incorrectWord('', '*'.repeat(word.word.length));
@@ -492,7 +493,7 @@ export default class CardView {
     this.input.classList.add('correct-color');
     this.cardShow.classList.add('lock-element');
     this.cardDiff.classList.remove('lock-element');
-    const isSound = this.settings.meaningWord || this.settings.exampleWord;
+    const isSound = (this.settings.meaningWord || this.settings.exampleWord) && this.settings.sound;
     const isFastAndSound = this.settings.nextCard && isSound;
     if (this.settings.interval && (!this.settings.nextCard || isFastAndSound)) {
       this.interval.classList.add('visibility');
@@ -521,7 +522,7 @@ export default class CardView {
       this.cardView.classList.add('hide');
       this.message.classList.add('show-flex');
       document.getElementById('cardStatistics').classList.add('hide');
-      document.getElementById('endTitle').innerHTML = 'В этой категории нет слов!';
+      document.getElementById('endTitle').innerHTML = 'В этой категории нет слов! Для продолжения можете выбрать другую категорию и нажать кнопку';
     } else {
       this.cardView.classList.add('hide');
       this.message.classList.add('show-flex');
@@ -770,7 +771,7 @@ export default class CardView {
             <label for="sound">Воспроизведение звука</label>
           </div>
           <div class="setting-block__item-card">
-            <input type="checkbox" id="nextCard" checked class="settings__checkbox" />
+            <input type="checkbox" id="nextCard" class="settings__checkbox" />
             <label for="nextCard">Быстрый переход</label>
           </div>
         </div>

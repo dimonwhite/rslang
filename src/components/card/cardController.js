@@ -33,7 +33,6 @@ export default class CardController {
   async create() {
     document.getElementById('main').append(this.view.preloader());
     document.body.classList.add('show-main');
-    document.body.classList.add('top-gear');
     this.settings = await this.user.getUserSettings();
     this.view.settings = this.settings.optional.settings;
     this.statistics = await this.user.getUserStatistics();
@@ -43,6 +42,7 @@ export default class CardController {
       if (document.body.classList.contains('show-main')) {
         if (this.view.ship) this.view.ship.remove();
         this.view.renderHTML();
+        document.body.classList.add('top-gear');
         const isNotEmpty = this.model.listToday.length > 0;
         if (isNotEmpty && this.model.listToday.length > this.params.passedToday) {
           [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
@@ -53,7 +53,9 @@ export default class CardController {
             cardIndeX: this.params.cardIndex,
           });
         } else {
+          this.params.generatedListToday = false;
           this.view.inputTodayStatistics(this.params);
+          this.model.clearListToday();
         }
         this.removeView();
         await this.setTodayStatStorage();
@@ -168,7 +170,8 @@ export default class CardController {
   async eventRemove() {
     if (!this.view.isLock() && this.model.listToday.length > 0) {
       this.view.lockElements(true);
-      const removeWord = this.model.listToday[this.params.cardIndex];
+      const lastWord = this.model.listToday[this.model.listToday.length - 1];
+      const removeWord = (this.cut) ? lastWord : this.model.listToday[this.params.cardIndex];
       let state = 'remove';
       if (removeWord.state === state) state = 'study';
 
@@ -181,11 +184,15 @@ export default class CardController {
       if (removeWord.isPassed) {
         if (state === 'remove') {
           this.statistics.optional.statisticsChart[removeWord.firstDate] -= 1;
+          // if (removeWord.firstDate === this.today && this.params.newWordsToday > 0) {
+          //   this.params.newWordsToday -= 1;
+          // }
         } else {
           this.statistics.optional.statisticsChart[removeWord.firstDate] += 1;
+          // if (removeWord.firstDate === this.today) this.params.newWordsToday += 1;
         }
-        this.view.setInDictionary(state, this.currentMistake);
-      } else {
+        this.view.setInDictionary(state, this.params.currentMistake);
+      } else if (state === 'remove') {
         this.removeWord();
       }
 
@@ -196,8 +203,18 @@ export default class CardController {
   }
 
   removeWord() {
+    if (this.params.newWordsToday > 0) this.params.newWordsToday -= 1;
     this.params.currentMistake = false;
-    this.model.listToday.splice(this.params.cardIndex, 1);
+    let word;
+    if (this.cut) {
+      word = this.model.listToday.splice(this.model.listToday.length - 1, 1)[+0];
+      this.view.clearCard();
+      this.next = false;
+      this.cut = false;
+    } else {
+      word = this.model.listToday.splice(this.params.cardIndex, 1)[+0];
+    }
+    this.model.spliceFullList(word);
     if (this.params.passedToday >= this.model.listToday.length) {
       this.params.generatedListToday = false;
       this.view.inputTodayStatistics(this.params);
@@ -221,7 +238,7 @@ export default class CardController {
     let state = 'difficult';
     if (word.state === state) state = 'study';
 
-    this.view.setInDictionary(state, this.currentMistake);
+    this.view.setInDictionary(state, this.params.currentMistake);
     const { customRating } = word;
     const compare = word.word.toLowerCase();
     if (this.model.allStudyWords.find((item) => item.word.toLowerCase() === compare)) {
@@ -246,6 +263,7 @@ export default class CardController {
       if (this.unlock) this.view.lockElements(true);
       this.view.cardAgain.classList.add('lock-element');
       const cutWord = this.model.listToday.splice(this.params.cardIndex, 1)[0];
+      this.model.spliceFullList(cutWord, true);
       cutWord.isPassed = false;
       cutWord.timeToday = new Date().getTime();
       this.model.listToday.push(cutWord);
@@ -341,8 +359,8 @@ export default class CardController {
         word, prev, show, isNotNew,
       });
       await this.checkMistakeFactor(word, show);
-      if (!this.view.settings.sound) this.moveNexCard();
       if (!prev) await this.setTodayStatStorage();
+      if (!this.view.settings.sound && !show) this.moveNexCard();
     }
   }
 
@@ -373,6 +391,7 @@ export default class CardController {
     } else if (this.model.listToday.length !== this.params.cardIndex + 1) {
       const cutWord = this.model.listToday.splice(this.params.cardIndex, 1)[0];
       this.model.listToday.push(cutWord);
+      this.model.spliceFullList(cutWord, true);
       this.cut = true;
     }
 
@@ -473,17 +492,22 @@ export default class CardController {
 
   moveNexCard(isClick) {
     if (!isClick) {
-      this.view.lockElements();
-      this.view.lockArrows(false);
-      this.unlock = true;
-      if (this.view.settings.nextCard) this.eventRight(true);
+      if (this.view.settings.nextCard) {
+        setTimeout(() => {
+          this.view.lockElements();
+          this.view.lockArrows(false);
+          this.unlock = true;
+          this.eventRight(true);
+        }, 100);
+      } else {
+        this.view.lockElements();
+        this.view.lockArrows(false);
+        this.unlock = true;
+      }
     }
   }
 
   async eventAddition() {
-    this.view.nextCard();
-    this.view.clearCard();
-    this.view.cardImg.classList.add('lock-img');
     Object.keys(this.params).forEach((key) => { this.params[key] = 0; });
     this.model.clearListToday();
     [
@@ -494,14 +518,19 @@ export default class CardController {
       settings: this.view.settings,
       generatedListToday: false,
       wordsRepeatToday: this.params.wordsRepeatToday,
-      numberListPages: this.numberListPages,
+      numberListPages: this.params.numberListPages,
     });
     const len = this.model.listToday.length;
-    this.view.setWordInCard({
-      next: false, numberWords: len, passedTodaY: 0, word: this.model.listToday[0], cardIndeX: 0,
-    });
-    await this.setTodayStatStorage();
-    await this.model.putListToday();
+    if (len > 0) {
+      this.view.nextCard();
+      this.view.clearCard();
+      this.view.cardImg.classList.add('lock-img');
+      this.view.setWordInCard({
+        next: false, numberWords: len, passedTodaY: 0, word: this.model.listToday[0], cardIndeX: 0,
+      });
+      await this.setTodayStatStorage();
+      await this.model.putListToday();
+    }
   }
 
   async moveToLeft() {
@@ -545,7 +574,9 @@ export default class CardController {
       this.view.again = true;
       await this.setTodayStatStorage();
       await this.model.putListToday();
-      if (!this.view.settings.nextCard) {
+      if (this.view.settings.nextCard) {
+        this.moveNexCard();
+      } else {
         this.view.lockElements(false);
       }
     }
@@ -603,18 +634,19 @@ export default class CardController {
         settings: this.view.settings,
         generatedListToday: false,
         wordsRepeatToday: this.params.wordsRepeatToday,
-        numberListPages: this.numberListPages,
+        numberListPages: this.params.numberListPages,
       });
       this.params.passedToday = 0;
       this.params.cardIndex = 0;
       this.params.consecutive = 0;
       this.params.newConsecutive = 0;
       this.params.newWordsToday = 0;
-      this.currentMistake = false;
+      this.params.currentMistake = false;
       this.params.correctAnswer = 0;
       if (this.model.listToday.length === 0) {
         this.params.generatedListToday = false;
         this.view.inputTodayStatistics({ ...this.params, isEmpty: true });
+        this.model.clearListToday();
         return true;
       }
       this.view.clearCard();
