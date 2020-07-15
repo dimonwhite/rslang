@@ -31,6 +31,7 @@ export default class CardController {
   }
 
   async create() {
+    document.getElementById('main').append(this.view.preloader());
     document.body.classList.add('show-main');
     document.body.classList.add('top-gear');
     this.settings = await this.user.getUserSettings();
@@ -39,20 +40,37 @@ export default class CardController {
     this.params = this.statistics.optional.todayTraining.params;
     if (document.body.classList.contains('show-main')) {
       await this.getTodayStatStorage();
-      this.view.renderHTML();
-      if (this.model.listToday.length !== this.params.passedToday) {
-        [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
-          next: false,
-          numberWords: this.model.listToday.length,
-          passedTodaY: this.params.passedToday,
-          word: this.model.listToday[this.params.cardIndex],
-          cardIndeX: this.params.cardIndex,
-        });
-      } else {
-        this.view.inputTodayStatistics(this.params);
+      if (document.body.classList.contains('show-main')) {
+        if (this.view.ship) this.view.ship.remove();
+        this.view.renderHTML();
+        const isNotEmpty = this.model.listToday.length > 0;
+        if (isNotEmpty && this.model.listToday.length > this.params.passedToday) {
+          [this.params.cardIndex, this.params.passedToday, this.next] = this.view.setWordInCard({
+            next: false,
+            numberWords: this.model.listToday.length,
+            passedTodaY: this.params.passedToday,
+            word: this.model.listToday[this.params.cardIndex],
+            cardIndeX: this.params.cardIndex,
+          });
+        } else {
+          this.view.inputTodayStatistics(this.params);
+        }
+        this.removeView();
+        await this.setTodayStatStorage();
+        if (document.body.classList.contains('show-main')) {
+          this.createEvent();
+        } else {
+          this.removeView();
+        }
       }
-      await this.setTodayStatStorage();
-      this.createEvent();
+    }
+  }
+
+  removeView() {
+    if (!document.body.classList.contains('show-main')) {
+      if (this.view.ship) this.view.ship.remove();
+      if (this.view.message) this.view.message.remove();
+      if (this.view.cardView) this.view.cardView.remove();
     }
   }
 
@@ -77,7 +95,7 @@ export default class CardController {
       await this.model.putListToday();
     } else {
       await this.model.getAllUserWords();
-      await this.model.getListToday(this.params.numberListPages);
+      await this.model.getListToday(this.params.numberListPages, this.view.settings);
     }
   }
 
@@ -91,7 +109,7 @@ export default class CardController {
   }
 
   createEvent() {
-    document.getElementById('addition').addEventListener('click', this.eventAddition.bind(this));
+    this.view.addition.addEventListener('click', this.eventAddition.bind(this));
     this.view.leftArrow.addEventListener('click', this.moveToLeft.bind(this));
     this.view.cardPlay.addEventListener('click', this.playWord.bind(this, true));
     this.view.input.addEventListener('input', this.inputSymbols.bind(this));
@@ -106,7 +124,7 @@ export default class CardController {
     this.view.cardHard.addEventListener('click', this.setInterval.bind(this, 'cardHard', 0));
     this.view.cardNormal.addEventListener('click', this.setInterval.bind(this, 'cardNormal', 1));
     this.view.cardEasy.addEventListener('click', this.setInterval.bind(this, 'cardEasy', 2));
-    document.getElementById('settings').addEventListener('change', this.setSettings.bind(this));
+    this.view.settingsBlock.addEventListener('change', this.setSettings.bind(this));
     const idChecks = ['translate', 'meaningWord', 'exampleWord'];
     idChecks.forEach((item) => {
       document.getElementById(item).addEventListener('click', () => {
@@ -123,7 +141,7 @@ export default class CardController {
     const setNextWord = this.params.cardIndex + 1 === (this.params.passedToday + Number(this.next));
     if (this.view.rightArrow.classList.contains('go-next') && setNextWord) {
       this.view.clearCard();
-      if (this.params.passedToday === this.model.listToday.length) {
+      if (this.params.passedToday >= this.model.listToday.length) {
         this.params.generatedListToday = false;
         this.view.inputTodayStatistics(this.params);
         this.model.clearListToday();
@@ -465,6 +483,7 @@ export default class CardController {
   async eventAddition() {
     this.view.nextCard();
     this.view.clearCard();
+    this.view.cardImg.classList.add('lock-img');
     Object.keys(this.params).forEach((key) => { this.params[key] = 0; });
     this.model.clearListToday();
     [

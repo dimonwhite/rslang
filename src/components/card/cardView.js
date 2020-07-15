@@ -18,7 +18,7 @@ export default class CardView {
   }
 
   createCard() {
-    const card = createElement({ tag: 'section', class: 'card', id: 'card' });
+    this.cardView = createElement({ tag: 'section', class: 'card', id: 'card' });
     this.createPartialCard();
     const input = createElement({ tag: 'div', class: 'card__input', id: 'cardInput' });
     this.input = createElement({ tag: 'input', class: 'card__input-item', id: 'inputWord' });
@@ -58,9 +58,9 @@ export default class CardView {
     const wrapPanel = createElement({ tag: 'div', class: 'card__wrapper-panel' });
     wrapPanel.append(...[wrapDict, wrapWords]);
     wrapCard.append(...[wrapRange, wrapHelp, this.interval, wrapPanel]);
-    card.append(...[this.leftArrow, wrapCard, this.rightArrow]);
+    this.cardView.append(...[this.leftArrow, wrapCard, this.rightArrow]);
     this.input.focus();
-    return card;
+    return this.cardView;
   }
 
   createPartialCard() {
@@ -137,7 +137,7 @@ export default class CardView {
     const long = createElement({ tag: 'span', class: 'finished__statistics-long', id: 'statLong' });
     wrapLong.append(longMes);
     wrapLong.append(long);
-    const btn = createElement({
+    this.addition = createElement({
       tag: 'button', class: 'finished__btn btn', id: 'addition', content: 'Учить ещё',
     });
     statistics.append(wrapCount);
@@ -146,7 +146,7 @@ export default class CardView {
     statistics.append(wrapLong);
     this.message.append(title);
     this.message.append(statistics);
-    this.message.append(btn);
+    this.message.append(this.addition);
     return this.message;
   }
 
@@ -212,12 +212,16 @@ export default class CardView {
   }
 
   setSettings() {
-    const keys = Object.keys(this.settings);
-    keys.forEach((item) => {
-      document.getElementById(item).checked = this.settings[item];
-    });
-    document.getElementById('newWords').value = this.settings.newWords;
-    document.getElementById('maxWords').value = this.settings.maxWords;
+    try {
+      const keys = Object.keys(this.settings);
+      keys.forEach((item) => {
+        document.getElementById(item).checked = this.settings[item];
+      });
+      document.getElementById('newWords').value = this.settings.newWords;
+      document.getElementById('maxWords').value = this.settings.maxWords;
+    } catch (error) {
+      this.error = error;
+    }
   }
 
   setWordInCard({
@@ -226,7 +230,7 @@ export default class CardView {
     let passedToday = passedTodaY;
     let cardIndex = cardIndeX;
     if (document.getElementById('maxWords').value === passedToday) {
-      document.getElementById('card').classList.add('hide');
+      this.cardView.classList.add('hide');
       document.getElementById('message').classList.add('show-flex');
     } else {
       if (next && !this.next && !this.again) cardIndex += 1;
@@ -379,7 +383,7 @@ export default class CardView {
       this.cardShow.classList.add('hide');
     }
     if (this.settings.imgWord) {
-      this.cardImg.classList.remove('lock-img');
+      setTimeout(() => this.cardImg.classList.remove('lock-img'), 800);
     } else {
       this.cardImg.classList.add('lock-img');
     }
@@ -514,12 +518,12 @@ export default class CardView {
     passedToday, incorrectAnswer, correctAnswer, newWordsToday, consecutive, isEmpty,
   }) {
     if (isEmpty) {
-      document.getElementById('card').classList.add('hide');
+      this.cardView.classList.add('hide');
       this.message.classList.add('show-flex');
       document.getElementById('cardStatistics').classList.add('hide');
       document.getElementById('endTitle').innerHTML = 'В этой категории нет слов!';
     } else {
-      document.getElementById('card').classList.add('hide');
+      this.cardView.classList.add('hide');
       this.message.classList.add('show-flex');
       document.getElementById('endTitle').innerHTML = 'План на сегодня выполнен!';
       document.getElementById('cardStatistics').classList.remove('hide');
@@ -589,7 +593,7 @@ export default class CardView {
 
   nextCard() {
     this.message.classList.remove('show-flex');
-    document.getElementById('card').classList.remove('hide');
+    this.cardView.classList.remove('hide');
   }
 
   isLock() {
@@ -668,7 +672,6 @@ export default class CardView {
   }
 
   createSettings() {
-    this.settingsBlock.classList.add('settings-card');
     const content = `<h2 class="settings__title">Настройки</h2>
     <div class="setting-block">
       <div class="setting-block__list-card">
@@ -797,6 +800,14 @@ export default class CardView {
         </div>
       </div>
     </div>`;
-    this.settingsBlock.innerHTML = content;
+    if (this.settingsBlock) {
+      this.settingsBlock.classList.add('settings-card');
+      this.settingsBlock.innerHTML = content;
+    }
+  }
+
+  preloader() {
+    this.ship = createElement({ tag: 'div', class: 'card__preloader' });
+    return this.ship;
   }
 }
