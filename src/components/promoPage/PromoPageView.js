@@ -59,6 +59,7 @@ export default class PromoPageView {
       </div>
       <img src="${promoPlanet}" alt="Планета" class="promoPage__planet">
       <video class="promoPage__video" src="//dimonwhite.ru/promovideo.mp4" controls preload></video>
+      <div class="promoPage__repo">Ссылка на репозиторий проекта: <a href="https://github.com/dimonwhite/rslang" target="_blank">RS LANG</a></div>
       <div class="promoPage__desc">
         Игровое приложение, которое поможет вам в изучении  английского языка.  В основу приложения заложен  принцип интервального
         повторения на основе известной методики Лейтнера. Слова, которые вы успешно выучили, переходят на следующий уровень повторения, при каждом 

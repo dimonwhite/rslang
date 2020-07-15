@@ -37,7 +37,7 @@
       font-size: 1.3rem;
     }
   }
-  &__desc {
+  &__desc, &__repo {
     position: relative;
     z-index: 1;
 
@@ -51,6 +51,12 @@
     }
     @include media(600px) {
       font-size: 0.8rem;
+    }
+  }
+  &__repo {
+    margin-bottom: 1rem;
+    a {
+      color: #FCA9FB;
     }
   }
   &__planet {
