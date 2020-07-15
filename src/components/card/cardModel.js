@@ -130,7 +130,7 @@ export default class CardModel {
 
   parseToObj(index) {
     const next = index + 1;
-    const part = this.listToday.slice(index * this.WORDS_PER_PAGE, next * this.WORDS_PER_PAGE);
+    const part = this.fullListToday.slice(index * this.WORDS_PER_PAGE, next * this.WORDS_PER_PAGE);
     const resultObj = {};
     part.forEach((item, i) => { resultObj[i] = item; });
     return resultObj;
@@ -201,7 +201,7 @@ export default class CardModel {
     word.lastTime = new Date().getTime();
 
     if (customRating) {
-      word.nextTime = word.lastTime + (customRating ** customRating + 2) * this.DAY;
+      word.nextTime = word.lastTime + (customRating ** 2 + 2) * this.DAY;
     } else {
       word.nextTime = word.lastTime + this.DAY;
     }
@@ -221,7 +221,7 @@ export default class CardModel {
     } else if (customRating) {
       update.customRating = customRating;
     }
-    if (isCount) this.changeWordStat({ update, mistake });
+    this.changeWordStat({ isCount, update, mistake });
     const { isNew, isPassed } = word;
     Object.keys(update).forEach((key) => { word[key] = update[key]; });
     word.isNew = isNew;
@@ -229,8 +229,8 @@ export default class CardModel {
     await this.user.updateUserWord({ wordData: update, wordId: update.id, difficulty: 'string' });
   }
 
-  changeWordStat({ update, mistake }) {
-    update.count += 1;
+  changeWordStat({ isCount, update, mistake }) {
+    if (isCount) update.count += 1;
     if (mistake) {
       update.mistakes += 1;
       update.interval = -1;
@@ -248,7 +248,7 @@ export default class CardModel {
     update.lastTime = new Date().getTime();
 
     if (update.customRating) {
-      const interval = update.customRating ** update.customRating + 2;
+      const interval = update.customRating ** 2 + 2;
       update.nextTime = update.lastTime + interval * this.DAY;
     } else {
       const interval = (update.interval === -1) ? 0 : update.interval;
@@ -270,7 +270,16 @@ export default class CardModel {
     return rating;
   }
 
+  spliceFullList(word, pushEnd) {
+    const index = this.fullListToday.findIndex((curWord) => curWord.word === word.word);
+    if (index >= 0) {
+      const removeWord = this.fullListToday.splice(index, 1)[0];
+      if (pushEnd) this.fullListToday.push(removeWord);
+    }
+  }
+
   clearListToday() {
     this.listToday = [];
+    this.fullListToday = [];
   }
 }

@@ -68,21 +68,23 @@ export default class SavannahView {
 
   createGameOptions() {
     this.start = document.getElementById('startScreen');
-    this.gameSettings = createElement({ tag: 'div', class: 'savannah__settings' });
-    this.gameSettings.append(document.getElementById('gameOptions'));
-    this.gameSettings.append(this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang'));
-    this.gameSettings.append(this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed'));
-    this.gameSettings.append(this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts'));
-    this.start.append(this.gameSettings);
-    const ALL_PAGES = 30;
-    const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
-    this.start.append(this.createOptions('Страница:', pages, 'selectPage', 'wrapPage'));
-    this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__words', content: 'Выученные слова' });
-    const wrap = createElement({ tag: 'div', class: 'savannah__wrap-level' });
-    wrap.append(document.getElementById('wrapPage'));
-    wrap.append(document.querySelector('.levels'));
-    this.wrap.append(this.learnedWords);
-    this.start.append(wrap);
+    if (this.start) {
+      this.gameSettings = createElement({ tag: 'div', class: 'savannah__settings' });
+      this.gameSettings.append(document.getElementById('gameOptions'));
+      this.gameSettings.append(this.createOptions('Выбор языка:', ['EN', 'RU'], 'selectLang'));
+      this.gameSettings.append(this.createOptions('Скорость:', ['easy', 'normal', 'hard'], 'selectSpeed'));
+      this.gameSettings.append(this.createOptions('Жизни:', ['easy', 'normal', 'hard'], 'selectHearts'));
+      this.start.append(this.gameSettings);
+      const ALL_PAGES = 30;
+      const pages = new Array(ALL_PAGES).fill('').map((item, index) => index + 1);
+      this.start.append(this.createOptions('Страница:', pages, 'selectPage', 'wrapPage'));
+      this.learnedWords = createElement({ tag: 'button', class: 'savannah-start__words', content: 'Выученные слова' });
+      const wrap = createElement({ tag: 'div', class: 'savannah__wrap-level' });
+      wrap.append(document.getElementById('wrapPage'));
+      wrap.append(document.querySelector('.levels'));
+      this.wrap.append(this.learnedWords);
+      this.start.append(wrap);
+    }
   }
 
   createOptions(content, options, id, idSelect) {
@@ -135,16 +137,17 @@ export default class SavannahView {
   }
 
   getStart() {
-    this.savannah.classList.add('show');
-    document.getElementById('gameOptions').classList.add('hide');
-    this.game.classList.add('show-flex');
+    if (this.savannah) this.savannah.classList.add('show');
+    const options = document.getElementById('gameOptions');
+    if (options) options.classList.add('hide');
+    if (this.game) this.game.classList.add('show-flex');
     setTimeout(() => { this.time.innerHTML = 2; }, 1000);
     setTimeout(() => { this.time.innerHTML = 1; }, 2000);
   }
 
   getStartRound() {
-    this.countdown.classList.add('hide');
-    this.field.classList.add('show-flex');
+    if (this.coundown) this.countdown.classList.add('hide');
+    if (this.field) this.field.classList.add('show-flex');
   }
 
   startNextRound({ gameWords, attempt, words }) {
