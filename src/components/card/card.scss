@@ -397,9 +397,11 @@
     &__message {
         font-size: 25px;
         text-align: center;
-        margin-top: 95px;
+        width: 310px;
         color: #724dd0;
         text-shadow: 1px 1px 0 saddlebrown;
+        margin: 0 auto;
+        margin-top: 95px;
     }
     &__btn {
         font-size: 24px;
@@ -439,7 +441,6 @@
     }
 }
 
-
 /*------------------PROGRESS----------------------*/
 .card__progress {
     -webkit-appearance: none;
@@ -474,22 +475,23 @@
     background-color: red;
 }
 
-.card::-webkit-scrollbar-track {
+.show-main::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: gray;
     border-radius: 3px;
 }
 
-.card::-webkit-scrollbar {
-    width: 15px;
+.show-main::-webkit-scrollbar {
+    width: 15px !important;
     border-radius: 3px;
 }
 
-.card::-webkit-scrollbar-thumb {
-    background-color: #09c;
+.show-main::-webkit-scrollbar-thumb {
+    background-color: #09c !important;
     border: 2px solid #257db1;
     border-radius: 3px;
 }
+
 /*------------------END PROGRESS----------------------*/
 
 /*------------------TOGGLE CLASSES-------------------*/
@@ -768,22 +770,22 @@
 }
 
 @keyframes timing {
-  0% {
-    transform: rotate(90deg);
-  }
-  45% {
-    left: 80vw; // calc(100% - 110px);
-    transform: rotate(90deg);
-  }
-  50% {
-    transform: rotate(270deg);
-  }
-  95% {
-    transform: rotate(270deg);
-  }
-  100% {
-    transform: rotate(90deg);
-  }
+    0% {
+        transform: rotate(90deg);
+    }
+    45% {
+        left: 80vw; // calc(100% - 110px);
+        transform: rotate(90deg);
+    }
+    50% {
+        transform: rotate(270deg);
+    }
+    95% {
+        transform: rotate(270deg);
+    }
+    100% {
+        transform: rotate(90deg);
+    }
 }
 
 @media only screen and (max-width: 400px) {

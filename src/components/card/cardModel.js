@@ -130,7 +130,7 @@ export default class CardModel {
 
   parseToObj(index) {
     const next = index + 1;
-    const part = this.listToday.slice(index * this.WORDS_PER_PAGE, next * this.WORDS_PER_PAGE);
+    const part = this.fullListToday.slice(index * this.WORDS_PER_PAGE, next * this.WORDS_PER_PAGE);
     const resultObj = {};
     part.forEach((item, i) => { resultObj[i] = item; });
     return resultObj;
@@ -270,7 +270,16 @@ export default class CardModel {
     return rating;
   }
 
+  spliceFullList(word, pushEnd) {
+    const index = this.fullListToday.findIndex((curWord) => curWord.word === word.word);
+    if (index >= 0) {
+      const removeWord = this.fullListToday.splice(index, 1)[0];
+      if (pushEnd) this.fullListToday.push(removeWord);
+    }
+  }
+
   clearListToday() {
     this.listToday = [];
+    this.fullListToday = [];
   }
 }
