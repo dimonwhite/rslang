@@ -22,6 +22,7 @@ export default class ChartMainController {
   createDataSignature() {
     this.chartMainView.showSignaturesData({
       quantityWord: Object.values(this.chartMainModel.dataChart),
+      dates: Object.keys(this.chartMainModel.dataChart),
       ranges: this.chartMainModel.determinePointsRange(),
     });
   }

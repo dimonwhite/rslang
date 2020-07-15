@@ -151,6 +151,7 @@ export default class ChartMainView {
     for (let i = 0; i < obj.ranges.length; i += 1) {
       content += `<p class="signature-item" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">
         <span class="signature-text" style="transform: translate(${this.canvasMainChart.getBoundingClientRect().x + obj.ranges[i].xStart}px, ${this.canvasMainChart.getBoundingClientRect().y + obj.ranges[i].yStart}px)">${obj.quantityWord[i]}</span>
+        <span class="signature-date">слов ${obj.dates[i]}</span>
       </p>`;
     }
     this.dataSignature.innerHTML = `${content}`;
