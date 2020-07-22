@@ -7,6 +7,7 @@
 - Webpack
 - Babel
 - ESLint
+- SCSS
 
 ## Используемые библиотеки
 
